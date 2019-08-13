@@ -16,6 +16,8 @@ pages:
     - pipenv install --dev --deploy
     - pipenv run docs
     - cp -r docs/build public
+  only:
+    - master
   artifacts:
     paths:
       - public
