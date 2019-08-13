@@ -1,0 +1,22 @@
+image: python:3.7-alpine
+
+variables:
+  PIP_INDEX: https://captain.rtf.siemens.net/artifactory/api/pypi/pypi-remote/simple
+  http_proxy: $CODE_PROXY
+  https_proxy: $CODE_PROXY
+  no_proxy: code.siemens.com,captain.rtf.siemens.net
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - pip install -i $PIP_INDEX pipenv
+    - pipenv install --dev --deploy
+    - pipenv run docs
+    - cp -r docs/build public
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 day

@@ -1,0 +1,16 @@
+[[source]]
+url = "https://captain.rtf.siemens.net/artifactory/api/pypi/pypi-remote/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+
+[dev-packages]
+sphinx = "*"
+m2r = "*"
+
+[scripts]
+test = "python test.py"
+docs = "sphinx-build docs/source docs/build"
+build = "python setup.py bdist_wheel -d docs/build"

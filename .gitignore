@@ -1,0 +1,6 @@
+__pycache__
+.env
+.vscode
+build/
+docs/build/
+fossology_python.egg-info/
