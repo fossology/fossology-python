@@ -12,7 +12,7 @@ used to implement this library.
 * Currently, the library package is only available from source:
   
   ```shell
-  pipenv install -e git+git@code.siemens.com:linux/fossology-python.git#egg=fossology-python
+  pipenv install -e git+git@code.siemens.com:fossology/fossology-python.git#egg=fossology-python
   ```
 
 * Additional dependencies:
