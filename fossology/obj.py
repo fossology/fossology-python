@@ -1,6 +1,14 @@
 # Copyright 2019 Siemens AG
 # SPDX-License-Identifier: LicenseRef-SISL-1.1-or-later
 
+from enum import Enum
+
+
+class AccessLevel(Enum):
+    PRIVATE = "private"
+    PROTECTED = "protected"
+    PUBLIC = "public"
+
 
 class Agents(object):
 
@@ -90,6 +98,35 @@ class Folder(object):
         return (
             f"{self.name} ({self.id}), '{self.description}', "
             f"parent folder id = {self.parent}"
+        )
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class Upload(object):
+
+    """FOSSology upload.
+
+    Represents a FOSSology upload.
+    """
+
+    def __init__(
+        self, folderid, foldername, id, description, uploadname, uploaddate, filesize
+    ):
+        self.folderid = folderid
+        self.foldername = foldername
+        self.id = id
+        self.description = description
+        self.uploadname = uploadname
+        self.uploaddate = uploaddate
+        self.filesize = filesize
+
+    def __str__(self):
+        return (
+            f"Upload '{self.uploadname}' ({self.id}, {self.filesize}B) "
+            f"in folder {self.fordername} ({self.folderid})"
         )
 
     @classmethod

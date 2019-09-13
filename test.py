@@ -5,6 +5,7 @@ import os
 import time
 
 from fossology.api import Fossology
+from fossology.obj import AccessLevel
 
 FOSS_URL = os.getenv("FOSS_URL") or exit("Environment variable FOSS_URL doesn't exists")
 FOSS_TOKEN = os.getenv("FOSS_TOKEN") or exit(
@@ -57,6 +58,13 @@ def update_folder_test(foss, test_folder):
     return test_folder
 
 
+def delete_folder_test(foss, test_folder):
+    foss.delete_folder(test_folder.id)
+    time.sleep(3)
+    deleted_folder = foss.detail_folder(test_folder.id, test_folder.parent)
+    assert not deleted_folder, "Deleted folder still exists"
+
+
 if __name__ == "__main__":
 
     foss = Fossology(FOSS_URL, FOSS_TOKEN)
@@ -64,9 +72,13 @@ if __name__ == "__main__":
 
     test_folder = create_folder_test(foss)
     # test_folder = update_folder_test(foss, test_folder)
+    # delete_folder_test(test_folder)
 
-    # delete_folder
-    foss.delete_folder(test_folder.id)
-    time.sleep(3)
-    deleted_folder = foss.detail_folder(test_folder.id, test_folder.parent)
-    assert not deleted_folder, "Deleted folder still exists"
+    test_file_path = "/home/marion/code/linux/fossology-python/test_files"
+    foss.upload_file(
+        "base-files_10.3-debian10-combined.tar.bz2",
+        test_file_path,
+        test_folder,
+        description="Test upload base-files combined",
+        access_level=AccessLevel.PUBLIC,
+    )

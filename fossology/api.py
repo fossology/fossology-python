@@ -5,7 +5,8 @@ import sys
 import logging
 import requests
 
-from .obj import Agents, User, Folder
+from pathlib import Path
+from .obj import Agents, User, Folder, Upload
 from .exceptions import AuthenticationError
 
 logger = logging.getLogger("fossology")
@@ -68,7 +69,7 @@ class Fossology:
                 else:
                     sys.exit(
                         f"Unable to establish a session with {self.host} "
-                        f"(Status code: {response.status_code})"
+                        f"{response.text} (Status code: {response.status_code})"
                     )
         except AuthenticationError as error:
             sys.exit(error.message)
@@ -90,7 +91,7 @@ class Fossology:
             )
         else:
             logger.error(
-                f"Unable to get a list of folders for {self.user.name} "
+                f"Unable to get a list of folders for {self.user.name} {response.text} "
                 f"(Status code: {response.status_code})"
             )
 
@@ -110,7 +111,10 @@ class Fossology:
             folder.parent = parent
             return folder
         else:
-            logger.error(f"Error while getting details for folder {folder_id}")
+            logger.error(
+                f"Error while getting details for folder {folder_id}: {response.text} "
+                f"(Status code: {response.status_code})"
+            )
             return None
 
     def create_folder(self, parent, name, description=None):
@@ -152,7 +156,10 @@ class Fossology:
             )
             return None
         else:
-            logger.error(f"Unable to create folder {name} under {parent} ({response})")
+            logger.error(
+                f"Unable to create folder {name} under {parent}: {response.text} "
+                f"(Status Code: {response.status_code})"
+            )
             return None
 
     def update_folder(self, folder, name=None, description=None):
@@ -189,7 +196,7 @@ class Fossology:
             return self.detail_folder(folder.id, folder.parent)
         else:
             logger.error(
-                f"Unable to update folder {folder} "
+                f"Unable to update folder {folder}: {response.text} "
                 f"(Status code: {response.status_code})"
             )
             return None
@@ -197,13 +204,83 @@ class Fossology:
     def delete_folder(self, folder_id):
         """Delete a folder
 
-        :param id: the ID of the folder to be deleted
-        :type id: int
+        :param folder_id: the ID of the folder to be deleted
+        :type folder_id: int
         """
         response = self.session.delete(self.api + f"/folders/{folder_id}")
         if response.status_code == 202:
             logger.info(f"Folder {folder_id} has been scheduled for deletion")
         else:
             logger.error(
-                f"Unable to delete folder {id} (Status code: {response.status_code})"
+                f"Unable to delete folder {id}: {response.text} "
+                f"(Status code: {response.status_code})"
+            )
+
+    def detail_upload(self, upload_id):
+        """Get detailled information about an upload
+
+        :param: upload_id
+        :type: int
+        """
+        response = self.session.get(self.api + f"/uploads/{upload_id}")
+        if response.status_code == 200:
+            logger.debug(response.json())
+            return Upload.from_json(response.json())
+        else:
+            logger.error(
+                f"Error while getting details for upload {upload_id} "
+                f"{response.text} (Status code: {response.status_code}"
+            )
+            return None
+
+    def upload_file(
+        self, upload_file, path, folder, description=None, access_level=None
+    ):
+        """Upload a file to FOSSology
+
+        :upload_file: the name of the file to be uploaded
+        :path: the path of the file on the file system
+        :folder: the folder where the file is updated
+        :type upload_file: string
+        :type path: string
+        :type folder: Folder
+        """
+        file_path = Path(path) / upload_file
+        files = {"fileInput": (upload_file, open(file_path, "rb"))}
+        print(files)
+        headers = {"folderId": str(folder.id)}
+        if description:
+            headers["uploadDescription"] = description
+        if access_level:
+            headers["public"] = access_level.value
+
+        response = self.session.post(
+            self.api + "/uploads", files=files, headers=headers
+        )
+        if response.status_code == 201:
+            upload_id = response.json()["message"]
+            upload = self.detail_upload(upload_id)
+            logger.info(
+                f"Upload {upload.uploadname} ({upload.filesize}) "
+                f"has been uploaded on {upload.uploaddate}"
+            )
+        else:
+            logger.error(
+                f"Upload of {upload_file} failed: {response.text} "
+                f"(Status code: {response.status_code})"
+            )
+
+    def delete_upload(self, upload_id):
+        """Delete an upload
+
+        :param upload_id: the ID of the upload to be deleted
+        :type upload_id: int
+        """
+        response = self.session.delete(self.api + f"/uploads/{upload_id}")
+        if response.status_code == 202:
+            logger.info(f"Upload {upload_id} has been scheduled for deletion")
+        else:
+            logger.error(
+                f"Unable to delete upload {upload_id} : {response.text}"
+                f"(Status code: {response.status_code})"
             )
