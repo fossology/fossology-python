@@ -8,7 +8,18 @@ class Agents(object):
 
     Represents the agents currently configured for a given user.
     """
-    def __init__(self, bucket, copyright_email_author, ecc, keyword, mimetype, monk, nomos, package):
+
+    def __init__(
+        self,
+        bucket,
+        copyright_email_author,
+        ecc,
+        keyword,
+        mimetype,
+        monk,
+        nomos,
+        package,
+    ):
         self.bucket = bucket
         self.copyright_email_author = copyright_email_author
         self.ecc = ecc
@@ -29,7 +40,18 @@ class User(object):
 
     Represents the user currently authenticated against the FOSSology server.
     """
-    def __init__(self, id, name, description, email, accessLevel, rootFolderId, emailNotification, agents):
+
+    def __init__(
+        self,
+        id,
+        name,
+        description,
+        email,
+        accessLevel,
+        rootFolderId,
+        emailNotification,
+        agents,
+    ):
         self.id = id
         self.name = name
         self.description = description
@@ -39,9 +61,10 @@ class User(object):
         self.emailNotification = emailNotification
         self.agents = agents
 
-    def __repr__(self):
+    def __str__(self):
         return (
-            f"User {self.description} ({self.id}), {self.email}, access level {self.accessLevel} "
+            f"User {self.description} ({self.id}), {self.email}, "
+            f"access level {self.accessLevel} "
             f"and root folder {self.rootFolderId}"
         )
 
@@ -56,13 +79,18 @@ class Folder(object):
 
     Represents a FOSSology folder.
     """
-    def __init__(self, id, name, description):
+
+    def __init__(self, id, name, description, parent=0):
         self.id = id
         self.name = name
         self.description = description
+        self.parent = parent
 
-    def __repr__(self):
-        return f"{self.name} ({self.id}), {self.description}"
+    def __str__(self):
+        return (
+            f"{self.name} ({self.id}), '{self.description}', "
+            f"parent folder id = {self.parent}"
+        )
 
     @classmethod
     def from_json(cls, json_dict):

@@ -7,12 +7,29 @@ variables:
   no_proxy: code.siemens.com,captain.rtf.siemens.net
 
 stages:
+  - check
   - deploy
+
+format:
+  stage: check
+  script:
+    - pip install -i ${PIP_INDEX} black
+    - black .
+  except:
+    - master
+
+style:
+  stage: check
+  script: 
+    - pip install -i ${PIP_INDEX} flake8
+    - flake8 .
+  except:
+    - master
 
 pages:
   stage: deploy
   script:
-    - pip install -i $PIP_INDEX pipenv
+    - pip install -i ${PIP_INDEX} pipenv
     - pipenv install --dev --deploy
     - pipenv run docs
     - cp -r docs/build public
