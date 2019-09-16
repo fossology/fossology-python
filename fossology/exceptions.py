@@ -1,0 +1,19 @@
+# Copyright 2019 Siemens AG
+# SPDX-License-Identifier: SISL-1.1-or-later
+
+
+class Error(Exception):
+    """Base class for exceptions in this module."""
+
+    pass
+
+
+class AuthenticationError(Error):
+    """Authentication error"""
+
+    def __init__(self, url):
+        self.url = url
+        self.message = (
+            f"An error occurred during authentication against {self.url}\n"
+            f"Check your API Token and try again"
+        )
