@@ -17,3 +17,21 @@ class AuthenticationError(Error):
             f"An error occurred during authentication against {self.url}\n"
             f"Check your API Token and try again"
         )
+
+
+class AuthorizationError(Error):
+    """Authorization error"""
+
+    def __init__(self, description, response):
+        self.message = (
+            f"{description}\n{response.json()['message']} ({response.status_code})"
+        )
+
+
+class FossologyApiError(Error):
+    """Error during a Fossology GET request"""
+
+    def __init__(self, description, response):
+        self.message = (
+            f"{description}\n{response.json()['message']} ({response.status_code})"
+        )

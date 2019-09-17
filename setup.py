@@ -11,7 +11,7 @@ setuptools.setup(
     description="A library to automate Fossology from Python scripts.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://code.siemens.com/linux/fossology-python",
+    url="https://code.siemens.com/fossology/fossology-python",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -88,7 +88,7 @@ class Folder(object):
     Represents a FOSSology folder.
     """
 
-    def __init__(self, id, name, description, parent=0):
+    def __init__(self, id, name, description, parent):
         self.id = id
         self.name = name
         self.description = description
@@ -126,7 +126,35 @@ class Upload(object):
     def __str__(self):
         return (
             f"Upload '{self.uploadname}' ({self.id}, {self.filesize}B) "
-            f"in folder {self.fordername} ({self.folderid})"
+            f"in folder {self.foldername} ({self.folderid})"
+        )
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class Job(object):
+
+    """FOSSology job.
+
+    Represents a FOSSology job.
+    """
+
+    def __init__(self, id, name, queueDate, uploadId, userId, groupId, eta, status):
+        self.id = id
+        self.name = name
+        self.queueDate = queueDate
+        self.uploadId = uploadId
+        self.userId = userId
+        self.groupId = groupId
+        self.eta = eta
+        self.status = status
+
+    def __str__(self):
+        return (
+            f"Job '{self.name}' ({self.id}) queued on {self.queueDate} "
+            f"is {self.status} (ETA = {self.eta})"
         )
 
     @classmethod
