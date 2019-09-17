@@ -2,12 +2,13 @@
 # SPDX-License-Identifier: LicenseRef-SISL-1.1-or-later
 
 import sys
+import json
 import logging
 import requests
 
 from pathlib import Path
 from .obj import Agents, User, Folder, Upload
-from .exceptions import AuthenticationError
+from .exceptions import AuthenticationError, AuthorizationError, FossologyApiError
 
 logger = logging.getLogger("fossology")
 logger.setLevel(logging.DEBUG)
@@ -38,13 +39,16 @@ class Fossology:
     :type token: str
     """
 
-    def __init__(self, url, token):
+    def __init__(self, url, token, email):
         self.token = token
         self.host = url
         self.api = self.host + "/api/v1"
         self.session = requests.Session()
+        self.email = email
+        self.user = None
+        self.agents = None
         self.auth()
-        self.rootFolder = self.detail_folder(self.user.rootFolderId, 0)
+        self.rootFolder = self.detail_folder(self.user.rootFolderId)
         self.folders = list()
         self._list_folders()
         logger.debug(self.user)
@@ -57,21 +61,24 @@ class Fossology:
             response = self.session.get(self.api + "/users")
             if response.status_code == 200:
                 response_list = response.json()
-                if response_list[0]["agents"]:
-                    agents_obj = Agents.from_json(response_list[0]["agents"])
-                    response_list[0]["agents"] = agents_obj
-                self.user = User.from_json(response_list[0])
-                logger.info(f"Authenticated as {self.user.name} against {self.host}.")
-                return self.user
+                for user in response_list:
+                    if user["email"] == self.email:
+                        self.user = User.from_json(user)
+                        if user["agents"]:
+                            self.agents = Agents.from_json(user["agents"])
+                        logger.info(
+                            f"Authenticated as {self.user.name} against {self.host}."
+                        )
+                        return self.user
+                logger.error(f"User with email {self.email} was not found")
+                raise AuthenticationError(self.host)
             else:
                 if response.status_code == 403:
                     raise AuthenticationError(self.host)
                 else:
-                    sys.exit(
-                        f"Unable to establish a session with {self.host} "
-                        f"{response.text} (Status code: {response.status_code})"
-                    )
-        except AuthenticationError as error:
+                    description = f"Unable to establish a session with {self.host}"
+                    raise FossologyApiError(description, response)
+        except (AuthenticationError, FossologyApiError) as error:
             sys.exit(error.message)
 
     def _list_folders(self):
@@ -79,23 +86,24 @@ class Fossology:
 
         This method is private and is called only during authentication.
         """
-        response = self.session.get(self.api + "/folders")
-        if response.status_code == 200:
-            response_list = response.json()
-            for folder in response_list:
-                root_sub_folder = Folder.from_json(folder)
-                root_sub_folder.parent = self.rootFolder.id
-                self.folders.append(root_sub_folder)
-            logger.debug(
-                f"{len(self.folders)} folders are accessible to {self.user.name}."
-            )
-        else:
-            logger.error(
-                f"Unable to get a list of folders for {self.user.name} {response.text} "
-                f"(Status code: {response.status_code})"
-            )
+        try:
+            response = self.session.get(self.api + "/folders")
+            if response.status_code == 200:
+                response_list = response.json()
+                for folder in response_list:
+                    root_sub_folder = Folder.from_json(folder)
+                    root_sub_folder.parent = self.rootFolder.id
+                    self.folders.append(root_sub_folder)
+                logger.debug(
+                    f"{len(self.folders)} folders are accessible to {self.user.name}."
+                )
+            else:
+                description = f"Unable to get a list of folders for {self.user.name}"
+                raise FossologyApiError(description, response)
+        except FossologyApiError as error:
+            logger.error(error.message)
 
-    def detail_folder(self, folder_id, parent):
+    def detail_folder(self, folder_id):
         """Get details of folder.
 
         :param id: the ID of the folder to be analysed
@@ -103,18 +111,16 @@ class Fossology:
         :return: the requested folder - or None if the REST call failed
         :rtype: Folder() object
         """
-        response = self.session.get(self.api + f"/folders/{folder_id}")
-        logger.debug(f"Getting detail for folder: {response.json()}")
-        if response.status_code == 200:
-            folder = Folder.from_json(response.json())
-            # FIXME folder detail API call doesn't deliver parent id
-            folder.parent = parent
-            return folder
-        else:
-            logger.error(
-                f"Error while getting details for folder {folder_id}: {response.text} "
-                f"(Status code: {response.status_code})"
-            )
+        try:
+            response = self.session.get(self.api + f"/folders/{folder_id}")
+            if response.status_code == 200:
+                folder = Folder.from_json(response.json())
+                return folder
+            else:
+                description = f"Error while getting details for folder {folder_id}"
+                raise FossologyApiError(description, response)
+        except FossologyApiError as error:
+            logger.error(error.message)
             return None
 
     def create_folder(self, parent, name, description=None):
@@ -136,31 +142,31 @@ class Fossology:
             "folderName": f"{name}",
             "folderDescription": f"{description}",
         }
-        response = self.session.post(self.api + "/folders", headers=headers)
+        try:
+            response = self.session.post(self.api + "/folders", headers=headers)
 
-        if response.status_code == 200:
-            logger.info(f"Folder '{name}' already exists")
-            for folder in self.folders:
-                if folder.name == name:
-                    return folder
-            # FIXME there is no mean to get a list of subfolders outside the top folder
-            return Folder(response.json()["message"], name, description, parent)
-        elif response.status_code == 201:
-            new_folder = Folder(response.json()["message"], name, description, parent)
-            logger.info(f"{new_folder} has been created ({response.json()}")
-            return new_folder
-        elif response.status_code == 403:
-            logger.error(
-                f"Folder creation is not authorized, "
-                f"verify the scope of your token (needs to be R/W)"
-            )
-            return None
-        else:
-            logger.error(
-                f"Unable to create folder {name} under {parent}: {response.text} "
-                f"(Status Code: {response.status_code})"
-            )
-            return None
+            if response.status_code == 200:
+                logger.info(f"Folder '{name}' already exists ({response.json()}")
+                for folder in self.folders:
+                    if folder.name == name:
+                        return folder
+                # FIXME https://github.com/fossology/fossology/issues/1475
+                logger.error(f"Can't retrieve folders outside the root folder")
+                return None
+
+            elif response.status_code == 201:
+                logger.info(f"Folder {name} has been created ({response.json()}")
+                return self.detail_folder(response.json()["message"])
+
+            elif response.status_code == 403:
+                description = f"Folder creation in parent {parent} not authorized"
+                raise AuthorizationError(description, response)
+            else:
+                description = f"Unable to create folder {name} under {parent}"
+                raise FossologyApiError(description, response)
+
+        except (AuthorizationError, FossologyApiError) as error:
+            logger.error(error.message)
 
     def update_folder(self, folder, name=None, description=None):
         """Update a folder's name or description
@@ -178,27 +184,24 @@ class Fossology:
             logger.error("You need to pass the Folder() object to call this method.")
             return None
 
-        if name and description:
-            headers = {"name": f"{name}", "description": f"{description}"}
-            logger.debug(f"Update name and description of folder {folder.id}")
-        else:
-            if name:
-                headers = {"name": f"{name}"}
-                logger.debug(f"Update name of folder {folder.id}")
-            if description:
-                headers = {"description": f"{description}"}
-                logger.debug(f"Update description of folder {folder.id}")
-
+        headers = dict()
+        if name:
+            headers["name"] = name
+        if description:
+            headers["description"] = description
         folders_api_path = self.api + f"/folders/{folder.id}"
-        response = self.session.patch(folders_api_path, headers=headers)
-        if response.status_code == 200:
-            logger.info(f"{folder} has been updated")
-            return self.detail_folder(folder.id, folder.parent)
-        else:
-            logger.error(
-                f"Unable to update folder {folder}: {response.text} "
-                f"(Status code: {response.status_code})"
-            )
+
+        try:
+            response = self.session.patch(folders_api_path, headers=headers)
+            if response.status_code == 200:
+                logger.info(f"{folder} has been updated")
+                return self.detail_folder(folder.id)
+            else:
+                description = f"Unable to update folder {folder}"
+                raise FossologyApiError(description, response)
+
+        except FossologyApiError as error:
+            logger.error(error.message)
             return None
 
     def delete_folder(self, folder_id):
@@ -207,30 +210,34 @@ class Fossology:
         :param folder_id: the ID of the folder to be deleted
         :type folder_id: int
         """
-        response = self.session.delete(self.api + f"/folders/{folder_id}")
-        if response.status_code == 202:
-            logger.info(f"Folder {folder_id} has been scheduled for deletion")
-        else:
-            logger.error(
-                f"Unable to delete folder {id}: {response.text} "
-                f"(Status code: {response.status_code})"
-            )
+        try:
+            response = self.session.delete(self.api + f"/folders/{folder_id}")
+            if response.status_code == 202:
+                logger.info(f"Folder {folder_id} has been scheduled for deletion")
+            else:
+                description = f"Unable to delete folder {folder_id}"
+                raise FossologyApiError(description, response)
+        except FossologyApiError as error:
+            logger.error(error.message)
 
     def detail_upload(self, upload_id):
         """Get detailled information about an upload
 
         :param: upload_id
         :type: int
+        :return: the upload data - or None if the REST call failed
+        :rtype: Upload() object
         """
-        response = self.session.get(self.api + f"/uploads/{upload_id}")
-        if response.status_code == 200:
-            logger.debug(response.json())
-            return Upload.from_json(response.json())
-        else:
-            logger.error(
-                f"Error while getting details for upload {upload_id} "
-                f"{response.text} (Status code: {response.status_code}"
-            )
+        try:
+            response = self.session.get(self.api + f"/uploads/{upload_id}")
+            if response.status_code == 200 and response.json():
+                logger.debug(f"Got upload details: {response.json()}")
+                return Upload.from_json(response.json())
+            else:
+                description = f"Error while getting details for upload {upload_id}"
+                raise FossologyApiError(description, response)
+        except FossologyApiError as error:
+            logger.error(error.message)
             return None
 
     def upload_file(
@@ -244,31 +251,36 @@ class Fossology:
         :type upload_file: string
         :type path: string
         :type folder: Folder
+        :return: the upload data - or None if the REST call failed
+        :rtype: Upload() object
+
         """
         file_path = Path(path) / upload_file
         files = {"fileInput": (upload_file, open(file_path, "rb"))}
-        print(files)
         headers = {"folderId": str(folder.id)}
         if description:
             headers["uploadDescription"] = description
         if access_level:
             headers["public"] = access_level.value
 
-        response = self.session.post(
-            self.api + "/uploads", files=files, headers=headers
-        )
-        if response.status_code == 201:
-            upload_id = response.json()["message"]
-            upload = self.detail_upload(upload_id)
-            logger.info(
-                f"Upload {upload.uploadname} ({upload.filesize}) "
-                f"has been uploaded on {upload.uploaddate}"
+        try:
+            response = self.session.post(
+                self.api + "/uploads", files=files, headers=headers
             )
-        else:
-            logger.error(
-                f"Upload of {upload_file} failed: {response.text} "
-                f"(Status code: {response.status_code})"
-            )
+            if response.status_code == 201:
+                upload_id = response.json()["message"]
+                upload = self.detail_upload(upload_id)
+                logger.info(
+                    f"Upload {upload.uploadname} ({upload.filesize}) "
+                    f"has been uploaded on {upload.uploaddate}"
+                )
+                return upload
+            else:
+                description = f"Upload of {upload_file} failed"
+                raise FossologyApiError(description, response)
+        except FossologyApiError as error:
+            logger.error(error.message)
+            return None
 
     def delete_upload(self, upload_id):
         """Delete an upload
@@ -276,11 +288,62 @@ class Fossology:
         :param upload_id: the ID of the upload to be deleted
         :type upload_id: int
         """
-        response = self.session.delete(self.api + f"/uploads/{upload_id}")
-        if response.status_code == 202:
-            logger.info(f"Upload {upload_id} has been scheduled for deletion")
-        else:
-            logger.error(
-                f"Unable to delete upload {upload_id} : {response.text}"
-                f"(Status code: {response.status_code})"
-            )
+        try:
+            response = self.session.delete(self.api + f"/uploads/{upload_id}")
+            if response.status_code == 202:
+                logger.info(f"Upload {upload_id} has been scheduled for deletion")
+            else:
+                description = f"Unable to delete upload {upload_id}"
+                raise FossologyApiError(description, response)
+        except FossologyApiError as error:
+            logger.error(error.message)
+
+    def list_uploads(self):
+        """Get all uploads available to the registered user
+
+        :return: a list of uploads - or None if the REST call failed
+        :rtype: list()
+        """
+        try:
+            response = self.session.get(self.api + f"/uploads")
+            if response.status_code == 200:
+                uploads_list = list()
+                for upload in response.json():
+                    uploads_list.append(Upload.from_json(upload))
+                logger.info(f"{len(uploads_list)} uploads are accessible")
+                return uploads_list
+            else:
+                description = f"Unable to retrieve the list of uploads"
+                raise FossologyApiError(description, response)
+        except FossologyApiError as error:
+            logger.error(error.message)
+            return None
+
+    def jobs(self, page_size=20, pages=1):
+        """Get all available jobs
+
+        The answer is limited to the first page of 20 results by default
+
+        :param page_size: the maximum number of results per page
+        :param pages: the number of pages to be retrieved
+        :type page_size: int (default to "20")
+        :type pages: int (default to "1")
+        :return: the jobs data - or None if the REST call failed
+        :rtype: list() of Job objects
+        """
+        headers = {"limit": str(page_size), "pages": str(pages)}
+        try:
+            response = self.session.get(self.api + "/jobs", headers=headers)
+            if response.status_code == 200:
+                jobs_list = list()
+                for job in response.json():
+                    logger.debug(json.dumps(job, indent=4))
+                    # jobs_list.append(Job.from_json(job))
+                # logger.info(f"{len(jobs_list)} jobs are accessible")
+                return jobs_list
+            else:
+                description = "Getting the list of jobs failed"
+                raise FossologyApiError(description, response)
+        except FossologyApiError as error:
+            logger.error(error.message)
+            return None
