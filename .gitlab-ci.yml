@@ -1,10 +1,7 @@
 image: python:3.7-alpine
 
 variables:
-  PIP_INDEX: https://captain.rtf.siemens.net/artifactory/api/pypi/pypi-remote/simple
-  http_proxy: $CODE_PROXY
-  https_proxy: $CODE_PROXY
-  no_proxy: code.siemens.com,captain.rtf.siemens.net
+  PIP_INDEX: https://devops.bt.siemens.com/artifactory/api/pypi/pypi-all/simple
 
 stages:
   - check
@@ -20,7 +17,7 @@ format:
 
 style:
   stage: check
-  script: 
+  script:
     - pip install -i ${PIP_INDEX} flake8
     - flake8 .
   except:
