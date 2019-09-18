@@ -1,7 +1,6 @@
 # Copyright 2019 Siemens AG
 # SPDX-License-Identifier: LicenseRef-SISL-1.1-or-later
 
-import json
 import logging
 import requests
 
