@@ -139,23 +139,19 @@ class Job(object):
     """FOSSology job.
 
     Represents a FOSSology job.
+    FIXME eta and status information are not available in API version 1.0.3
     """
 
-    def __init__(self, id, name, queueDate, uploadId, userId, groupId, eta, status):
+    def __init__(self, id, name, queueDate, uploadId, userId, groupId):
         self.id = id
         self.name = name
         self.queueDate = queueDate
         self.uploadId = uploadId
         self.userId = userId
         self.groupId = groupId
-        self.eta = eta
-        self.status = status
 
     def __str__(self):
-        return (
-            f"Job '{self.name}' ({self.id}) queued on {self.queueDate} "
-            f"is {self.status} (ETA = {self.eta})"
-        )
+        return f"Job '{self.name}' ({self.id}) queued on {self.queueDate}"
 
     @classmethod
     def from_json(cls, json_dict):

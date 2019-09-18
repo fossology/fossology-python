@@ -3,16 +3,27 @@
 
 import os
 import time
+import logging
 
 from fossology.api import Fossology
 from fossology.obj import AccessLevel
 
-FOSS_URL = os.getenv("FOSS_URL") or exit("Environment variable FOSS_URL doesn't exists")
-FOSS_EMAIL = os.getenv("FOSS_EMAIL") or exit(
-    "Environment variable FOSS_EMAIL doesn't exists"
+logger = logging.getLogger("fossology")
+console = logging.StreamHandler()
+console.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+console.setFormatter(formatter)
+logger.addHandler(console)
+
+
+FOSSOLOGY_SERVER = os.getenv("FOSSOLOGY_SERVER") or exit(
+    "Environment variable FOSSOLOGY_URL doesn't exists"
 )
-FOSS_TOKEN = os.getenv("FOSS_TOKEN") or exit(
-    "Environment variable FOSS_TOKEN doesn't exists"
+FOSSOLOGY_TOKEN = os.getenv("FOSSOLOGY_TOKEN") or exit(
+    "Environment variable FOSSOLOGY_TOKEN doesn't exists"
+)
+FOSSOLOGY_USER = os.getenv("FOSSOLOGY_EMAIL") or exit(
+    "Environment variable FOSSOLOGY_EMAIL doesn't exists"
 )
 
 test_file_path = "/home/marion/code/linux/fossology-python/test_files"
@@ -57,14 +68,16 @@ def update_folder_test(foss, test_folder):
     return test_folder
 
 
-def upload_file_test(filename):
+def upload_file_test(filename, test_folder):
     test_upload = foss.upload_file(
         filename,
         test_file_path,
         test_folder,
-        description="Test upload base-files combined",
+        description="Test upload via fossology-python lib",
         access_level=AccessLevel.PUBLIC,
     )
+    assert test_upload.uploadname == filename, "Uploadname on the server is wrong"
+
     return test_upload
 
 
@@ -75,33 +88,21 @@ def delete_folder_test(foss, test_folder):
     assert not deleted_folder, "Deleted folder still exists"
 
 
-def delete_upload_test(foss, test_upload):
-    foss.delete_upload(test_upload.id)
-    time.sleep(3)
-    deleted_upload = foss.detail_upload(test_upload.id)
-    assert not deleted_upload, "Deleted upload still exists"
-
-
 if __name__ == "__main__":
     # def test_fossology_api():
 
-    foss = Fossology(FOSS_URL, FOSS_TOKEN, FOSS_EMAIL)
+    foss = Fossology(FOSSOLOGY_SERVER, FOSSOLOGY_TOKEN, FOSSOLOGY_USER)
     assert foss, "Client session could not be established"
 
     test_folder = create_folder_test(foss)
-    # test_folder = update_folder_test(foss, test_folder)
-    # delete_folder_test(foss, test_folder)
-
-    # test_upload = upload_file_test("base-files_10.3-debian10-combined.tar.bz2")
-    # delete_upload_test(foss, test_upload)
+    test_folder = update_folder_test(foss, test_folder)
+    test_upload = upload_file_test(
+        "base-files_10.3-debian10-combined.tar.bz2", test_folder
+    )
 
     all_uploads = foss.list_uploads()
-    for upload in all_uploads:
-        print(upload)
+    all_jobs = foss.list_jobs(page_size=1)
 
-    test_upload = foss.detail_upload(12)
-
-    all_jobs = foss.jobs(page_size=1)
-    print(all_jobs)
-
-    # foss.start_jobs(test_folder, test_upload)
+    # Cleanup
+    foss.delete_upload(test_upload.id)
+    delete_folder_test(foss, test_folder)

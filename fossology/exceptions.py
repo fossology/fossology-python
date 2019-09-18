@@ -33,5 +33,5 @@ class FossologyApiError(Error):
 
     def __init__(self, description, response):
         self.message = (
-            f"{description}\n{response.json()['message']} ({response.status_code})"
+            f"{description}: '{response.json()['message']}' ({response.status_code})"
         )
