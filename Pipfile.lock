@@ -1,13 +1,13 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0f942e43c5759a89f7980d6f1a1a4c4e51e9cad0ff08d06432987fdae9c40f43"
+            "sha256": "aa0414a97260f3dad00269d0af3c9f6ac0a0600f099d428330181f20564b0b1a"
         },
         "pipfile-spec": 6,
         "requires": {},
         "sources": [
             {
-                "name": "pypi",
+                "name": "artifactory",
                 "url": "https://devops.bt.siemens.com/artifactory/api/pypi/pypi-all/simple",
                 "verify_ssl": true
             }
@@ -40,7 +40,7 @@
                 "sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4",
                 "sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"
             ],
-            "index": "pypi",
+            "index": "artifactory",
             "version": "==2.22.0"
         },
         "urllib3": {
@@ -203,7 +203,7 @@
                 "sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4",
                 "sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"
             ],
-            "index": "pypi",
+            "index": "artifactory",
             "version": "==2.22.0"
         },
         "requests-toolbelt": {
@@ -231,7 +231,7 @@
                 "sha256:0d586b0f8c2fc3cc6559c5e8fd6124628110514fda0e5d7c82e682d749d2e845",
                 "sha256:839a3ed6f6b092bb60f492024489cc9e6991360fb9f52ed6361acd510d261069"
             ],
-            "index": "pypi",
+            "index": "artifactory",
             "version": "==2.2.0"
         },
         "sphinxcontrib-applehelp": {
@@ -288,7 +288,7 @@
                 "sha256:630fadd6e342e725930be6c696537e3f9ccc54331742b16245dab292a17d0460",
                 "sha256:a3d22aab467b4682a22de4a422632e79d07eebd07ff2a7079effb13f8a693787"
             ],
-            "index": "pypi",
+            "index": "artifactory",
             "version": "==1.15.0"
         },
         "urllib3": {
