@@ -1,22 +1,16 @@
 # Copyright 2019 Siemens AG
 # SPDX-License-Identifier: LicenseRef-SISL-1.1-or-later
 
-import sys
 import json
 import logging
 import requests
 
 from pathlib import Path
-from .obj import Agents, User, Folder, Upload
+from .obj import Agents, User, Folder, Upload, Job
 from .exceptions import AuthenticationError, AuthorizationError, FossologyApiError
 
 logger = logging.getLogger("fossology")
 logger.setLevel(logging.DEBUG)
-console = logging.StreamHandler()
-console.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-console.setFormatter(formatter)
-logger.addHandler(console)
 
 
 class Fossology:
@@ -79,7 +73,7 @@ class Fossology:
                     description = f"Unable to establish a session with {self.host}"
                     raise FossologyApiError(description, response)
         except (AuthenticationError, FossologyApiError) as error:
-            sys.exit(error.message)
+            logger.error(error.message)
 
     def _list_folders(self):
         """List all folders accessible to the authenticated user
@@ -146,7 +140,7 @@ class Fossology:
             response = self.session.post(self.api + "/folders", headers=headers)
 
             if response.status_code == 200:
-                logger.info(f"Folder '{name}' already exists ({response.json()}")
+                logger.info(f"Folder '{name}' already exists")
                 for folder in self.folders:
                     if folder.name == name:
                         return folder
@@ -155,7 +149,7 @@ class Fossology:
                 return None
 
             elif response.status_code == 201:
-                logger.info(f"Folder {name} has been created ({response.json()}")
+                logger.info(f"Folder {name} has been created")
                 return self.detail_folder(response.json()["message"])
 
             elif response.status_code == 403:
@@ -231,11 +225,15 @@ class Fossology:
         try:
             response = self.session.get(self.api + f"/uploads/{upload_id}")
             if response.status_code == 200 and response.json():
-                logger.debug(f"Got upload details: {response.json()}")
+                logger.debug(f"Got details for upload {upload_id}")
                 return Upload.from_json(response.json())
             else:
-                description = f"Error while getting details for upload {upload_id}"
-                raise FossologyApiError(description, response)
+                if response.json():
+                    description = f"Error while getting details for upload {upload_id}"
+                    raise FossologyApiError(description, response)
+                else:
+                    logger.error(f"Missing response from API: {response.text}")
+                    return None
         except FossologyApiError as error:
             logger.error(error.message)
             return None
@@ -319,7 +317,7 @@ class Fossology:
             logger.error(error.message)
             return None
 
-    def jobs(self, page_size=20, pages=1):
+    def list_jobs(self, page_size=20, pages=1):
         """Get all available jobs
 
         The answer is limited to the first page of 20 results by default
@@ -337,9 +335,7 @@ class Fossology:
             if response.status_code == 200:
                 jobs_list = list()
                 for job in response.json():
-                    logger.debug(json.dumps(job, indent=4))
-                    # jobs_list.append(Job.from_json(job))
-                # logger.info(f"{len(jobs_list)} jobs are accessible")
+                    jobs_list.append(Job.from_json(job))
                 return jobs_list
             else:
                 description = "Getting the list of jobs failed"
