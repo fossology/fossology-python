@@ -1,16 +1,18 @@
 [[source]]
-url = "https://captain.rtf.siemens.net/artifactory/api/pypi/pypi-remote/simple"
+url = "https://devops.bt.siemens.com/artifactory/api/pypi/pypi-all/simple"
 verify_ssl = true
-name = "pypi"
+name = "artifactory"
 
 [packages]
 requests = "*"
 
 [dev-packages]
 sphinx = "*"
-m2r = "*"
+twine = "*"
 
 [scripts]
 test = "python test.py"
 docs = "sphinx-build docs/source docs/build"
-build = "python setup.py bdist_wheel -d docs/build"
+build = "python setup.py bdist_wheel"
+deploy = "pipenv run twine upload --verbose --repository-url https://devops.bt.siemens.com/artifactory/api/pypi/pypi-siemens dist/*"
+clean = "rm -r dist/ fossology_python.egg-info/ docs/build/"
