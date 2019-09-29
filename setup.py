@@ -1,11 +1,11 @@
 import setuptools
 
-with open("README.md", "r") as fh:
+with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="fossology-python",
-    version="0.0.1",
+    version="0.0.2",
     author="Marion Deveaud",
     author_email="marion.deveaud@siemens.com",
     description="A library to automate Fossology from Python scripts.",

@@ -5,6 +5,8 @@ from enum import Enum
 
 
 class AccessLevel(Enum):
+    """Access level for uploads: PRIVATE, PROTECTED, PUBLIC"""
+
     PRIVATE = "private"
     PROTECTED = "protected"
     PUBLIC = "public"
@@ -23,18 +25,22 @@ class Agents(object):
         copyright_email_author,
         ecc,
         keyword,
+        patent,
         mimetype,
         monk,
         nomos,
+        ojo,
         package,
     ):
         self.bucket = bucket
         self.copyright_email_author = copyright_email_author
         self.ecc = ecc
         self.keyword = keyword
+        self.patent = patent
         self.mimetype = mimetype
         self.monk = monk
         self.nomos = nomos
+        self.ojo = ojo
         self.package = package
 
     @classmethod
@@ -142,16 +148,21 @@ class Job(object):
     FIXME eta and status information are not available in API version 1.0.3
     """
 
-    def __init__(self, id, name, queueDate, uploadId, userId, groupId):
+    def __init__(self, id, name, queueDate, uploadId, userId, groupId, eta, status):
         self.id = id
         self.name = name
         self.queueDate = queueDate
         self.uploadId = uploadId
         self.userId = userId
         self.groupId = groupId
+        self.eta = eta
+        self.status = status
 
     def __str__(self):
-        return f"Job '{self.name}' ({self.id}) queued on {self.queueDate}"
+        return (
+            f"Job '{self.name}' ({self.id}) queued on {self.queueDate} "
+            f"(Status: {self.status} ETA: {self.eta})"
+        )
 
     @classmethod
     def from_json(cls, json_dict):
