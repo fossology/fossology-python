@@ -69,7 +69,7 @@ implementation:
    -  ☒ GET /folders/{id}
    -  ☒ DELETE /folders/{id}
    -  ☒ PATCH /folders/{id}
-   -  ☐ PUT /folders/{id}
+   -  ☒ PUT /folders/{id} => Broken API Endpoint?
 
 -  Upload:
 
@@ -77,8 +77,8 @@ implementation:
    -  ☒ POST /uploads
    -  ☒ GET /uploads/{id}
    -  ☒ DELETE /uploads/{id}
-   -  ☐ PATCH /uploads/{id}
-   -  ☐ PUT /uploads/{id}
+   -  ☒ PATCH /uploads/{id}
+   -  ☒ PUT /uploads/{id}
 
 -  Search:
 
