@@ -4,7 +4,7 @@
 import logging
 
 from pathlib import Path
-from .obj import Upload, Job
+from .obj import Upload
 from .exceptions import FossologyApiError
 
 logger = logging.getLogger(__name__)

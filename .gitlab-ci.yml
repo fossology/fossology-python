@@ -1,5 +1,10 @@
 image: docker.siemens.com/code-ops/poetry-docker
 
+variables:
+  http_proxy: $CODE_PROXY
+  https_proxy: $CODE_PROXY
+  no_proxy: code.siemens.com,docker.siemens.com,devops.bt.siemens.com
+
 stages:
   - check
   - deploy
@@ -7,16 +12,16 @@ stages:
 format_and_style:
   stage: check
   script:
-    - poetry install
-    - black .
-    - flake8 .
+    - poetry install --no-root
+    - poetry run black .
+    - poetry run flake8 .
   except:
     - master
 
 pages:
   stage: deploy
   script:
-    - poetry install
+    - poetry install --no-root -n
     - poetry run sphinx-build docs/source docs/build
     - cp -r docs/build public
   only:
