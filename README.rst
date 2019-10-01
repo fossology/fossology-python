@@ -1,5 +1,5 @@
-**Work-in-Progress**\ *, if you which to contribute, look at
-the*\ `section "contribute" <=contribute>`__
+**Work-in-Progress**, if you which to contribute, look at
+the `section "contribute" <#contribute>`__.
 
 This small library can be used to access data from the FOSSology API via
 Python scripts.
@@ -48,7 +48,7 @@ Installation
 Available endpoints
 -------------------
 
-   In version 0.0.1
+   In version 0.0.3
 
 In the current version of this module, not all REST API endpoints are
 supported.
@@ -105,20 +105,13 @@ Contribute
 Develop
 -------
 
--  Install dependencies using ``pipenv`` (*if you're not using
-   ``pipenv`` have a look at* `Pipfile <Pipfile>`_ *for a list of
-   dependencies*):
+-  Install dependencies using ``poetry`` (if you're not using
+   ``poetry`` have a look at the project's `pyproject.toml <pyproject.toml>`_ for a list of
+   dependencies):
 
    .. code:: shell
 
-      pipenv install
-
--  Following files are currently available:
-
-   -  `api.py <fossology/api.py>`_: the methods used to interact with
-      the server via the Rest API
-   -  `obj.py <fossology/obj.py>`_: the classes derived from the JSON
-      objects returned from the API
+      poetry install
 
 -  Contributions can be performed using `the merge request
    workflow <https://code.siemens.com/help/workflow/workflow.html>`__

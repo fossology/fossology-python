@@ -1,5 +1,5 @@
-Welcome to fossology-python's documentation!
-============================================
+Welcome to fossology's documentation!
+=====================================
 
 .. include:: ../../README.rst
 
@@ -8,7 +8,10 @@ Welcome to fossology-python's documentation!
    :hidden:
    :caption: Contents:
 
-   api
+   fossology
+   folders
+   uploads
+   jobs
    obj
    exceptions
    logging
