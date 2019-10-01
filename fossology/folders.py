@@ -11,6 +11,8 @@ logger.setLevel(logging.DEBUG)
 
 
 class Folders:
+    """Class dedicated to all "folders" related endpoints"""
+
     def list_folders(self):
         """List all folders accessible to the authenticated user
 

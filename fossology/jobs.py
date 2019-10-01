@@ -11,6 +11,8 @@ logger.setLevel(logging.DEBUG)
 
 
 class Jobs:
+    """Class dedicated to all "jobs" related endpoints"""
+
     def list_jobs(self, page_size=20, pages=1):
         """Get all available jobs
 
