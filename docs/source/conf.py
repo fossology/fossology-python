@@ -19,9 +19,8 @@ sys.path.insert(0, os.path.abspath("../.."))
 
 # -- Project information -----------------------------------------------------
 
-project = "fossology-python"
-copyright = "2019, Marion Deveaud"
-author = "Marion Deveaud"
+project = "fossology"
+copyright = "2019, Siemens AG"
 
 # The full version, including alpha/beta/rc tags
 release = "0.0.1"

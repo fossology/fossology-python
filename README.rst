@@ -18,7 +18,7 @@ Installation
 
    .. code:: shell
 
-      pip install -i "https://devops.bt.siemens.com/artifactory/api/pypi/pypi-all/simple" fossology-python
+      pip install -i "https://devops.bt.siemens.com/artifactory/api/pypi/pypi-all/simple" fossology
 
 -  Additional dependencies:
 

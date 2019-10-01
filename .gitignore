@@ -6,4 +6,4 @@ __pycache__
 build/
 dist/
 docs/build/
-fossology_python.egg-info/
+fossology.egg-info/

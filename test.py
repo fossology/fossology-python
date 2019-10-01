@@ -1,11 +1,11 @@
 # Copyright 2019 Siemens AG
-# SPDX-License-Identifier: LicenseRef-SISL-1.1-or-later
+# SPDX-License-Identifier: MIT
 
 import os
 import time
 import logging
 
-from fossology.api import Fossology
+from fossology import Fossology
 from fossology.obj import AccessLevel
 
 logger = logging.getLogger("fossology")
