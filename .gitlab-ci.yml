@@ -1,24 +1,14 @@
-image: python:3.7-alpine
-
-variables:
-  PIP_INDEX: https://devops.bt.siemens.com/artifactory/api/pypi/pypi-all/simple
+image: docker.siemens.com/code-ops/poetry-docker
 
 stages:
   - check
   - deploy
 
-format:
+format_and_style:
   stage: check
   script:
-    - pip install -i ${PIP_INDEX} black
+    - poetry install
     - black .
-  except:
-    - master
-
-style:
-  stage: check
-  script:
-    - pip install -i ${PIP_INDEX} flake8
     - flake8 .
   except:
     - master
@@ -26,9 +16,8 @@ style:
 pages:
   stage: deploy
   script:
-    - pip install -i ${PIP_INDEX} pipenv
-    - pipenv install --dev --deploy
-    - pipenv run docs
+    - poetry install
+    - poetry run sphinx-build docs/source docs/build
     - cp -r docs/build public
   only:
     - master

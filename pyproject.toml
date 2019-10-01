@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "fossology"
+version = "0.0.3"
+description = "A library to automate Fossology from Python scripts"
+authors = ["Marion Deveaud <marion.deveaud@siemens.com>"]
+license = "MIT License"
+readme = "README.rst"
+include = ["LICENSE.md"]
+repository = "https://code.siemens.com/fossology/fossology-python"
+classifiers = [
+    "Topic :: Development Status :: 3 - Alpha",
+    "Topic :: Environment :: Fossology Environment",
+    "Topic :: Intended Audience :: Developers",
+    "Topic :: License :: OSI Approved :: MIT License",
+    "Topic :: Natural Language :: English",
+    "Topic :: Operating System :: OS Independent",
+    "Topic :: Programming Language :: Python :: 3.7",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[[tool.poetry.source]]
+name = "devopsbt"
+url = "https://devops.bt.siemens.com/artifactory/api/pypi/pypi-all/simple"
+
+[tool.poetry.dependencies]
+python = ">=3.6"
+requests = ">=2.22.0"
+
+[tool.poetry.dev-dependencies]
+black = ">=19.3b0"
+flake8 = ">=3.7.8"
+sphinx = ">=2.2.0"
+
+[tool.poetry.scripts]
+# No supported yet
+# https://github.com/sdispater/poetry/issues/241
+#docs = "sphinx-build docs/source docs/build"
+#clean = "rm -r dist/ build/ docs/build/"
+
