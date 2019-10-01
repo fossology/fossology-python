@@ -1,5 +1,5 @@
 # Copyright 2019 Siemens AG
-# SPDX-License-Identifier: SISL-1.1-or-later
+# SPDX-License-Identifier: MIT
 
 
 class Error(Exception):
