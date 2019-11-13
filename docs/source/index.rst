@@ -12,6 +12,7 @@ Welcome to fossology's documentation!
    folders
    uploads
    jobs
+   report
    obj
    exceptions
    logging
