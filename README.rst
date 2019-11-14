@@ -1,12 +1,6 @@
-**Work-in-Progress**, if you which to contribute, look at
-the `section "contribute" <#contribute>`__.
+This library can be used to access data from the FOSSology API via Python scripts.
 
-This small library can be used to access data from the FOSSology API via
-Python scripts.
-
-See `the OpenAPI
-specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_
-used to implement this library.
+See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
 Usage
 =====
@@ -25,6 +19,9 @@ Installation
    .. code:: shell
 
       pip install requests
+
+Using the API
+-------------
 
 -  Export required environment variables:
 
@@ -48,7 +45,7 @@ Installation
 Available endpoints
 -------------------
 
-   In version 0.0.3
+   In version 0.0.4
 
 In the current version of this module, not all REST API endpoints are
 supported.
@@ -69,7 +66,7 @@ implementation:
    -  ☒ GET /folders/{id}
    -  ☒ DELETE /folders/{id}
    -  ☒ PATCH /folders/{id}
-   -  ☒ PUT /folders/{id} => Broken API Endpoint?
+   -  ☒ PUT /folders/{id}
 
 -  Upload:
 
@@ -82,22 +79,23 @@ implementation:
 
 -  Search:
 
-   -  ☐ GET /search
+   -  ☒ GET /search
 
 -  Report:
 
-   -  ☐ GET /report
-   -  ☐ GET /report/{id}
+   -  ☒ GET /report
+   -  ☒ GET /report/{id}
 
 -  Jobs:
 
    -  ☒ GET /jobs
-   -  ☐ POST /jobs
-   -  ☐ GET /jobs/{id}
+   -  ☒ POST /jobs
+   -  ☒ GET /jobs/{id}
 
 -  Default:
 
-   -  ☐ POST /tokens
+   -  ☒ POST /tokens
+   -  ☒ GET /version
 
 Contribute
 ==========
@@ -129,6 +127,47 @@ Develop
    extension <http://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
 
 .. _feature-request--bug-report:
+
+
+Build and publish
+-----------------
+
+- Configure the PyPi repository where the package shall be published:
+
+  .. code:: shell
+
+     poetry config repositories.myrepo $MYREPO_URL
+
+- Build and publish the current version of the PyPi package:
+
+  .. code:: shell
+
+    poetry publish --repository myrepo --username $USER --password $PASSWD --build
+
+- Build documentation:
+
+  .. code:: shell
+
+     poetry run sphinx-build docs/source docs/build
+
+- Cleanup builds:
+
+  .. code::shell
+
+     rm -r dist/ build/ docs/build/
+
+
+Test
+----
+
+The testsuite available in this project expects a running Fossology instance under the hostname **fossology** and a postgres database. Refer to the Fossology project to create a Docker-based test environment: `github.com/fossology/fossology <https://github.com/fossology/fossology>`_.
+
+- Start the complete test suite or a specific test case:
+
+  .. code:shell
+
+     poetry run python test.py
+     poetry run python test.py TestFossologySearch
 
 Feature request & bug report
 ----------------------------

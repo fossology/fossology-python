@@ -3,26 +3,38 @@ image: docker.siemens.com/code-ops/poetry-docker
 variables:
   http_proxy: $CODE_PROXY
   https_proxy: $CODE_PROXY
-  no_proxy: code.siemens.com,docker.siemens.com,devops.bt.siemens.com
+  no_proxy: code.siemens.com,docker.siemens.com,devops.bt.siemens.com, fossology
 
 stages:
   - check
-  - deploy
+  - test
+  - document
 
 format_and_style:
   stage: check
   script:
     - poetry install --no-root
-    - poetry run black .
-    - poetry run flake8 .
+    - poetry run -- black .
+    - poetry run -- flake8 .
+  except:
+    - master
+
+testsuite:
+  stage: test
+  services:
+    - name: docker.siemens.com/mirror/fossology:latest
+      alias: fossology
+  script:
+    - poetry install --no-root -n
+    - poetry run -- python test.py
   except:
     - master
 
 pages:
-  stage: deploy
+  stage: document
   script:
     - poetry install --no-root -n
-    - poetry run sphinx-build docs/source docs/build
+    - poetry run -- sphinx-build docs/source docs/build
     - cp -r docs/build public
   only:
     - master
