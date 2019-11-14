@@ -24,16 +24,6 @@ console.setFormatter(formatter)
 logger.addHandler(console)
 
 
-def get_upload():
-    upload_list = foss.list_uploads()
-    test_upload = None
-    for upload in upload_list:
-        if upload.uploadname == upload_filename:
-            test_upload = upload
-            break
-    return test_upload
-
-
 def generate_fossology_token(server):
     try:
         return fossology_token(
@@ -50,6 +40,31 @@ try:
     foss = Fossology(FOSSOLOGY_SERVER, FOSSOLOGY_TOKEN, "fossy")
 except (FossologyApiError, AuthenticationError) as error:
     exit(error.message)
+
+
+def get_upload():
+    upload_list = foss.list_uploads()
+    test_upload = None
+    for upload in upload_list:
+        if upload.uploadname == upload_filename:
+            test_upload = upload
+            break
+    return test_upload
+
+
+def do_upload():
+    try:
+        test_upload = foss.upload_file(
+            upload_filename,
+            test_files,
+            foss.rootFolder,
+            description="Test upload via fossology-python lib",
+            access_level=AccessLevel.PUBLIC,
+        )
+        return test_upload
+    except FossologyApiError as error:
+        logger.error(error.message)
+        return None
 
 
 class TestFossologyFolders(unittest.TestCase):
@@ -132,32 +147,15 @@ class TestFossologyUploads(unittest.TestCase):
     def test_upload_file(self):
         test_upload = get_upload()
         if not test_upload:
-            try:
-                test_upload = foss.upload_file(
-                    upload_filename,
-                    test_files,
-                    foss.rootFolder,
-                    description="Test upload via fossology-python lib",
-                    access_level=AccessLevel.PUBLIC,
-                )
-                self.assertEqual(
-                    test_upload.uploadname,
-                    upload_filename,
-                    "Uploadname on the server is wrong",
-                )
-            except FossologyApiError as error:
-                logger.error(error.message)
+            test_upload = do_upload()
+        self.assertEqual(
+            test_upload.uploadname, upload_filename, "Uploadname on the server is wrong"
+        )
 
     def test_move_upload(self):
         test_upload = get_upload()
         if not test_upload:
-            test_upload = foss.upload_file(
-                upload_filename,
-                test_files,
-                foss.rootFolder,
-                description="Test upload via fossology-python lib",
-                access_level=AccessLevel.PUBLIC,
-            )
+            test_upload = do_upload()
 
         move_folder = foss.create_folder(
             foss.rootFolder, "MoveUploadTest", "Test move upload function"
@@ -181,13 +179,7 @@ class TestFossologyUploads(unittest.TestCase):
     def test_delete_upload(self):
         test_upload = get_upload()
         if not test_upload:
-            test_upload = foss.upload_file(
-                upload_filename,
-                test_files,
-                foss.rootFolder,
-                description="Test upload via fossology-python lib",
-                access_level=AccessLevel.PUBLIC,
-            )
+            test_upload = do_upload()
 
         try:
             foss.delete_upload(test_upload)
@@ -203,13 +195,7 @@ class TestFossologyJobs(unittest.TestCase):
     def test_schedule_jobs(self):
         test_upload = get_upload()
         if not test_upload:
-            test_upload = foss.upload_file(
-                upload_filename,
-                test_files,
-                foss.rootFolder,
-                description="Test upload via fossology-python lib",
-                access_level=AccessLevel.PUBLIC,
-            )
+            test_upload = do_upload()
 
         analysis_agents = foss.user.agents.to_dict()
         jobs_spec = {
@@ -243,13 +229,7 @@ class TestFossologyReport(unittest.TestCase):
     def test_generate_report(self):
         test_upload = get_upload()
         if not test_upload:
-            test_upload = foss.upload_file(
-                upload_filename,
-                test_files,
-                foss.rootFolder,
-                description="Test upload via fossology-python lib",
-                access_level=AccessLevel.PUBLIC,
-            )
+            test_upload = do_upload()
 
         try:
             report_id = foss.generate_report(test_upload, Format=ReportFormat.SPDX2)
@@ -279,8 +259,24 @@ class TestFossologySearch(unittest.TestCase):
             logger.error(error.message)
 
 
+def suite():
+    suite = unittest.TestSuite()
+    suite.addTest(TestFossologyFolders("test_create_folder"))
+    suite.addTest(TestFossologyFolders("test_update_folder"))
+    suite.addTest(TestFossologyFolders("test_move_folder"))
+    suite.addTest(TestFossologyFolders("test_delete_folder"))
+    suite.addTest(TestFossologyUploads("test_upload_file"))
+    suite.addTest(TestFossologyUploads("test_move_upload"))
+    suite.addTest(TestFossologyJobs("test_schedule_jobs"))
+    suite.addTest(TestFossologyReport("test_generate_report"))
+    suite.addTest(TestFossologySearch("test_search"))
+    suite.addTest(TestFossologyUploads("test_delete_upload"))
+    return suite
+
+
 if __name__ == "__main__":
 
-    unittest.main()
+    runner = unittest.TextTestRunner()
+    runner.run(suite())
 
     foss.close()
