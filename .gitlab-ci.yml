@@ -1,9 +1,9 @@
-image: docker.siemens.com/code-ops/poetry-docker
+image: $DOCKER_POETRY
 
 variables:
   http_proxy: $CODE_PROXY
   https_proxy: $CODE_PROXY
-  no_proxy: code.siemens.com,docker.siemens.com,devops.bt.siemens.com, fossology
+  no_proxy: $NO_PROXY
 
 stages:
   - check
@@ -22,7 +22,7 @@ format_and_style:
 testsuite:
   stage: test
   services:
-    - name: docker.siemens.com/mirror/fossology:latest
+    - name: $DOCKER_FOSSOLOGY
       alias: fossology
   script:
     - poetry install --no-root -n
