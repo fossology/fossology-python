@@ -1,0 +1,28 @@
+name: Fossology Tests
+
+on: push
+
+jobs:
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.7-alpine
+
+    services:
+      fossology:
+        image: fossology/fossology:latest
+        ports:
+          - 8081:80
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install host dependencies
+        run: apk add --update python3-dev gcc musl-dev libffi-dev libressl nmap
+      - name: Install Python dependencies
+        run: pip install requests
+      - name: Check services
+        run: nmap fossology -p 80
+      - name: Run tests
+        run: python test.py

@@ -58,8 +58,8 @@ def fossology_token(
         else:
             description = f"Error while generating new token"
             raise FossologyApiError(description, response)
-    except requests.exceptions.ConnectionError:
-        exit(f"Server {url} does not seem to be running or is unreachable")
+    except requests.exceptions.ConnectionError as error:
+        exit(f"Server {url} does not seem to be running or is unreachable: {error}")
 
 
 class Fossology(Folders, Uploads, Jobs, Report):
