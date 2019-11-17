@@ -1,6 +1,7 @@
 # Copyright 2019 Siemens AG
 # SPDX-License-Identifier: MIT
 
+import json
 import logging
 
 from .obj import Job
@@ -77,8 +78,14 @@ class Jobs:
         :rtype: Job
         :raises FossologyApiError: if the REST call failed
         """
-        headers = {"folderId": str(folder.id), "uploadId": str(upload.id)}
-        response = self.session.post(self.api + "/jobs", headers=headers, data=spec)
+        headers = {
+            "folderId": str(folder.id),
+            "uploadId": str(upload.id),
+            "Content-Type": "application/json",
+        }
+        response = self.session.post(
+            self.api + "/jobs", headers=headers, data=json.dumps(spec)
+        )
         if response.status_code == 201:
             detailled_job = self.detail_job(response.json()["message"])
             return detailled_job
