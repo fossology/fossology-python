@@ -104,5 +104,5 @@ Use the latest Fossology container from `<Docker hub: https://hub.docker.com/r/f
 
   .. code:: shell
 
-     poetry run python test.py
-     poetry run python test.py TestFossologySearch
+     poetry run python fossology/tests/test.py
+     poetry run python test.py fossology/tests/test_uploads.py

@@ -20,18 +20,6 @@ class AccessLevel(Enum):
     PUBLIC = "public"
 
 
-class TokenScope(Enum):
-    """Scope for API tokens: 
-    
-    READ: Read only access, limited only to "GET" calls
-    
-    WRITE: Read/Write access, required for calls other than "GET"
-    """
-
-    READ = "read"
-    WRITE = "write"
-
-
 class ReportFormat(Enum):
     """Available report format: DEP5, SPDX2, SPDX2TV, READMEOSS, UNIFIEDREPORT"""
 
@@ -48,6 +36,18 @@ class SearchTypes(Enum):
     ALLFILES = "allfiles"
     CONTAINERS = "containers"
     DIRECTORIES = "directories"
+
+
+class TokenScope(Enum):
+    """Scope for API tokens:
+
+    READ: Read only access, limited only to "GET" calls
+
+    WRITE: Read/Write access, required for calls other than "GET"
+    """
+
+    READ = "read"
+    WRITE = "write"
 
 
 class Agents(object):
