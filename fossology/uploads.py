@@ -1,9 +1,10 @@
 # Copyright 2019 Siemens AG
 # SPDX-License-Identifier: MIT
 
+import json
+import time
 import logging
 
-from pathlib import Path
 from .obj import Upload
 from .exceptions import FossologyApiError
 
@@ -38,41 +39,49 @@ class Uploads:
                 return None
 
     def upload_file(
-        self, upload_file, path, folder, description=None, access_level=None
+        self, folder, file=None, vcs=None, description=None, access_level=None
     ):
         """Upload a file to FOSSology
 
         API Endpoint: POST /uploads
 
-        :param upload_file: the name of the file to be uploaded
-        :param path: the path of the file on the file system
-        :param folder: the folder where the file is updated
-        :param description: add a description to the upload
+        :param folder: the upload Fossology folder
+        :param file: the local path of the file to be uploaded
+        :param vcs: the VCS specification to upload from an online repository
         :param access_level: access permissions of the upload (default: protected)
-        :type upload_file: string
-        :type path: string
         :type folder: Folder
+        :type file: string
+        :type vcs: dict()
         :type description: string
         :type access_level: AccessLevel
         :return: the upload data
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
         """
-        file_path = Path(path) / upload_file
-        fp = open(file_path, "rb")
-        files = {"fileInput": (upload_file, fp)}
         headers = {"folderId": str(folder.id)}
+        if file:
+            fp = open(file, "rb")
+            files = {"fileInput": fp}
+        if vcs:
+            data = json.dumps(vcs)
+            headers["Content-Type"] = "application/json"
         if description:
             headers["uploadDescription"] = description
         if access_level:
             headers["public"] = access_level.value
 
-        response = self.session.post(
-            self.api + "/uploads", files=files, headers=headers
-        )
-        fp.close()
+        if file:
+            response = self.session.post(
+                self.api + "/uploads", files=files, headers=headers
+            )
+            fp.close()
+        if vcs:
+            response = self.session.post(
+                self.api + "/uploads", data=data, headers=headers
+            )
         if response.status_code == 201:
             upload_id = response.json()["message"]
+            time.sleep(3)
             upload = self.detail_upload(upload_id)
             logger.info(
                 f"Upload {upload.uploadname} ({upload.filesize}) "
@@ -80,7 +89,8 @@ class Uploads:
             )
             return upload
         else:
-            description = f"Upload of {upload_file} failed"
+            source = f"{file}" if file else f"{vcs['vcsUrl']}"
+            description = f"Upload of {source} failed"
             raise FossologyApiError(description, response)
 
     def delete_upload(self, upload):

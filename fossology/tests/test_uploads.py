@@ -23,10 +23,10 @@ def get_upload():
 
 def do_upload():
     try:
+        file_path = f"{test_files}/{upload_filename}"
         test_upload = foss.upload_file(
-            upload_filename,
-            test_files,
             foss.rootFolder,
+            file=file_path,
             description="Test upload via fossology-python lib",
             access_level=AccessLevel.PUBLIC,
         )
@@ -45,6 +45,32 @@ class TestFossologyUploads(unittest.TestCase):
         self.assertEqual(
             test_upload.uploadname, upload_filename, "Uploadname on the server is wrong"
         )
+
+    def test_upload_from_vcs(self):
+        try:
+            vcs = {
+                "vcsType": "git",
+                "vcsUrl": "https://github.com/fossology/fossdriver",
+                "vcsName": "fossdriver-github-master",
+                "vcsUsername": "",
+                "vcsPassword": "",
+            }
+            test_upload = foss.upload_file(
+                foss.rootFolder,
+                vcs=vcs,
+                description="Test upload from github repository via python lib",
+                access_level=AccessLevel.PUBLIC,
+            )
+            time.sleep(3)
+            self.assertEqual(
+                test_upload.uploadname,
+                vcs["vcsName"],
+                "Uploadname on the server is wrong",
+            )
+        except FossologyApiError as error:
+            logger.error(error.message)
+
+        foss.delete_upload(test_upload)
 
     def test_move_upload(self):
         test_upload = get_upload()
