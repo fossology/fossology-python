@@ -25,8 +25,8 @@ testsuite:
     - name: $DOCKER_FOSSOLOGY
       alias: fossology
   script:
-    - poetry install --no-root -n
-    - poetry run -- python test.py
+    - poetry install -n
+    - poetry run -- python fossology/tests/tests.py
   except:
     - master
 

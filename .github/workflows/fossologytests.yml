@@ -21,8 +21,8 @@ jobs:
       - name: Install host dependencies
         run: apk add --update python3-dev gcc musl-dev libffi-dev libressl nmap
       - name: Install Python dependencies
-        run: pip install requests
+        run: pip install requests fossology
       - name: Check services
         run: nmap fossology -p 80
       - name: Run tests
-        run: python test.py
+        run: python fossology/tests/tests.py
