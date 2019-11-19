@@ -19,10 +19,12 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install host dependencies
-        run: apk add --update python3-dev gcc musl-dev libffi-dev libressl nmap
+        run: apk add --update python3-dev gcc musl-dev libffi-dev openssl-dev nmap
       - name: Install Python dependencies
-        run: pip install requests fossology
+        run: |
+          pip install poetry==1.0.0b5
+          poetry install
       - name: Check services
         run: nmap fossology -p 80
       - name: Run tests
-        run: python fossology/tests/tests.py
+        run: poetry run python fossology/tests/tests.py
