@@ -1,3 +1,11 @@
+|Static Checks Action| |Fossology Tests Action|
+
+.. |Static Checks Action| image:: https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg
+   :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22
+   
+.. |Fossology Tests Action| image:: https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg
+   :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22
+
 A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
@@ -74,7 +82,7 @@ Develop
 Build
 -----
 
-- You can build the PyPi package using `<poetry https://poetry.eustace.io/>`_:
+- You can build the PyPi package using `poetry <https://poetry.eustace.io/>`_:
 
   .. code:: shell
 
@@ -98,11 +106,11 @@ Test
 
 The testsuite available in this project expects a running Fossology instance under the hostname **fossology** with the default admin user "fossy".
 
-Use the latest Fossology container from `<Docker hub: https://hub.docker.com/r/fossology/fossology>`_.
+Use the latest Fossology container from `Docker hub <https://hub.docker.com/r/fossology/fossology>`_.
 
 - Start the complete test suite or a specific test case:
 
   .. code:: shell
 
-     poetry run python fossology/tests/test.py
-     poetry run python test.py fossology/tests/test_uploads.py
+     poetry run python fossology/tests/tests.py
+     poetry run python fossology/tests/test_uploads.py
