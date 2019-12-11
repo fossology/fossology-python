@@ -1,21 +1,21 @@
 [tool.poetry]
 name = "fossology"
-version = "0.0.4"
+version = "0.0.5"
 description = "A library to automate Fossology from Python scripts"
 authors = ["Marion Deveaud <marion.deveaud@siemens.com>"]
 license = "MIT License"
 readme = "README.rst"
 include = ["LICENSE.md"]
-repository = "https://code.siemens.com/fossology/fossology-python"
+repository = "https://github.com/fossology/fossology-python"
+homepage = "https://github.com/fossology/fossology-python"
 classifiers = [
-    "Topic :: Development Status :: 3 - Alpha",
-    "Topic :: Environment :: Fossology Environment",
-    "Topic :: Intended Audience :: Developers",
-    "Topic :: License :: OSI Approved :: MIT License",
-    "Topic :: Natural Language :: English",
-    "Topic :: Operating System :: OS Independent",
-    "Topic :: Programming Language :: Python :: 3.7",
-    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.7",
 ]
 
 [tool.poetry.dependencies]
