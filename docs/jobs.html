@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fossology Jobs &#8212; fossology 0.0.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Fossology Report" href="report.html" />
+    <link rel="prev" title="Fossology Uploads" href="uploads.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="fossology-jobs">
+<h1>Fossology Jobs<a class="headerlink" href="#fossology-jobs" title="Permalink to this headline">¶</a></h1>
+<p>Methods used to access “jobs/” endpoints.</p>
+<span class="target" id="module-fossology.jobs"></span><dl class="class">
+<dt id="fossology.jobs.Jobs">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.jobs.</code><code class="sig-name descname">Jobs</code><a class="headerlink" href="#fossology.jobs.Jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class dedicated to all “jobs” related endpoints</p>
+<dl class="method">
+<dt id="fossology.jobs.Jobs.detail_job">
+<code class="sig-name descname">detail_job</code><span class="sig-paren">(</span><em class="sig-param">job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.jobs.Jobs.detail_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get detailled information about a job</p>
+<p>API Endpoint: GET /jobs/{id}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>job_id</strong> – the id of the job</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the job data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="obj.html#fossology.obj.Job" title="fossology.obj.Job">Job</a></p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fossology.jobs.Jobs.list_jobs">
+<code class="sig-name descname">list_jobs</code><span class="sig-paren">(</span><em class="sig-param">page_size=20</em>, <em class="sig-param">pages=1</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.jobs.Jobs.list_jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all available jobs</p>
+<p>API Endpoint: GET /jobs</p>
+<p>The answer is limited to the first page of 20 results by default</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page_size</strong> (<em>int</em><em> (</em><em>default to &quot;20&quot;</em><em>)</em>) – the maximum number of results per page</p></li>
+<li><p><strong>pages</strong> (<em>int</em><em> (</em><em>default to &quot;1&quot;</em><em>)</em>) – the number of pages to be retrieved</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the jobs data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of Job</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="fossology.jobs.Jobs.schedule_jobs">
+<code class="sig-name descname">schedule_jobs</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">upload</em>, <em class="sig-param">spec</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.jobs.Jobs.schedule_jobs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedule jobs for a specific upload</p>
+<p>API Endpoint: POST /jobs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a>) – the upload folder</p></li>
+<li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – the upload for which jobs will be scheduled</p></li>
+<li><p><strong>spec</strong> (<em>dict</em>) – the job specification</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the job id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Job" title="fossology.obj.Job">Job</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">fossology</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="uploads.html" title="previous chapter">Fossology Uploads</a></li>
+      <li>Next: <a href="report.html" title="next chapter">Fossology Report</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Siemens AG.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/jobs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
