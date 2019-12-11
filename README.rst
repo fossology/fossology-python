@@ -92,13 +92,13 @@ Build
 
   .. code:: shell
 
-     poetry run sphinx-build docs/source docs/build
+     poetry run sphinx-build docs-source docs/
 
 - Cleanup builds:
 
   .. code:: shell
 
-     rm -r dist/ build/ docs/build/
+     rm -r dist/ build/ docs/
 
 
 Test
