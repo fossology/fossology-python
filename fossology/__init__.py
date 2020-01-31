@@ -175,10 +175,15 @@ class Fossology(Folders, Uploads, Jobs, Report):
         if response.status_code == 200:
             users_list = list()
             for user in response.json():
-                foss_user = User.from_json(user)
-                if user["agents"]:
-                    foss_user.agents = Agents.from_json(user["agents"])
-                users_list.append(foss_user)
+                if user["name"] != "Default User":
+                    foss_user = User.from_json(user)
+                    try:
+                        if user["agents"]:
+                            foss_user.agents = Agents.from_json(user["agents"])
+                    except KeyError:
+                        # no agents configured
+                        pass
+                    users_list.append(foss_user)
             return users_list
         else:
             description = f"Unable to get a list of users from {self.host}"

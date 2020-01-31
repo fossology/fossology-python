@@ -103,7 +103,7 @@ class TestFossologyUploads(unittest.TestCase):
 
         try:
             foss.delete_upload(test_upload)
-            time.sleep(5)
+            time.sleep(10)
         except FossologyApiError as error:
             logger.error(error.message)
 

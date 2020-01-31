@@ -163,7 +163,7 @@ class User(object):
         accessLevel,
         rootFolderId,
         emailNotification,
-        agents,
+        agents=None,
     ):
         self.id = id
         self.name = name
