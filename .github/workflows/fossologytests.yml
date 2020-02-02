@@ -27,4 +27,4 @@ jobs:
       - name: Check services
         run: nmap fossology -p 80
       - name: Run tests
-        run: poetry run python fossology/tests/tests.py
+        run: poetry run python tests/tests.py

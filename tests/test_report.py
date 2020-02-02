@@ -26,7 +26,7 @@ class TestFossologyReport(unittest.TestCase):
         try:
             # Plain text
             report = foss.download_report(report_id)
-            report_path = Path.cwd() / "fossology/tests/files"
+            report_path = Path.cwd() / "tests/files"
             report_name = upload_filename + ".spdx-report.rdf"
             with open(report_path / report_name, "w+") as report_file:
                 report_file.write(report)

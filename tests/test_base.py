@@ -8,7 +8,7 @@ from fossology import Fossology, fossology_token
 from fossology.obj import TokenScope
 from fossology.exceptions import FossologyApiError, AuthenticationError
 
-test_files = "fossology/tests/files"
+test_files = "tests/files"
 
 logger = logging.getLogger("fossology")
 console = logging.StreamHandler()

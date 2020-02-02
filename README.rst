@@ -119,5 +119,5 @@ The testsuite available in this project expects a running Fossology instance und
 
   .. code:: shell
 
-     poetry run python fossology/tests/tests.py
-     poetry run python fossology/tests/test_uploads.py
+     poetry run python tests/tests.py
+     poetry run python tests/test_uploads.py
