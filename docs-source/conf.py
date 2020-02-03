@@ -23,7 +23,7 @@ project = "fossology"
 copyright = "2019, Siemens AG"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.4"
+release = "0.0.7"
 
 
 # -- General configuration ---------------------------------------------------

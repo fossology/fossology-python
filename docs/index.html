@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Welcome to fossology’s documentation! &#8212; fossology 0.0.4 documentation</title>
+    <title>Welcome to fossology’s documentation! &#8212; fossology 0.0.7 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -36,11 +36,17 @@
 <p><a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22"><img alt="Static Checks Action" src="https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22"><img alt="Fossology Tests Action" src="https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg" /></a></p>
 <p>A simple wrapper for the Fossology REST API.</p>
 <p>See <a class="reference external" href="https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml">the OpenAPI specification</a> used to implement this library.</p>
+<blockquote>
+<div><p>Compatible with API version 1.0.7</p>
+</div></blockquote>
 </div>
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>This project is available as <a class="reference external" href="https://pypi.org/project/fossology/">Python package on PyPi.org</a></p>
+</div></blockquote>
 <ul>
 <li><p>Install fossology and required dependencies:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install fossology requests
@@ -123,11 +129,16 @@ extension</a></p></li>
 <div class="section" id="test">
 <h2>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>
 <p>The testsuite available in this project expects a running Fossology instance under the hostname <strong>fossology</strong> with the default admin user “fossy”.</p>
-<p>Use the latest Fossology container from <a class="reference external" href="https://hub.docker.com/r/fossology/fossology">Docker hub</a>.</p>
 <ul>
+<li><p>Use the latest Fossology container from <a class="reference external" href="https://hub.docker.com/r/fossology/fossology">Docker hub</a>:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker pull fossology/fossology
+docker run --name fossology -p <span class="m">80</span>:80 fossology/fossology
+</pre></div>
+</div>
+</li>
 <li><p>Start the complete test suite or a specific test case:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run python fossology/tests/tests.py
-poetry run python fossology/tests/test_uploads.py
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run python tests/tests.py
+poetry run python tests/test_uploads.py
 </pre></div>
 </div>
 </li>
@@ -200,7 +211,7 @@ poetry run python fossology/tests/test_uploads.py
       &copy;2019, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

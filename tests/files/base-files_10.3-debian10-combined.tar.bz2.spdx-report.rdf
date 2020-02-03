@@ -1,0 +1,64 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:spdx="http://spdx.org/rdf/terms#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<spdx:SpdxDocument rdf:about="http://396ca7c875a0/repo/SPDX2_base-files_10.3-debian10-combined.tar.bz2_1580631566-spdx.rdf#SPDXRef-DOCUMENT">
+  <spdx:specVersion>SPDX-2.1</spdx:specVersion>
+  <spdx:dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0" />
+  <spdx:creationInfo>
+    <spdx:CreationInfo>
+      <spdx:licenseListVersion>2.6</spdx:licenseListVersion>
+      <spdx:creator>Person: TestUser (test@test.com)</spdx:creator>
+      <spdx:creator>Organization: </spdx:creator>
+      <spdx:creator>Tool: spdx2</spdx:creator>
+      <spdx:created>2020-02-02T08:19:27Z</spdx:created>
+    </spdx:CreationInfo>
+  </spdx:creationInfo>
+  <spdx:name>/srv/fossology/repository/report</spdx:name>
+  <rdfs:comment>
+    This document was created using license information and a generator from Fossology.
+  </rdfs:comment>
+    <spdx:relationship>
+    <spdx:Relationship>
+      <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes" />
+      <spdx:relatedSpdxElement>
+        <spdx:Package rdf:about="http://396ca7c875a0/repo/SPDX2_base-files_10.3-debian10-combined.tar.bz2_1580631566-spdx.rdf#SPDXRef-upload4">
+          <spdx:name>base-files_10.3-debian10-combined.tar.bz2</spdx:name>
+          <spdx:packageFileName>base-files_10.3-debian10-combined.tar.bz2</spdx:packageFileName>
+          <spdx:downloadLocation rdf:resource="http://spdx.org/rdf/terms#noassertion" />
+          <spdx:packageVerificationCode>
+            <spdx:PackageVerificationCode>
+            <spdx:packageVerificationCodeValue>de4428054bce19ed14fc900daa251b95867e1108</spdx:packageVerificationCodeValue>
+            </spdx:PackageVerificationCode>
+          </spdx:packageVerificationCode>
+          <spdx:checksum>
+            <spdx:Checksum>
+              <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1" />
+              <spdx:checksumValue>7a36310ab05cd8401a1cc16b934d998ed491eb12</spdx:checksumValue>
+            </spdx:Checksum>
+          </spdx:checksum>
+          <spdx:checksum> 
+            <spdx:Checksum>
+              <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_md5" />
+              <spdx:checksumValue>9c378f3e4e3db1f5c49d6485efbca10e</spdx:checksumValue>
+            </spdx:Checksum>
+          </spdx:checksum>
+          <spdx:licenseConcluded>
+            <spdx:DisjunctiveLicenseSet>
+              </spdx:DisjunctiveLicenseSet>
+          </spdx:licenseConcluded>
+          <spdx:licenseComments><![CDATA[
+            licenseInfoInFile determined by Scanners:
+   - ojo ("3.7.0-58-g8a17b9532".8a17b9)
+          ]]></spdx:licenseComments>
+          <spdx:licenseConcluded rdf:resource="http://spdx.org/rdf/terms#noassertion" />
+          <spdx:licenseDeclared rdf:resource="http://spdx.org/rdf/terms#noassertion" />
+          <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/rdf/terms#noassertion" />
+          <spdx:copyrightText rdf:resource="http://spdx.org/rdf/terms#noassertion" />
+          
+        </spdx:Package>
+      </spdx:relatedSpdxElement>
+    </spdx:Relationship>
+  </spdx:relationship>
+  
+</spdx:SpdxDocument>
+</rdf:RDF>

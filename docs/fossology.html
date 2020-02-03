@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Fossology &#8212; fossology 0.0.4 documentation</title>
+    <title>Fossology &#8212; fossology 0.0.7 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -45,9 +45,14 @@ get user relevant information.</p>
 <dt class="field-odd">Example</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.api</span> <span class="k">import</span> <span class="n">Fossology</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">FOSS_EMAIL</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.api</span> <span class="kn">import</span> <span class="n">Fossology</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The class instantiation exits if the session with the Fossology server
+can’t be established</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -240,7 +245,7 @@ get user relevant information.</p>
       &copy;2019, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

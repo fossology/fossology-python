@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Fossology Jobs &#8212; fossology 0.0.4 documentation</title>
+    <title>Fossology Jobs &#8212; fossology 0.0.7 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -93,6 +93,36 @@
 <code class="sig-name descname">schedule_jobs</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">upload</em>, <em class="sig-param">spec</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.jobs.Jobs.schedule_jobs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Schedule jobs for a specific upload</p>
 <p>API Endpoint: POST /jobs</p>
+<p>Job specifications <cite>spec</cite> are added to the request body,
+following options are available:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;analysis&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;bucket&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;copyright_email_author&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;ecc&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;monk&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;mime&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;monk&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;nomos&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;ojo&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;package&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;decider&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;nomos_monk&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;bulk_reused&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;new_scanner&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;ojo_decider&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;reuse&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;reuse_upload&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;reuse_group&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;reuse_main&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="s2">&quot;reuse_enhanced&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">}</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -181,7 +211,7 @@
       &copy;2019, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
