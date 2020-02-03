@@ -71,10 +71,12 @@ class Fossology(Folders, Uploads, Jobs, Report):
     :Example:
 
     >>> from fossology.api import Fossology
-    >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, FOSS_EMAIL)
+    >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
 
-    .. note: The class instantiation exits if the session with the Fossology server
-             can't be established
+    .. note::
+        
+        The class instantiation exits if the session with the Fossology server
+        can't be established
 
     :param url: URL of the Fossology instance
     :param token: The API token generated using the Fossology UI
@@ -175,14 +177,12 @@ class Fossology(Folders, Uploads, Jobs, Report):
         if response.status_code == 200:
             users_list = list()
             for user in response.json():
-                if user["name"] != "Default User":
+                if user["name"] == "Default User":
+                    continue
+                if "email" in user:
                     foss_user = User.from_json(user)
-                    try:
-                        if user["agents"]:
-                            foss_user.agents = Agents.from_json(user["agents"])
-                    except KeyError:
-                        # no agents configured
-                        pass
+                    if "agents" in user:
+                        foss_user.agents = Agents.from_json(user["agents"])
                     users_list.append(foss_user)
             return users_list
         else:

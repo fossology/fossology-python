@@ -10,7 +10,6 @@ A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
-.. note::
    Compatible with API version 1.0.7
 
 Usage
@@ -19,7 +18,6 @@ Usage
 Installation
 ------------
 
-.. note::
    This project is available as `Python package on PyPi.org <https://pypi.org/project/fossology/>`_
 
 -  Install fossology and required dependencies:
@@ -110,7 +108,7 @@ Test
 
 The testsuite available in this project expects a running Fossology instance under the hostname **fossology** with the default admin user "fossy".
 
-Use the latest Fossology container from `Docker hub <https://hub.docker.com/r/fossology/fossology>`_:
+- Use the latest Fossology container from `Docker hub <https://hub.docker.com/r/fossology/fossology>`_:
 
   .. code:: shell
 
@@ -121,5 +119,5 @@ Use the latest Fossology container from `Docker hub <https://hub.docker.com/r/fo
 
   .. code:: shell
 
-     poetry run python fossology/tests/tests.py
-     poetry run python fossology/tests/test_uploads.py
+     poetry run python tests/tests.py
+     poetry run python tests/test_uploads.py

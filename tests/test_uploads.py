@@ -8,7 +8,7 @@ from test_base import foss, logger, test_files
 from fossology.obj import AccessLevel
 from fossology.exceptions import FossologyApiError
 
-upload_filename = "base-files_10.3-debian10-combined.tar.bz2"
+upload_filename = "base-files_11.tar.xz"
 
 
 def get_upload():
