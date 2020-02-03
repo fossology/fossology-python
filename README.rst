@@ -90,11 +90,14 @@ Build
 
     poetry build
 
-- Build documentation:
+- Build documentation (the generated static site must be pushed to the **gh-pages** branch):
 
   .. code:: shell
 
+     git clone -b gh-pages git@github.com:fossology/fossology-python.git docs/
      poetry run sphinx-build docs-source docs/
+     cd docs/
+     # Create a new branch to be merged into gh-pages and commit your changes
 
 - Cleanup builds:
 
