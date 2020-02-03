@@ -71,10 +71,12 @@ class Fossology(Folders, Uploads, Jobs, Report):
     :Example:
 
     >>> from fossology.api import Fossology
-    >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, FOSS_EMAIL)
+    >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
 
-    .. note: The class instantiation exits if the session with the Fossology server
-             can't be established
+    .. note::
+        
+        The class instantiation exits if the session with the Fossology server
+        can't be established
 
     :param url: URL of the Fossology instance
     :param token: The API token generated using the Fossology UI
