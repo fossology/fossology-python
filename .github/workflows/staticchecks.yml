@@ -1,6 +1,9 @@
 name: Static Checks
 
-on: push
+on: 
+  push:
+    paths:
+      - '**/.py'
 
 jobs:
   build:
