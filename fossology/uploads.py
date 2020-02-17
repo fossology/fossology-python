@@ -120,7 +120,9 @@ class Uploads:
             time.sleep(3)
             raise TryAgain
         else:
-            logger.error(f"Error {response.status_code} while getting summary for upload {upload_id}")
+            logger.error(
+                f"Error {response.status_code} while getting summary for upload {upload_id}"
+            )
             return None
 
     def delete_upload(self, upload):

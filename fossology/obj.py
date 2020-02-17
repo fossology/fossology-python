@@ -315,7 +315,7 @@ class Summary(object):
         filesToBeCleared,
         filesCleared,
         clearingStatus,
-        copyrightCount
+        copyrightCount,
     ):
         self.id = id
         self.uploadName = uploadName

@@ -115,7 +115,6 @@ class TestFossologyUploads(unittest.TestCase):
                 summary.clearingStatus, "Open", "Clearing status should be 'Open'"
             )
 
-
     def test_delete_upload(self):
         test_upload = get_upload()
         if not test_upload:
