@@ -33,19 +33,23 @@
             
   <div class="section" id="welcome-to-fossology-s-documentation">
 <h1>Welcome to fossology’s documentation!<a class="headerlink" href="#welcome-to-fossology-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22"><img alt="Static Checks Action" src="https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22"><img alt="Fossology Tests Action" src="https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/deveaud-m/fossology-python/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a> <a class="reference external" href="https://pypi.org/project/fossology"><img alt="PyPI Version" src="https://badge.fury.io/py/fossology.svg" /></a> <a class="reference external" href="https://www.python.org/doc/versions/"><img alt="Python Version" src="https://img.shields.io/badge/python-3.6%2C3.7%2C3.8-blue?logo=python" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22"><img alt="Static Checks" src="https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22"><img alt="Fossology Tests" src="https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg" /></a></p>
 <p>A simple wrapper for the Fossology REST API.</p>
 <p>See <a class="reference external" href="https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml">the OpenAPI specification</a> used to implement this library.</p>
 <blockquote>
-<div><p>Compatible with API version 1.0.7</p>
+<div><p>Compatible with API version 1.0.10</p>
 </div></blockquote>
+</div>
+<div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<p>See <a class="reference external" href="https://fossology.github.io/fossology-python">fossology-python on Github Pages</a>.</p>
 </div>
 <div class="section" id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><p>This project is available as <a class="reference external" href="https://pypi.org/project/fossology/">Python package on PyPi.org</a></p>
+<div><p>This project is available as <a class="reference external" href="https://pypi.org/project/fossology/">Python package on PyPi.org</a>.</p>
 </div></blockquote>
 <ul>
 <li><p>Install fossology and required dependencies:</p>
@@ -141,7 +145,6 @@ docker run --name fossology -p <span class="m">80</span>:80 fossology/fossology
 </li>
 <li><p>Start the complete test suite or a specific test case:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run python tests/tests.py
-poetry run python tests/test_uploads.py
 </pre></div>
 </div>
 </li>
