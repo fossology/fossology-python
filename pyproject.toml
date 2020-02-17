@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fossology"
-version = "0.0.7"
+version = "0.0.8"
 description = "A library to automate Fossology from Python scripts"
 authors = ["Marion Deveaud <marion.deveaud@siemens.com>"]
 license = "MIT License"
@@ -21,6 +21,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.6"
 requests = ">=2.22.0"
+tenacity = "^6.0.0"
 
 [tool.poetry.dev-dependencies]
 black = ">=19.10b0"

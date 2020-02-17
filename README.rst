@@ -19,7 +19,7 @@ A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
-   Compatible with API version 1.0.7
+   Compatible with API version 1.0.10
 
 Documentation
 =============
@@ -137,4 +137,3 @@ The testsuite available in this project expects a running Fossology instance und
   .. code:: shell
 
      poetry run python tests/tests.py
-     poetry run python tests/test_uploads.py
