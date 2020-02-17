@@ -1,9 +1,18 @@
-|Static Checks Action| |Fossology Tests Action|
+|License| |PyPI Version| |Python Version| |Static Checks| |Fossology Tests|
 
-.. |Static Checks Action| image:: https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg
+.. |License| image:: https://img.shields.io/badge/license-MIT-blue.svg
+   :target: https://github.com/deveaud-m/fossology-python/LICENSE.md
+
+.. |PyPI Version| image:: https://badge.fury.io/py/fossology.svg
+   :target: https://pypi.org/project/fossology
+
+.. |Python Version| image:: https://img.shields.io/badge/python-3.6%2C3.7%2C3.8-blue?logo=python
+   :target: https://www.python.org/doc/versions/
+
+.. |Static Checks| image:: https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg
    :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22
    
-.. |Fossology Tests Action| image:: https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg
+.. |Fossology Tests| image:: https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg
    :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22
 
 A simple wrapper for the Fossology REST API.
@@ -12,13 +21,18 @@ See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/foss
 
    Compatible with API version 1.0.7
 
+Documentation
+=============
+
+See `fossology-python on Github Pages <https://fossology.github.io/fossology-python>`_.
+
 Usage
 =====
 
 Installation
 ------------
 
-   This project is available as `Python package on PyPi.org <https://pypi.org/project/fossology/>`_
+   This project is available as `Python package on PyPi.org <https://pypi.org/project/fossology/>`_.
 
 -  Install fossology and required dependencies:
 
