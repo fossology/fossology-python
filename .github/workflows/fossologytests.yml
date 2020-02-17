@@ -3,7 +3,8 @@ name: Fossology Tests
 on: 
   push:
     paths:
-      - '**/.py'
+      - 'fossology/**'
+      - 'tests/**'
 
 jobs:
   test:

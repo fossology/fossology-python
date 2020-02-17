@@ -6,6 +6,7 @@ import unittest
 from test_base import foss, logger
 from test_uploads import get_upload, do_upload, upload_filename
 from fossology.exceptions import FossologyApiError
+from fossology.obj import Agents
 
 
 class TestFossologyJobs(unittest.TestCase):
@@ -14,7 +15,14 @@ class TestFossologyJobs(unittest.TestCase):
         if not test_upload:
             test_upload = do_upload()
 
-        analysis_agents = foss.user.agents.to_dict()
+        try:
+            analysis_agents = foss.user.agents.to_dict()
+        except AttributeError:
+            # Create default user agents
+            foss.user.agents = Agents(
+                True, True, False, False, True, True, True, True, True
+            )
+            analysis_agents = foss.user.agents.to_dict()
         jobs_spec = {
             "analysis": analysis_agents,
             "decider": {

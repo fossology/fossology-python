@@ -5,6 +5,7 @@ import re
 import time
 import logging
 
+from tenacity import retry, TryAgain, stop_after_attempt
 from .exceptions import FossologyApiError
 
 logger = logging.getLogger(__name__)
@@ -14,6 +15,7 @@ logger.setLevel(logging.DEBUG)
 class Report:
     """Class dedicated to all "report" related endpoints"""
 
+    @retry(stop=stop_after_attempt(3))
     def generate_report(self, upload, Format=None):
         """Generate a report for a given upload
 
@@ -37,8 +39,13 @@ class Report:
         if response.status_code == 201:
             report_id = re.search("[0-9]*$", response.json()["message"])
             return report_id[0]
+        elif response.status_code == 503:
+            wait_time = response.header["Retry-After"]
+            logger.debug(f"Report is not ready yet, retry after {wait_time}")
+            time.sleep(wait_time)
+            raise TryAgain
         else:
-            description = "Report generation for upload {upload.name} failed"
+            description = f"Report generation for upload {upload.name} failed"
             raise FossologyApiError(description, response)
 
     def download_report(self, report_id, as_zip=False):
