@@ -50,6 +50,16 @@ class TokenScope(Enum):
     WRITE = "write"
 
 
+class ClearingStatus(Enum):
+    """Clearing statuses
+    """
+
+    OPEN = "Open"
+    PROGRESS = "InProgress"
+    CLOSED = "Closed"
+    REJECTED = "Rejected"
+
+
 class Agents(object):
 
     """FOSSology agents.
@@ -256,6 +266,73 @@ class Upload(object):
         return (
             f"Upload '{self.uploadname}' ({self.id}, {self.filesize}B) "
             f"in folder {self.foldername} ({self.folderid})"
+        )
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class Summary(object):
+
+    """FOSSology upload summary.
+
+    Represents a FOSSology upload summary.
+
+    :param id: the ID of the upload
+    :param uploadName: the name of the upload
+    :param mainLicense: the main upload license
+    :param uniqueLicenses: the number of unique licenses
+    :param totalLicenses: the total number of licenses
+    :param uniqueConcludedLicenses: the number of unique concluded licenses
+    :param totalConcludedLicenses: the total number of concluded licenses
+    :param filesToBeCleared: the number of remaining files to be cleared
+    :param filesCleared: the number of files already cleared
+    :param clearingStatus: the clearing status
+    :param copyrightCount: the number of copyrights found
+    :type id: int
+    :type uploadName: string
+    :type mainLicense: string
+    :type uniqueLicenses: int
+    :type totalLicenses: int
+    :type uniqueConcludedLicenses: int
+    :type totalConcludedLicenses: int
+    :type filesToBeCleared: int
+    :type filesCleared: int
+    :type clearingStatus: string
+    :type copyrightCount: int
+    """
+
+    def __init__(
+        self,
+        id,
+        uploadName,
+        mainLicense,
+        uniqueLicenses,
+        totalLicenses,
+        uniqueConcludedLicenses,
+        totalConcludedLicenses,
+        filesToBeCleared,
+        filesCleared,
+        clearingStatus,
+        copyrightCount
+    ):
+        self.id = id
+        self.uploadName = uploadName
+        self.mainLicense = mainLicense
+        self.uniqueLicenses = uniqueLicenses
+        self.totalLicenses = totalLicenses
+        self.uniqueConcludedLicenses = uniqueConcludedLicenses
+        self.totalConcludedLicenses = totalConcludedLicenses
+        self.filesToBeCleared = filesToBeCleared
+        self.filesCleared = filesCleared
+        self.clearingStatus = clearingStatus
+        self.copyrightCount = copyrightCount
+
+    def __str__(self):
+        return (
+            f"Clearing status for '{self.uploadname}' is '{self.clearingStatus},"
+            f"main license {self.mainLicense}"
         )
 
     @classmethod

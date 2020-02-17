@@ -1,11 +1,12 @@
-# Copyright 2019 Siemens AG
+# Copyright 2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import json
 import time
 import logging
+from tenacity import retry, stop_after_attempt, TryAgain
 
-from .obj import Upload
+from .obj import Upload, Summary
 from .exceptions import FossologyApiError
 
 logger = logging.getLogger(__name__)
@@ -15,6 +16,7 @@ logger.setLevel(logging.DEBUG)
 class Uploads:
     """Class dedicated to all "uploads" related endpoints"""
 
+    @retry(stop=stop_after_attempt(3))
     def detail_upload(self, upload_id):
         """Get detailled information about an upload
 
@@ -30,6 +32,10 @@ class Uploads:
         if response.status_code == 200 and response.json():
             logger.debug(f"Got details for upload {upload_id}")
             return Upload.from_json(response.json())
+        elif response.status_code == 503:
+            logger.debug(f"Upload details for {upload_id} not ready yet")
+            time.sleep(3)
+            raise TryAgain
         else:
             if response.json():
                 description = f"Error while getting details for upload {upload_id}"
@@ -81,17 +87,41 @@ class Uploads:
             )
         if response.status_code == 201:
             upload_id = response.json()["message"]
+            try:
+                upload = self.detail_upload(upload_id)
+                logger.info(
+                    f"Upload {upload.uploadname} ({upload.filesize}) "
+                    f"has been uploaded on {upload.uploaddate}"
+                )
+                return upload
+            except TryAgain:
+                source = f"{file}" if file else f"{vcs['vcsUrl']}"
+                description = f"Upload of {source} failed"
+                raise FossologyApiError(description, response)
+
+    @retry(stop=stop_after_attempt(3))
+    def upload_summary(self, upload_id):
+        """Get clearing information about an upload
+
+        API Endpoint: GET /uploads/{id}/summary
+
+        :param upload_id: the id of the upload
+        :type: int
+        :return: the upload summary data
+        :rtype: Summary
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.get(self.api + f"/uploads/{upload_id}/summary")
+        if response.status_code == 200 and response.json():
+            logger.debug(f"Got summary for upload {upload_id}")
+            return Summary.from_json(response.json())
+        elif response.status_code == 503:
+            logger.debug(f"Upload summary for {upload_id} not ready yet")
             time.sleep(3)
-            upload = self.detail_upload(upload_id)
-            logger.info(
-                f"Upload {upload.uploadname} ({upload.filesize}) "
-                f"has been uploaded on {upload.uploaddate}"
-            )
-            return upload
+            raise TryAgain
         else:
-            source = f"{file}" if file else f"{vcs['vcsUrl']}"
-            description = f"Upload of {source} failed"
-            raise FossologyApiError(description, response)
+            logger.error(f"Error {response.status_code} while getting summary for upload {upload_id}")
+            return None
 
     def delete_upload(self, upload):
         """Delete an upload
