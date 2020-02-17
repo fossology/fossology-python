@@ -3,7 +3,8 @@ name: Static Checks
 on: 
   push:
     paths:
-      - '**/.py'
+      - 'fossology/**'
+      - 'tests/**'
 
 jobs:
   build:
