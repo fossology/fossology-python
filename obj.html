@@ -95,6 +95,12 @@
 </dd></dl>
 
 <dl class="class">
+<dt id="fossology.obj.ClearingStatus">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">ClearingStatus</code><a class="headerlink" href="#fossology.obj.ClearingStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clearing statuses</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="fossology.obj.Folder">
 <em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Folder</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Folder" title="Permalink to this definition">¶</a></dt>
 <dd><p>FOSSology folder.</p>
@@ -142,6 +148,30 @@
 <dt id="fossology.obj.SearchTypes">
 <em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">SearchTypes</code><a class="headerlink" href="#fossology.obj.SearchTypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type of item that can be searched: ALLFILES, CONTAINERS, DIRECTORIES</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="fossology.obj.Summary">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Summary</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">uploadName</em>, <em class="sig-param">mainLicense</em>, <em class="sig-param">uniqueLicenses</em>, <em class="sig-param">totalLicenses</em>, <em class="sig-param">uniqueConcludedLicenses</em>, <em class="sig-param">totalConcludedLicenses</em>, <em class="sig-param">filesToBeCleared</em>, <em class="sig-param">filesCleared</em>, <em class="sig-param">clearingStatus</em>, <em class="sig-param">copyrightCount</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology upload summary.</p>
+<p>Represents a FOSSology upload summary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – the ID of the upload</p></li>
+<li><p><strong>uploadName</strong> (<em>string</em>) – the name of the upload</p></li>
+<li><p><strong>mainLicense</strong> (<em>string</em>) – the main upload license</p></li>
+<li><p><strong>uniqueLicenses</strong> (<em>int</em>) – the number of unique licenses</p></li>
+<li><p><strong>totalLicenses</strong> (<em>int</em>) – the total number of licenses</p></li>
+<li><p><strong>uniqueConcludedLicenses</strong> (<em>int</em>) – the number of unique concluded licenses</p></li>
+<li><p><strong>totalConcludedLicenses</strong> (<em>int</em>) – the total number of concluded licenses</p></li>
+<li><p><strong>filesToBeCleared</strong> (<em>int</em>) – the number of remaining files to be cleared</p></li>
+<li><p><strong>filesCleared</strong> (<em>int</em>) – the number of files already cleared</p></li>
+<li><p><strong>clearingStatus</strong> (<em>string</em>) – the clearing status</p></li>
+<li><p><strong>copyrightCount</strong> (<em>int</em>) – the number of copyrights found</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
