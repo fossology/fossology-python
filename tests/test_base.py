@@ -10,12 +10,13 @@ from fossology.exceptions import FossologyApiError, AuthenticationError
 
 test_files = "tests/files"
 
-logger = logging.getLogger("fossology")
+logger = logging.getLogger("fossology-tests")
 console = logging.StreamHandler()
 console.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s %(levelname)s\t%(name)s: %(message)s")
 console.setFormatter(formatter)
 logger.addHandler(console)
+logging.getLogger("").addHandler(console)
 
 
 def generate_fossology_token(server):
