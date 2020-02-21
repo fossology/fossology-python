@@ -122,15 +122,14 @@ class TestFossologyUploads(unittest.TestCase):
 
         try:
             foss.delete_upload(test_upload)
-            logger.debug(f"Waiting 5 second after scheduling {test_upload.id} deletion")
-            time.sleep(5)
+            logger.debug(
+                f"Waiting 10 second after scheduling {test_upload.id} deletion"
+            )
+            time.sleep(10)
         except FossologyApiError as error:
             logger.error(error.message)
 
         verify_uploads = foss.list_uploads()
-        print(f"{len(verify_uploads)} are still available")
-        for upload in verify_uploads:
-            print(upload)
         self.assertEqual(len(verify_uploads), 0, "Upload couldn't be deleted")
 
 

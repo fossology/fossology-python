@@ -16,7 +16,8 @@ logger.setLevel(logging.DEBUG)
 class Uploads:
     """Class dedicated to all "uploads" related endpoints"""
 
-    @retry(stop=stop_after_attempt(3))
+    # Retry until the unpack agent is finished
+    @retry
     def detail_upload(self, upload_id):
         """Get detailled information about an upload
 
@@ -34,7 +35,7 @@ class Uploads:
             return Upload.from_json(response.json())
         elif response.status_code == 503:
             logger.debug(f"Upload details for {upload_id} not ready yet")
-            time.sleep(3)
+            time.sleep(5)
             raise TryAgain
         else:
             if response.json():
