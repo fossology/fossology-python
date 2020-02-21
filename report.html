@@ -44,7 +44,21 @@
 <code class="sig-name descname">download_report</code><span class="sig-paren">(</span><em class="sig-param">report_id</em>, <em class="sig-param">as_zip=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.download_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download a report</p>
 <p>API Endpoint: GET /report/{id}</p>
-<p>FIXME: Accept header “application/zip” does not work in version 1.0.6</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.api</span> <span class="kn">import</span> <span class="n">Fossology</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate a report for upload 1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_id</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="n">foss</span><span class="o">.</span><span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_content</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">download_report</span><span class="p">(</span><span class="n">report_id</span><span class="p">,</span> <span class="n">as_zip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">report_file</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">report_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">report_content</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -60,21 +74,21 @@
 
 <dl class="method">
 <dt id="fossology.report.Report.generate_report">
-<code class="sig-name descname">generate_report</code><span class="sig-paren">(</span><em class="sig-param">upload</em>, <em class="sig-param">Format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.generate_report" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">generate_report</code><span class="sig-paren">(</span><em class="sig-param">upload</em>, <em class="sig-param">report_format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.generate_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a report for a given upload</p>
 <p>API Endpoint: GET /report</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – the upload which report will be generated</p></li>
-<li><p><strong>Format</strong> (<a class="reference internal" href="obj.html#fossology.obj.ReportFormat" title="fossology.obj.ReportFormat"><em>ReportFormat</em></a>) – the report format</p></li>
+<li><p><strong>format</strong> (<a class="reference internal" href="obj.html#fossology.obj.ReportFormat" title="fossology.obj.ReportFormat"><em>ReportFormat</em></a>) – the report format (default ReportFormat.READMEOSS)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the report download url</p>
+<dd class="field-even"><p>the report id</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of Job</p>
+<dd class="field-odd"><p>int</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
