@@ -8,14 +8,15 @@ variables:
 stages:
   - check
   - test
+  - publish
   - document
 
 format_and_style:
   stage: check
   script:
     - poetry install --no-root
-    - poetry run -- black .
-    - poetry run -- flake8 .
+    - poetry run black .
+    - poetry run flake8 .
   except:
     - master
 
@@ -26,16 +27,29 @@ testsuite:
       alias: fossology
   script:
     - poetry install -n
-    - poetry run -- python fossology/tests/tests.py
+    - poetry run python tests/tests.py
   except:
     - master
+
+package:
+  stage: publish
+  before_script:
+    - mkdir -p ~/.config/pypoetry && touch ~/.config/pypoetry/config.toml
+    - poetry config repositories.captain https://captain.rtf.siemens.net/artifactory/api/pypi/siemens-pypi
+    - echo Publishing the package as $CAPTAIN_USER
+  script:
+    - poetry build
+    - poetry publish --repository captain --username $CAPTAIN_USER --password $CAPTAIN_PASSWD
+  when: manual
+  only:
+    - tags
 
 pages:
   stage: document
   script:
     - poetry install --no-root -n
-    - poetry run -- sphinx-build docs/source docs/build
-    - cp -r docs/build public
+    - poetry run sphinx-build docs-source docs/
+    - cp -r docs/ public
   only:
     - master
   artifacts:
