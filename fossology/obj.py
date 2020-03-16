@@ -331,7 +331,7 @@ class Summary(object):
 
     def __str__(self):
         return (
-            f"Clearing status for '{self.uploadname}' is '{self.clearingStatus},"
+            f"Clearing status for '{self.uploadName}' is '{self.clearingStatus},"
             f"main license {self.mainLicense}"
         )
 

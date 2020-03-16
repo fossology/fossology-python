@@ -105,8 +105,6 @@ class TestFossologyUploads(unittest.TestCase):
             test_upload = do_upload()
 
         summary = foss.upload_summary(test_upload.id)
-        # FIXME: getting the summary without accessing the upload from the UI
-        # currently doesn't work, it returns a 500
         if summary:
             self.assertEqual(
                 summary.uploadName, upload_filename, "Uploadname on the server is wrong"
@@ -114,6 +112,9 @@ class TestFossologyUploads(unittest.TestCase):
             self.assertEqual(
                 summary.clearingStatus, "Open", "Clearing status should be 'Open'"
             )
+        else:
+            # FIXME remove once the fix is deployed
+            logger.info("Upload summary fix not available yet")
 
     def test_delete_upload(self):
         test_upload = get_upload()
