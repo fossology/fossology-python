@@ -7,11 +7,11 @@
     <title>Fossology objects &#8212; fossology 0.0.7 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fossology exceptions" href="exceptions.html" />
@@ -46,7 +46,7 @@
 
 <dl class="class">
 <dt id="fossology.obj.Agents">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Agents</code><span class="sig-paren">(</span><em class="sig-param">bucket</em>, <em class="sig-param">copyright_email_author</em>, <em class="sig-param">ecc</em>, <em class="sig-param">keyword</em>, <em class="sig-param">mimetype</em>, <em class="sig-param">monk</em>, <em class="sig-param">nomos</em>, <em class="sig-param">ojo</em>, <em class="sig-param">package</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Agents</code><span class="sig-paren">(</span><em class="sig-param">bucket</em>, <em class="sig-param">copyright_email_author</em>, <em class="sig-param">ecc</em>, <em class="sig-param">keyword</em>, <em class="sig-param">mimetype</em>, <em class="sig-param">monk</em>, <em class="sig-param">nomos</em>, <em class="sig-param">ojo</em>, <em class="sig-param">package</em>, <em class="sig-param">patent</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents" title="Permalink to this definition">¶</a></dt>
 <dd><p>FOSSology agents.</p>
 <p>Represents the agents currently configured for a given user.</p>
 <dl class="field-list simple">
@@ -61,6 +61,7 @@
 <li><p><strong>nomos</strong> (<em>boolean</em>) – run nomos agent on every upload</p></li>
 <li><p><strong>ojo</strong> (<em>boolean</em>) – run ojo agent on every upload</p></li>
 <li><p><strong>package</strong> (<em>boolean</em>) – run package agent on every upload</p></li>
+<li><p><strong>patent</strong> (<em>boolean</em>) – run patent agent on every upload</p></li>
 </ul>
 </dd>
 </dl>
@@ -272,7 +273,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -289,7 +290,7 @@
       &copy;2019, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
