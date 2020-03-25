@@ -75,6 +75,7 @@ class Agents(object):
     :param nomos: run nomos agent on every upload
     :param ojo: run ojo agent on every upload
     :param package: run package agent on every upload
+    :param patent: run patent agent on every upload
     :type bucket: boolean
     :type copyright_email_author: boolean
     :type ecc: boolean
@@ -84,6 +85,7 @@ class Agents(object):
     :type nomos: boolean
     :type ojo: boolean
     :type package: boolean
+    :type patent: boolean
     """
 
     def __init__(
@@ -97,6 +99,7 @@ class Agents(object):
         nomos,
         ojo,
         package,
+        patent,
     ):
         self.bucket = bucket
         self.copyright_email_author = copyright_email_author
@@ -107,6 +110,7 @@ class Agents(object):
         self.nomos = nomos
         self.ojo = ojo
         self.package = package
+        self.patent = patent
 
     def to_dict(self):
         """Get a directory with the agent configuration
@@ -124,6 +128,7 @@ class Agents(object):
             "nomos": self.nomos,
             "ojo": self.ojo,
             "package": self.package,
+            "patent": self.patent,
         }
         return agents
 

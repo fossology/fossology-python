@@ -20,7 +20,7 @@ class TestFossologyJobs(unittest.TestCase):
         except AttributeError:
             # Create default user agents
             foss.user.agents = Agents(
-                True, True, False, False, True, True, True, True, True
+                True, True, False, False, True, True, True, True, True, False,
             )
             analysis_agents = foss.user.agents.to_dict()
         jobs_spec = {
