@@ -75,7 +75,7 @@ class Agents(object):
     :param nomos: run nomos agent on every upload
     :param ojo: run ojo agent on every upload
     :param package: run package agent on every upload
-    :param patent: run patent agent on every upload
+    :param **kwargs: handle any other agent provided by the fossology instance
     :type bucket: boolean
     :type copyright_email_author: boolean
     :type ecc: boolean
@@ -85,7 +85,7 @@ class Agents(object):
     :type nomos: boolean
     :type ojo: boolean
     :type package: boolean
-    :type patent: boolean
+    :type **kwargs: key word argument
     """
 
     def __init__(
@@ -99,7 +99,7 @@ class Agents(object):
         nomos,
         ojo,
         package,
-        patent,
+        **kwargs,
     ):
         self.bucket = bucket
         self.copyright_email_author = copyright_email_author
@@ -110,7 +110,8 @@ class Agents(object):
         self.nomos = nomos
         self.ojo = ojo
         self.package = package
-        self.patent = patent
+        for key, value in kwargs.items():
+            self.additional_agents = {key: value}
 
     def to_dict(self):
         """Get a directory with the agent configuration
@@ -118,7 +119,7 @@ class Agents(object):
         :return: the agents configured for the current user
         :rtype: dict
         """
-        agents = {
+        generic_agents = {
             "bucket": self.bucket,
             "copyright_email_author": self.copyright_email_author,
             "ecc": self.ecc,
@@ -128,8 +129,12 @@ class Agents(object):
             "nomos": self.nomos,
             "ojo": self.ojo,
             "package": self.package,
-            "patent": self.patent,
         }
+        try:
+            agents = {**generic_agents, **self.additional_agents}
+        except AttributeError:
+            agents = generic_agents
+
         return agents
 
     @classmethod
