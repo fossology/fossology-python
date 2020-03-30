@@ -83,7 +83,6 @@ class Jobs:
         >>>         "nomos": True,
         >>>         "ojo": True,
         >>>         "package": True,
-        >>>         "patent": True,
         >>>     },
         >>>     "decider": {
         >>>         "nomos_monk": True,

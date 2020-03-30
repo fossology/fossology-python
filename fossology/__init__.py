@@ -6,7 +6,7 @@ import logging
 import requests
 from datetime import date, timedelta
 
-from .obj import Agents, User, SearchTypes
+from .obj import Agents, User, TokenScope, SearchTypes
 from .folders import Folders
 from .uploads import Uploads
 from .jobs import Jobs
@@ -18,23 +18,30 @@ logger.setLevel(logging.DEBUG)
 
 
 def fossology_token(
-    url, username, password, token_name, token_scope, token_expire=None
+    url, username, password, token_name, token_scope=TokenScope.READ, token_expire=None
 ):
     """Generate an API token using username/password
 
     API endpoint: POST /tokens
 
+    :Example:
+
+    >>> from fossology import fossology_token
+    >>> from fossology.obj import TokenScope
+    >>> token = fossology_token("https://fossology.example.com", "Me", "MyPassword", "MyToken")
+
+
     :param url: the URL of the Fossology server
     :param username: name of the user the token will be generated for
     :param password: the password of the user
     :param name: the name of the token
-    :param scope: the scope of the token
+    :param scope: the scope of the token (default: READ)
     :param expire: the expire date of the token (default max. 30 days)
     :type url: string
     :type username: string
     :type password: string
     :type name: string
-    :type scope: string
+    :type scope: TokenScope (default TokenScope.READ)
     :type expire: string, e.g. 2019-12-25
     :return: the new token
     :rtype: string
@@ -70,7 +77,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
 
     :Example:
 
-    >>> from fossology.api import Fossology
+    >>> from fossology import Fossology
     >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
 
     .. note::
