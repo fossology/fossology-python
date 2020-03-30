@@ -45,7 +45,7 @@ get user relevant information.</p>
 <dt class="field-odd">Example</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.api</span> <span class="kn">import</span> <span class="n">Fossology</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">Fossology</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -156,9 +156,18 @@ can’t be established</p>
 
 <dl class="function">
 <dt id="fossology.fossology_token">
-<code class="sig-prename descclassname">fossology.</code><code class="sig-name descname">fossology_token</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">username</em>, <em class="sig-param">password</em>, <em class="sig-param">token_name</em>, <em class="sig-param">token_scope</em>, <em class="sig-param">token_expire=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.fossology_token" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">fossology.</code><code class="sig-name descname">fossology_token</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">username</em>, <em class="sig-param">password</em>, <em class="sig-param">token_name</em>, <em class="sig-param">token_scope=&lt;TokenScope.READ: 'read'&gt;</em>, <em class="sig-param">token_expire=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.fossology_token" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an API token using username/password</p>
 <p>API endpoint: POST /tokens</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">fossology_token</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.obj</span> <span class="kn">import</span> <span class="n">TokenScope</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">token</span> <span class="o">=</span> <span class="n">fossology_token</span><span class="p">(</span><span class="s2">&quot;https://fossology.example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;Me&quot;</span><span class="p">,</span> <span class="s2">&quot;MyPassword&quot;</span><span class="p">,</span> <span class="s2">&quot;MyToken&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -166,7 +175,7 @@ can’t be established</p>
 <li><p><strong>username</strong> (<em>string</em>) – name of the user the token will be generated for</p></li>
 <li><p><strong>password</strong> (<em>string</em>) – the password of the user</p></li>
 <li><p><strong>name</strong> (<em>string</em>) – the name of the token</p></li>
-<li><p><strong>scope</strong> (<em>string</em>) – the scope of the token</p></li>
+<li><p><strong>scope</strong> (<a class="reference internal" href="obj.html#fossology.obj.TokenScope" title="fossology.obj.TokenScope"><em>TokenScope</em></a><em> (</em><em>default TokenScope.READ</em><em>)</em>) – the scope of the token (default: READ)</p></li>
 <li><p><strong>expire</strong> (<em>string</em><em>, </em><em>e.g. 2019-12-25</em>) – the expire date of the token (default max. 30 days)</p></li>
 </ul>
 </dd>
