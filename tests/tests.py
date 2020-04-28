@@ -1,4 +1,4 @@
-# Copyright 2019 Siemens AG
+# Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import unittest

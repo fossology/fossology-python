@@ -1,4 +1,4 @@
-# Copyright 2019 Siemens AG
+# Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import json
@@ -75,7 +75,7 @@ class Agents(object):
     :param nomos: run nomos agent on every upload
     :param ojo: run ojo agent on every upload
     :param package: run package agent on every upload
-    :param **kwargs: handle any other agent provided by the fossology instance
+    :param kwargs: handle any other agent provided by the fossology instance
     :type bucket: boolean
     :type copyright_email_author: boolean
     :type ecc: boolean
@@ -85,7 +85,7 @@ class Agents(object):
     :type nomos: boolean
     :type ojo: boolean
     :type package: boolean
-    :type **kwargs: key word argument
+    :type kwargs: key word argument
     """
 
     def __init__(
