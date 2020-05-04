@@ -1,4 +1,4 @@
-# Copyright 2019 Siemens AG
+# Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import os
@@ -24,6 +24,7 @@ class TestFossologyReport(unittest.TestCase):
             )
         except FossologyApiError as error:
             logger.error(error.message)
+            return
 
         try:
             # Plain text

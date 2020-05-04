@@ -1,4 +1,4 @@
-# Copyright 2019 Siemens AG
+# Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import re
@@ -81,7 +81,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
     >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
 
     .. note::
-        
+
         The class instantiation exits if the session with the Fossology server
         can't be established
 
@@ -101,7 +101,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
         self.users = list()
         self.folders = list()
 
-        self.api = self.host + "/api/v1"
+        self.api = f"{self.host}/api/v1"
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
 
@@ -141,7 +141,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :rtype: string
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/version")
+        response = self.session.get(f"{self.api}/version")
         if response.status_code == 200:
             return response.json()["version"]
         else:
@@ -159,8 +159,9 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :rtype: User
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/users/{user_id}")
+        response = self.session.get(f"{self.api}/users/{user_id}")
         if response.status_code == 200:
+            user_agents = None
             user_details = response.json()
             if user_details["agents"]:
                 user_agents = Agents.from_json(user_details["agents"])
@@ -180,7 +181,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :rtype: list of User
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + "/users")
+        response = self.session.get(f"{self.api}/users")
         if response.status_code == 200:
             users_list = list()
             for user in response.json():
@@ -194,6 +195,22 @@ class Fossology(Folders, Uploads, Jobs, Report):
             return users_list
         else:
             description = f"Unable to get a list of users from {self.host}"
+            raise FossologyApiError(description, response)
+
+    def delete_user(self, user):
+        """Delete a Fossology user.
+
+        API Endpoint: DELETE /users/{id}
+
+        :param user: the user to be deleted
+        :type user: User
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.delete(f"{self.api}/users/{user.id}")
+        if response.status_code == 202:
+            return
+        else:
+            description = f"Error while deleting user {user.name} ({user.id})"
             raise FossologyApiError(description, response)
 
     def search(
@@ -242,7 +259,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
         if copyright:
             headers["copyright"] = copyright
 
-        response = self.session.get(self.api + "/search", headers=headers)
+        response = self.session.get(f"{self.api}/search", headers=headers)
         if response.status_code == 200:
             return response.json()
         else:

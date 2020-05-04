@@ -1,4 +1,4 @@
-# Copyright 2019 Siemens AG
+# Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import time
@@ -69,6 +69,7 @@ class TestFossologyUploads(unittest.TestCase):
             )
         except FossologyApiError as error:
             logger.error(error.message)
+            return
 
         logger.info(f"Delete VCS test upload {vcs_upload.id}")
         foss.delete_upload(vcs_upload)
@@ -104,7 +105,7 @@ class TestFossologyUploads(unittest.TestCase):
         if not test_upload:
             test_upload = do_upload()
 
-        summary = foss.upload_summary(test_upload.id)
+        summary = foss.upload_summary(test_upload)
         if summary:
             self.assertEqual(
                 summary.uploadName, upload_filename, "Uploadname on the server is wrong"
@@ -115,6 +116,18 @@ class TestFossologyUploads(unittest.TestCase):
         else:
             # FIXME remove once the fix is deployed
             logger.info("Upload summary fix not available yet")
+
+    def test_upload_licenses(self):
+        test_upload = get_upload()
+        if not test_upload:
+            test_upload = do_upload()
+
+        licenses = foss.upload_licenses(test_upload)
+        self.assertEqual(
+            len(licenses),
+            56,
+            "Unexpected licenses were found for upload {test_upload.uploadname}",
+        )
 
     def test_delete_upload(self):
         test_upload = get_upload()

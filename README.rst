@@ -15,11 +15,14 @@
 .. |Fossology Tests| image:: https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg
    :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22
 
+.. |Coverage| image:: https://codecov.io/gh/fossology/fossology-python/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/fossology/fossology-python
+
 A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
-   Compatible with API version 1.0.12
+   Compatible with API version 1.0.13
 
 Documentation
 =============
@@ -132,8 +135,10 @@ The testsuite available in this project expects a running Fossology instance und
     docker pull fossology/fossology
     docker run --name fossology -p 80:80 fossology/fossology
 
-- Start the complete test suite or a specific test case:
+- Start the complete test suite or a specific test case (and generate coverage report):
 
   .. code:: shell
 
-     poetry run python tests/tests.py
+     poetry run coverage run --source=fossology tests/tests.py
+     poetry run coverage report -m
+     poetry run coverage html

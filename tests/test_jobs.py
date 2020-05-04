@@ -1,4 +1,4 @@
-# Copyright 2019 Siemens AG
+# Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import unittest
@@ -15,14 +15,33 @@ class TestFossologyJobs(unittest.TestCase):
         if not test_upload:
             test_upload = do_upload()
 
-        try:
-            analysis_agents = foss.user.agents.to_dict()
-        except AttributeError:
-            # Create default user agents
+        jobs = foss.list_jobs(upload=test_upload)
+        self.assertEqual(
+            len(jobs),
+            1,
+            "Found more than 1 job for upload {test_upload.uploadname}: {jobs}",
+        )
+
+        if not foss.user.agents:
+            additional_agent = {"TestAgent": True}
             foss.user.agents = Agents(
-                True, True, False, False, True, True, True, True, True, False,
+                True,
+                True,
+                False,
+                False,
+                True,
+                True,
+                True,
+                True,
+                True,
+                **additional_agent,
             )
-            analysis_agents = foss.user.agents.to_dict()
+        analysis_agents = foss.user.agents.to_dict()
+        self.assertEqual(
+            analysis_agents["TestAgent"],
+            True,
+            "Specific agent could not be configured for Fossology instance",
+        )
         jobs_spec = {
             "analysis": analysis_agents,
             "decider": {
@@ -48,6 +67,16 @@ class TestFossologyJobs(unittest.TestCase):
             )
         except FossologyApiError as error:
             logger.error(error.message)
+
+        jobs = foss.list_jobs(upload=test_upload)
+        self.assertEqual(
+            len(jobs),
+            2,
+            f"Found {len(jobs)} jobs for upload {test_upload.uploadname}: {jobs}",
+        )
+
+        job = foss.detail_job(jobs[1].id, wait=True, timeout=30)
+        self.assertEqual(job.status, "Completed", f"Job {job} not completed yet")
 
 
 if __name__ == "__main__":

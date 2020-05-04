@@ -1,4 +1,4 @@
-# Copyright 2019 Siemens AG
+# Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import logging
@@ -22,7 +22,7 @@ class Folders:
         :rtype: list()
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + "/folders")
+        response = self.session.get(f"{self.api}/folders")
         if response.status_code == 200:
             folders_list = list()
             response_list = response.json()
@@ -47,7 +47,7 @@ class Folders:
         :rtype: Folder() object
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/folders/{folder_id}")
+        response = self.session.get(f"{self.api}/folders/{folder_id}")
         if response.status_code == 200:
             detailled_folder = Folder.from_json(response.json())
             for folder in self.folders:
@@ -82,7 +82,7 @@ class Folders:
             "folderName": f"{name}",
             "folderDescription": f"{description}",
         }
-        response = self.session.post(self.api + "/folders", headers=headers)
+        response = self.session.post(f"{self.api}/folders", headers=headers)
 
         if response.status_code == 200:
             logger.info(f"Folder '{name}' already exists")
@@ -127,7 +127,7 @@ class Folders:
             headers["name"] = name
         if description:
             headers["description"] = description
-        folders_api_path = self.api + f"/folders/{folder.id}"
+        folders_api_path = f"{self.api}/folders/{folder.id}"
 
         response = self.session.patch(folders_api_path, headers=headers)
         if response.status_code == 200:
@@ -147,7 +147,7 @@ class Folders:
         :type folder: Folder() object
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.delete(self.api + f"/folders/{folder.id}")
+        response = self.session.delete(f"{self.api}/folders/{folder.id}")
         if response.status_code == 202:
             logger.info(f"Folder {folder.id} has been scheduled for deletion")
         else:
@@ -172,7 +172,7 @@ class Folders:
         :raises FossologyApiError: if the REST call failed
         """
         headers = {"parent": str(parent.id), "action": action}
-        response = self.session.put(self.api + f"/folders/{folder.id}", headers=headers)
+        response = self.session.put(f"{self.api}/folders/{folder.id}", headers=headers)
         if response.status_code == 202:
             logger.info(f"Folder {folder.name} has been {action}d to {parent.name}")
             return self.detail_folder(folder.id)

@@ -29,12 +29,12 @@ class Uploads:
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/uploads/{upload_id}")
+        response = self.session.get(f"{self.api}/uploads/{upload_id}")
         if response.status_code == 200 and response.json():
             logger.debug(f"Got details for upload {upload_id}")
             return Upload.from_json(response.json())
         elif response.status_code == 503:
-            logger.debug(f"Upload details for {upload_id} not ready yet")
+            logger.debug(f"Unpack agent for {upload_id} didn't start yet")
             time.sleep(5)
             raise TryAgain
         else:
@@ -46,7 +46,14 @@ class Uploads:
                 return None
 
     def upload_file(
-        self, folder, file=None, vcs=None, description=None, access_level=None
+        self,
+        folder,
+        file=None,
+        vcs=None,
+        description=None,
+        access_level=None,
+        ignore_scm=False,
+        group=None,
     ):
         """Upload a file to FOSSology
 
@@ -55,41 +62,50 @@ class Uploads:
         :param folder: the upload Fossology folder
         :param file: the local path of the file to be uploaded
         :param vcs: the VCS specification to upload from an online repository
+        :param description: description of the upload (default: None)
         :param access_level: access permissions of the upload (default: protected)
+        :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: False)
+        :param group: the group name to chose while uploading the file (default: None)
         :type folder: Folder
         :type file: string
         :type vcs: dict()
         :type description: string
         :type access_level: AccessLevel
+        :type ignore_scm: boolean
+        :type group: string
         :return: the upload data
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
         """
         headers = {"folderId": str(folder.id)}
-        if file:
-            fp = open(file, "rb")
-            files = {"fileInput": fp}
-        if vcs:
-            data = json.dumps(vcs)
-            headers["Content-Type"] = "application/json"
         if description:
             headers["uploadDescription"] = description
         if access_level:
             headers["public"] = access_level.value
+        if ignore_scm:
+            headers["ignoreScm"] = "true"
+        if group:
+            headers["groupName"] = group
 
         if file:
+            with open(file, "rb") as fp:
+                files = {"fileInput": fp}
+                response = self.session.post(
+                    f"{self.api}/uploads", files=files, headers=headers
+                )
+        elif vcs:
+            data = json.dumps(vcs)
+            headers["Content-Type"] = "application/json"
             response = self.session.post(
-                self.api + "/uploads", files=files, headers=headers
+                f"{self.api}/uploads", data=data, headers=headers
             )
-            fp.close()
-        if vcs:
-            response = self.session.post(
-                self.api + "/uploads", data=data, headers=headers
-            )
+        else:
+            logger.debug("Neither VCS or File option given, not uploading anything")
+            return
+
         if response.status_code == 201:
-            upload_id = response.json()["message"]
             try:
-                upload = self.detail_upload(upload_id)
+                upload = self.detail_upload(response.json()["message"])
                 logger.info(
                     f"Upload {upload.uploadname} ({upload.filesize}) "
                     f"has been uploaded on {upload.uploaddate}"
@@ -101,41 +117,103 @@ class Uploads:
                 raise FossologyApiError(description, response)
 
     @retry(stop=stop_after_attempt(3))
-    def upload_summary(self, upload_id):
+    def upload_summary(self, upload):
         """Get clearing information about an upload
 
         API Endpoint: GET /uploads/{id}/summary
 
-        :param upload_id: the id of the upload
-        :type: int
+        :param upload: the upload to gather data from
+        :type: Upload
         :return: the upload summary data
         :rtype: Summary
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/uploads/{upload_id}/summary")
+        response = self.session.get(f"{self.api}/uploads/{upload.id}/summary")
         if response.status_code == 200 and response.json():
-            logger.debug(f"Got summary for upload {upload_id}")
+            logger.debug(f"Got summary for upload {upload.uploadname} (id={upload.id})")
             return Summary.from_json(response.json())
         elif response.status_code == 503:
-            logger.debug(f"Upload summary for {upload_id} not ready yet")
+            logger.debug(
+                f"Unpack agent for {upload.uploadname} (id={upload.id}) didn't start yet"
+            )
             time.sleep(3)
             raise TryAgain
         else:
             logger.error(
-                f"Error {response.status_code} while getting summary for upload {upload_id}"
+                f"Error {response.status_code} while getting summary for upload {upload.uploadname} (id={upload.id})"
             )
             return None
 
-    def delete_upload(self, upload):
+    @retry(stop=stop_after_attempt(3))
+    def upload_licenses(self, upload, agent=None, containers=False):
+        """Get clearing information about an upload
+
+        API Endpoint: GET /uploads/{id}/licenses
+
+        :param upload: the upload to gather data from
+        :param agent: the license agent to use (default: LicenseAgent.MONK)
+        :param containers: wether to show containers or not (default: False)
+        :type upload: Upload
+        :type agent: LicenseAgent
+        :type containers: boolean
+        :return: the licenses found by the specified agent
+        :rtype: list of licenses as JSON object
+        :raises FossologyApiError: if the REST call failed
+        """
+        if agent:
+            agent = agent.value
+        else:
+            agent = "nomos"
+        if containers:
+            containers = "true"
+            response = self.session.get(
+                f"{self.api}/uploads/{upload.id}/licenses?agent={agent}&containers={containers}"
+            )
+        else:
+            response = self.session.get(
+                f"{self.api}/uploads/{upload.id}/licenses?agent={agent}"
+            )
+
+        if response.status_code == 200 and response.json():
+            logger.debug(
+                f"Got licenses from agent {agent} for upload {upload.uploadname} (id={upload.id})"
+            )
+            return response.json()
+        elif response.status_code == 412:
+            logger.info(
+                f"Agent {agent} has not been scheduled for {upload.uploadname} (id={upload.id}): "
+                f"{response.json()['message']}"
+            )
+            return None
+        elif response.status_code == 503:
+            logger.debug(
+                f"Unpack agent for {upload.uploadname} (id={upload.id}) didn't start yet"
+            )
+            time.sleep(3)
+            raise TryAgain
+        else:
+            logger.error(
+                f"Error {response.status_code} while getting licenses for upload {upload.uploadname} (id={upload.id})"
+            )
+            return None
+
+    def delete_upload(self, upload, group=None):
         """Delete an upload
 
         API Endpoint: DELETE /uploads/{id}
 
         :param upload: the upload to be deleted
+        :param group: the group name to chose while deleting the upload (default None)
         :type upload: Upload
+        :type group: string
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.delete(self.api + f"/uploads/{upload.id}")
+        headers = {}
+        if group:
+            headers["groupName"] = group
+        response = self.session.delete(
+            f"{self.api}/uploads/{upload.id}", headers=headers
+        )
         if response.status_code == 202:
             logger.info(f"Upload {upload.id} has been scheduled for deletion")
         else:
@@ -151,7 +229,7 @@ class Uploads:
         :rtype: list of Upload
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/uploads")
+        response = self.session.get(f"{self.api}/uploads")
         if response.status_code == 200:
             uploads_list = list()
             for upload in response.json():
@@ -161,20 +239,24 @@ class Uploads:
             description = f"Unable to retrieve the list of uploads"
             raise FossologyApiError(description, response)
 
-    def move_upload(self, upload, folder):
+    def move_upload(self, upload, folder, group=None):
         """Move an upload to another folder
 
         API Endpoint: PATCH /uploads/{id}
 
         :param upload: the Upload to be copied in another folder
-        :type upload: Upload
         :param folder: the destination Folder
+        :param group: the group name to chose while deleting the upload (default None)
+        :type upload: Upload
         :type folder: Folder
+        :type group: string
         :raises FossologyApiError: if the REST call failed
         """
         headers = {"folderId": str(folder.id)}
+        if group:
+            headers["groupName"] = group
         response = self.session.patch(
-            self.api + f"/uploads/{upload.id}", headers=headers
+            f"{self.api}/uploads/{upload.id}", headers=headers
         )
         if response.status_code == 202:
             logger.info(f"Upload {upload.uploadname} has been moved to {folder.name}")
@@ -188,13 +270,13 @@ class Uploads:
         API Endpoint: PUT /uploads/{id}
 
         :param upload: the Upload to be copied in another folder
-        :type upload: Upload
         :param folder: the destination Folder
+        :type upload: Upload
         :type folder: Folder
         :raises FossologyApiError: if the REST call failed
         """
         headers = {"folderId": str(folder.id)}
-        response = self.session.put(self.api + f"/uploads/{upload.id}", headers=headers)
+        response = self.session.put(f"{self.api}/uploads/{upload.id}", headers=headers)
         if response.status_code == 202:
             logger.info(f"Upload {upload.uploadname} has been copied to {folder.name}")
         else:
