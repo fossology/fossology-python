@@ -51,7 +51,7 @@ class Jobs:
         :rtype: Job
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/jobs/{job_id}")
+        response = self.session.get(f"{self.api}/jobs/{job_id}")
         if response.status_code == 200 and response.json():
             logger.debug(f"Got details for job {job_id}")
             return Job.from_json(response.json())
@@ -114,7 +114,7 @@ class Jobs:
             "Content-Type": "application/json",
         }
         response = self.session.post(
-            self.api + "/jobs", headers=headers, data=json.dumps(spec)
+            f"{self.api}/jobs", headers=headers, data=json.dumps(spec)
         )
         if response.status_code == 201:
             detailled_job = self.detail_job(response.json()["message"])

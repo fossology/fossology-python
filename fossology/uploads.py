@@ -29,12 +29,12 @@ class Uploads:
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/uploads/{upload_id}")
+        response = self.session.get(f"{self.api}/uploads/{upload_id}")
         if response.status_code == 200 and response.json():
             logger.debug(f"Got details for upload {upload_id}")
             return Upload.from_json(response.json())
         elif response.status_code == 503:
-            logger.debug(f"Upload details for {upload_id} not ready yet")
+            logger.debug(f"Unpack agent for {upload_id} didn't start yet")
             time.sleep(5)
             raise TryAgain
         else:
@@ -66,30 +66,30 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         """
         headers = {"folderId": str(folder.id)}
-        if file:
-            fp = open(file, "rb")
-            files = {"fileInput": fp}
-        if vcs:
-            data = json.dumps(vcs)
-            headers["Content-Type"] = "application/json"
         if description:
             headers["uploadDescription"] = description
         if access_level:
             headers["public"] = access_level.value
 
         if file:
+            with open(file, "rb") as fp:
+                files = {"fileInput": fp}
+                response = self.session.post(
+                    f"{self.api}/uploads", files=files, headers=headers
+                )
+        elif vcs:
+            data = json.dumps(vcs)
+            headers["Content-Type"] = "application/json"
             response = self.session.post(
-                self.api + "/uploads", files=files, headers=headers
+                f"{self.api}/uploads", data=data, headers=headers
             )
-            fp.close()
-        if vcs:
-            response = self.session.post(
-                self.api + "/uploads", data=data, headers=headers
-            )
+        else:
+            logger.debug("Neither VCS or File option given, not uploading anything")
+            return
+
         if response.status_code == 201:
-            upload_id = response.json()["message"]
             try:
-                upload = self.detail_upload(upload_id)
+                upload = self.detail_upload(response.json()["message"])
                 logger.info(
                     f"Upload {upload.uploadname} ({upload.filesize}) "
                     f"has been uploaded on {upload.uploaddate}"
@@ -151,7 +151,7 @@ class Uploads:
         :rtype: list of Upload
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(self.api + f"/uploads")
+        response = self.session.get(f"{self.api}/uploads")
         if response.status_code == 200:
             uploads_list = list()
             for upload in response.json():
@@ -174,7 +174,7 @@ class Uploads:
         """
         headers = {"folderId": str(folder.id)}
         response = self.session.patch(
-            self.api + f"/uploads/{upload.id}", headers=headers
+            f"{self.api}/uploads/{upload.id}", headers=headers
         )
         if response.status_code == 202:
             logger.info(f"Upload {upload.uploadname} has been moved to {folder.name}")
@@ -188,13 +188,13 @@ class Uploads:
         API Endpoint: PUT /uploads/{id}
 
         :param upload: the Upload to be copied in another folder
-        :type upload: Upload
         :param folder: the destination Folder
+        :type upload: Upload
         :type folder: Folder
         :raises FossologyApiError: if the REST call failed
         """
         headers = {"folderId": str(folder.id)}
-        response = self.session.put(self.api + f"/uploads/{upload.id}", headers=headers)
+        response = self.session.put(f"{self.api}/uploads/{upload.id}", headers=headers)
         if response.status_code == 202:
             logger.info(f"Upload {upload.uploadname} has been copied to {folder.name}")
         else:

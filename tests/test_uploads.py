@@ -69,6 +69,7 @@ class TestFossologyUploads(unittest.TestCase):
             )
         except FossologyApiError as error:
             logger.error(error.message)
+            return
 
         logger.info(f"Delete VCS test upload {vcs_upload.id}")
         foss.delete_upload(vcs_upload)

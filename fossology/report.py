@@ -35,7 +35,7 @@ class Report:
         else:
             headers["reportFormat"] = "readmeoss"
 
-        response = self.session.get(self.api + "/report", headers=headers)
+        response = self.session.get(f"{self.api}/report", headers=headers)
         if response.status_code == 201:
             report_id = re.search("[0-9]*$", response.json()["message"])
             return report_id[0]
@@ -78,7 +78,7 @@ class Report:
             headers = {"Accept": "text/plain"}
         while True:
             response = self.session.get(
-                self.api + f"/report/{report_id}", headers=headers
+                f"{self.api}/report/{report_id}", headers=headers
             )
             if response.status_code == 200:
                 return response.text

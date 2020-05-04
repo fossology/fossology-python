@@ -24,6 +24,7 @@ class TestFossologyReport(unittest.TestCase):
             )
         except FossologyApiError as error:
             logger.error(error.message)
+            return
 
         try:
             # Plain text

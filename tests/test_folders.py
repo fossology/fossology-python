@@ -67,6 +67,7 @@ class TestFossologyFolders(unittest.TestCase):
             )
         except FossologyApiError as error:
             logger.error(error.message)
+            return
 
         foss.delete_folder(move_copy_folder)
         foss.delete_folder(folder_copy[0])
