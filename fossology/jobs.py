@@ -143,7 +143,9 @@ class Jobs:
             f"{self.api}/jobs", headers=headers, data=json.dumps(spec)
         )
         if response.status_code == 201:
-            detailled_job = self.detail_job(response.json()["message"], wait=wait, timeout=timeout)
+            detailled_job = self.detail_job(
+                response.json()["message"], wait=wait, timeout=timeout
+            )
             return detailled_job
         else:
             description = "Scheduling jobs for upload {upload.uploadname} failed"

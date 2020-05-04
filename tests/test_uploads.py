@@ -123,7 +123,11 @@ class TestFossologyUploads(unittest.TestCase):
             test_upload = do_upload()
 
         licenses = foss.upload_licenses(test_upload)
-        self.assertEqual(len(licenses), 56, "Unexpected licenses were found for upload {test_upload.uploadname}")
+        self.assertEqual(
+            len(licenses),
+            56,
+            "Unexpected licenses were found for upload {test_upload.uploadname}",
+        )
 
     def test_delete_upload(self):
         test_upload = get_upload()
