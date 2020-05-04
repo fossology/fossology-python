@@ -6,12 +6,12 @@ from enum import Enum
 
 
 class AccessLevel(Enum):
-    """Available access levels for uploads: 
-    
+    """Available access levels for uploads:
+
     PRIVATE: the upload will only be visible to the owner
-    
+
     PROTECTED: ?
-    
+
     PUBLIC: the upload will be visible for everyone
     """
 
@@ -58,6 +58,16 @@ class ClearingStatus(Enum):
     PROGRESS = "InProgress"
     CLOSED = "Closed"
     REJECTED = "Rejected"
+
+
+class LicenseAgent(Enum):
+    """Available license agents: NOMOS, MONK, NINKA, OJO, REPORTIMPORT"""
+
+    NOMOS = "nomos"
+    MONK = "monk"
+    NINKA = "ninka"
+    OJO = "ojo"
+    REPORTIMPORT = "reportImport"
 
 
 class Agents(object):
@@ -110,12 +120,11 @@ class Agents(object):
         self.nomos = nomos
         self.ojo = ojo
         self.package = package
-        for key, value in kwargs.items():
-            self.additional_agents = {key: value}
+        self.additional_agents = kwargs
 
     def to_dict(self):
         """Get a directory with the agent configuration
-        
+
         :return: the agents configured for the current user
         :rtype: dict
         """
@@ -143,7 +152,7 @@ class Agents(object):
 
     def to_json(self):
         """Get a JSON object with the agent configuration
-        
+
         :return: the agents configured for the current user
         :rtype: JSON
         """

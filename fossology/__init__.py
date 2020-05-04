@@ -197,6 +197,22 @@ class Fossology(Folders, Uploads, Jobs, Report):
             description = f"Unable to get a list of users from {self.host}"
             raise FossologyApiError(description, response)
 
+    def delete_user(self, user):
+        """Delete a Fossology user.
+
+        API Endpoint: DELETE /users/{id}
+
+        :param user: the user to be deleted
+        :type user: User
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.delete(f"{self.api}/users/{user.id}")
+        if response.status_code == 202:
+            return
+        else:
+            description = f"Error while deleting user {user.name} ({user.id})"
+            raise FossologyApiError(description, response)
+
     def search(
         self,
         searchType=SearchTypes.ALLFILES,

@@ -22,6 +22,7 @@ def suite():
     suite.addTest(TestFossologyUploads("test_upload_from_vcs"))
     suite.addTest(TestFossologyJobs("test_schedule_jobs"))
     suite.addTest(TestFossologyUploads("test_upload_summary"))
+    suite.addTest(TestFossologyUploads("test_upload_licenses"))
     suite.addTest(TestFossologyReport("test_generate_report"))
     suite.addTest(TestFossologySearch("test_search"))
     suite.addTest(TestFossologyUploads("test_delete_upload"))
