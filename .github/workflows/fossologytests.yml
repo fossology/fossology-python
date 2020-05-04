@@ -1,10 +1,7 @@
 name: Fossology Tests
 
-on: 
+on:
   push:
-    paths:
-      - 'fossology/**'
-      - 'tests/**'
 
 jobs:
   test:
@@ -25,7 +22,7 @@ jobs:
       - name: Install host dependencies
         run: |
           apt-get -qq update
-          apt-get install -qq gcc nmap
+          apt-get install -qq gcc git nmap
           rm -rf /var/lib/apt/lists/*
       - name: Install Python dependencies
         run: |
