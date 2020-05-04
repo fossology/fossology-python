@@ -37,4 +37,4 @@ jobs:
         run: |
           poetry run coverage run --source=fossology tests/tests.py
           poetry run coverage report -m
-          bash <(curl -s https://codecov.io/bash)
+          poetry run codecov
