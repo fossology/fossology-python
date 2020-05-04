@@ -37,4 +37,4 @@ jobs:
         run: |
           poetry run coverage run --source=fossology tests/tests.py
           poetry run coverage report -m
-          codecov --token=CODECOV_TOKEN
+          bash <(curl -s https://codecov.io/bash)
