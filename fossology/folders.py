@@ -89,7 +89,7 @@ class Folders:
             for folder in self.folders:
                 if folder.name == name:
                     return folder
-            logger.error(f"Folder exists but was not found in the user's folder list")
+            logger.error("Folder exists but was not found in the user's folder list")
             return None
 
         elif response.status_code == 201:

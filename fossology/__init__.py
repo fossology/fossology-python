@@ -63,7 +63,7 @@ def fossology_token(
             token = response.json()["Authorization"]
             return re.sub("Bearer ", "", token)
         else:
-            description = f"Error while generating new token"
+            description = "Error while generating new token"
             raise FossologyApiError(description, response)
     except requests.exceptions.ConnectionError as error:
         exit(f"Server {url} does not seem to be running or is unreachable: {error}")
@@ -145,7 +145,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
         if response.status_code == 200:
             return response.json()["version"]
         else:
-            description = f"Error while getting API version"
+            description = "Error while getting API version"
             raise FossologyApiError(description, response)
 
     def detail_user(self, user_id):
@@ -163,7 +163,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
         if response.status_code == 200:
             user_agents = None
             user_details = response.json()
-            if user_details["agents"]:
+            if user_details.get("agents"):
                 user_agents = Agents.from_json(user_details["agents"])
             user = User.from_json(user_details)
             user.agents = user_agents
@@ -185,12 +185,12 @@ class Fossology(Folders, Uploads, Jobs, Report):
         if response.status_code == 200:
             users_list = list()
             for user in response.json():
-                if user["name"] == "Default User":
+                if user.get("name") == "Default User":
                     continue
-                if "email" in user:
+                if user.get("email"):
                     foss_user = User.from_json(user)
-                    if "agents" in user:
-                        foss_user.agents = Agents.from_json(user["agents"])
+                    if agents := user.get("agents"):
+                        foss_user.agents = Agents.from_json(agents)
                     users_list.append(foss_user)
             return users_list
         else:
@@ -207,6 +207,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :raises FossologyApiError: if the REST call failed
         """
         response = self.session.delete(f"{self.api}/users/{user.id}")
+        print(response.json())
         if response.status_code == 202:
             return
         else:
@@ -263,5 +264,5 @@ class Fossology(Folders, Uploads, Jobs, Report):
         if response.status_code == 200:
             return response.json()
         else:
-            description = f"Unable to get a result with the given search criteria"
+            description = "Unable to get a result with the given search criteria"
             raise FossologyApiError(description, response)

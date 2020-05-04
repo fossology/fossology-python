@@ -31,9 +31,9 @@ class TestFossologyFolders(unittest.TestCase):
         name = "NewFolderName"
         desc = "Updated via the Fossology Python API"
         update_folder = foss.update_folder(update_folder, name=name, description=desc)
-        self.assertEqual(update_folder.name, name, f"Folder name couldn't be updated")
+        self.assertEqual(update_folder.name, name, "Folder name couldn't be updated")
         self.assertEqual(
-            update_folder.description, desc, f"Folder description couldn't be updated"
+            update_folder.description, desc, "Folder description couldn't be updated"
         )
         foss.delete_folder(update_folder)
 

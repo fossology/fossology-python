@@ -3,20 +3,24 @@
 
 import unittest
 
-from test_base import foss, logger
-from fossology.exceptions import FossologyApiError
+from test_base import foss
 from fossology.obj import SearchTypes
 
 
 class TestFossologySearch(unittest.TestCase):
     def test_search(self):
-        try:
-            search_result = foss.search(
-                searchType=SearchTypes.ALLFILES, filename="GPL%"
-            )
-            self.assertIsNotNone(search_result, "Couldn't search Fossology")
-        except FossologyApiError as error:
-            logger.error(error.message)
+        search_result = foss.search(searchType=SearchTypes.ALLFILES, filename="GPL%")
+        self.assertIsNotNone(search_result, "Couldn't search Fossology")
+        search_result = foss.search(
+            searchType=SearchTypes.ALLFILES,
+            filename="test%",
+            tag="test",
+            filesizemin="0",
+            filesizemax="1024",
+            license="Artistic",
+            copyright="Debian",
+        )
+        self.assertEqual(search_result, [], "Search result should be empty")
 
 
 if __name__ == "__main__":

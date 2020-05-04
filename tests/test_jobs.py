@@ -24,7 +24,7 @@ class TestFossologyJobs(unittest.TestCase):
 
         if not foss.user.agents:
             additional_agent = {"TestAgent": True}
-            foss.user.agents = Agents(
+            agents = Agents(
                 True,
                 True,
                 False,
@@ -36,12 +36,8 @@ class TestFossologyJobs(unittest.TestCase):
                 True,
                 **additional_agent,
             )
+            foss.user.agents = agents
         analysis_agents = foss.user.agents.to_dict()
-        self.assertEqual(
-            analysis_agents["TestAgent"],
-            True,
-            "Specific agent could not be configured for Fossology instance",
-        )
         jobs_spec = {
             "analysis": analysis_agents,
             "decider": {

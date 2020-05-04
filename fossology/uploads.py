@@ -236,7 +236,7 @@ class Uploads:
                 uploads_list.append(Upload.from_json(upload))
             return uploads_list
         else:
-            description = f"Unable to retrieve the list of uploads"
+            description = "Unable to retrieve the list of uploads"
             raise FossologyApiError(description, response)
 
     def move_upload(self, upload, folder, group=None):
