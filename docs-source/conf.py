@@ -20,10 +20,10 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "fossology"
-copyright = "2019, Siemens AG"
+copyright = "2020, Siemens AG"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.7"
+release = "0.1.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -49,3 +49,13 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = "alabaster"
+html_theme_options = {
+    "github_user": "fossology",
+    "github_repo": "fossology-python",
+    "github_button": True,
+    "fixed_sidebar": True,
+    "extra_nav_links": {
+        "Package on PyPi": "https://pypi.org/project/fossology/",
+        "Source on Github": "http://github.com/fossology/fossology-python/",
+    },
+}
