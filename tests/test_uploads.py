@@ -2,10 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 import time
+import secrets
 import unittest
 
 from test_base import foss, logger, test_files
-from fossology.obj import AccessLevel
+from fossology.obj import AccessLevel, LicenseAgent, Folder, Upload
 from fossology.exceptions import FossologyApiError
 
 upload_filename = "base-files_11.tar.xz"
@@ -22,19 +23,15 @@ def get_upload():
 
 
 def do_upload():
-    try:
-        file_path = f"{test_files}/{upload_filename}"
-        test_upload = foss.upload_file(
-            foss.rootFolder,
-            file=file_path,
-            description="Test upload via fossology-python lib",
-            access_level=AccessLevel.PUBLIC,
-        )
-        time.sleep(3)
-        return test_upload
-    except FossologyApiError as error:
-        logger.error(error.message)
-        return None
+    file_path = f"{test_files}/{upload_filename}"
+    test_upload = foss.upload_file(
+        foss.rootFolder,
+        file=file_path,
+        description="Test upload via fossology-python lib",
+        access_level=AccessLevel.PUBLIC,
+    )
+    time.sleep(3)
+    return test_upload
 
 
 class TestFossologyUploads(unittest.TestCase):
@@ -48,31 +45,32 @@ class TestFossologyUploads(unittest.TestCase):
         )
 
     def test_upload_from_vcs(self):
-        try:
-            vcs = {
-                "vcsType": "git",
-                "vcsUrl": "https://github.com/fossology/fossdriver",
-                "vcsName": "fossdriver-github-master",
-                "vcsUsername": "",
-                "vcsPassword": "",
-            }
-            vcs_upload = foss.upload_file(
-                foss.rootFolder,
-                vcs=vcs,
-                description="Test upload from github repository via python lib",
-                access_level=AccessLevel.PUBLIC,
-            )
-            self.assertEqual(
-                vcs_upload.uploadname,
-                vcs["vcsName"],
-                "Uploadname on the server is wrong",
-            )
-        except FossologyApiError as error:
-            logger.error(error.message)
-            return
-
-        logger.info(f"Delete VCS test upload {vcs_upload.id}")
+        vcs = {
+            "vcsType": "git",
+            "vcsUrl": "https://github.com/fossology/fossdriver",
+            "vcsName": "fossdriver-github-master",
+            "vcsUsername": "",
+            "vcsPassword": "",
+        }
+        vcs_upload = foss.upload_file(
+            foss.rootFolder,
+            vcs=vcs,
+            description="Test upload from github repository via python lib",
+            access_level=AccessLevel.PUBLIC,
+        )
+        self.assertEqual(
+            vcs_upload.uploadname, vcs["vcsName"], "Uploadname on the server is wrong",
+        )
         foss.delete_upload(vcs_upload)
+
+        empty_upload = foss.upload_file(
+            foss.rootFolder,
+            description="Test empty upload",
+            access_level=AccessLevel.PUBLIC,
+        )
+        self.assertIsNone(
+            empty_upload, "Something has been uploaded for empty upload test"
+        )
 
     def test_move_upload(self):
         test_upload = get_upload()
@@ -100,22 +98,18 @@ class TestFossologyUploads(unittest.TestCase):
         # Clean up
         foss.delete_folder(move_folder)
 
+        # Move/Copy to arbitrary folder
+        non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
+        self.assertRaises(FossologyApiError, foss.move_upload, test_upload, non_folder)
+        self.assertRaises(FossologyApiError, foss.copy_upload, test_upload, non_folder)
+
     def test_upload_summary(self):
         test_upload = get_upload()
         if not test_upload:
             test_upload = do_upload()
 
-        summary = foss.upload_summary(test_upload)
-        if summary:
-            self.assertEqual(
-                summary.uploadName, upload_filename, "Uploadname on the server is wrong"
-            )
-            self.assertEqual(
-                summary.clearingStatus, "Open", "Clearing status should be 'Open'"
-            )
-        else:
-            # FIXME remove once the fix is deployed
-            logger.info("Upload summary fix not available yet")
+        # FIXME remove once the fix is deployed
+        self.assertRaises(FossologyApiError, foss.upload_summary, test_upload)
 
     def test_upload_licenses(self):
         test_upload = get_upload()
@@ -129,22 +123,44 @@ class TestFossologyUploads(unittest.TestCase):
             "Unexpected licenses were found for upload {test_upload.uploadname}",
         )
 
+        # Get license with containers
+        licenses = foss.upload_licenses(test_upload, containers=True)
+        self.assertEqual(
+            len(licenses),
+            56,
+            "Unexpected licenses were found for upload {test_upload.uploadname}",
+        )
+
+        # Get license from unscheduled agent 'ojo'
+        licenses = foss.upload_licenses(test_upload, agent=LicenseAgent.OJO)
+        self.assertIsNone(
+            licenses[0].get("agentFindings"),
+            "Unexpected ojo licenses were found for upload {test_upload.uploadname}",
+        )
+
     def test_delete_upload(self):
         test_upload = get_upload()
         if not test_upload:
             test_upload = do_upload()
 
-        try:
-            foss.delete_upload(test_upload)
-            logger.debug(
-                f"Waiting 10 second after scheduling {test_upload.id} deletion"
-            )
-            time.sleep(10)
-        except FossologyApiError as error:
-            logger.error(error.message)
+        foss.delete_upload(test_upload)
+        logger.debug(f"Waiting 10 second after scheduling {test_upload.id} deletion")
+        time.sleep(10)
 
         verify_uploads = foss.list_uploads()
         self.assertEqual(len(verify_uploads), 0, "Upload couldn't be deleted")
+
+        # Delete arbitrary upload
+        non_upload = Upload(
+            foss.rootFolder,
+            "Root Folder",
+            secrets.randbelow(1000),
+            "",
+            "Non Upload",
+            "2020-05-05",
+            "0",
+        )
+        self.assertRaises(FossologyApiError, foss.delete_upload, non_upload)
 
 
 if __name__ == "__main__":

@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: MIT
 
 import time
+import secrets
 import unittest
 
 from test_base import foss, logger
-from fossology.exceptions import FossologyApiError
+from fossology.obj import Folder
+from fossology.exceptions import FossologyApiError, AuthorizationError
 
 
 class TestFossologyFolders(unittest.TestCase):
@@ -21,6 +23,17 @@ class TestFossologyFolders(unittest.TestCase):
             desc,
             "Description of folder on the server is wrong",
         )
+
+        # Recreate folder to test API response 200
+        test_folder = foss.create_folder(foss.rootFolder, name, description=desc)
+        self.assertEqual(
+            test_folder.name, name, f"Main test {name} folder couldn't be created"
+        )
+
+        # Create folder in arbitrary parent
+        parent = Folder(secrets.randbelow(1000), "Parent", "", 0)
+        self.assertRaises(AuthorizationError, foss.create_folder, parent, "No Parent")
+
         foss.delete_folder(test_folder)
 
     def test_update_folder(self):

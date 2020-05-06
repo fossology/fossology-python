@@ -5,7 +5,7 @@ import re
 import time
 import logging
 
-from tenacity import retry, TryAgain, stop_after_attempt
+from tenacity import retry, TryAgain, stop_after_attempt, retry_if_exception_type
 from .exceptions import FossologyApiError
 
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ logger.setLevel(logging.DEBUG)
 class Report:
     """Class dedicated to all "report" related endpoints"""
 
-    @retry(stop=stop_after_attempt(3))
+    @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
     def generate_report(self, upload, report_format=None):
         """Generate a report for a given upload
 
@@ -41,14 +41,14 @@ class Report:
             return report_id[0]
         elif response.status_code == 503:
             wait_time = response.headers["Retry-After"]
-            logger.debug(f"Report is not ready yet, retry after {wait_time} seconds")
+            logger.debug(f"Retry generate report after {wait_time} seconds")
             time.sleep(int(wait_time))
             raise TryAgain
         else:
             description = f"Report generation for upload {upload.name} failed"
             raise FossologyApiError(description, response)
 
-    @retry(stop=stop_after_attempt(3))
+    @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
     def download_report(self, report_id, as_zip=False):
         """Download a report
 
@@ -76,20 +76,15 @@ class Report:
             headers = {"Accept": "application/zip"}
         else:
             headers = {"Accept": "text/plain"}
-        while True:
-            response = self.session.get(
-                f"{self.api}/report/{report_id}", headers=headers
-            )
-            if response.status_code == 200:
-                return response.text
-            elif response.status_code == 503:
-                wait_time = response.headers["Retry-After"]
-                logger.debug(
-                    f"Report is not ready yet, retry after {wait_time} seconds"
-                )
-                time.sleep(int(wait_time))
-                raise TryAgain
-            else:
-                description = "Download of report {report_id} failed"
-                raise FossologyApiError(description, response)
-                return None
+
+        response = self.session.get(f"{self.api}/report/{report_id}", headers=headers)
+        if response.status_code == 200:
+            return response.text
+        elif response.status_code == 503:
+            wait_time = response.headers["Retry-After"]
+            logger.debug(f"Retry get report after {wait_time} seconds")
+            time.sleep(int(wait_time))
+            raise TryAgain
+        else:
+            description = "Download of report {report_id} failed"
+            raise FossologyApiError(description, response)

@@ -60,11 +60,12 @@ class TestFossologyUser(unittest.TestCase):
         self.assertRaises(FossologyApiError, foss.detail_user, 30)
 
         foss.detail_user(foss.user.id)
-        self.assertEqual(foss.user.email, "fossy", "Wrong email set for default user")
+        self.assertEqual(foss.user.email, "y", "Wrong email set for default user")
 
+        # Configure all license agents besides 'ojo'
         additional_agent = {"TestAgent": True}
         agents = Agents(
-            True, True, False, False, True, True, True, True, True, **additional_agent,
+            True, True, False, False, True, True, True, False, True, **additional_agent,
         )
         foss.user.agents = agents
         analysis_agents = foss.user.agents.to_dict()
