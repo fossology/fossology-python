@@ -34,4 +34,5 @@ jobs:
         run: |
           poetry run coverage run --source=fossology tests/tests.py
           poetry run coverage report -m
-          poetry run codecov
+          poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
+ 
