@@ -1,4 +1,4 @@
-|License| |PyPI Version| |Python Version| |Static Checks| |Fossology Tests|
+|License| |PyPI Version| |Python Version| |Static Checks| |Fossology Tests| |Coverage|
 
 .. |License| image:: https://img.shields.io/badge/license-MIT-blue.svg
    :target: https://github.com/deveaud-m/fossology-python/LICENSE.md
@@ -16,7 +16,7 @@
    :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22
 
 .. |Coverage| image:: https://codecov.io/gh/fossology/fossology-python/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/fossology/fossology-python
+   :target: https://codecov.io/gh/fossology/fossology-python
 
 A simple wrapper for the Fossology REST API.
 
