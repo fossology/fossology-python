@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Fossology objects &#8212; fossology 0.0.7 documentation</title>
+    <title>Fossology objects &#8212; fossology 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -23,214 +23,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
-
-          <div class="body" role="main">
-            
-  <div class="section" id="fossology-objects">
-<h1>Fossology objects<a class="headerlink" href="#fossology-objects" title="Permalink to this headline">¶</a></h1>
-<p>The Python objects derived from the REST data.</p>
-<span class="target" id="module-fossology.obj"></span><dl class="class">
-<dt id="fossology.obj.AccessLevel">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">AccessLevel</code><a class="headerlink" href="#fossology.obj.AccessLevel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Available access levels for uploads:</p>
-<p>PRIVATE: the upload will only be visible to the owner</p>
-<p>PROTECTED: ?</p>
-<p>PUBLIC: the upload will be visible for everyone</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.Agents">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Agents</code><span class="sig-paren">(</span><em class="sig-param">bucket</em>, <em class="sig-param">copyright_email_author</em>, <em class="sig-param">ecc</em>, <em class="sig-param">keyword</em>, <em class="sig-param">mimetype</em>, <em class="sig-param">monk</em>, <em class="sig-param">nomos</em>, <em class="sig-param">ojo</em>, <em class="sig-param">package</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents" title="Permalink to this definition">¶</a></dt>
-<dd><p>FOSSology agents.</p>
-<p>Represents the agents currently configured for a given user.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>bucket</strong> (<em>boolean</em>) – run bucket agent on every upload</p></li>
-<li><p><strong>copyright_email_author</strong> (<em>boolean</em>) – run copyright_email_author agent on every upload</p></li>
-<li><p><strong>ecc</strong> (<em>boolean</em>) – run ecc agent on every upload</p></li>
-<li><p><strong>keyword</strong> (<em>boolean</em>) – run keyword agent on every upload</p></li>
-<li><p><strong>mimetype</strong> (<em>boolean</em>) – run mimetype agent on every upload</p></li>
-<li><p><strong>monk</strong> (<em>boolean</em>) – run monk agent on every upload</p></li>
-<li><p><strong>nomos</strong> (<em>boolean</em>) – run nomos agent on every upload</p></li>
-<li><p><strong>ojo</strong> (<em>boolean</em>) – run ojo agent on every upload</p></li>
-<li><p><strong>package</strong> (<em>boolean</em>) – run package agent on every upload</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other agent provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt id="fossology.obj.Agents.to_dict">
-<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a directory with the agent configuration</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the agents configured for the current user</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="fossology.obj.Agents.to_json">
-<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents.to_json" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a JSON object with the agent configuration</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the agents configured for the current user</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>JSON</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.ClearingStatus">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">ClearingStatus</code><a class="headerlink" href="#fossology.obj.ClearingStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clearing statuses</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.Folder">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Folder</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">parent</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Folder" title="Permalink to this definition">¶</a></dt>
-<dd><p>FOSSology folder.</p>
-<p>Represents a FOSSology folder.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the folder</p></li>
-<li><p><strong>name</strong> (<em>string</em>) – the name of the folder</p></li>
-<li><p><strong>description</strong> (<em>string</em>) – further information about the folder</p></li>
-<li><p><strong>parent</strong> (<em>int</em>) – the ID of the parent folder</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.Job">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Job</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">name</em>, <em class="sig-param">queueDate</em>, <em class="sig-param">uploadId</em>, <em class="sig-param">userId</em>, <em class="sig-param">groupId</em>, <em class="sig-param">eta</em>, <em class="sig-param">status</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Job" title="Permalink to this definition">¶</a></dt>
-<dd><p>FOSSology job.</p>
-<p>Represents a FOSSology job.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the job</p></li>
-<li><p><strong>name</strong> (<em>string</em>) – the name of the job</p></li>
-<li><p><strong>queueDate</strong> (<em>string</em>) – the start date of the job</p></li>
-<li><p><strong>uploadId</strong> (<em>int</em>) – the ID of the upload</p></li>
-<li><p><strong>userId</strong> (<em>int</em>) – the ID of the user wo started the job</p></li>
-<li><p><strong>groupId</strong> (<em>int</em>) – the ID of the job’s group</p></li>
-<li><p><strong>eta</strong> (<em>string</em>) – the estimated termination time</p></li>
-<li><p><strong>status</strong> (<em>string</em>) – the status of the job</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.ReportFormat">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">ReportFormat</code><a class="headerlink" href="#fossology.obj.ReportFormat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Available report format: DEP5, SPDX2, SPDX2TV, READMEOSS, UNIFIEDREPORT</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.SearchTypes">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">SearchTypes</code><a class="headerlink" href="#fossology.obj.SearchTypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Type of item that can be searched: ALLFILES, CONTAINERS, DIRECTORIES</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.Summary">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Summary</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">uploadName</em>, <em class="sig-param">mainLicense</em>, <em class="sig-param">uniqueLicenses</em>, <em class="sig-param">totalLicenses</em>, <em class="sig-param">uniqueConcludedLicenses</em>, <em class="sig-param">totalConcludedLicenses</em>, <em class="sig-param">filesToBeCleared</em>, <em class="sig-param">filesCleared</em>, <em class="sig-param">clearingStatus</em>, <em class="sig-param">copyrightCount</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Summary" title="Permalink to this definition">¶</a></dt>
-<dd><p>FOSSology upload summary.</p>
-<p>Represents a FOSSology upload summary.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the upload</p></li>
-<li><p><strong>uploadName</strong> (<em>string</em>) – the name of the upload</p></li>
-<li><p><strong>mainLicense</strong> (<em>string</em>) – the main upload license</p></li>
-<li><p><strong>uniqueLicenses</strong> (<em>int</em>) – the number of unique licenses</p></li>
-<li><p><strong>totalLicenses</strong> (<em>int</em>) – the total number of licenses</p></li>
-<li><p><strong>uniqueConcludedLicenses</strong> (<em>int</em>) – the number of unique concluded licenses</p></li>
-<li><p><strong>totalConcludedLicenses</strong> (<em>int</em>) – the total number of concluded licenses</p></li>
-<li><p><strong>filesToBeCleared</strong> (<em>int</em>) – the number of remaining files to be cleared</p></li>
-<li><p><strong>filesCleared</strong> (<em>int</em>) – the number of files already cleared</p></li>
-<li><p><strong>clearingStatus</strong> (<em>string</em>) – the clearing status</p></li>
-<li><p><strong>copyrightCount</strong> (<em>int</em>) – the number of copyrights found</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.TokenScope">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">TokenScope</code><a class="headerlink" href="#fossology.obj.TokenScope" title="Permalink to this definition">¶</a></dt>
-<dd><p>Scope for API tokens:</p>
-<p>READ: Read only access, limited only to “GET” calls</p>
-<p>WRITE: Read/Write access, required for calls other than “GET”</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.Upload">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Upload</code><span class="sig-paren">(</span><em class="sig-param">folderid</em>, <em class="sig-param">foldername</em>, <em class="sig-param">id</em>, <em class="sig-param">description</em>, <em class="sig-param">uploadname</em>, <em class="sig-param">uploaddate</em>, <em class="sig-param">filesize</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Upload" title="Permalink to this definition">¶</a></dt>
-<dd><p>FOSSology upload.</p>
-<p>Represents a FOSSology upload.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>folderid</strong> (<em>int</em>) – the ID of the upload folder</p></li>
-<li><p><strong>foldername</strong> (<em>string</em>) – the name of the upload folder</p></li>
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the upload</p></li>
-<li><p><strong>description</strong> (<em>string</em>) – further information about the upload</p></li>
-<li><p><strong>uploadname</strong> (<em>string</em>) – the name of the upload (default: the name of the upload file)</p></li>
-<li><p><strong>uploaddate</strong> (<em>string</em>) – the date of the upload</p></li>
-<li><p><strong>filesize</strong> (<em>int</em>) – the size of the uploaded file in bytes</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="fossology.obj.User">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">name</em>, <em class="sig-param">description</em>, <em class="sig-param">email</em>, <em class="sig-param">accessLevel</em>, <em class="sig-param">rootFolderId</em>, <em class="sig-param">emailNotification</em>, <em class="sig-param">agents=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.User" title="Permalink to this definition">¶</a></dt>
-<dd><p>FOSSology user.</p>
-<p>Represents the user currently authenticated against the FOSSology server.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the user ID</p></li>
-<li><p><strong>name</strong> (<em>string</em>) – the user name</p></li>
-<li><p><strong>description</strong> (<em>string</em>) – further information about the user</p></li>
-<li><p><strong>email</strong> (<em>string</em>) – the user’s email</p></li>
-<li><p><strong>accessLevel</strong> (<em>string</em>) – TBD</p></li>
-<li><p><strong>rootFolderId</strong> (<em>int</em>) – the ID of the user’s root folder</p></li>
-<li><p><strong>emailNotification</strong> (<em>boolean</em>) – are email notifications configured for that user?</p></li>
-<li><p><strong>agents</strong> (<a class="reference internal" href="#fossology.obj.Agents" title="fossology.obj.Agents"><em>Agents</em></a>) – the default agent configuration for the user</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-
-
-          </div>
-          
-        </div>
-      </div>
+  <div class="document">
+    
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h1 class="logo"><a href="index.html">fossology</a></h1>
@@ -240,10 +34,16 @@
 
 
 
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=fossology&repo=fossology-python&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
@@ -255,6 +55,15 @@
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 </ul>
 
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/fossology/">Package on PyPi</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/fossology/fossology-python/">Source on Github</a></li>
+    
+</ul>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -284,13 +93,224 @@
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="fossology-objects">
+<h1>Fossology objects<a class="headerlink" href="#fossology-objects" title="Permalink to this headline">¶</a></h1>
+<p>The Python objects derived from the REST data.</p>
+<span class="target" id="module-fossology.obj"></span><dl class="py class">
+<dt id="fossology.obj.AccessLevel">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">AccessLevel</code><a class="headerlink" href="#fossology.obj.AccessLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Available access levels for uploads:</p>
+<p>PRIVATE: the upload will only be visible to the owner</p>
+<p>PROTECTED: ?</p>
+<p>PUBLIC: the upload will be visible for everyone</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.Agents">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Agents</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bucket</span></em>, <em class="sig-param"><span class="n">copyright_email_author</span></em>, <em class="sig-param"><span class="n">ecc</span></em>, <em class="sig-param"><span class="n">keyword</span></em>, <em class="sig-param"><span class="n">mimetype</span></em>, <em class="sig-param"><span class="n">monk</span></em>, <em class="sig-param"><span class="n">nomos</span></em>, <em class="sig-param"><span class="n">ojo</span></em>, <em class="sig-param"><span class="n">package</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology agents.</p>
+<p>Represents the agents currently configured for a given user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bucket</strong> (<em>boolean</em>) – run bucket agent on every upload</p></li>
+<li><p><strong>copyright_email_author</strong> (<em>boolean</em>) – run copyright_email_author agent on every upload</p></li>
+<li><p><strong>ecc</strong> (<em>boolean</em>) – run ecc agent on every upload</p></li>
+<li><p><strong>keyword</strong> (<em>boolean</em>) – run keyword agent on every upload</p></li>
+<li><p><strong>mimetype</strong> (<em>boolean</em>) – run mimetype agent on every upload</p></li>
+<li><p><strong>monk</strong> (<em>boolean</em>) – run monk agent on every upload</p></li>
+<li><p><strong>nomos</strong> (<em>boolean</em>) – run nomos agent on every upload</p></li>
+<li><p><strong>ojo</strong> (<em>boolean</em>) – run ojo agent on every upload</p></li>
+<li><p><strong>package</strong> (<em>boolean</em>) – run package agent on every upload</p></li>
+<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other agent provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="fossology.obj.Agents.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a directory with the agent configuration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the agents configured for the current user</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fossology.obj.Agents.to_json">
+<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents.to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a JSON object with the agent configuration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the agents configured for the current user</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.ClearingStatus">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">ClearingStatus</code><a class="headerlink" href="#fossology.obj.ClearingStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clearing statuses</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.Folder">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Folder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">parent</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology folder.</p>
+<p>Represents a FOSSology folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – the ID of the folder</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – the name of the folder</p></li>
+<li><p><strong>description</strong> (<em>string</em>) – further information about the folder</p></li>
+<li><p><strong>parent</strong> (<em>int</em>) – the ID of the parent folder</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.Job">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Job</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">queueDate</span></em>, <em class="sig-param"><span class="n">uploadId</span></em>, <em class="sig-param"><span class="n">userId</span></em>, <em class="sig-param"><span class="n">groupId</span></em>, <em class="sig-param"><span class="n">eta</span></em>, <em class="sig-param"><span class="n">status</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Job" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology job.</p>
+<p>Represents a FOSSology job.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – the ID of the job</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – the name of the job</p></li>
+<li><p><strong>queueDate</strong> (<em>string</em>) – the start date of the job</p></li>
+<li><p><strong>uploadId</strong> (<em>int</em>) – the ID of the upload</p></li>
+<li><p><strong>userId</strong> (<em>int</em>) – the ID of the user wo started the job</p></li>
+<li><p><strong>groupId</strong> (<em>int</em>) – the ID of the job’s group</p></li>
+<li><p><strong>eta</strong> (<em>string</em>) – the estimated termination time</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – the status of the job</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.LicenseAgent">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">LicenseAgent</code><a class="headerlink" href="#fossology.obj.LicenseAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Available license agents: NOMOS, MONK, NINKA, OJO, REPORTIMPORT</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.ReportFormat">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">ReportFormat</code><a class="headerlink" href="#fossology.obj.ReportFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Available report format: DEP5, SPDX2, SPDX2TV, READMEOSS, UNIFIEDREPORT</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.SearchTypes">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">SearchTypes</code><a class="headerlink" href="#fossology.obj.SearchTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of item that can be searched: ALLFILES, CONTAINERS, DIRECTORIES</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.Summary">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">uploadName</span></em>, <em class="sig-param"><span class="n">mainLicense</span></em>, <em class="sig-param"><span class="n">uniqueLicenses</span></em>, <em class="sig-param"><span class="n">totalLicenses</span></em>, <em class="sig-param"><span class="n">uniqueConcludedLicenses</span></em>, <em class="sig-param"><span class="n">totalConcludedLicenses</span></em>, <em class="sig-param"><span class="n">filesToBeCleared</span></em>, <em class="sig-param"><span class="n">filesCleared</span></em>, <em class="sig-param"><span class="n">clearingStatus</span></em>, <em class="sig-param"><span class="n">copyrightCount</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology upload summary.</p>
+<p>Represents a FOSSology upload summary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – the ID of the upload</p></li>
+<li><p><strong>uploadName</strong> (<em>string</em>) – the name of the upload</p></li>
+<li><p><strong>mainLicense</strong> (<em>string</em>) – the main upload license</p></li>
+<li><p><strong>uniqueLicenses</strong> (<em>int</em>) – the number of unique licenses</p></li>
+<li><p><strong>totalLicenses</strong> (<em>int</em>) – the total number of licenses</p></li>
+<li><p><strong>uniqueConcludedLicenses</strong> (<em>int</em>) – the number of unique concluded licenses</p></li>
+<li><p><strong>totalConcludedLicenses</strong> (<em>int</em>) – the total number of concluded licenses</p></li>
+<li><p><strong>filesToBeCleared</strong> (<em>int</em>) – the number of remaining files to be cleared</p></li>
+<li><p><strong>filesCleared</strong> (<em>int</em>) – the number of files already cleared</p></li>
+<li><p><strong>clearingStatus</strong> (<em>string</em>) – the clearing status</p></li>
+<li><p><strong>copyrightCount</strong> (<em>int</em>) – the number of copyrights found</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.TokenScope">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">TokenScope</code><a class="headerlink" href="#fossology.obj.TokenScope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scope for API tokens:</p>
+<p>READ: Read only access, limited only to “GET” calls</p>
+<p>WRITE: Read/Write access, required for calls other than “GET”</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.Upload">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Upload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folderid</span></em>, <em class="sig-param"><span class="n">foldername</span></em>, <em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">uploadname</span></em>, <em class="sig-param"><span class="n">uploaddate</span></em>, <em class="sig-param"><span class="n">filesize</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology upload.</p>
+<p>Represents a FOSSology upload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folderid</strong> (<em>int</em>) – the ID of the upload folder</p></li>
+<li><p><strong>foldername</strong> (<em>string</em>) – the name of the upload folder</p></li>
+<li><p><strong>id</strong> (<em>int</em>) – the ID of the upload</p></li>
+<li><p><strong>description</strong> (<em>string</em>) – further information about the upload</p></li>
+<li><p><strong>uploadname</strong> (<em>string</em>) – the name of the upload (default: the name of the upload file)</p></li>
+<li><p><strong>uploaddate</strong> (<em>string</em>) – the date of the upload</p></li>
+<li><p><strong>filesize</strong> (<em>int</em>) – the size of the uploaded file in bytes</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.User">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">email</span></em>, <em class="sig-param"><span class="n">accessLevel</span></em>, <em class="sig-param"><span class="n">rootFolderId</span></em>, <em class="sig-param"><span class="n">emailNotification</span></em>, <em class="sig-param"><span class="n">agents</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology user.</p>
+<p>Represents the user currently authenticated against the FOSSology server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – the user ID</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – the user name</p></li>
+<li><p><strong>description</strong> (<em>string</em>) – further information about the user</p></li>
+<li><p><strong>email</strong> (<em>string</em>) – the user’s email</p></li>
+<li><p><strong>accessLevel</strong> (<em>string</em>) – TBD</p></li>
+<li><p><strong>rootFolderId</strong> (<em>int</em>) – the ID of the user’s root folder</p></li>
+<li><p><strong>emailNotification</strong> (<em>boolean</em>) – are email notifications configured for that user?</p></li>
+<li><p><strong>agents</strong> (<a class="reference internal" href="#fossology.obj.Agents" title="fossology.obj.Agents"><em>Agents</em></a>) – the default agent configuration for the user</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
-      &copy;2019, Siemens AG.
+      &copy;2020, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

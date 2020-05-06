@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Fossology Report &#8212; fossology 0.0.7 documentation</title>
+    <title>Fossology Report &#8212; fossology 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -23,9 +23,76 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">fossology</a></h1>
 
-    <div class="document">
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=fossology&repo=fossology-python&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/fossology/">Package on PyPi</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/fossology/fossology-python/">Source on Github</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="jobs.html" title="previous chapter">Fossology Jobs</a></li>
+      <li>Next: <a href="obj.html" title="next chapter">Fossology objects</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -35,13 +102,13 @@
   <div class="section" id="fossology-report">
 <h1>Fossology Report<a class="headerlink" href="#fossology-report" title="Permalink to this headline">¶</a></h1>
 <p>Methods used to access “report/” endpoints.</p>
-<span class="target" id="module-fossology.report"></span><dl class="class">
+<span class="target" id="module-fossology.report"></span><dl class="py class">
 <dt id="fossology.report.Report">
 <em class="property">class </em><code class="sig-prename descclassname">fossology.report.</code><code class="sig-name descname">Report</code><a class="headerlink" href="#fossology.report.Report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class dedicated to all “report” related endpoints</p>
-<dl class="method">
+<dl class="py method">
 <dt id="fossology.report.Report.download_report">
-<code class="sig-name descname">download_report</code><span class="sig-paren">(</span><em class="sig-param">report_id</em>, <em class="sig-param">as_zip=False</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.download_report" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">download_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">report_id</span></em>, <em class="sig-param"><span class="n">as_zip</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.download_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download a report</p>
 <p>API Endpoint: GET /report/{id}</p>
 <dl class="field-list simple">
@@ -72,9 +139,9 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="fossology.report.Report.generate_report">
-<code class="sig-name descname">generate_report</code><span class="sig-paren">(</span><em class="sig-param">upload</em>, <em class="sig-param">report_format=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.generate_report" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">generate_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span></em>, <em class="sig-param"><span class="n">report_format</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.generate_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a report for a given upload</p>
 <p>API Endpoint: GET /report</p>
 <dl class="field-list simple">
@@ -105,66 +172,13 @@
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">fossology</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Report</a></li>
-<li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="jobs.html" title="previous chapter">Fossology Jobs</a></li>
-      <li>Next: <a href="obj.html" title="next chapter">Fossology objects</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
-      &copy;2019, Siemens AG.
+      &copy;2020, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

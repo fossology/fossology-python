@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Welcome to fossology’s documentation! &#8212; fossology 0.0.7 documentation</title>
+    <title>Welcome to fossology’s documentation! &#8212; fossology 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -22,9 +22,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">fossology</a></h1>
 
-    <div class="document">
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=fossology&repo=fossology-python&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/fossology/">Package on PyPi</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/fossology/fossology-python/">Source on Github</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="fossology.html" title="next chapter">Fossology</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
       <div class="documentwrapper">
         <div class="bodywrapper">
           
@@ -33,11 +99,11 @@
             
   <div class="section" id="welcome-to-fossology-s-documentation">
 <h1>Welcome to fossology’s documentation!<a class="headerlink" href="#welcome-to-fossology-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://github.com/deveaud-m/fossology-python/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a> <a class="reference external" href="https://pypi.org/project/fossology"><img alt="PyPI Version" src="https://badge.fury.io/py/fossology.svg" /></a> <a class="reference external" href="https://www.python.org/doc/versions/"><img alt="Python Version" src="https://img.shields.io/badge/python-3.6%2C3.7%2C3.8-blue?logo=python" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22"><img alt="Static Checks" src="https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22"><img alt="Fossology Tests" src="https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/deveaud-m/fossology-python/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a> <a class="reference external" href="https://pypi.org/project/fossology"><img alt="PyPI Version" src="https://badge.fury.io/py/fossology.svg" /></a> <a class="reference external" href="https://www.python.org/doc/versions/"><img alt="Python Version" src="https://img.shields.io/badge/python-3.6%2C3.7%2C3.8-blue?logo=python" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22"><img alt="Static Checks" src="https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22"><img alt="Fossology Tests" src="https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg" /></a> <a class="reference external" href="https://codecov.io/gh/fossology/fossology-python"><img alt="Coverage" src="https://codecov.io/gh/fossology/fossology-python/branch/master/graph/badge.svg" /></a></p>
 <p>A simple wrapper for the Fossology REST API.</p>
 <p>See <a class="reference external" href="https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml">the OpenAPI specification</a> used to implement this library.</p>
 <blockquote>
-<div><p>Compatible with API version 1.0.12</p>
+<div><p>Compatible with API version 1.0.13</p>
 </div></blockquote>
 </div>
 <div class="section" id="documentation">
@@ -143,8 +209,10 @@ docker run --name fossology -p <span class="m">80</span>:80 fossology/fossology
 </pre></div>
 </div>
 </li>
-<li><p>Start the complete test suite or a specific test case:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run python tests/tests.py
+<li><p>Start the complete test suite or a specific test case (and generate coverage report):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run coverage run --source<span class="o">=</span>fossology tests/tests.py
+poetry run coverage report -m
+poetry run coverage html
 </pre></div>
 </div>
 </li>
@@ -159,65 +227,13 @@ docker run --name fossology -p <span class="m">80</span>:80 fossology/fossology
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">fossology</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
-<li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
-<li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="fossology.html" title="next chapter">Fossology</a></li>
-  </ul></li>
-</ul>
-</div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
-      &copy;2019, Siemens AG.
+      &copy;2020, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

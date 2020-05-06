@@ -6,7 +6,6 @@ Welcome to fossology's documentation!
 .. toctree::
    :maxdepth: 2
    :hidden:
-   :caption: Contents:
 
    fossology
    folders

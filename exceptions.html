@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Fossology exceptions &#8212; fossology 0.0.7 documentation</title>
+    <title>Fossology exceptions &#8212; fossology 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -23,49 +23,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-  
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          
-
-          <div class="body" role="main">
-            
-  <div class="section" id="fossology-exceptions">
-<h1>Fossology exceptions<a class="headerlink" href="#fossology-exceptions" title="Permalink to this headline">¶</a></h1>
-<p>The fossology exceptions.</p>
-<span class="target" id="module-fossology.exceptions"></span><dl class="exception">
-<dt id="fossology.exceptions.AuthenticationError">
-<em class="property">exception </em><code class="sig-prename descclassname">fossology.exceptions.</code><code class="sig-name descname">AuthenticationError</code><span class="sig-paren">(</span><em class="sig-param">url</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.exceptions.AuthenticationError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Authentication error</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="fossology.exceptions.AuthorizationError">
-<em class="property">exception </em><code class="sig-prename descclassname">fossology.exceptions.</code><code class="sig-name descname">AuthorizationError</code><span class="sig-paren">(</span><em class="sig-param">description</em>, <em class="sig-param">response</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.exceptions.AuthorizationError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Authorization error</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="fossology.exceptions.Error">
-<em class="property">exception </em><code class="sig-prename descclassname">fossology.exceptions.</code><code class="sig-name descname">Error</code><a class="headerlink" href="#fossology.exceptions.Error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for exceptions in this module.</p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="fossology.exceptions.FossologyApiError">
-<em class="property">exception </em><code class="sig-prename descclassname">fossology.exceptions.</code><code class="sig-name descname">FossologyApiError</code><span class="sig-paren">(</span><em class="sig-param">description</em>, <em class="sig-param">response</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.exceptions.FossologyApiError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Error during a Fossology GET request</p>
-</dd></dl>
-
-</div>
-
-
-          </div>
-          
-        </div>
-      </div>
+  <div class="document">
+    
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 <h1 class="logo"><a href="index.html">fossology</a></h1>
@@ -75,10 +34,16 @@
 
 
 
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=fossology&repo=fossology-python&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
@@ -90,6 +55,15 @@
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 </ul>
 
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/fossology/">Package on PyPi</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/fossology/fossology-python/">Source on Github</a></li>
+    
+</ul>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -119,13 +93,53 @@
 
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="fossology-exceptions">
+<h1>Fossology exceptions<a class="headerlink" href="#fossology-exceptions" title="Permalink to this headline">¶</a></h1>
+<p>The fossology exceptions.</p>
+<span class="target" id="module-fossology.exceptions"></span><dl class="py exception">
+<dt id="fossology.exceptions.AuthenticationError">
+<em class="property">exception </em><code class="sig-prename descclassname">fossology.exceptions.</code><code class="sig-name descname">AuthenticationError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.exceptions.AuthenticationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authentication error</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="fossology.exceptions.AuthorizationError">
+<em class="property">exception </em><code class="sig-prename descclassname">fossology.exceptions.</code><code class="sig-name descname">AuthorizationError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">response</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.exceptions.AuthorizationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Authorization error</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="fossology.exceptions.Error">
+<em class="property">exception </em><code class="sig-prename descclassname">fossology.exceptions.</code><code class="sig-name descname">Error</code><a class="headerlink" href="#fossology.exceptions.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for exceptions in this module.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="fossology.exceptions.FossologyApiError">
+<em class="property">exception </em><code class="sig-prename descclassname">fossology.exceptions.</code><code class="sig-name descname">FossologyApiError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">description</span></em>, <em class="sig-param"><span class="n">response</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.exceptions.FossologyApiError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error during a Fossology GET request</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
     <div class="footer">
-      &copy;2019, Siemens AG.
+      &copy;2020, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
