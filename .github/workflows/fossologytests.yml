@@ -1,10 +1,7 @@
 name: Fossology Tests
 
-on: 
+on:
   push:
-    paths:
-      - 'fossology/**'
-      - 'tests/**'
 
 jobs:
   test:
@@ -25,7 +22,7 @@ jobs:
       - name: Install host dependencies
         run: |
           apt-get -qq update
-          apt-get install -qq gcc nmap
+          apt-get install -qq gcc git nmap
           rm -rf /var/lib/apt/lists/*
       - name: Install Python dependencies
         run: |
@@ -37,4 +34,4 @@ jobs:
         run: |
           poetry run coverage run --source=fossology tests/tests.py
           poetry run coverage report -m
-          bash <(curl -s https://codecov.io/bash)
+          poetry run codecov

@@ -28,6 +28,9 @@ flake8 = ">=3.7.8"
 sphinx = ">=2.2.0"
 black = "^19.10b0"
 coverage = "^5.1"
+codecov = "^2.0.22"
+pyflakes = { git = "https://github.com/PyCQA/pyflakes.git", rev = "c9708a18a17fbf17e0d88c1d1675ac1a926c4565" }
+
 
 [build-system]
 requires = ["poetry>=0.12"]

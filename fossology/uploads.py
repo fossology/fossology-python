@@ -4,7 +4,7 @@
 import json
 import time
 import logging
-from tenacity import retry, stop_after_attempt, TryAgain
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, TryAgain
 
 from .obj import Upload, Summary
 from .exceptions import FossologyApiError
@@ -17,7 +17,7 @@ class Uploads:
     """Class dedicated to all "uploads" related endpoints"""
 
     # Retry until the unpack agent is finished
-    @retry
+    @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(10))
     def detail_upload(self, upload_id):
         """Get detailled information about an upload
 
@@ -30,7 +30,7 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         """
         response = self.session.get(f"{self.api}/uploads/{upload_id}")
-        if response.status_code == 200 and response.json():
+        if response.status_code == 200:
             logger.debug(f"Got details for upload {upload_id}")
             return Upload.from_json(response.json())
         elif response.status_code == 503:
@@ -38,12 +38,8 @@ class Uploads:
             time.sleep(5)
             raise TryAgain
         else:
-            if response.json():
-                description = f"Error while getting details for upload {upload_id}"
-                raise FossologyApiError(description, response)
-            else:
-                logger.error(f"Missing response from API: {response.text}")
-                return None
+            description = f"Error while getting details for upload {upload_id}"
+            raise FossologyApiError(description, response)
 
     def upload_file(
         self,
@@ -116,7 +112,7 @@ class Uploads:
                 description = f"Upload of {source} failed"
                 raise FossologyApiError(description, response)
 
-    @retry(stop=stop_after_attempt(3))
+    @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
     def upload_summary(self, upload):
         """Get clearing information about an upload
 
@@ -129,8 +125,7 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         """
         response = self.session.get(f"{self.api}/uploads/{upload.id}/summary")
-        if response.status_code == 200 and response.json():
-            logger.debug(f"Got summary for upload {upload.uploadname} (id={upload.id})")
+        if response.status_code == 200:
             return Summary.from_json(response.json())
         elif response.status_code == 503:
             logger.debug(
@@ -139,12 +134,10 @@ class Uploads:
             time.sleep(3)
             raise TryAgain
         else:
-            logger.error(
-                f"Error {response.status_code} while getting summary for upload {upload.uploadname} (id={upload.id})"
-            )
-            return None
+            description = f"No summary for upload {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
 
-    @retry(stop=stop_after_attempt(3))
+    @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
     def upload_licenses(self, upload, agent=None, containers=False):
         """Get clearing information about an upload
 
@@ -174,17 +167,14 @@ class Uploads:
                 f"{self.api}/uploads/{upload.id}/licenses?agent={agent}"
             )
 
-        if response.status_code == 200 and response.json():
-            logger.debug(
-                f"Got licenses from agent {agent} for upload {upload.uploadname} (id={upload.id})"
-            )
+        if response.status_code == 200:
             return response.json()
         elif response.status_code == 412:
             logger.info(
                 f"Agent {agent} has not been scheduled for {upload.uploadname} (id={upload.id}): "
                 f"{response.json()['message']}"
             )
-            return None
+            return
         elif response.status_code == 503:
             logger.debug(
                 f"Unpack agent for {upload.uploadname} (id={upload.id}) didn't start yet"
@@ -192,10 +182,8 @@ class Uploads:
             time.sleep(3)
             raise TryAgain
         else:
-            logger.error(
-                f"Error {response.status_code} while getting licenses for upload {upload.uploadname} (id={upload.id})"
-            )
-            return None
+            description = f"No licenses for upload {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
 
     def delete_upload(self, upload, group=None):
         """Delete an upload
@@ -236,7 +224,7 @@ class Uploads:
                 uploads_list.append(Upload.from_json(upload))
             return uploads_list
         else:
-            description = f"Unable to retrieve the list of uploads"
+            description = "Unable to retrieve the list of uploads"
             raise FossologyApiError(description, response)
 
     def move_upload(self, upload, folder, group=None):

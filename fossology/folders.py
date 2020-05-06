@@ -34,7 +34,6 @@ class Folders:
         else:
             description = f"Unable to get a list of folders for {self.user.name}"
             raise FossologyApiError(description, response)
-            return None
 
     def detail_folder(self, folder_id):
         """Get details of folder.
@@ -89,8 +88,8 @@ class Folders:
             for folder in self.folders:
                 if folder.name == name:
                     return folder
-            logger.error(f"Folder exists but was not found in the user's folder list")
-            return None
+            logger.error("Folder exists but was not found in the user's folder list")
+            return
 
         elif response.status_code == 201:
             logger.info(f"Folder {name} has been created")
@@ -118,10 +117,6 @@ class Folders:
         :rtype: Folder() object
         :raises FossologyApiError: if the REST call failed
         """
-        if not isinstance(folder, Folder):
-            logger.error("You need to pass the Folder() object to call this method.")
-            return None
-
         headers = dict()
         if name:
             headers["name"] = name

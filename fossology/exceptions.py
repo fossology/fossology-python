@@ -1,6 +1,8 @@
 # Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
+from json.decoder import JSONDecodeError
+
 
 class Error(Exception):
     """Base class for exceptions in this module."""
@@ -32,6 +34,8 @@ class FossologyApiError(Error):
     """Error during a Fossology GET request"""
 
     def __init__(self, description, response):
-        self.message = (
-            f"{description}: '{response.json()['message']}' ({response.status_code})"
-        )
+        try:
+            message = response.json().get("message")
+        except JSONDecodeError:
+            message = ""
+        self.message = f"{description}: {message} ({response.status_code})"

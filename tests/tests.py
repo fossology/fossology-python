@@ -3,7 +3,7 @@
 
 import unittest
 
-from test_base import foss
+from test_base import foss, TestFossologyUser, TestFossologyToken
 from test_folders import TestFossologyFolders
 from test_uploads import TestFossologyUploads
 from test_jobs import TestFossologyJobs
@@ -13,6 +13,8 @@ from test_search import TestFossologySearch
 
 def suite():
     suite = unittest.TestSuite()
+    suite.addTest(TestFossologyToken("test_generate_token"))
+    suite.addTest(TestFossologyUser("test_get_user"))
     suite.addTest(TestFossologyFolders("test_create_folder"))
     suite.addTest(TestFossologyFolders("test_update_folder"))
     suite.addTest(TestFossologyFolders("test_move_folder"))
