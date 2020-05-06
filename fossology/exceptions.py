@@ -25,9 +25,11 @@ class AuthorizationError(Error):
     """Authorization error"""
 
     def __init__(self, description, response):
-        self.message = (
-            f"{description}\n{response.json()['message']} ({response.status_code})"
-        )
+        try:
+            message = response.json().get("message")
+        except JSONDecodeError:
+            message = ""
+        self.message = f"{description}: {message} ({response.status_code})"
 
 
 class FossologyApiError(Error):
