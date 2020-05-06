@@ -28,7 +28,7 @@ class AuthorizationError(Error):
         try:
             message = response.json().get("message")
         except JSONDecodeError:
-            message = ""
+            message = response.text
         self.message = f"{description}: {message} ({response.status_code})"
 
 
@@ -39,5 +39,5 @@ class FossologyApiError(Error):
         try:
             message = response.json().get("message")
         except JSONDecodeError:
-            message = ""
+            message = response.text
         self.message = f"{description}: {message} ({response.status_code})"
