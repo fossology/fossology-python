@@ -43,6 +43,11 @@ class TestFossologyUploads(unittest.TestCase):
         self.assertEqual(
             test_upload.uploadname, upload_filename, "Uploadname on the server is wrong"
         )
+        self.assertEqual(
+            test_upload.filesha1,
+            "D4D663FC2877084362FB2297337BE05684869B00",
+            "Filesha1 on the server is wrong",
+        )
 
     def test_upload_from_vcs(self):
         vcs = {
