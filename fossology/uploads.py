@@ -34,18 +34,21 @@ class Uploads:
             logger.debug(f"Got details for upload {upload_id}")
             return Upload.from_json(response.json())
         elif response.status_code == 503:
-            logger.debug(f"Unpack agent for {upload_id} didn't start yet")
-            time.sleep(5)
+            logger.debug(
+                f"Unpack agent for {upload_id} didn't start yet, is the scheduler running?"
+            )
+            time.sleep(20)
             raise TryAgain
         else:
             description = f"Error while getting details for upload {upload_id}"
             raise FossologyApiError(description, response)
 
-    def upload_file(
+    def upload_file(  # noqa: C901
         self,
         folder,
         file=None,
         vcs=None,
+        url=None,
         description=None,
         access_level=None,
         ignore_scm=False,
@@ -55,9 +58,54 @@ class Uploads:
 
         API Endpoint: POST /uploads
 
+        :Example for a file upload:
+
+        >>> from fossology import Fossology
+        >>> from fossology.obj import AccessLevel
+        >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
+        >>> my_upload = foss.upload_file(
+                foss.rootFolder,
+                file="my-package.zip",
+                description="My product package",
+                access_level=AccessLevel.PUBLIC,
+            )
+
+        :Example for a VCS upload:
+
+        >>> vcs = {
+                "vcsType": "git",
+                "vcsUrl": "https://github.com/fossology/fossology-python",
+                "vcsName": "fossology-python-github-master",
+                "vcsUsername": "",
+                "vcsPassword": "",
+            }
+        >>> vcs_upload = foss.upload_file(
+                foss.rootFolder,
+                vcs=vcs,
+                description="Upload from VCS",
+                access_level=AccessLevel.PUBLIC,
+            )
+
+        :Example for a URL upload:
+
+        >>> url = {
+                "url": "https://github.com/fossology/fossology-python/archive/master.zip",
+                "name": "fossology-python-master.zip",
+                "accept": "zip",
+                "reject": "",
+                "maxRecursionDepth": "1",
+            }
+        >>> url_upload = foss.upload_file(
+                foss.rootFolder,
+                url=url,
+                description="Upload from URL",
+                access_level=AccessLevel.PUBLIC,
+            )
+
         :param folder: the upload Fossology folder
         :param file: the local path of the file to be uploaded
         :param vcs: the VCS specification to upload from an online repository
+        :param url: the URL specification to upload from a url
         :param description: description of the upload (default: None)
         :param access_level: access permissions of the upload (default: protected)
         :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: False)
@@ -65,6 +113,7 @@ class Uploads:
         :type folder: Folder
         :type file: string
         :type vcs: dict()
+        :type url: dict()
         :type description: string
         :type access_level: AccessLevel
         :type ignore_scm: boolean
@@ -84,13 +133,22 @@ class Uploads:
             headers["groupName"] = group
 
         if file:
+            headers["uploadType"] = "server"
             with open(file, "rb") as fp:
                 files = {"fileInput": fp}
                 response = self.session.post(
                     f"{self.api}/uploads", files=files, headers=headers
                 )
         elif vcs:
+            headers["uploadType"] = "vcs"
             data = json.dumps(vcs)
+            headers["Content-Type"] = "application/json"
+            response = self.session.post(
+                f"{self.api}/uploads", data=data, headers=headers
+            )
+        elif url:
+            headers["uploadType"] = "url"
+            data = json.dumps(url)
             headers["Content-Type"] = "application/json"
             response = self.session.post(
                 f"{self.api}/uploads", data=data, headers=headers
@@ -108,7 +166,12 @@ class Uploads:
                 )
                 return upload
             except TryAgain:
-                source = f"{file}" if file else f"{vcs['vcsUrl']}"
+                if file:
+                    source = f"{file}"
+                elif vcs:
+                    source = vcs.get("vcsName")
+                else:
+                    source = url.get("name")
                 description = f"Upload of {source} failed"
                 raise FossologyApiError(description, response)
 

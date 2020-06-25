@@ -173,6 +173,7 @@ class User(object):
     :param rootFolderId: the ID of the user's root folder
     :param emailNotification: are email notifications configured for that user?
     :param agents: the default agent configuration for the user
+    :param kwargs: handle any other user information provided by the fossology instance
     :type id: int
     :type name: string
     :type description: string
@@ -181,6 +182,7 @@ class User(object):
     :type rootFolderId: int
     :type emailNotification: boolean
     :type agents: Agents
+    :type kwargs: key word argument
     """
 
     def __init__(
@@ -193,6 +195,7 @@ class User(object):
         rootFolderId,
         emailNotification,
         agents=None,
+        **kwargs,
     ):
         self.id = id
         self.name = name
@@ -202,6 +205,7 @@ class User(object):
         self.rootFolderId = rootFolderId
         self.emailNotification = emailNotification
         self.agents = agents
+        self.additional_info = kwargs
 
     def __str__(self):
         return (
@@ -225,17 +229,20 @@ class Folder(object):
     :param name: the name of the folder
     :param description: further information about the folder
     :param parent: the ID of the parent folder
+    :param kwargs: handle any other folder information provided by the fossology instance
     :type id: int
     :type name: string
     :type description: string
     :type parent: int
+    :type kwargs: key word argument
     """
 
-    def __init__(self, id, name, description, parent):
+    def __init__(self, id, name, description, parent, **kwargs):
         self.id = id
         self.name = name
         self.description = description
         self.parent = parent
+        self.additional_info = kwargs
 
     def __str__(self):
         return (
@@ -261,6 +268,8 @@ class Upload(object):
     :param uploadname: the name of the upload (default: the name of the upload file)
     :param uploaddate: the date of the upload
     :param filesize: the size of the uploaded file in bytes
+    :param filesha1: the SHA1 hash sum of the file
+    :param kwargs: handle any other upload information provided by the fossology instance
     :type folderid: int
     :type foldername: string
     :type id: int
@@ -268,10 +277,21 @@ class Upload(object):
     :type uploadname: string
     :type uploaddate: string
     :type filesize: int
+    :type filesha1: string
+    :type kwargs: key word argument
     """
 
     def __init__(
-        self, folderid, foldername, id, description, uploadname, uploaddate, filesize
+        self,
+        folderid,
+        foldername,
+        id,
+        description,
+        uploadname,
+        uploaddate,
+        filesize,
+        filesha1,
+        **kwargs,
     ):
         self.folderid = folderid
         self.foldername = foldername
@@ -280,10 +300,12 @@ class Upload(object):
         self.uploadname = uploadname
         self.uploaddate = uploaddate
         self.filesize = filesize
+        self.filesha1 = filesha1
+        self.additional_info = kwargs
 
     def __str__(self):
         return (
-            f"Upload '{self.uploadname}' ({self.id}, {self.filesize}B) "
+            f"Upload '{self.uploadname}' ({self.id}, {self.filesize}B, {self.filesha1}) "
             f"in folder {self.foldername} ({self.folderid})"
         )
 
@@ -309,6 +331,7 @@ class Summary(object):
     :param filesCleared: the number of files already cleared
     :param clearingStatus: the clearing status
     :param copyrightCount: the number of copyrights found
+    :param kwargs: handle any other summary information provided by the fossology instance
     :type id: int
     :type uploadName: string
     :type mainLicense: string
@@ -320,6 +343,7 @@ class Summary(object):
     :type filesCleared: int
     :type clearingStatus: string
     :type copyrightCount: int
+    :type kwargs: key word argument
     """
 
     def __init__(
@@ -335,6 +359,7 @@ class Summary(object):
         filesCleared,
         clearingStatus,
         copyrightCount,
+        **kwargs,
     ):
         self.id = id
         self.uploadName = uploadName
@@ -347,11 +372,12 @@ class Summary(object):
         self.filesCleared = filesCleared
         self.clearingStatus = clearingStatus
         self.copyrightCount = copyrightCount
+        self.additional_info = kwargs
 
     def __str__(self):
         return (
-            f"Clearing status for '{self.uploadName}' is '{self.clearingStatus},"
-            f"main license {self.mainLicense}"
+            f"Clearing status for '{self.uploadName}' is '{self.clearingStatus}',"
+            f" main license = {self.mainLicense}"
         )
 
     @classmethod
@@ -373,6 +399,7 @@ class Job(object):
     :param groupId: the ID of the job's group
     :param eta: the estimated termination time
     :param status: the status of the job
+    :param kwargs: handle any other job information provided by the fossology instance
     :type id: int
     :type name: string
     :type queueDate: string
@@ -381,9 +408,12 @@ class Job(object):
     :type groupId: int
     :type eta: string
     :type status: string
+    :type kwargs: key word argument
     """
 
-    def __init__(self, id, name, queueDate, uploadId, userId, groupId, eta, status):
+    def __init__(
+        self, id, name, queueDate, uploadId, userId, groupId, eta, status, **kwargs
+    ):
         self.id = id
         self.name = name
         self.queueDate = queueDate
@@ -392,6 +422,7 @@ class Job(object):
         self.groupId = groupId
         self.eta = eta
         self.status = status
+        self.additional_info = kwargs
 
     def __str__(self):
         return (

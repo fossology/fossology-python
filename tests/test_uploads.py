@@ -47,8 +47,8 @@ class TestFossologyUploads(unittest.TestCase):
     def test_upload_from_vcs(self):
         vcs = {
             "vcsType": "git",
-            "vcsUrl": "https://github.com/fossology/fossdriver",
-            "vcsName": "fossdriver-github-master",
+            "vcsUrl": "https://github.com/fossology/fossology-python",
+            "vcsName": "fossology-python-github-master",
             "vcsUsername": "",
             "vcsPassword": "",
         }
@@ -63,6 +63,26 @@ class TestFossologyUploads(unittest.TestCase):
         )
         foss.delete_upload(vcs_upload)
 
+    def test_upload_from_url(self):
+        url = {
+            "url": "https://github.com/fossology/fossology-python/archive/master.zip",
+            "name": "fossology-python-master.zip",
+            "accept": "zip",
+            "reject": "",
+            "maxRecursionDepth": "1",
+        }
+        url_upload = foss.upload_file(
+            foss.rootFolder,
+            url=url,
+            description="Test upload from url via python lib",
+            access_level=AccessLevel.PUBLIC,
+        )
+        self.assertEqual(
+            url_upload.uploadname, url["name"], "Uploadname on the server is wrong",
+        )
+        foss.delete_upload(url_upload)
+
+    def test_empty_upload(self):
         empty_upload = foss.upload_file(
             foss.rootFolder,
             description="Test empty upload",
@@ -108,8 +128,9 @@ class TestFossologyUploads(unittest.TestCase):
         if not test_upload:
             test_upload = do_upload()
 
-        # FIXME remove once the fix is deployed
-        self.assertRaises(FossologyApiError, foss.upload_summary, test_upload)
+        summary = foss.upload_summary(test_upload)
+        self.assertEqual(summary.clearingStatus, "Open")
+        self.assertEqual(summary.mainLicense, None)
 
     def test_upload_licenses(self):
         test_upload = get_upload()
@@ -138,19 +159,7 @@ class TestFossologyUploads(unittest.TestCase):
             "Unexpected ojo licenses were found for upload {test_upload.uploadname}",
         )
 
-    def test_delete_upload(self):
-        test_upload = get_upload()
-        if not test_upload:
-            test_upload = do_upload()
-
-        foss.delete_upload(test_upload)
-        logger.debug(f"Waiting 10 second after scheduling {test_upload.id} deletion")
-        time.sleep(10)
-
-        verify_uploads = foss.list_uploads()
-        self.assertEqual(len(verify_uploads), 0, "Upload couldn't be deleted")
-
-        # Delete arbitrary upload
+    def test_delete_unknown_upload(self):
         non_upload = Upload(
             foss.rootFolder,
             "Root Folder",
@@ -159,8 +168,19 @@ class TestFossologyUploads(unittest.TestCase):
             "Non Upload",
             "2020-05-05",
             "0",
+            "sha",
         )
         self.assertRaises(FossologyApiError, foss.delete_upload, non_upload)
+
+    def test_delete_upload(self):
+        test_upload = get_upload()
+        if not test_upload:
+            test_upload = do_upload()
+
+        foss.delete_upload(test_upload)
+
+        verify_uploads = foss.list_uploads()
+        self.assertEqual(len(verify_uploads), 0, "Upload couldn't be deleted")
 
 
 if __name__ == "__main__":
