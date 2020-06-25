@@ -189,7 +189,8 @@ class Fossology(Folders, Uploads, Jobs, Report):
                     continue
                 if user.get("email"):
                     foss_user = User.from_json(user)
-                    if agents := user.get("agents"):
+                    agents = user.get("agents")
+                    if agents:
                         foss_user.agents = Agents.from_json(agents)
                     users_list.append(foss_user)
             return users_list

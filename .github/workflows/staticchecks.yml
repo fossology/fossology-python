@@ -7,9 +7,15 @@ jobs:
   test:
     name: Static Checks
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        container:
+        - 'python:3.6-slim'
+        - 'python:3.7-slim'
+        - 'python:3.8-slim'
 
-    container:
-      image: python:3.8-slim
+    container: ${{ matrix.container }}
 
     steps:
       - uses: actions/checkout@v1
