@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fossology Uploads &#8212; fossology 0.1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -144,7 +145,7 @@
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.detail_upload">
-<code class="sig-name descname">detail_upload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.detail_upload" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">detail_upload</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.detail_upload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get detailled information about an upload</p>
 <p>API Endpoint: GET /uploads/{id}</p>
 <dl class="field-list simple">
@@ -205,15 +206,69 @@
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.upload_file">
-<code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vcs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">access_level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ignore_scm</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vcs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">access_level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ignore_scm</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload a file to FOSSology</p>
 <p>API Endpoint: POST /uploads</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example for a file upload</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">Fossology</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.obj</span> <span class="kn">import</span> <span class="n">AccessLevel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+<span class="go">        foss.rootFolder,</span>
+<span class="go">        file=&quot;my-package.zip&quot;,</span>
+<span class="go">        description=&quot;My product package&quot;,</span>
+<span class="go">        access_level=AccessLevel.PUBLIC,</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Example for a VCS upload</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vcs</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">        &quot;vcsType&quot;: &quot;git&quot;,</span>
+<span class="go">        &quot;vcsUrl&quot;: &quot;https://github.com/fossology/fossology-python&quot;,</span>
+<span class="go">        &quot;vcsName&quot;: &quot;fossology-python-github-master&quot;,</span>
+<span class="go">        &quot;vcsUsername&quot;: &quot;&quot;,</span>
+<span class="go">        &quot;vcsPassword&quot;: &quot;&quot;,</span>
+<span class="go">    }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vcs_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+<span class="go">        foss.rootFolder,</span>
+<span class="go">        vcs=vcs,</span>
+<span class="go">        description=&quot;Upload from VCS&quot;,</span>
+<span class="go">        access_level=AccessLevel.PUBLIC,</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Example for a URL upload</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">        &quot;url&quot;: &quot;https://github.com/fossology/fossology-python/archive/master.zip&quot;,</span>
+<span class="go">        &quot;name&quot;: &quot;fossology-python-master.zip&quot;,</span>
+<span class="go">        &quot;accept&quot;: &quot;zip&quot;,</span>
+<span class="go">        &quot;reject&quot;: &quot;&quot;,</span>
+<span class="go">        &quot;maxRecursionDepth&quot;: &quot;1&quot;,</span>
+<span class="go">    }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+<span class="go">        foss.rootFolder,</span>
+<span class="go">        url=url,</span>
+<span class="go">        description=&quot;Upload from URL&quot;,</span>
+<span class="go">        access_level=AccessLevel.PUBLIC,</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a>) – the upload Fossology folder</p></li>
 <li><p><strong>file</strong> (<em>string</em>) – the local path of the file to be uploaded</p></li>
 <li><p><strong>vcs</strong> (<em>dict</em><em>(</em><em>)</em>) – the VCS specification to upload from an online repository</p></li>
+<li><p><strong>url</strong> (<em>dict</em><em>(</em><em>)</em>) – the URL specification to upload from a url</p></li>
 <li><p><strong>description</strong> (<em>string</em>) – description of the upload (default: None)</p></li>
 <li><p><strong>access_level</strong> (<a class="reference internal" href="obj.html#fossology.obj.AccessLevel" title="fossology.obj.AccessLevel"><em>AccessLevel</em></a>) – access permissions of the upload (default: protected)</p></li>
 <li><p><strong>ignore_scm</strong> (<em>boolean</em>) – ignore SCM files (Git, SVN, TFS) (default: False)</p></li>
@@ -234,7 +289,7 @@
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.upload_licenses">
-<code class="sig-name descname">upload_licenses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span></em>, <em class="sig-param"><span class="n">agent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">containers</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_licenses" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">upload_licenses</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_licenses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get clearing information about an upload</p>
 <p>API Endpoint: GET /uploads/{id}/licenses</p>
 <dl class="field-list simple">
@@ -259,7 +314,7 @@
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.upload_summary">
-<code class="sig-name descname">upload_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_summary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">upload_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kw</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_summary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get clearing information about an upload</p>
 <p>API Endpoint: GET /uploads/{id}/summary</p>
 <dl class="field-list simple">
@@ -296,7 +351,7 @@
       &copy;2020, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
