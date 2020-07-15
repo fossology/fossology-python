@@ -22,7 +22,7 @@ class Report:
         API Endpoint: GET /report
 
         :param upload: the upload which report will be generated
-        :param format: the report format (default ReportFormat.READMEOSS)
+        :param format: the report format (default: ReportFormat.READMEOSS)
         :type upload: Upload
         :type format: ReportFormat
         :return: the report id
@@ -67,7 +67,7 @@ class Report:
         >>>     report_file.write(report_content)
 
         :param report_id: the id of the generated report
-        :param as_zip: control if the report should be generated as ZIP file (default False)
+        :param as_zip: control if the report should be generated as ZIP file (default: False)
         :type report_id: int
         :type as_zip: boolean
         :raises FossologyApiError: if the REST call failed
