@@ -55,7 +55,7 @@ class Uploads:
         ignore_scm=False,
         group=None,
     ):
-        """Upload a file to FOSSology
+        """Upload a package to FOSSology
 
         API Endpoint: POST /uploads
 
@@ -109,7 +109,7 @@ class Uploads:
         :param url: the URL specification to upload from a url
         :param description: description of the upload (default: None)
         :param access_level: access permissions of the upload (default: protected)
-        :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: False)
+        :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: True)
         :param group: the group name to chose while uploading the file (default: None)
         :type folder: Folder
         :type file: string
@@ -129,7 +129,7 @@ class Uploads:
         if access_level:
             headers["public"] = access_level.value
         if ignore_scm:
-            headers["ignoreScm"] = "true"
+            headers["ignoreScm"] = "false"
         if group:
             headers["groupName"] = group
 
@@ -140,22 +140,21 @@ class Uploads:
                 response = self.session.post(
                     f"{self.api}/uploads", files=files, headers=headers
                 )
-        elif vcs:
-            headers["uploadType"] = "vcs"
-            data = json.dumps(vcs)
-            headers["Content-Type"] = "application/json"
-            response = self.session.post(
-                f"{self.api}/uploads", data=data, headers=headers
-            )
-        elif url:
-            headers["uploadType"] = "url"
-            data = json.dumps(url)
+        elif vcs or url:
+            if vcs:
+                headers["uploadType"] = "vcs"
+                data = json.dumps(vcs)
+            else:
+                headers["uploadType"] = "url"
+                data = json.dumps(url)
             headers["Content-Type"] = "application/json"
             response = self.session.post(
                 f"{self.api}/uploads", data=data, headers=headers
             )
         else:
-            logger.debug("Neither VCS or File option given, not uploading anything")
+            logger.debug(
+                "Neither VCS, or Url or filename option given, not uploading anything"
+            )
             return
 
         if response.status_code == 201:
@@ -217,19 +216,16 @@ class Uploads:
         :rtype: list of licenses as JSON object
         :raises FossologyApiError: if the REST call failed
         """
+        params = {}
         if agent:
-            agent = agent.value
+            params["agent"] = agent.value
         else:
-            agent = "nomos"
+            params["agent"] = "nomos"
         if containers:
-            containers = "true"
-            response = self.session.get(
-                f"{self.api}/uploads/{upload.id}/licenses?agent={agent}&containers={containers}"
-            )
-        else:
-            response = self.session.get(
-                f"{self.api}/uploads/{upload.id}/licenses?agent={agent}"
-            )
+            params["containers"] = "true"
+        response = self.session.get(
+            f"{self.api}/uploads/{upload.id}/licenses", params=params
+        )
 
         if response.status_code == 200:
             return response.json()
@@ -255,7 +251,7 @@ class Uploads:
         API Endpoint: DELETE /uploads/{id}
 
         :param upload: the upload to be deleted
-        :param group: the group name to chose while deleting the upload (default None)
+        :param group: the group name to chose while deleting the upload (default: None)
         :type upload: Upload
         :type group: string
         :raises FossologyApiError: if the REST call failed
@@ -272,20 +268,44 @@ class Uploads:
             description = f"Unable to delete upload {upload.id}"
             raise FossologyApiError(description, response)
 
-    def list_uploads(self):
+    def list_uploads(self, folder=None, group=None, recursive=True, page=1):
         """Get all uploads available to the registered user
 
         API Endpoint: GET /uploads
 
+        :param folder: only list uploads from the given folder
+        :param group: list uploads from a specific group (not only your own uploads)
+        :param recursive: wether to list uploads from children folders or not (default: True)
+        :param page: the number of the page to fetch uploads from (default: 1)
+        :type folder: Folder
+        :type group: string
+        :type recursive: boolean
+        :type page: int
         :return: a list of uploads
         :rtype: list of Upload
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(f"{self.api}/uploads")
+        headers = {}
+        if group:
+            headers["groupName"] = group
+
+        url = f"{self.api}/uploads"
+        params = {}
+        if page != 1:
+            params["page"] = page
+        if folder:
+            params["folderId"] = folder.id
+        if not recursive:
+            params["recursive"] = "false"
+
+        response = self.session.get(url, params=params)
         if response.status_code == 200:
             uploads_list = list()
             for upload in response.json():
                 uploads_list.append(Upload.from_json(upload))
+            logger.info(
+                f"Retrived page {page} of uploads, {response.headers['X-TOTAL-PAGES']} available"
+            )
             return uploads_list
         else:
             description = "Unable to retrieve the list of uploads"
@@ -298,7 +318,7 @@ class Uploads:
 
         :param upload: the Upload to be copied in another folder
         :param folder: the destination Folder
-        :param group: the group name to chose while deleting the upload (default None)
+        :param group: the group name to chose while deleting the upload (default: None)
         :type upload: Upload
         :type folder: Folder
         :type group: string
