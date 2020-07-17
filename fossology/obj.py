@@ -60,16 +60,6 @@ class ClearingStatus(Enum):
     REJECTED = "Rejected"
 
 
-class LicenseAgent(Enum):
-    """Available license agents: NOMOS, MONK, NINKA, OJO, REPORTIMPORT"""
-
-    NOMOS = "nomos"
-    MONK = "monk"
-    NINKA = "ninka"
-    OJO = "ojo"
-    REPORTIMPORT = "reportImport"
-
-
 class Agents(object):
 
     """FOSSology agents.
@@ -433,3 +423,12 @@ class Job(object):
     @classmethod
     def from_json(cls, json_dict):
         return cls(**json_dict)
+
+
+def get_options(group: str = None, folder: Folder = None) -> str:
+    options = ""
+    if group:
+        options += f"for group {group} "
+    if folder:
+        options += f"in folder {folder.id} "
+    return options

@@ -8,7 +8,7 @@ import mimetypes
 from pathlib import Path
 from test_base import foss, logger
 from test_uploads import get_upload, do_upload, upload_filename
-from fossology.exceptions import FossologyApiError
+from fossology.exceptions import FossologyApiError, AuthorizationError
 from fossology.obj import ReportFormat
 
 
@@ -18,6 +18,17 @@ class TestFossologyReport(unittest.TestCase):
         if not test_upload:
             test_upload = do_upload()
 
+        # Generate report for unknown group
+        with self.assertRaises(AuthorizationError) as cm:
+            foss.generate_report(
+                test_upload, report_format=ReportFormat.SPDX2, group="test"
+            )
+        self.assertIn(
+            "Provided group:test does not exist (403)",
+            cm.exception.message,
+            "Exception message does not match requested group",
+        )
+
         try:
             report_id = foss.generate_report(
                 test_upload, report_format=ReportFormat.SPDX2
@@ -26,43 +37,46 @@ class TestFossologyReport(unittest.TestCase):
             logger.error(error.message)
             return
 
-        try:
-            # Plain text
-            report = foss.download_report(report_id)
-            report_path = Path.cwd() / "tests/files"
-            report_name = upload_filename + ".spdx-report.rdf"
-            with open(report_path / report_name, "w+") as report_file:
-                report_file.write(report)
+        # Get report for unknown group
+        with self.assertRaises(AuthorizationError) as cm:
+            foss.download_report(report_id, group="test")
+        self.assertIn(
+            "Provided group:test does not exist (403)",
+            cm.exception.message,
+            "Exception message does not match requested group",
+        )
 
-            filetype = mimetypes.guess_type(report_path / report_name)
-            report_stat = os.stat(report_path / report_name)
-            self.assertGreater(report_stat.st_size, 0, "Downloaded report is empty")
-            self.assertIn(
-                filetype[0],
-                ("application/rdf+xml", "application/xml"),
-                "Downloaded report is not a RDF/XML file",
-            )
-            Path(report_path / report_name).unlink()
-        except FossologyApiError as error:
-            logger.error(error.message)
+        # Plain text
+        report = foss.download_report(report_id)
+        report_path = Path.cwd() / "tests/files"
+        report_name = upload_filename + ".spdx-report.rdf"
+        with open(report_path / report_name, "w+") as report_file:
+            report_file.write(report)
 
-        try:
-            # Zip
-            report = foss.download_report(report_id, as_zip=True)
-            report_path = Path.cwd() / "tests/files"
-            report_name = upload_filename + ".spdx-report.rdf.zip"
-            with open(report_path / report_name, "w+") as report_file:
-                report_file.write(report)
+        filetype = mimetypes.guess_type(report_path / report_name)
+        report_stat = os.stat(report_path / report_name)
+        self.assertGreater(report_stat.st_size, 0, "Downloaded report is empty")
+        self.assertIn(
+            filetype[0],
+            ("application/rdf+xml", "application/xml"),
+            "Downloaded report is not a RDF/XML file",
+        )
+        Path(report_path / report_name).unlink()
 
-            filetype = mimetypes.guess_type(report_path / report_name)
-            report_stat = os.stat(report_path / report_name)
-            self.assertGreater(report_stat.st_size, 0, "Downloaded report is empty")
-            self.assertEqual(
-                filetype[0], "application/zip", "Downloaded report is not a ZIP file"
-            )
-            Path(report_path / report_name).unlink()
-        except FossologyApiError as error:
-            logger.error(error.message)
+        # Zip
+        report = foss.download_report(report_id, as_zip=True)
+        report_path = Path.cwd() / "tests/files"
+        report_name = upload_filename + ".spdx-report.rdf.zip"
+        with open(report_path / report_name, "w+") as report_file:
+            report_file.write(report)
+
+        filetype = mimetypes.guess_type(report_path / report_name)
+        report_stat = os.stat(report_path / report_name)
+        self.assertGreater(report_stat.st_size, 0, "Downloaded report is empty")
+        self.assertEqual(
+            filetype[0], "application/zip", "Downloaded report is not a ZIP file"
+        )
+        Path(report_path / report_name).unlink()
 
 
 if __name__ == "__main__":
