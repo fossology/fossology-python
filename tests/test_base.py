@@ -1,13 +1,13 @@
 # Copyright 2019-2020 Siemens AG
 # SPDX-License-Identifier: MIT
 
+import pytest
 import secrets
 import logging
-import unittest
 
 from datetime import date, timedelta
 from fossology import Fossology, fossology_token
-from fossology.obj import TokenScope, Agents
+from fossology.obj import Agents
 from fossology.exceptions import FossologyApiError, AuthenticationError
 
 test_files = "tests/files"
@@ -21,30 +21,10 @@ logger.addHandler(console)
 logging.getLogger("").addHandler(console)
 
 
-def generate_fossology_token(server):
-    try:
-        return fossology_token(
-            server, "fossy", "fossy", secrets.token_urlsafe(8), TokenScope.WRITE
-        )
-    except (FossologyApiError, AuthenticationError) as error:
-        exit(error.message)
-
-
-# Get API handler
-try:
-    FOSSOLOGY_SERVER = "http://fossology/repo"
-    FOSSOLOGY_TOKEN = generate_fossology_token(FOSSOLOGY_SERVER)
-    foss = Fossology(FOSSOLOGY_SERVER, FOSSOLOGY_TOKEN, "fossy")
-except (FossologyApiError, AuthenticationError) as error:
-    exit(error.message)
-
-
-class TestFossologyToken(unittest.TestCase):
-    def test_generate_token(self):
-        self.assertRaises(
-            FossologyApiError,
-            fossology_token,
-            FOSSOLOGY_SERVER,
+def test_generate_token(foss_server: str):
+    with pytest.raises(FossologyApiError):
+        fossology_token(
+            foss_server,
             "fossy",
             "fossy",
             secrets.token_urlsafe(8),
@@ -52,33 +32,27 @@ class TestFossologyToken(unittest.TestCase):
         )
 
 
-class TestFossologyUser(unittest.TestCase):
-    def test_get_user(self):
-        self.assertRaises(
-            AuthenticationError, Fossology, FOSSOLOGY_SERVER, FOSSOLOGY_TOKEN, "nofossy"
-        )
-        self.assertRaises(FossologyApiError, foss.detail_user, 30)
+def test_wrong_user(foss_server, foss_token):
+    with pytest.raises(AuthenticationError):
+        Fossology(foss_server, foss_token, "nofossy")
 
-        foss.detail_user(foss.user.id)
-        self.assertEqual(foss.user.email, "y", "Wrong email set for default user")
 
-        # Configure all license agents besides 'ojo'
-        additional_agent = {"TestAgent": True}
-        agents = Agents(
-            True, True, False, False, True, True, True, False, True, **additional_agent,
-        )
-        foss.user.agents = agents
-        analysis_agents = foss.user.agents.to_dict()
-        self.assertEqual(
-            analysis_agents.get("TestAgent"),
-            True,
-            "Specific agent could not be configured for Fossology instance",
-        )
+def test_unknown_user(foss: Fossology):
+    with pytest.raises(FossologyApiError):
+        foss.detail_user(30)
 
-        foss.detail_user(foss.user.id)
-        self.assertEqual(
-            foss.user.agents, agents, "Wrong agents configured for default user"
-        )
 
-        users = foss.list_users()
-        self.assertEqual(len(users), 1, "Wrong number of users on the test server")
+def test_list_users(foss: Fossology):
+    users = foss.list_users()
+    assert len(users) == 1
+
+
+def test_detail_user(foss: Fossology):
+    assert foss.detail_user(foss.user.id)
+    assert foss.user.email == "y"
+
+
+def test_user_agents(foss: Fossology, foss_agents: Agents):
+    assert foss.user.agents == foss_agents
+    analysis_agents = foss.user.agents.to_dict()
+    assert analysis_agents.get("TestAgent")
