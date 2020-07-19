@@ -32,7 +32,7 @@ jobs:
         run: nmap fossology -p 80
       - name: Run tests
         run: |
-          poetry run coverage run --source=fossology tests/tests.py
+          poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
           poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
  
