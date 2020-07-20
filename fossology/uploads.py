@@ -365,7 +365,7 @@ class Uploads:
             for upload in response.json():
                 uploads_list.append(Upload.from_json(upload))
             logger.info(
-                f"Retrieved page {page} of uploads, {response.headers['X-TOTAL-PAGES']} pages are in total available"
+                f"Retrieved page {page} of uploads, {response.headers.get('x-total-pages', 'Unknown')} pages are in total available"
             )
             return uploads_list
 
