@@ -279,11 +279,8 @@ class Uploads:
             raise AuthorizationError(description, response)
 
         elif response.status_code == 412:
-            logger.info(
-                f"Unable to get licenses from {agent} for {upload.uploadname} (id={upload.id}): "
-                f"{response.json()['message']}"
-            )
-            return
+            description = f"Unable to get licenses from {agent} for {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
 
         elif response.status_code == 503:
             logger.debug(

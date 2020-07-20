@@ -71,7 +71,8 @@ def foss(foss_server: str, foss_token: str, foss_agents: Agents) -> Fossology:
 
     # Configure all license agents besides 'ojo'
     foss.user.agents = foss_agents
-    return foss
+    yield foss
+    foss.close()
 
 
 @pytest.fixture(scope="session")

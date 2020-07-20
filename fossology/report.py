@@ -58,7 +58,7 @@ class Report:
             raise TryAgain
 
         else:
-            description = f"Report generation for upload {upload.name} failed"
+            description = f"Report generation for upload {upload.uploadname} failed"
             raise FossologyApiError(description, response)
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
