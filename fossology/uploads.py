@@ -259,11 +259,9 @@ class Uploads:
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 412:
-            logger.info(
-                f"Agent {agent} has not been scheduled for {upload.uploadname} (id={upload.id}): "
-                f"{response.json()['message']}"
-            )
-            return
+            description = f"Unable to get licenses from {agent} for {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
+
         elif response.status_code == 503:
             logger.debug(
                 f"Unpack agent for {upload.uploadname} (id={upload.id}) didn't start yet"

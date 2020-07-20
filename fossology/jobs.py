@@ -54,7 +54,7 @@ class Jobs:
         API Endpoint: GET /jobs/{id}
 
         :param job_id: the id of the job
-        :param wait: wait until the job is finisched (default: False)
+        :param wait: wait until the job is finished (default: False)
         :param timeout: stop waiting after x seconds (default: 30)
         :type: int
         :type wait: boolean
@@ -148,5 +148,5 @@ class Jobs:
             )
             return detailled_job
         else:
-            description = "Scheduling jobs for upload {upload.uploadname} failed"
+            description = f"Scheduling jobs for upload {upload.uploadname} failed"
             raise FossologyApiError(description, response)

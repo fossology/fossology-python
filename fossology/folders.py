@@ -130,7 +130,7 @@ class Folders:
             logger.info(f"{folder} has been updated")
             return folder
         else:
-            description = f"Unable to update folder {folder}"
+            description = f"Unable to update folder {folder.id}"
             raise FossologyApiError(description, response)
 
     def delete_folder(self, folder):

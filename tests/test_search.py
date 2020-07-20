@@ -2,10 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 import pytest
+import responses
 
 from fossology import Fossology
 from fossology.obj import SearchTypes
-from fossology.exceptions import AuthorizationError
+from fossology.exceptions import AuthorizationError, FossologyApiError
 
 
 def test_search_nogroup(foss: Fossology):
@@ -27,3 +28,11 @@ def test_search(foss: Fossology):
         copyright="Debian",
     )
     assert search_result == []
+
+
+@responses.activate
+def test_search_error(foss_server: str, foss: Fossology):
+    responses.add(responses.GET, f"{foss_server}/api/v1/search", status=404)
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.search()
+    assert "Unable to get a result with the given search criteria" in str(excinfo.value)
