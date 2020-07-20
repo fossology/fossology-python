@@ -151,6 +151,6 @@ The testsuite available in this project expects a running Fossology instance und
 
   .. code:: shell
 
-     poetry run coverage run --source=fossology tests/tests.py
+     poetry run coverage run --source=fossology -m pytest
      poetry run coverage report -m
      poetry run coverage html
