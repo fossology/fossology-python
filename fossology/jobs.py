@@ -32,13 +32,11 @@ class Jobs:
         :rtype: list of Job
         :raises FossologyApiError: if the REST call failed
         """
+        params = {}
         headers = {"limit": str(page_size), "pages": str(pages)}
         if upload:
-            response = self.session.get(
-                f"{self.api}/jobs?upload={upload.id}", headers=headers
-            )
-        else:
-            response = self.session.get(f"{self.api}/jobs", headers=headers)
+            params["upload"] = upload.id
+        response = self.session.get(f"{self.api}/jobs", params=params, headers=headers)
         if response.status_code == 200:
             jobs_list = list()
             for job in response.json():

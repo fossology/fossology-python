@@ -35,7 +35,7 @@ class AuthorizationError(Error):
 class FossologyApiError(Error):
     """Error during a Fossology GET request"""
 
-    def __init__(self, description, response):
+    def __init__(self, description, response=None):
         try:
             message = response.json().get("message")
         except JSONDecodeError:

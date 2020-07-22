@@ -6,12 +6,17 @@ import logging
 import requests
 from datetime import date, timedelta
 
-from .obj import Agents, User, TokenScope, SearchTypes
-from .folders import Folders
-from .uploads import Uploads
-from .jobs import Jobs
-from .report import Report
-from .exceptions import AuthenticationError, FossologyApiError
+from typing import List
+from fossology.obj import Agents, User, File, TokenScope, SearchTypes, get_options
+from fossology.folders import Folders
+from fossology.uploads import Uploads
+from fossology.jobs import Jobs
+from fossology.report import Report
+from fossology.exceptions import (
+    AuthenticationError,
+    AuthorizationError,
+    FossologyApiError,
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -36,12 +41,12 @@ def fossology_token(
     :param password: the password of the user
     :param name: the name of the token
     :param scope: the scope of the token (default: READ)
-    :param expire: the expire date of the token (default max. 30 days)
+    :param expire: the expire date of the token (default: max. 30 days)
     :type url: string
     :type username: string
     :type password: string
     :type name: string
-    :type scope: TokenScope (default TokenScope.READ)
+    :type scope: TokenScope (default: TokenScope.READ)
     :type expire: string, e.g. 2019-12-25
     :return: the new token
     :rtype: string
@@ -266,4 +271,47 @@ class Fossology(Folders, Uploads, Jobs, Report):
             return response.json()
         else:
             description = "Unable to get a result with the given search criteria"
+            raise FossologyApiError(description, response)
+
+    def filesearch(
+        self, filelist: List = [], group: str = None,
+    ):
+        """Search for files from hash sum
+
+        API Endpoint: POST /filesearch
+
+        The response does not generate Python objects yet, the plain JSON data is simply returned.
+
+        :param filelist: the list of files (or containers) to search for (default: [])
+        :param group: the group name to choose while performing search (default: None)
+        :type filelist: list
+        :return: list of items corresponding to the search criteria
+        :type group: string
+        :rtype: JSON
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the user can't access the group
+        """
+        headers = {}
+        if group:
+            headers["groupName"] = group
+
+        response = self.session.post(
+            f"{self.api}/filesearch", headers=headers, json=filelist
+        )
+
+        if response.status_code == 200:
+            all_files = []
+            for hash_file in response.json():
+                if hash_file.get("findings"):
+                    all_files.append(File.from_json(hash_file))
+                else:
+                    return "Unable to get a result with the given filesearch criteria"
+            return all_files
+
+        elif response.status_code == 403:
+            description = f"Searching {get_options(group)}not authorized"
+            raise AuthorizationError(description, response)
+
+        else:
+            description = "Unable to get a result with the given filesearch criteria"
             raise FossologyApiError(description, response)

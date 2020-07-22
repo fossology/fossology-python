@@ -4,10 +4,10 @@
 import json
 import time
 import logging
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, TryAgain
 
-from .obj import Upload, Summary
-from .exceptions import FossologyApiError
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, TryAgain
+from fossology.obj import Upload, Summary, Licenses, get_options
+from fossology.exceptions import AuthorizationError, FossologyApiError
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -74,7 +74,7 @@ class Uploads:
         group=None,
         wait_time=0,
     ):
-        """Upload a file to FOSSology
+        """Upload a package to FOSSology
 
         API Endpoint: POST /uploads
 
@@ -132,7 +132,7 @@ class Uploads:
         :param url: the URL specification to upload from a url
         :param description: description of the upload (default: None)
         :param access_level: access permissions of the upload (default: protected)
-        :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: False)
+        :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: True)
         :param group: the group name to chose while uploading the file (default: None)
         :param wait_time: use a customized upload wait time instead of Retry-After (in seconds, default: 0)
         :type folder: Folder
@@ -154,7 +154,7 @@ class Uploads:
         if access_level:
             headers["public"] = access_level.value
         if ignore_scm:
-            headers["ignoreScm"] = "true"
+            headers["ignoreScm"] = "false"
         if group:
             headers["groupName"] = group
 
@@ -165,29 +165,28 @@ class Uploads:
                 response = self.session.post(
                     f"{self.api}/uploads", files=files, headers=headers
                 )
-        elif vcs:
-            headers["uploadType"] = "vcs"
-            data = json.dumps(vcs)
-            headers["Content-Type"] = "application/json"
-            response = self.session.post(
-                f"{self.api}/uploads", data=data, headers=headers
-            )
-        elif url:
-            headers["uploadType"] = "url"
-            data = json.dumps(url)
+        elif vcs or url:
+            if vcs:
+                headers["uploadType"] = "vcs"
+                data = json.dumps(vcs)
+            else:
+                headers["uploadType"] = "url"
+                data = json.dumps(url)
             headers["Content-Type"] = "application/json"
             response = self.session.post(
                 f"{self.api}/uploads", data=data, headers=headers
             )
         else:
-            logger.debug("Neither VCS or File option given, not uploading anything")
+            logger.debug(
+                "Neither VCS, or Url or filename option given, not uploading anything"
+            )
             return
 
         if response.status_code == 201:
             try:
                 upload = self.detail_upload(response.json()["message"], wait_time)
                 logger.info(
-                    f"Upload {upload.uploadname} ({upload.filesize}) "
+                    f"Upload {upload.uploadname} ({upload.hash.size}) "
                     f"has been uploaded on {upload.uploaddate}"
                 )
                 return upload
@@ -227,10 +226,12 @@ class Uploads:
             raise FossologyApiError(description, response)
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
-    def upload_licenses(self, upload, agent=None, containers=False):
+    def upload_licenses(self, upload, group: str = None, agent=None, containers=False):
         """Get clearing information about an upload
 
         API Endpoint: GET /uploads/{id}/licenses
+
+        The response does not generate Python objects yet, the plain JSON data is simply returned.
 
         :param upload: the upload to gather data from
         :param agent: the license agent to use (default: LicenseAgent.MONK)
@@ -238,26 +239,38 @@ class Uploads:
         :type upload: Upload
         :type agent: LicenseAgent
         :type containers: boolean
-        :return: the licenses found by the specified agent
-        :rtype: list of licenses as JSON object
+        :type group: string
+        :return: the list of licenses findings for the specified agent
+        :rtype: list of Licenses
         :raises FossologyApiError: if the REST call failed
         """
+        headers = {}
+        params = {}
         if agent:
-            agent = agent.value
+            params["agent"] = agent.value
         else:
-            agent = "nomos"
+            params["agent"] = "nomos"
         if containers:
-            containers = "true"
-            response = self.session.get(
-                f"{self.api}/uploads/{upload.id}/licenses?agent={agent}&containers={containers}"
-            )
-        else:
-            response = self.session.get(
-                f"{self.api}/uploads/{upload.id}/licenses?agent={agent}"
-            )
+            params["containers"] = "true"
+        if group:
+            headers["groupName"] = group
+
+        response = self.session.get(
+            f"{self.api}/uploads/{upload.id}/licenses", params=params, headers=headers
+        )
 
         if response.status_code == 200:
-            return response.json()
+            all_licenses = []
+            scanned_files = response.json()
+            for file_with_findings in scanned_files:
+                file_licenses = Licenses.from_json(file_with_findings)
+                all_licenses.append(file_licenses)
+            return all_licenses
+
+        elif response.status_code == 403:
+            description = f"Getting license for upload {upload.id} {get_options(group)}not authorized"
+            raise AuthorizationError(description, response)
+
         elif response.status_code == 412:
             description = f"Unable to get licenses from {agent} for {upload.uploadname} (id={upload.id})"
             raise FossologyApiError(description, response)
@@ -278,7 +291,7 @@ class Uploads:
         API Endpoint: DELETE /uploads/{id}
 
         :param upload: the upload to be deleted
-        :param group: the group name to chose while deleting the upload (default None)
+        :param group: the group name to chose while deleting the upload (default: None)
         :type upload: Upload
         :type group: string
         :raises FossologyApiError: if the REST call failed
@@ -295,22 +308,43 @@ class Uploads:
             description = f"Unable to delete upload {upload.id}"
             raise FossologyApiError(description, response)
 
-    def list_uploads(self):
+    def list_uploads(self, folder=None, group=None, recursive=True, page=1):
         """Get all uploads available to the registered user
 
         API Endpoint: GET /uploads
 
+        :param folder: only list uploads from the given folder
+        :param group: list uploads from a specific group (not only your own uploads)
+        :param recursive: wether to list uploads from children folders or not (default: True)
+        :param page: the number of the page to fetch uploads from (default: 1)
+        :type folder: Folder
+        :type group: string
+        :type recursive: boolean
+        :type page: int
         :return: a list of uploads
         :rtype: list of Upload
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(f"{self.api}/uploads")
+        headers = {}
+        if group:
+            headers["groupName"] = group
+
+        url = f"{self.api}/uploads"
+        params = {}
+        if page != 1:
+            params["page"] = page
+        if folder:
+            params["folderId"] = folder.id
+        if not recursive:
+            params["recursive"] = "false"
+
+        response = self.session.get(url, params=params)
         if response.status_code == 200:
             uploads_list = list()
             for upload in response.json():
                 uploads_list.append(Upload.from_json(upload))
             logger.info(
-                f"Retrieved page {page} of uploads, {response.headers.get('x-total-pages', 'Unknown')} pages are in total available"
+                f"Retrieved page {page} of uploads, {response.headers.get('X-TOTAL-PAGES', 'Unknown')} pages are in total available"
             )
             return uploads_list
         else:
@@ -324,7 +358,7 @@ class Uploads:
 
         :param upload: the Upload to be copied in another folder
         :param folder: the destination Folder
-        :param group: the group name to chose while deleting the upload (default None)
+        :param group: the group name to chose while deleting the upload (default: None)
         :type upload: Upload
         :type folder: Folder
         :type group: string

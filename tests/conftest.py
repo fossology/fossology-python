@@ -4,11 +4,19 @@
 import time
 import pytest
 import secrets
+import logging
 
 from typing import Dict
 from fossology import Fossology, fossology_token
 from fossology.obj import Folder, TokenScope, AccessLevel, Agents, Upload
 from fossology.exceptions import FossologyApiError, AuthenticationError
+
+logger = logging.getLogger("fossology")
+console = logging.StreamHandler()
+console.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+console.setFormatter(formatter)
+logger.addHandler(console)
 
 
 @pytest.fixture(scope="session")

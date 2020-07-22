@@ -24,7 +24,7 @@ class Report:
         API Endpoint: GET /report
 
         :param upload: the upload which report will be generated
-        :param format: the report format (default ReportFormat.READMEOSS)
+        :param format: the report format (default: ReportFormat.READMEOSS)
         :type upload: Upload
         :type format: ReportFormat
         :return: the report id

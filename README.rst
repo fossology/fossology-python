@@ -22,7 +22,7 @@ A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
-   Compatible with API version 1.0.16
+   Compatible with API version 1.1.0
 
 Documentation
 =============
