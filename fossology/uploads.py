@@ -46,10 +46,11 @@ class Uploads:
             raise AuthorizationError(description, response)
 
         elif response.status_code == 503:
+            wait_time = response.headers["Retry-After"]
             logger.debug(
-                f"Unpack agent for {upload_id} didn't start yet, is the scheduler running?"
+                f"Retry GET upload {upload_id} after {wait_time} seconds: {response.json()['message']}"
             )
-            time.sleep(20)
+            time.sleep(int(wait_time))
             raise TryAgain
 
         else:
