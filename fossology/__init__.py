@@ -36,12 +36,12 @@ def fossology_token(
     :param password: the password of the user
     :param name: the name of the token
     :param scope: the scope of the token (default: READ)
-    :param expire: the expire date of the token (default: max. 30 days)
+    :param expire: the expire date of the token (default max. 30 days)
     :type url: string
     :type username: string
     :type password: string
     :type name: string
-    :type scope: TokenScope (default: TokenScope.READ)
+    :type scope: TokenScope (default TokenScope.READ)
     :type expire: string, e.g. 2019-12-25
     :return: the new token
     :rtype: string

@@ -6,7 +6,7 @@ import secrets
 import unittest
 
 from test_base import foss, logger, test_files
-from fossology.obj import AccessLevel, LicenseAgent, Folder, Upload, SearchTypes
+from fossology.obj import AccessLevel, LicenseAgent, Folder, Upload
 from fossology.exceptions import FossologyApiError
 
 upload_filename = "base-files_11.tar.xz"
@@ -49,35 +49,6 @@ class TestFossologyUploads(unittest.TestCase):
             "Filesha1 on the server is wrong",
         )
 
-    def test_get_uploads(self):
-        name = "FossPythonTestUploads"
-        desc = "Created via the Fossology Python API"
-        test_folder = foss.create_folder(foss.rootFolder, name, description=desc)
-        name = "FossPythonTestUploadsSubfolder"
-        test_subfolder = foss.create_folder(test_folder, name, description=desc)
-        test_file = f"{test_files}/{upload_filename}"
-        # FIXME: use group options once required features implemented
-        foss.upload_file(
-            test_folder,
-            file=test_file,
-            description="Test upload from github repository via python lib",
-        )
-        foss.upload_file(
-            test_subfolder,
-            file=test_file,
-            description="Test upload from github repository via python lib",
-        )
-
-        # FIXME: using the group option does not filter uploads of groups
-        # group_uploads = foss.list_uploads(group="TestGroup")
-        folder_uploads = foss.list_uploads(folder=test_folder)
-        no_subfolder_uploads = foss.list_uploads(folder=test_folder, recursive=False)
-        self.assertEqual(len(folder_uploads), 2, "Too many uploads listed")
-        self.assertEqual(len(no_subfolder_uploads), 1, "Too many uploads listed")
-
-        # Cleanup
-        foss.delete_folder(test_folder)
-
     def test_upload_from_vcs(self):
         vcs = {
             "vcsType": "git",
@@ -95,36 +66,6 @@ class TestFossologyUploads(unittest.TestCase):
         self.assertEqual(
             vcs_upload.uploadname, vcs["vcsName"], "Uploadname on the server is wrong",
         )
-        search_result = foss.search(
-            searchType=SearchTypes.DIRECTORIES, filename=".git",
-        )
-        self.assertEqual(search_result, [], "Search result should be empty")
-        foss.delete_upload(vcs_upload)
-
-    def test_upload_ignore_scm(self):
-        vcs = {
-            "vcsType": "git",
-            "vcsUrl": "https://github.com/fossology/fossology-python",
-            "vcsName": "fossology-python-github-master",
-            "vcsUsername": "",
-            "vcsPassword": "",
-        }
-        vcs_upload = foss.upload_file(
-            foss.rootFolder,
-            vcs=vcs,
-            description="Test upload with ignore_scm flag",
-            ignore_scm=False,
-            access_level=AccessLevel.PUBLIC,
-        )
-        self.assertEqual(
-            vcs_upload.uploadname, vcs["vcsName"], "Uploadname on the server is wrong",
-        )
-        search_result = foss.search(
-            searchType=SearchTypes.DIRECTORIES, filename=".git",
-        )
-        print(search_result)
-        # FIXME: shall be fixed in the next release
-        # self.assertEqual(search_result, $something, "Search result should be empty")
         foss.delete_upload(vcs_upload)
 
     def test_upload_from_url(self):
