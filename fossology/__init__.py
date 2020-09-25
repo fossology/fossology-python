@@ -6,16 +6,12 @@ import logging
 import requests
 from datetime import date, timedelta
 
-from fossology.obj import Agents, User, TokenScope, SearchTypes, get_options
-from fossology.folders import Folders
-from fossology.uploads import Uploads
-from fossology.jobs import Jobs
-from fossology.report import Report
-from fossology.exceptions import (
-    AuthenticationError,
-    AuthorizationError,
-    FossologyApiError,
-)
+from .obj import Agents, User, TokenScope, SearchTypes
+from .folders import Folders
+from .uploads import Uploads
+from .jobs import Jobs
+from .report import Report
+from .exceptions import AuthenticationError, FossologyApiError
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -212,7 +208,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :raises FossologyApiError: if the REST call failed
         """
         response = self.session.delete(f"{self.api}/users/{user.id}")
-
+        print(response.json())
         if response.status_code == 202:
             return
         else:
@@ -228,7 +224,6 @@ class Fossology(Folders, Uploads, Jobs, Report):
         filesizemax=None,
         license=None,
         copyright=None,
-        group=None,
     ):
         """Search for a specific file
 
@@ -241,7 +236,6 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :param filesizemax: Max filesize in bytes
         :param license: License search filter
         :param copyright: Copyright search filter
-        :param group: the group name to choose while performing search (default: None)
         :type searchType: SearchType Enum
         :type filename: string
         :type tag: string
@@ -249,11 +243,9 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :type filesizemax: int
         :type license: string
         :type copyright: string
-        :type group: string
         :return: list of items corresponding to the search criteria
         :rtype: JSON
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
         """
         headers = {"searchType": searchType.value}
         if filename:
@@ -268,18 +260,10 @@ class Fossology(Folders, Uploads, Jobs, Report):
             headers["license"] = license
         if copyright:
             headers["copyright"] = copyright
-        if group:
-            headers["groupName"] = group
 
         response = self.session.get(f"{self.api}/search", headers=headers)
-
         if response.status_code == 200:
             return response.json()
-
-        elif response.status_code == 403:
-            description = f"Searching {get_options(group)}not authorized"
-            raise AuthorizationError(description, response)
-
         else:
             description = "Unable to get a result with the given search criteria"
             raise FossologyApiError(description, response)

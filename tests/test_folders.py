@@ -14,15 +14,6 @@ class TestFossologyFolders(unittest.TestCase):
     def test_create_folder(self):
         name = "FossPythonTest"
         desc = "Created via the Fossology Python API"
-        # Create folder for unknown group
-        with self.assertRaises(AuthorizationError) as cm:
-            foss.create_folder(foss.rootFolder, name, description=desc, group="test")
-        self.assertIn(
-            "Provided group:test does not exist (403)",
-            cm.exception.message,
-            "Exception message does not match requested group",
-        )
-
         test_folder = foss.create_folder(foss.rootFolder, name, description=desc)
         self.assertEqual(
             test_folder.name, name, f"Main test {name} folder couldn't be created"
