@@ -5,7 +5,7 @@ import unittest
 
 from test_base import foss, logger
 from test_uploads import get_upload, do_upload, upload_filename
-from fossology.exceptions import FossologyApiError, AuthorizationError
+from fossology.exceptions import FossologyApiError
 from fossology.obj import Agents
 
 
@@ -54,15 +54,6 @@ class TestFossologyJobs(unittest.TestCase):
             },
         }
 
-        # Create jobs for unknown group
-        with self.assertRaises(AuthorizationError) as cm:
-            foss.schedule_jobs(foss.rootFolder, test_upload, jobs_spec, group="test")
-        self.assertIn(
-            "Provided group:test does not exist (403)",
-            cm.exception.message,
-            "Exception message does not match requested group",
-        )
-
         try:
             job = foss.schedule_jobs(foss.rootFolder, test_upload, jobs_spec)
             self.assertEqual(
@@ -82,17 +73,6 @@ class TestFossologyJobs(unittest.TestCase):
 
         job = foss.detail_job(jobs[1].id, wait=True, timeout=30)
         self.assertEqual(job.status, "Completed", f"Job {job} not completed yet")
-
-        # Use pagination
-        jobs = foss.list_jobs(upload=test_upload, page_size=1, page=2)
-        self.assertEqual(
-            len(jobs),
-            1,
-            f"Found {len(jobs)} jobs for upload {test_upload.uploadname}: {jobs}",
-        )
-        self.assertEqual(
-            jobs[0].id, job.id, "Paginated list_jobs doesn't return the expected result"
-        )
 
 
 if __name__ == "__main__":

@@ -5,8 +5,8 @@ import json
 import time
 import logging
 
-from fossology.obj import Job, get_options
-from fossology.exceptions import AuthorizationError, FossologyApiError
+from .obj import Job
+from .exceptions import FossologyApiError
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -15,7 +15,7 @@ logger.setLevel(logging.DEBUG)
 class Jobs:
     """Class dedicated to all "jobs" related endpoints"""
 
-    def list_jobs(self, page_size=20, page=1, upload=None):
+    def list_jobs(self, page_size=20, pages=1, upload=None):
         """Get all available jobs
 
         API Endpoint: GET /jobs
@@ -23,20 +23,22 @@ class Jobs:
         The answer is limited to the first page of 20 results by default
 
         :param page_size: the maximum number of results per page
-        :param page: the number of pages to be retrieved
+        :param pages: the number of pages to be retrieved
         :param upload: list only jobs of the given upload (default: None)
         :type page_size: int (default: 20)
-        :type page: int (default: 1)
+        :type pages: int (default: 1)
         :type upload: Upload
         :return: the jobs data
         :rtype: list of Job
         :raises FossologyApiError: if the REST call failed
         """
-        params = {}
-        headers = {"limit": str(page_size), "page": str(page)}
+        headers = {"limit": str(page_size), "pages": str(pages)}
         if upload:
-            params["upload"] = upload.id
-        response = self.session.get(f"{self.api}/jobs", params=params, headers=headers)
+            response = self.session.get(
+                f"{self.api}/jobs?upload={upload.id}", headers=headers
+            )
+        else:
+            response = self.session.get(f"{self.api}/jobs", headers=headers)
         if response.status_code == 200:
             jobs_list = list()
             for job in response.json():
@@ -82,7 +84,7 @@ class Jobs:
             description = f"Error while getting details for job {job_id}"
             raise FossologyApiError(description, response)
 
-    def schedule_jobs(self, folder, upload, spec, group=None, wait=False, timeout=30):
+    def schedule_jobs(self, folder, upload, spec, wait=False, timeout=30):
         """Schedule jobs for a specific upload
 
         API Endpoint: POST /jobs
@@ -121,42 +123,30 @@ class Jobs:
         :param folder: the upload folder
         :param upload: the upload for which jobs will be scheduled
         :param spec: the job specification
-        :param group: the group name to choose while scheduling jobs (default: None)
         :param wait: wait for the scheduled job to finish (default: False)
         :param timeout: stop waiting after x seconds (default: 30)
         :type upload: Upload
         :type folder: Folder
         :type spec: dict
-        :type group: string
         :type wait: boolean
         :type timeout: 30
         :return: the job id
         :rtype: Job
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
         """
         headers = {
             "folderId": str(folder.id),
             "uploadId": str(upload.id),
             "Content-Type": "application/json",
         }
-        if group:
-            headers["groupName"] = group
-
         response = self.session.post(
             f"{self.api}/jobs", headers=headers, data=json.dumps(spec)
         )
-
         if response.status_code == 201:
             detailled_job = self.detail_job(
                 response.json()["message"], wait=wait, timeout=timeout
             )
             return detailled_job
-
-        elif response.status_code == 403:
-            description = f"Scheduling job {get_options(group)}not authorized"
-            raise AuthorizationError(description, response)
-
         else:
             description = "Scheduling jobs for upload {upload.uploadname} failed"
             raise FossologyApiError(description, response)
