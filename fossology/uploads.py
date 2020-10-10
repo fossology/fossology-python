@@ -54,6 +54,7 @@ class Uploads:
         access_level=None,
         ignore_scm=False,
         group=None,
+        wait_time_before_checking=None
     ):
         """Upload a file to FOSSology
 
@@ -159,6 +160,8 @@ class Uploads:
             return
 
         if response.status_code == 201:
+            if wait_time_before_checking:
+                time.sleep(wait_time_before_checking)
             try:
                 upload = self.detail_upload(response.json()["message"])
                 logger.info(
