@@ -18,13 +18,30 @@ class Uploads:
 
     # Retry until the unpack agent is finished
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(10))
-    def detail_upload(self, upload_id):
+    def detail_upload(self, upload_id, wait_time=0):
         """Get detailled information about an upload
 
         API Endpoint: GET /uploads/{id}
 
+        Get information about a given upload. If the upload is not ready wait another ``wait_time`` seconds or look at
+        the ``Retry-After`` to determine how long the wait period shall be.
+
+        If ``wait_time`` is 0, the time interval specified by the ``Retry-After`` header is used.
+
+        The function stops trying after **10 attempts**.
+
+        :Examples:
+
+        >>> # Wait up to 20 minutes until the upload is ready
+        >>> long_upload = detail_upload(1, 120)
+
+        >>> # Wait up to 5 minutes until the upload is ready
+        >>> long_upload = detail_upload(1, 30)
+
         :param upload_id: the id of the upload
-        :type: int
+        :param wait_time: use a customized upload wait time instead of Retry-After (in seconds, default: 0)
+        :type upload_id: int
+        :type wait_time: int
         :return: the upload data
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
@@ -34,7 +51,8 @@ class Uploads:
             logger.debug(f"Got details for upload {upload_id}")
             return Upload.from_json(response.json())
         elif response.status_code == 503:
-            wait_time = response.headers["Retry-After"]
+            if not wait_time:
+                wait_time = response.headers["Retry-After"]
             logger.debug(
                 f"Retry GET upload {upload_id} after {wait_time} seconds: {response.json()['message']}"
             )
@@ -54,10 +72,15 @@ class Uploads:
         access_level=None,
         ignore_scm=False,
         group=None,
+        wait_time=0,
     ):
         """Upload a file to FOSSology
 
         API Endpoint: POST /uploads
+
+        Perform a file, VCS or URL upload and get information about the upload using :func:`~fossology.uploads.Uploads.detail_upload` and passing the ``wait_time`` argument.
+
+        See description of :func:`~fossology.uploads.Uploads.detail_upload` to configure how long the client shall wait for the upload to be ready.
 
         :Example for a file upload:
 
@@ -111,6 +134,7 @@ class Uploads:
         :param access_level: access permissions of the upload (default: protected)
         :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: False)
         :param group: the group name to chose while uploading the file (default: None)
+        :param wait_time: use a customized upload wait time instead of Retry-After (in seconds, default: 0)
         :type folder: Folder
         :type file: string
         :type vcs: dict()
@@ -119,6 +143,7 @@ class Uploads:
         :type access_level: AccessLevel
         :type ignore_scm: boolean
         :type group: string
+        :type wait_time: int
         :return: the upload data
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
@@ -160,7 +185,7 @@ class Uploads:
 
         if response.status_code == 201:
             try:
-                upload = self.detail_upload(response.json()["message"])
+                upload = self.detail_upload(response.json()["message"], wait_time)
                 logger.info(
                     f"Upload {upload.uploadname} ({upload.filesize}) "
                     f"has been uploaded on {upload.uploaddate}"
