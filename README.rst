@@ -120,7 +120,19 @@ Build
 
   .. code:: shell
 
-     rm -r dist/ build/ docs/
+     rm -r dist/ docs/
+
+Tag
+----
+
+Each new release gets a new tag with important information about the changes added to the new release:
+
+.. code:: shell
+
+   git tag -a vx.x.x -m "New major/minor/patch release x.x.x"
+   git push origin vx.x.x
+
+Add required information in the corresponding `release in the Github project <https://github.com/fossology/fossology-python/releases>`_.
 
 
 Test
