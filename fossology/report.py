@@ -18,7 +18,9 @@ class Report:
     """Class dedicated to all "report" related endpoints"""
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
-    def generate_report(self, upload: Upload, report_format: ReportFormat = None, group: str = None):
+    def generate_report(
+        self, upload: Upload, report_format: ReportFormat = None, group: str = None
+    ):
         """Generate a report for a given upload
 
         API Endpoint: GET /report

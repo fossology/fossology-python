@@ -70,9 +70,7 @@ def test_upload_from_vcs(foss: Fossology):
         access_level=AccessLevel.PUBLIC,
     )
     assert vcs_upload.uploadname == vcs["vcsName"]
-    search_result = foss.search(
-        searchType=SearchTypes.DIRECTORIES, filename=".git",
-    )
+    search_result = foss.search(searchType=SearchTypes.DIRECTORIES, filename=".git",)
     assert not search_result
     foss.delete_upload(vcs_upload)
 
@@ -171,7 +169,10 @@ def test_upload_summary(foss: Fossology, scanned_upload: Upload):
 def test_upload_summary_nogroup(foss: Fossology, upload: Upload):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.upload_summary(upload, group="test")
-    assert f"Getting summary of upload {upload.id} for group test not authorized" in str(excinfo.value)
+    assert (
+        f"Getting summary of upload {upload.id} for group test not authorized"
+        in str(excinfo.value)
+    )
 
 
 def test_upload_licenses(foss: Fossology, scanned_upload: Upload):
@@ -198,7 +199,10 @@ def test_upload_licenses_from_agent(foss: Fossology, scanned_upload: Upload):
 def test_upload_licenses_nogroup(foss: Fossology, upload: Upload):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.upload_licenses(upload, group="test")
-    assert f"Getting license for upload {upload.id} for group test not authorized" in str(excinfo.value)
+    assert (
+        f"Getting license for upload {upload.id} for group test not authorized"
+        in str(excinfo.value)
+    )
 
 
 def test_delete_unknown_upload(foss: Fossology):
@@ -209,7 +213,7 @@ def test_delete_unknown_upload(foss: Fossology):
         "",
         "Non Upload",
         "2020-05-05",
-        {"sha1": None, "md5": None, "sha256": None, "size": None}
+        {"sha1": None, "md5": None, "sha256": None, "size": None},
     )
     with pytest.raises(FossologyApiError):
         foss.delete_upload(upload)
@@ -218,4 +222,6 @@ def test_delete_unknown_upload(foss: Fossology):
 def test_delete_upload_nogroup(foss: Fossology, upload: Upload):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.delete_upload(upload, group="test")
-    assert f"Deleting upload {upload.id} for group test not authorized" in str(excinfo.value)
+    assert f"Deleting upload {upload.id} for group test not authorized" in str(
+        excinfo.value
+    )

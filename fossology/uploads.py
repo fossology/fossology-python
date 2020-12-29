@@ -18,7 +18,9 @@ class Uploads:
 
     # Retry until the unpack agent is finished
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(10))
-    def detail_upload(self, upload_id: int, group: str = None, wait_time: int = 0) -> Upload:
+    def detail_upload(
+        self, upload_id: int, group: str = None, wait_time: int = 0
+    ) -> Upload:
         """Get detailled information about an upload
 
         API Endpoint: GET /uploads/{id}
