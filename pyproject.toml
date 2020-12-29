@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fossology"
-version = "0.2.0"
+version = "1.0.0"
 description = "A library to automate Fossology from Python scripts"
 authors = ["Marion Deveaud <marion.deveaud@siemens.com>"]
 license = "MIT License"

@@ -11,7 +11,7 @@ from fossology.exceptions import AuthorizationError, FossologyApiError
 
 def test_upload_sha1(upload: Upload):
     assert upload.uploadname == "base-files_11.tar.xz"
-    assert upload.filesha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+    assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
 
 
 def test_upload_nogroup(foss: Fossology, upload_folder: Folder, test_file_path: str):
@@ -145,18 +145,13 @@ def test_move_copy_upload(foss: Fossology, upload: Upload, move_folder: Folder):
     moved_upload = foss.detail_upload(upload.id)
     assert moved_upload.folderid == move_folder.id
 
-    # FIXME: recursion due to https://github.com/fossology/fossology/pull/1748?
     foss.copy_upload(moved_upload, foss.rootFolder)
     list_uploads = foss.list_uploads()
     test_upload = None
     for upload in list_uploads:
         if upload.folderid == foss.rootFolder.id:
             test_upload = upload
-    if not test_upload:
-        print("Copying uploads didn't work")
-    else:
-        print("Copying uploads works again, replace log output with assert")
-    # assert upload
+    assert test_upload
 
 
 def test_move_copy_arbitrary_folder(foss: Fossology, upload: Upload):
@@ -191,7 +186,8 @@ def test_upload_licenses_containers(foss: Fossology, scanned_upload: Upload):
 
 def test_upload_licenses_unscheduled(foss: Fossology, scanned_upload: Upload):
     licenses = foss.upload_licenses(scanned_upload, agent="ojo")
-    assert not licenses[0].get("agentFindings")
+    print(licenses[0])
+    assert not licenses[0].findings.conclusion
 
 
 def test_upload_licenses_from_agent(foss: Fossology, scanned_upload: Upload):
@@ -213,8 +209,7 @@ def test_delete_unknown_upload(foss: Fossology):
         "",
         "Non Upload",
         "2020-05-05",
-        "0",
-        "sha",
+        {"sha1": None, "md5": None, "sha256": None, "size": None}
     )
     with pytest.raises(FossologyApiError):
         foss.delete_upload(upload)
