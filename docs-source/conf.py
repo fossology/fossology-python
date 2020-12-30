@@ -20,10 +20,10 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "fossology"
-copyright = "2020, Siemens AG"
+copyright = "2021, Siemens AG"
 
 # The full version, including major/minor/patch tags
-release = "0.2.0"
+release = "1.0.0"
 
 
 # -- General configuration ---------------------------------------------------
