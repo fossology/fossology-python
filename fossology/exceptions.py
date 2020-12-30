@@ -13,12 +13,15 @@ class Error(Exception):
 class AuthenticationError(Error):
     """Authentication error"""
 
-    def __init__(self, url):
-        self.url = url
-        self.message = (
-            f"An error occurred during authentication against {self.url}\n"
-            f"Check your API Token and try again"
-        )
+    def __init__(self, description, response=None):
+        if response:
+            try:
+                message = response.json().get("message")
+            except JSONDecodeError:
+                message = response.text
+            self.message = f"{description}: {message} ({response.status_code})"
+        else:
+            self.message = description
 
 
 class AuthorizationError(Error):

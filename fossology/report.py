@@ -104,7 +104,7 @@ class Report:
             return response.text, report_name
         elif response.status_code == 403:
             description = (
-                f"Getting report {report_id} {get_options(group)} not authorized"
+                f"Getting report {report_id} {get_options(group)}not authorized"
             )
             raise AuthorizationError(description, response)
         elif response.status_code == 503:

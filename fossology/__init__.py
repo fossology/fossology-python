@@ -6,8 +6,16 @@ import logging
 import requests
 from datetime import date, timedelta
 
-from typing import List
-from fossology.obj import Agents, User, File, TokenScope, SearchTypes, get_options
+from typing import Dict, List
+from fossology.obj import (
+    Agents,
+    Upload,
+    User,
+    File,
+    TokenScope,
+    SearchTypes,
+    get_options,
+)
 from fossology.folders import Folders
 from fossology.uploads import Uploads
 from fossology.jobs import Jobs
@@ -20,6 +28,37 @@ from fossology.exceptions import (
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+def search_headers(
+    searchType: SearchTypes = SearchTypes.ALLFILES,
+    upload: Upload = None,
+    filename: str = None,
+    tag: str = None,
+    filesizemin: int = None,
+    filesizemax: int = None,
+    license: str = None,
+    copyright: str = None,
+    group: str = None,
+) -> Dict:
+    headers = {"searchType": searchType.value}
+    if upload:
+        headers["uploadId"] = str(upload.id)
+    if filename:
+        headers["filename"] = filename
+    if tag:
+        headers["tag"] = tag
+    if filesizemin:
+        headers["filesizemin"] = filesizemin
+    if filesizemax:
+        headers["filesizemax"] = filesizemax
+    if license:
+        headers["license"] = license
+    if copyright:
+        headers["copyright"] = copyright
+    if group:
+        headers["groupName"] = group
+    return headers
 
 
 def fossology_token(
@@ -50,6 +89,8 @@ def fossology_token(
     :type expire: string, e.g. 2019-12-25
     :return: the new token
     :rtype: string
+    :raises AuthenticationError: if the username or password is incorrect
+    :raises FossologyApiError: if another error occurs
     """
     data = {
         "username": username,
@@ -67,6 +108,9 @@ def fossology_token(
         if response.status_code == 201:
             token = response.json()["Authorization"]
             return re.sub("Bearer ", "", token)
+        elif response.status_code == 404:
+            description = "Authentication error"
+            raise AuthenticationError(description, response)
         else:
             description = "Error while generating new token"
             raise FossologyApiError(description, response)
@@ -131,8 +175,8 @@ class Fossology(Folders, Uploads, Jobs, Report):
             if user.name == self.name:
                 self.user = user
                 return self.user
-        logger.error(f"User {self.name} was not found")
-        raise AuthenticationError(self.host)
+        description = f"User {self.name} was not found on {self.host}"
+        raise AuthenticationError(description)
 
     def close(self):
         self.session.close()
@@ -222,20 +266,22 @@ class Fossology(Folders, Uploads, Jobs, Report):
 
     def search(
         self,
-        searchType=SearchTypes.ALLFILES,
-        filename=None,
-        tag=None,
-        filesizemin=None,
-        filesizemax=None,
-        license=None,
-        copyright=None,
-        group=None,
+        searchType: SearchTypes = SearchTypes.ALLFILES,
+        upload: Upload = None,
+        filename: str = None,
+        tag: str = None,
+        filesizemin: int = None,
+        filesizemax: int = None,
+        license: str = None,
+        copyright: str = None,
+        group: str = None,
     ):
         """Search for a specific file
 
         API Endpoint: GET /search
 
         :param searchType: Limit search to: directory, allfiles (default), containers
+        :param upload: Limit search to a specific upload
         :param filename: Filename to find, can contain % as wild-card
         :param tag: tag to find
         :param filesizemin: Min filesize in bytes
@@ -243,7 +289,8 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :param license: License search filter
         :param copyright: Copyright search filter
         :param group: the group name to choose while performing search (default: None)
-        :type searchType: SearchType Enum
+        :type searchType: one of SearchTypes Enum
+        :type upload: Upload
         :type filename: string
         :type tag: string
         :type filesizemin: int
@@ -256,22 +303,17 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
         """
-        headers = {"searchType": searchType.value}
-        if filename:
-            headers["filename"] = filename
-        if tag:
-            headers["tag"] = tag
-        if filesizemin:
-            headers["filesizemin"] = filesizemin
-        if filesizemax:
-            headers["filesizemax"] = filesizemax
-        if license:
-            headers["license"] = license
-        if copyright:
-            headers["copyright"] = copyright
-        if group:
-            headers["groupName"] = group
-
+        headers = search_headers(
+            searchType,
+            upload,
+            filename,
+            tag,
+            filesizemin,
+            filesizemax,
+            license,
+            copyright,
+            group,
+        )
         response = self.session.get(f"{self.api}/search", headers=headers)
 
         if response.status_code == 200:
@@ -294,7 +336,7 @@ class Fossology(Folders, Uploads, Jobs, Report):
 
         The response does not generate Python objects yet, the plain JSON data is simply returned.
 
-        :param filelist: the list of files (or containers) to search for (default: [])
+        :param filelist: the list of files (or containers) hashes to search for (default: [])
         :param group: the group name to choose while performing search (default: None)
         :type filelist: list
         :return: list of items corresponding to the search criteria

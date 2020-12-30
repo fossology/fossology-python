@@ -193,7 +193,7 @@ class Uploads:
                 f"{self.api}/uploads", data=data, headers=headers
             )
         else:
-            logger.debug(
+            logger.info(
                 "Neither VCS, or Url or filename option given, not uploading anything"
             )
             return

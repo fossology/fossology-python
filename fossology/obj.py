@@ -334,7 +334,7 @@ class Hash(object):
         self.additional_info = kwargs
 
     def __str__(self):
-        return f"File SHA1: {self.sha1} MD5 {self.md5} SH256 {self.sha256} Size {self.filesize}B"
+        return f"File SHA1: {self.sha1} MD5 {self.md5} SH256 {self.sha256} Size {self.size}B"
 
     @classmethod
     def from_json(cls, json_dict):
