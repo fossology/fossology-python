@@ -60,16 +60,6 @@ class ClearingStatus(Enum):
     REJECTED = "Rejected"
 
 
-class LicenseAgent(Enum):
-    """Available license agents: NOMOS, MONK, NINKA, OJO, REPORTIMPORT"""
-
-    NOMOS = "nomos"
-    MONK = "monk"
-    NINKA = "ninka"
-    OJO = "ojo"
-    REPORTIMPORT = "reportImport"
-
-
 class Agents(object):
 
     """FOSSology agents.
@@ -255,6 +245,134 @@ class Folder(object):
         return cls(**json_dict)
 
 
+class Findings(object):
+
+    """FOSSology license findings.
+
+    Represents FOSSology license findings.
+
+    :param scanner: the list of licenses found by the specified scanners
+    :param conclusion: the concluded license by user of for a package
+    :param kwargs: handle any other finding information provided by the fossology instance
+    :type scanner: list
+    :type conclusion: list
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self, scanner, conclusion, **kwargs,
+    ):
+        self.scanner = scanner
+        self.conclusion = conclusion
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Licenses found by scanners: {self.scanner}, concluded licenses: {self.conclusion}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class Licenses(object):
+
+    """FOSSology file license findings.
+
+    Represents a FOSSology licenses response.
+
+    :param filePath: the path of the file in the specified upload
+    :param findings: the license findings in that file
+    :param kwargs: handle any other license information provided by the fossology instance
+    :type filePath: string
+    :type findings: Findings
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self, filePath, findings, **kwargs,
+    ):
+        self.filepath = filePath
+        self.findings = Findings.from_json(findings)
+        self.additional_info = kwargs
+
+    def __str__(self):
+        if self.findings.conclusion:
+            return f"File {self.filepath} has {len(self.findings.conclusion)} concluded licenses"
+        else:
+            return f"File {self.filepath} doesn't have any concluded license yet"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class Hash(object):
+
+    """FOSSology hash.
+
+    Represents a FOSSology file hash values.
+
+    :param sha1: the SHA1 hash sum of the file
+    :param md5: the MDA check sum of the file
+    :param sha256: the SHA256 hash sum of the file
+    :param size: the size of the file in bytes
+    :param kwargs: handle any other hash information provided by the fossology instance
+    :type sha1: string
+    :type md5: string
+    :type sha256: string
+    :type size: int
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self, sha1, md5, sha256, size, **kwargs,
+    ):
+        self.sha1 = sha1
+        self.md5 = md5
+        self.sha256 = sha256
+        self.size = size
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"File SHA1: {self.sha1} MD5 {self.md5} SH256 {self.sha256} Size {self.filesize}B"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class File(object):
+
+    """FOSSology file response from filesearch.
+
+    Represents a FOSSology filesearch response.
+
+    :param hash: the hash information of the file
+    :param findings: the license findings in that file
+    :param kwargs: handle any other license information provided by the fossology instance
+    :type hash: Hash
+    :type findings: Findings
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self, hash, findings, **kwargs,
+    ):
+        self.hash = Hash.from_json(hash)
+        self.findings = Findings.from_json(findings)
+        self.additional_info = kwargs
+
+    def __str__(self):
+        if self.findings.conclusion:
+            return f"File with SHA1 {self.hash.sha1} has {len(self.findings.conclusion)} concluded licenses"
+        else:
+            return f"File with SHA1 {self.hash.sha1} doesn't have any concluded license yet"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 class Upload(object):
 
     """FOSSology upload.
@@ -267,8 +385,7 @@ class Upload(object):
     :param description: further information about the upload
     :param uploadname: the name of the upload (default: the name of the upload file)
     :param uploaddate: the date of the upload
-    :param filesize: the size of the uploaded file in bytes
-    :param filesha1: the SHA1 hash sum of the file
+    :param hash: the hash data of the uploaded file
     :param kwargs: handle any other upload information provided by the fossology instance
     :type folderid: int
     :type foldername: string
@@ -276,8 +393,7 @@ class Upload(object):
     :type description: string
     :type uploadname: string
     :type uploaddate: string
-    :type filesize: int
-    :type filesha1: string
+    :type hash: Hash
     :type kwargs: key word argument
     """
 
@@ -289,8 +405,7 @@ class Upload(object):
         description,
         uploadname,
         uploaddate,
-        filesize,
-        filesha1,
+        hash,
         **kwargs,
     ):
         self.folderid = folderid
@@ -299,13 +414,12 @@ class Upload(object):
         self.description = description
         self.uploadname = uploadname
         self.uploaddate = uploaddate
-        self.filesize = filesize
-        self.filesha1 = filesha1
+        self.hash = Hash.from_json(hash)
         self.additional_info = kwargs
 
     def __str__(self):
         return (
-            f"Upload '{self.uploadname}' ({self.id}, {self.filesize}B, {self.filesha1}) "
+            f"Upload '{self.uploadname}' ({self.id}, {self.hash.size}B, {self.hash.sha1}) "
             f"in folder {self.foldername} ({self.folderid})"
         )
 
@@ -433,3 +547,12 @@ class Job(object):
     @classmethod
     def from_json(cls, json_dict):
         return cls(**json_dict)
+
+
+def get_options(group: str = None, folder: Folder = None) -> str:
+    options = ""
+    if group:
+        options += f"for group {group} "
+    if folder:
+        options += f"in folder {folder.id} "
+    return options

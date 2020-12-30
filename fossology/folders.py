@@ -3,8 +3,8 @@
 
 import logging
 
-from .obj import Folder
-from .exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import Folder, get_options
+from fossology.exceptions import AuthorizationError, FossologyApiError
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -58,7 +58,7 @@ class Folders:
             description = f"Error while getting details for folder {folder_id}"
             raise FossologyApiError(description, response)
 
-    def create_folder(self, parent, name, description=None):
+    def create_folder(self, parent, name, description=None, group=None):
         """Create a new (sub)folder
 
         The name of the new folder must be unique under the same parent.
@@ -67,20 +67,25 @@ class Folders:
 
         :param parent: the parent folder
         :param name: the name of the folder
-        :param description: a meaningful description for the folder (optional)
+        :param description: a meaningful description for the folder (default: None)
+        :param group: the name of the group chosen to create the folder (default: None)
         :type parent: Folder() object
         :type name: str
         :type description: str
+        :type group: string
         :return: the folder newly created (or already existing) - or None
         :rtype: Folder() object
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user is not allowed to write in the folder
+        :raises AuthorizationError: if the user is not allowed to write in the folder or access the group
         """
         headers = {
             "parentFolder": f"{parent.id}",
             "folderName": f"{name}",
             "folderDescription": f"{description}",
         }
+        if group:
+            headers["groupName"] = group
+
         response = self.session.post(f"{self.api}/folders", headers=headers)
 
         if response.status_code == 200:
@@ -96,7 +101,7 @@ class Folders:
             return self.detail_folder(response.json()["message"])
 
         elif response.status_code == 403:
-            description = f"Folder creation in parent {parent} not authorized"
+            description = f"Folder creation {get_options(group, parent)}not authorized"
             raise AuthorizationError(description, response)
         else:
             description = f"Unable to create folder {name} under {parent}"
@@ -130,7 +135,7 @@ class Folders:
             logger.info(f"{folder} has been updated")
             return folder
         else:
-            description = f"Unable to update folder {folder}"
+            description = f"Unable to update folder {folder.id}"
             raise FossologyApiError(description, response)
 
     def delete_folder(self, folder):
