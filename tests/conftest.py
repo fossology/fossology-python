@@ -64,6 +64,38 @@ def foss_schedule_agents() -> Dict:
 
 
 @pytest.fixture(scope="session")
+def foss_user_agents() -> Dict:
+    return {
+        "bucket": True,
+        "copyright_email_author": True,
+        "ecc": True,
+        "keyword": True,
+        "mimetype": False,
+        "monk": True,
+        "mime": True,
+        "monk": True,
+        "nomos": True,
+        "ojo": True,
+        "package": True,
+        "specific_agent": True,
+    }
+
+
+@pytest.fixture(scope="session")
+def foss_user(foss_user_agents) -> Dict:
+    return {
+        "id": secrets.randbelow(1000),
+        "name": "Test User",
+        "description": "",
+        "email": "test.user@example.com",
+        "accessLevel": "read_write",
+        "rootFolderId": 1,
+        "emailNotification": "y",
+        "agents": foss_user_agents,
+    }
+
+
+@pytest.fixture(scope="session")
 def foss_token(foss_server: str) -> str:
     return fossology_token(
         foss_server, "fossy", "fossy", secrets.token_urlsafe(8), TokenScope.WRITE

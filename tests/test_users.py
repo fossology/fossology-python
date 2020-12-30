@@ -21,8 +21,8 @@ logger.addHandler(console)
 logging.getLogger("").addHandler(console)
 
 
-def test_generate_token(foss_server: str):
-    with pytest.raises(FossologyApiError):
+def test_generate_token_wrong_date(foss_server: str):
+    with pytest.raises(FossologyApiError) as excinfo:
         fossology_token(
             foss_server,
             "fossy",
@@ -30,14 +30,30 @@ def test_generate_token(foss_server: str):
             secrets.token_urlsafe(8),
             token_expire=str(date.today() - timedelta(days=1)),
         )
+        assert "Error while generating new token" in str(excinfo.value)
+
+
+def test_generate_token_too_long(foss_server: str):
+    with pytest.raises(FossologyApiError) as excinfo:
+        fossology_token(
+            foss_server,
+            "fossy",
+            "fossy",
+            secrets.token_urlsafe(41),
+            token_expire=str(date.today() + timedelta(days=1)),
+        )
+        assert "Error while generating new token" in str(excinfo.value)
 
 
 @responses.activate
-def test_generate_token_noconnection(foss_server: str):
+def test_generate_token_errors(foss_server: str):
     responses.add(
         responses.POST,
         f"{foss_server}/api/v1/tokens",
         body=requests.exceptions.ConnectionError(),
+    )
+    responses.add(
+        responses.POST, f"{foss_server}/api/v1/tokens", status=404,
     )
     with pytest.raises(SystemExit) as excinfo:
         fossology_token(
@@ -47,9 +63,19 @@ def test_generate_token_noconnection(foss_server: str):
             secrets.token_urlsafe(8),
             token_expire=str(date.today() - timedelta(days=1)),
         )
-    assert f"Server {foss_server} does not seem to be running or is unreachable" in str(
-        excinfo.value
-    )
+        assert (
+            f"Server {foss_server} does not seem to be running or is unreachable"
+            in str(excinfo.value)
+        )
+    with pytest.raises(AuthenticationError) as excinfo:
+        fossology_token(
+            foss_server,
+            "fossy",
+            "nofossy",
+            secrets.token_urlsafe(8),
+            token_expire=str(date.today() + timedelta(days=1)),
+        )
+        assert "Authentication error" in str(excinfo.value)
 
 
 def test_wrong_user(foss_server, foss_token):
@@ -65,6 +91,28 @@ def test_unknown_user(foss: Fossology):
 def test_list_users(foss: Fossology):
     users = foss.list_users()
     assert len(users) == 1
+
+
+@responses.activate
+def test_detail_user_with_agents(
+    foss_server: str, foss: Fossology, foss_user: dict, foss_user_agents: dict
+):
+    user = foss_user
+    responses.add(
+        responses.GET, f"{foss_server}/api/v1/users/{user['id']}", status=200, json=user
+    )
+    user_from_api = foss.detail_user(user["id"])
+    assert user_from_api.agents.to_dict() == foss_user_agents
+
+
+@responses.activate
+def test_list_users_with_agents(
+    foss_server: str, foss: Fossology, foss_user: dict, foss_user_agents: dict
+):
+    users = [foss_user]
+    responses.add(responses.GET, f"{foss_server}/api/v1/users", status=200, json=users)
+    users_from_api = foss.list_users()
+    assert users_from_api[0].agents.to_dict() == foss_user_agents
 
 
 @responses.activate

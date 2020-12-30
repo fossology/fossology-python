@@ -3,6 +3,7 @@
 
 import secrets
 import pytest
+import responses
 
 from fossology import Fossology
 from fossology.obj import AccessLevel, Folder, Upload, SearchTypes
@@ -12,6 +13,36 @@ from fossology.exceptions import AuthorizationError, FossologyApiError
 def test_upload_sha1(upload: Upload):
     assert upload.uploadname == "base-files_11.tar.xz"
     assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+    assert str(upload) == (
+        f"Upload '{upload.uploadname}' ({upload.id}, {upload.hash.size}B, {upload.hash.sha1}) "
+        f"in folder {upload.foldername} ({upload.folderid})"
+    )
+    assert str(upload.hash) == (
+        f"File SHA1: {upload.hash.sha1} MD5 {upload.hash.md5} "
+        f"SH256 {upload.hash.sha256} Size {upload.hash.size}B"
+    )
+
+
+def test_get_upload_unauthorized(foss: Fossology, upload: Upload):
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.detail_upload(
+            upload.id, group="test",
+        )
+    assert (
+        f"Getting details for upload {upload.id} for group test not authorized"
+        in str(excinfo.value)
+    )
+
+
+@responses.activate
+def test_get_upload_error(foss: Fossology, foss_server: str):
+    upload_id = 100
+    responses.add(
+        responses.GET, f"{foss_server}/api/v1/uploads/{upload_id}", status=500,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.detail_upload(upload_id)
+    assert f"Error while getting details for upload {upload_id}" in str(excinfo.value)
 
 
 def test_upload_nogroup(foss: Fossology, upload_folder: Folder, test_file_path: str):
@@ -129,6 +160,19 @@ def test_empty_upload(foss: Fossology):
     assert not empty_upload
 
 
+@responses.activate
+def test_upload_error(foss: Fossology, foss_server: str, test_file_path: str):
+    responses.add(
+        responses.POST, f"{foss_server}/api/v1/uploads", status=500,
+    )
+    description = "Test upload API error"
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.upload_file(
+            foss.rootFolder, file=test_file_path, description=description,
+        )
+    assert f"Upload {description} could not be performed" in str(excinfo.value)
+
+
 def test_move_upload_nogroup(foss: Fossology, upload: Upload, move_folder: Folder):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.move_upload(upload, move_folder, group="test")
@@ -164,6 +208,10 @@ def test_upload_summary(foss: Fossology, scanned_upload: Upload):
     summary = foss.upload_summary(scanned_upload)
     assert summary.clearingStatus == "Open"
     assert not summary.mainLicense
+    assert str(summary) == (
+        f"Clearing status for '{summary.uploadName}' is '{summary.clearingStatus}',"
+        f" main license = {summary.mainLicense}"
+    )
 
 
 def test_upload_summary_nogroup(foss: Fossology, upload: Upload):
@@ -187,7 +235,6 @@ def test_upload_licenses_containers(foss: Fossology, scanned_upload: Upload):
 
 def test_upload_licenses_unscheduled(foss: Fossology, scanned_upload: Upload):
     licenses = foss.upload_licenses(scanned_upload, agent="ojo")
-    print(licenses[0])
     assert not licenses[0].findings.conclusion
 
 
