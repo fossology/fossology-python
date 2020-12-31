@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fossology Uploads &#8212; fossology 0.2.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>Fossology Uploads &#8212; fossology 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fossology Jobs" href="jobs.html" />
@@ -134,18 +133,21 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – the upload to be deleted</p></li>
-<li><p><strong>group</strong> (<em>string</em>) – the group name to chose while deleting the upload (default None)</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to chose while deleting the upload (default: None)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.detail_upload">
-<code class="sig-name descname">detail_upload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload_id</span></em>, <em class="sig-param"><span class="n">wait_time</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.detail_upload" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">detail_upload</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">group</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wait_time</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload">fossology.obj.Upload</a><a class="headerlink" href="#fossology.uploads.Uploads.detail_upload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get detailled information about an upload</p>
 <p>API Endpoint: GET /uploads/{id}</p>
 <p>Get information about a given upload. If the upload is not ready wait another <code class="docutils literal notranslate"><span class="pre">wait_time</span></code> seconds or look at
@@ -168,6 +170,7 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>upload_id</strong> (<em>int</em>) – the id of the upload</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group the upload shall belong to</p></li>
 <li><p><strong>wait_time</strong> (<em>int</em>) – use a customized upload wait time instead of Retry-After (in seconds, default: 0)</p></li>
 </ul>
 </dd>
@@ -178,25 +181,40 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload">Upload</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.list_uploads">
-<code class="sig-name descname">list_uploads</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.list_uploads" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_uploads</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">recursive</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.list_uploads" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all uploads available to the registered user</p>
 <p>API Endpoint: GET /uploads</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of uploads</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a>) – only list uploads from the given folder</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – list uploads from a specific group (not only your own uploads) (default: None)</p></li>
+<li><p><strong>recursive</strong> (<em>boolean</em>) – wether to list uploads from children folders or not (default: True)</p></li>
+<li><p><strong>page_size</strong> (<em>int</em>) – limit the number of uploads per page (default: 20)</p></li>
+<li><p><strong>page</strong> (<em>int</em>) – the number of the page to fetch uploads from (default: 1)</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of Upload</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of uploads</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of Upload</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -211,11 +229,14 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – the Upload to be copied in another folder</p></li>
 <li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a>) – the destination Folder</p></li>
-<li><p><strong>group</strong> (<em>string</em>) – the group name to chose while deleting the upload (default None)</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to chose while changing the upload (default: None)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group or folder</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -223,7 +244,7 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.upload_file">
 <code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vcs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">access_level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ignore_scm</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wait_time</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Upload a file to FOSSology</p>
+<dd><p>Upload a package to FOSSology</p>
 <p>API Endpoint: POST /uploads</p>
 <p>Perform a file, VCS or URL upload and get information about the upload using <a class="reference internal" href="#fossology.uploads.Uploads.detail_upload" title="fossology.uploads.Uploads.detail_upload"><code class="xref py py-func docutils literal notranslate"><span class="pre">detail_upload()</span></code></a> and passing the <code class="docutils literal notranslate"><span class="pre">wait_time</span></code> argument.</p>
 <p>See description of <a class="reference internal" href="#fossology.uploads.Uploads.detail_upload" title="fossology.uploads.Uploads.detail_upload"><code class="xref py py-func docutils literal notranslate"><span class="pre">detail_upload()</span></code></a> to configure how long the client shall wait for the upload to be ready.</p>
@@ -289,7 +310,7 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <li><p><strong>url</strong> (<em>dict</em><em>(</em><em>)</em>) – the URL specification to upload from a url</p></li>
 <li><p><strong>description</strong> (<em>string</em>) – description of the upload (default: None)</p></li>
 <li><p><strong>access_level</strong> (<a class="reference internal" href="obj.html#fossology.obj.AccessLevel" title="fossology.obj.AccessLevel"><em>AccessLevel</em></a>) – access permissions of the upload (default: protected)</p></li>
-<li><p><strong>ignore_scm</strong> (<em>boolean</em>) – ignore SCM files (Git, SVN, TFS) (default: False)</p></li>
+<li><p><strong>ignore_scm</strong> (<em>boolean</em>) – ignore SCM files (Git, SVN, TFS) (default: True)</p></li>
 <li><p><strong>group</strong> (<em>string</em>) – the group name to chose while uploading the file (default: None)</p></li>
 <li><p><strong>wait_time</strong> (<em>int</em>) – use a customized upload wait time instead of Retry-After (in seconds, default: 0)</p></li>
 </ul>
@@ -301,44 +322,55 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload">Upload</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.upload_licenses">
-<code class="sig-name descname">upload_licenses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span></em>, <em class="sig-param"><span class="n">agent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">containers</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_licenses" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">upload_licenses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span></em>, <em class="sig-param"><span class="n">group</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">agent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">containers</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_licenses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get clearing information about an upload</p>
 <p>API Endpoint: GET /uploads/{id}/licenses</p>
+<p>The response does not generate Python objects yet, the plain JSON data is simply returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – the upload to gather data from</p></li>
-<li><p><strong>agent</strong> (<a class="reference internal" href="obj.html#fossology.obj.LicenseAgent" title="fossology.obj.LicenseAgent"><em>LicenseAgent</em></a>) – the license agent to use (default: LicenseAgent.MONK)</p></li>
+<li><p><strong>agent</strong> (<em>string</em>) – the license agents to use (e.g. “nomos,monk,ninka,ojo,reportImport”, default: “nomos”)</p></li>
 <li><p><strong>containers</strong> (<em>boolean</em>) – wether to show containers or not (default: False)</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to chose while accessing the upload (default: None)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the licenses found by the specified agent</p>
+<dd class="field-even"><p>the list of licenses findings for the specified agent</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of licenses as JSON object</p>
+<dd class="field-odd"><p>list of Licenses</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.upload_summary">
-<code class="sig-name descname">upload_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_summary" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">upload_summary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_summary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get clearing information about an upload</p>
 <p>API Endpoint: GET /uploads/{id}/summary</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>upload</strong> – the upload to gather data from</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>upload</strong> – the upload to gather data from</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to chose while accessing an upload (default: None)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Type</dt>
 <dd class="field-even"><p><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload">Upload</a></p>
@@ -350,7 +382,10 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-even"><p><a class="reference internal" href="obj.html#fossology.obj.Summary" title="fossology.obj.Summary">Summary</a></p>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -367,10 +402,10 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2020, Siemens AG.
+      &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

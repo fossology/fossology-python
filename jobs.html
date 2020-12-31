@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fossology Jobs &#8212; fossology 0.2.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>Fossology Jobs &#8212; fossology 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fossology Report" href="report.html" />
@@ -116,7 +115,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>job_id</strong> – the id of the job</p></li>
-<li><p><strong>wait</strong> (<em>boolean</em>) – wait until the job is finisched (default: False)</p></li>
+<li><p><strong>wait</strong> (<em>boolean</em>) – wait until the job is finished (default: False)</p></li>
 <li><p><strong>timeout</strong> (<em>30</em>) – stop waiting after x seconds (default: 30)</p></li>
 </ul>
 </dd>
@@ -137,7 +136,7 @@
 
 <dl class="py method">
 <dt id="fossology.jobs.Jobs.list_jobs">
-<code class="sig-name descname">list_jobs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">pages</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">upload</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.jobs.Jobs.list_jobs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_jobs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">page_size</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">page</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">upload</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.jobs.Jobs.list_jobs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all available jobs</p>
 <p>API Endpoint: GET /jobs</p>
 <p>The answer is limited to the first page of 20 results by default</p>
@@ -145,7 +144,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>page_size</strong> (<em>int</em><em> (</em><em>default: 20</em><em>)</em>) – the maximum number of results per page</p></li>
-<li><p><strong>pages</strong> (<em>int</em><em> (</em><em>default: 1</em><em>)</em>) – the number of pages to be retrieved</p></li>
+<li><p><strong>page</strong> (<em>int</em><em> (</em><em>default: 1</em><em>)</em>) – the number of pages to be retrieved</p></li>
 <li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – list only jobs of the given upload (default: None)</p></li>
 </ul>
 </dd>
@@ -163,7 +162,7 @@
 
 <dl class="py method">
 <dt id="fossology.jobs.Jobs.schedule_jobs">
-<code class="sig-name descname">schedule_jobs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">upload</span></em>, <em class="sig-param"><span class="n">spec</span></em>, <em class="sig-param"><span class="n">wait</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">30</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.jobs.Jobs.schedule_jobs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">schedule_jobs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">upload</span></em>, <em class="sig-param"><span class="n">spec</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wait</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">30</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.jobs.Jobs.schedule_jobs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Schedule jobs for a specific upload</p>
 <p>API Endpoint: POST /jobs</p>
 <p>Job specifications <cite>spec</cite> are added to the request body,
@@ -203,6 +202,7 @@ following options are available:</p>
 <li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a>) – the upload folder</p></li>
 <li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – the upload for which jobs will be scheduled</p></li>
 <li><p><strong>spec</strong> (<em>dict</em>) – the job specification</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to choose while scheduling jobs (default: None)</p></li>
 <li><p><strong>wait</strong> (<em>boolean</em>) – wait for the scheduled job to finish (default: False)</p></li>
 <li><p><strong>timeout</strong> (<em>30</em>) – stop waiting after x seconds (default: 30)</p></li>
 </ul>
@@ -214,7 +214,10 @@ following options are available:</p>
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Job" title="fossology.obj.Job">Job</a></p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -231,10 +234,10 @@ following options are available:</p>
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2020, Siemens AG.
+      &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

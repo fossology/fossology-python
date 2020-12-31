@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fossology Report &#8212; fossology 0.2.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>Fossology Report &#8212; fossology 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fossology objects" href="obj.html" />
@@ -109,7 +108,7 @@
 <dd><p>Class dedicated to all “report” related endpoints</p>
 <dl class="py method">
 <dt id="fossology.report.Report.download_report">
-<code class="sig-name descname">download_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">report_id</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>str<span class="p">, </span>str<span class="p">]</span><a class="headerlink" href="#fossology.report.Report.download_report" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">download_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">report_id</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">group</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>str<span class="p">, </span>str<span class="p">]</span><a class="headerlink" href="#fossology.report.Report.download_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Download a report</p>
 <p>API Endpoint: GET /report/{id}</p>
 <dl class="field-list simple">
@@ -129,7 +128,10 @@
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>report_id</strong> (<em>int</em>) – the id of the generated report</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>report_id</strong> (<em>int</em>) – the id of the generated report</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to choose while downloading a specific report (default: None)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the report content and the report name</p>
@@ -140,6 +142,7 @@
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
 <li><p><strong>TryAgain</strong> – if the report generation timed out after 3 retries</p></li>
 </ul>
 </dd>
@@ -148,14 +151,15 @@
 
 <dl class="py method">
 <dt id="fossology.report.Report.generate_report">
-<code class="sig-name descname">generate_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span><span class="p">:</span> <span class="n"><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload">fossology.obj.Upload</a></span></em>, <em class="sig-param"><span class="n">report_format</span><span class="p">:</span> <span class="n"><a class="reference internal" href="obj.html#fossology.obj.ReportFormat" title="fossology.obj.ReportFormat">fossology.obj.ReportFormat</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.generate_report" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">generate_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">upload</span><span class="p">:</span> <span class="n"><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload">fossology.obj.Upload</a></span></em>, <em class="sig-param"><span class="n">report_format</span><span class="p">:</span> <span class="n"><a class="reference internal" href="obj.html#fossology.obj.ReportFormat" title="fossology.obj.ReportFormat">fossology.obj.ReportFormat</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">group</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.generate_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a report for a given upload</p>
 <p>API Endpoint: GET /report</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – the upload which report will be generated</p></li>
-<li><p><strong>format</strong> (<a class="reference internal" href="obj.html#fossology.obj.ReportFormat" title="fossology.obj.ReportFormat"><em>ReportFormat</em></a>) – the report format (default ReportFormat.READMEOSS)</p></li>
+<li><p><strong>format</strong> (<a class="reference internal" href="obj.html#fossology.obj.ReportFormat" title="fossology.obj.ReportFormat"><em>ReportFormat</em></a>) – the report format (default: ReportFormat.READMEOSS)</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to choose while generating the report (default: None)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -165,7 +169,10 @@
 <dd class="field-odd"><p>int</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -182,10 +189,10 @@
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2020, Siemens AG.
+      &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

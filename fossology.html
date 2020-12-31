@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fossology &#8212; fossology 0.2.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <title>Fossology &#8212; fossology 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fossology Folders" href="folders.html" />
@@ -171,6 +170,34 @@ can’t be established</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="fossology.Fossology.filesearch">
+<code class="sig-name descname">filesearch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filelist</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">group</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.filesearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for files from hash sum</p>
+<p>API Endpoint: POST /filesearch</p>
+<p>The response does not generate Python objects yet, the plain JSON data is simply returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filelist</strong> (<em>list</em>) – the list of files (or containers) hashes to search for (default: [])</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to choose while performing search (default: None)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of items corresponding to the search criteria</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>JSON</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="fossology.Fossology.get_version">
 <code class="sig-name descname">get_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.get_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get API version from the server</p>
@@ -208,19 +235,21 @@ can’t be established</p>
 
 <dl class="py method">
 <dt id="fossology.Fossology.search">
-<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param">searchType=&lt;SearchTypes.ALLFILES: 'allfiles'&gt;</em>, <em class="sig-param">filename=None</em>, <em class="sig-param">tag=None</em>, <em class="sig-param">filesizemin=None</em>, <em class="sig-param">filesizemax=None</em>, <em class="sig-param">license=None</em>, <em class="sig-param">copyright=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.search" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param">searchType: fossology.obj.SearchTypes = &lt;SearchTypes.ALLFILES: 'allfiles'&gt;</em>, <em class="sig-param">upload: Optional[fossology.obj.Upload] = None</em>, <em class="sig-param">filename: Optional[str] = None</em>, <em class="sig-param">tag: Optional[str] = None</em>, <em class="sig-param">filesizemin: Optional[int] = None</em>, <em class="sig-param">filesizemax: Optional[int] = None</em>, <em class="sig-param">license: Optional[str] = None</em>, <em class="sig-param">copyright: Optional[str] = None</em>, <em class="sig-param">group: Optional[str] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for a specific file</p>
 <p>API Endpoint: GET /search</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>searchType</strong> (<em>SearchType Enum</em>) – Limit search to: directory, allfiles (default), containers</p></li>
+<li><p><strong>searchType</strong> (<em>one of SearchTypes Enum</em>) – Limit search to: directory, allfiles (default), containers</p></li>
+<li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – Limit search to a specific upload</p></li>
 <li><p><strong>filename</strong> (<em>string</em>) – Filename to find, can contain % as wild-card</p></li>
 <li><p><strong>tag</strong> (<em>string</em>) – tag to find</p></li>
 <li><p><strong>filesizemin</strong> (<em>int</em>) – Min filesize in bytes</p></li>
 <li><p><strong>filesizemax</strong> (<em>int</em>) – Max filesize in bytes</p></li>
 <li><p><strong>license</strong> (<em>string</em>) – License search filter</p></li>
 <li><p><strong>copyright</strong> (<em>string</em>) – Copyright search filter</p></li>
+<li><p><strong>group</strong> (<em>string</em>) – the group name to choose while performing search (default: None)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -230,7 +259,10 @@ can’t be established</p>
 <dd class="field-odd"><p>JSON</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -258,8 +290,8 @@ can’t be established</p>
 <li><p><strong>username</strong> (<em>string</em>) – name of the user the token will be generated for</p></li>
 <li><p><strong>password</strong> (<em>string</em>) – the password of the user</p></li>
 <li><p><strong>name</strong> (<em>string</em>) – the name of the token</p></li>
-<li><p><strong>scope</strong> (<a class="reference internal" href="obj.html#fossology.obj.TokenScope" title="fossology.obj.TokenScope"><em>TokenScope</em></a><em> (</em><em>default TokenScope.READ</em><em>)</em>) – the scope of the token (default: READ)</p></li>
-<li><p><strong>expire</strong> (<em>string</em><em>, </em><em>e.g. 2019-12-25</em>) – the expire date of the token (default max. 30 days)</p></li>
+<li><p><strong>scope</strong> (<a class="reference internal" href="obj.html#fossology.obj.TokenScope" title="fossology.obj.TokenScope"><em>TokenScope</em></a><em> (</em><em>default: TokenScope.READ</em><em>)</em>) – the scope of the token (default: READ)</p></li>
+<li><p><strong>expire</strong> (<em>string</em><em>, </em><em>e.g. 2019-12-25</em>) – the expire date of the token (default: max. 30 days)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -267,6 +299,12 @@ can’t be established</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>string</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthenticationError" title="fossology.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – if the username or password is incorrect</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if another error occurs</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -281,10 +319,10 @@ can’t be established</p>
     <div class="clearer"></div>
   </div>
     <div class="footer">
-      &copy;2020, Siemens AG.
+      &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
