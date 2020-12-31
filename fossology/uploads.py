@@ -1,4 +1,4 @@
-# Copyright 2020 Siemens AG
+# Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import json
@@ -193,7 +193,7 @@ class Uploads:
                 f"{self.api}/uploads", data=data, headers=headers
             )
         else:
-            logger.debug(
+            logger.info(
                 "Neither VCS, or Url or filename option given, not uploading anything"
             )
             return

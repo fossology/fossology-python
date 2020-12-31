@@ -1,4 +1,4 @@
-# Copyright 2019-2020 Siemens AG
+# Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import time
@@ -60,6 +60,38 @@ def foss_schedule_agents() -> Dict:
             "reuse_main": True,
             "reuse_enhanced": True,
         },
+    }
+
+
+@pytest.fixture(scope="session")
+def foss_user_agents() -> Dict:
+    return {
+        "bucket": True,
+        "copyright_email_author": True,
+        "ecc": True,
+        "keyword": True,
+        "mimetype": False,
+        "monk": True,
+        "mime": True,
+        "monk": True,
+        "nomos": True,
+        "ojo": True,
+        "package": True,
+        "specific_agent": True,
+    }
+
+
+@pytest.fixture(scope="session")
+def foss_user(foss_user_agents) -> Dict:
+    return {
+        "id": secrets.randbelow(1000),
+        "name": "Test User",
+        "description": "",
+        "email": "test.user@example.com",
+        "accessLevel": "read_write",
+        "rootFolderId": 1,
+        "emailNotification": "y",
+        "agents": foss_user_agents,
     }
 
 

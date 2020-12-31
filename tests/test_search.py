@@ -1,6 +1,7 @@
-# Copyright 2019-2020 Siemens AG
+# Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
+import secrets
 import pytest
 import responses
 
@@ -15,9 +16,12 @@ def test_search_nogroup(foss: Fossology):
     assert "Searching for group test not authorized" in str(excinfo.value)
 
 
-def test_search(foss: Fossology):
+def test_search(foss: Fossology, upload):
     search_result = foss.search(searchType=SearchTypes.ALLFILES, filename="GPL%")
     assert search_result
+
+
+def test_search_nothing_found(foss: Fossology, upload):
     search_result = foss.search(
         searchType=SearchTypes.ALLFILES,
         filename="test%",
@@ -28,6 +32,35 @@ def test_search(foss: Fossology):
         copyright="Debian",
     )
     assert search_result == []
+
+
+def test_search_directory(foss: Fossology, upload):
+    search_result = foss.search(searchType=SearchTypes.DIRECTORIES, filename="share",)
+    assert search_result
+
+
+def test_search_upload(foss: Fossology, upload):
+    search_result = foss.search(
+        searchType=SearchTypes.ALLFILES, upload=upload, filename="share",
+    )
+    assert search_result
+
+
+def test_search_upload_does_not_exist(foss: Fossology, upload):
+    hash = {"sha1": "", "md5": "", "sha256": "", "size": ""}
+    fake_upload = Upload(
+        secrets.randbelow(1000),
+        "fake_folder",
+        secrets.randbelow(1000),
+        "",
+        "fake_upload",
+        "2020-12-30",
+        hash,
+    )
+    search_result = foss.search(
+        searchType=SearchTypes.ALLFILES, upload=fake_upload, filename="share",
+    )
+    assert not search_result
 
 
 @responses.activate

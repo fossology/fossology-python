@@ -1,4 +1,4 @@
-# Copyright 2019-2020 Siemens AG
+# Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import os
@@ -62,3 +62,14 @@ def test_report_error(foss_server: str, foss: Fossology, upload: Upload):
     assert f"Report generation for upload {upload.uploadname} failed" in str(
         excinfo.value
     )
+
+
+@responses.activate
+def test_download_report_error(foss_server: str, foss: Fossology):
+    report_id = secrets.randbelow(1000)
+    responses.add(
+        responses.GET, f"{foss_server}/api/v1/report/{report_id}", status=500,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.download_report(report_id)
+    assert f"Download of report {report_id} failed" in str(excinfo.value)
