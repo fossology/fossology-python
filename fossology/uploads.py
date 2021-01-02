@@ -58,7 +58,6 @@ class Uploads:
 
         if response.status_code == 200:
             logger.debug(f"Got details for upload {upload_id}")
-            logger.info(f"response.json is {response.json()}")
             return Upload.from_json(response.json())
 
         elif response.status_code == 403:
