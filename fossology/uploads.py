@@ -58,6 +58,7 @@ class Uploads:
 
         if response.status_code == 200:
             logger.debug(f"Got details for upload {upload_id}")
+            logger.info(f"response.json is {response.json()}")
             return Upload.from_json(response.json())
 
         elif response.status_code == 403:
@@ -83,6 +84,7 @@ class Uploads:
         file=None,
         vcs=None,
         url=None,
+        server=None,
         description=None,
         access_level=None,
         ignore_scm=False,
@@ -141,10 +143,25 @@ class Uploads:
                 access_level=AccessLevel.PUBLIC,
             )
 
+        :Example for a SERVER upload:
+
+        >>> server = {
+                "path": "/tmp/fossology-python",
+                "name": "fossology-python",
+            }
+        >>> server_upload = foss.upload_file(
+                foss.rootFolder,
+                server=server,
+                description="Upload from SERVER",
+                access_level=AccessLevel.PUBLIC,
+            )
+
+
         :param folder: the upload Fossology folder
         :param file: the local path of the file to be uploaded
         :param vcs: the VCS specification to upload from an online repository
         :param url: the URL specification to upload from a url
+        :param server: the SERVER specification to upload from fossology server
         :param description: description of the upload (default: None)
         :param access_level: access permissions of the upload (default: protected)
         :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: True)
@@ -154,6 +171,7 @@ class Uploads:
         :type file: string
         :type vcs: dict()
         :type url: dict()
+        :type server: dict()
         :type description: string
         :type access_level: AccessLevel
         :type ignore_scm: boolean
@@ -181,13 +199,16 @@ class Uploads:
                 response = self.session.post(
                     f"{self.api}/uploads", files=files, headers=headers
                 )
-        elif vcs or url:
+        elif vcs or url or server:
             if vcs:
                 headers["uploadType"] = "vcs"
                 data = json.dumps(vcs)
-            else:
+            elif url:
                 headers["uploadType"] = "url"
                 data = json.dumps(url)
+            elif server:
+                headers["uploadType"] = "server"
+                data = json.dumps(server)
             headers["Content-Type"] = "application/json"
             response = self.session.post(
                 f"{self.api}/uploads", data=data, headers=headers
@@ -202,8 +223,10 @@ class Uploads:
             source = f"{file}"
         elif vcs:
             source = vcs.get("vcsName")
-        else:
+        elif url:
             source = url.get("name")
+        elif server:
+            source = server.get("name")
 
         if response.status_code == 201:
             try:
