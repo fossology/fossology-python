@@ -246,6 +246,13 @@ class Uploads:
             )
             raise AuthorizationError(description, response)
 
+        elif server and response.status_code == 500:
+            description = (f"Upload {description} could not be performed; "
+            f"did you add a prefix for '{server['path']}' in Fossology config "
+            "variable 'Admin->Customize->Whitelist for serverupload'? "
+            f"Has fossy user read access to {server['path']}?")
+            raise FossologyApiError(description, response)
+
         else:
             description = f"Upload {description} could not be performed"
             raise FossologyApiError(description, response)
