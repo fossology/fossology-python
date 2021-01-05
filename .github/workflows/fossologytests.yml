@@ -5,7 +5,7 @@ on:
 
 jobs:
   test-latest:
-    name: Unit Tests
+    name: Integration Tests (latest Fossology)
     runs-on: ubuntu-latest
 
     container:
@@ -38,8 +38,8 @@ jobs:
           poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
  
 
-  test-3.9.0:
-    name: Unit Tests
+  test-last-release:
+    name: Integration Tests (Fossology 3.9.0)
     runs-on: ubuntu-latest
 
     container:
