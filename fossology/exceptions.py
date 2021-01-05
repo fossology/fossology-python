@@ -36,7 +36,7 @@ class AuthorizationError(Error):
 
 
 class FossologyApiError(Error):
-    """Error during a Fossology GET request"""
+    """Error during a Fossology request"""
 
     def __init__(self, description, response=None):
         try:
@@ -44,3 +44,10 @@ class FossologyApiError(Error):
         except JSONDecodeError:
             message = response.text
         self.message = f"{description}: {message} ({response.status_code})"
+
+
+class FossologyUnsupported(Error):
+    """Endpoint or option not supported"""
+
+    def __init__(self, description):
+        self.message = description

@@ -289,10 +289,13 @@ class Licenses(object):
     """
 
     def __init__(
-        self, filePath, findings, **kwargs,
+        self, filePath, findings=None, **kwargs,
     ):
         self.filepath = filePath
-        self.findings = Findings.from_json(findings)
+        if findings:
+            self.findings = Findings.from_json(findings)
+        else:
+            self.findings = findings
         self.additional_info = kwargs
 
     def __str__(self):
@@ -405,7 +408,9 @@ class Upload(object):
         description,
         uploadname,
         uploaddate,
-        hash,
+        filesize=None,
+        filesha1=None,
+        hash=None,
         **kwargs,
     ):
         self.folderid = folderid
@@ -414,14 +419,27 @@ class Upload(object):
         self.description = description
         self.uploadname = uploadname
         self.uploaddate = uploaddate
-        self.hash = Hash.from_json(hash)
+        if filesize and filesha1:
+            self.filesize = filesize
+            self.filesha1 = filesha1
+            self.hash = None
+        else:
+            self.filesize = None
+            self.filesha1 = None
+            self.hash = Hash.from_json(hash)
         self.additional_info = kwargs
 
     def __str__(self):
-        return (
-            f"Upload '{self.uploadname}' ({self.id}, {self.hash.size}B, {self.hash.sha1}) "
-            f"in folder {self.foldername} ({self.folderid})"
-        )
+        if self.filesize:
+            return (
+                f"Upload '{self.uploadname}' ({self.id}, {self.filesize}B, {self.filesha1}) "
+                f"in folder {self.foldername} ({self.folderid})"
+            )
+        else:
+            return (
+                f"Upload '{self.uploadname}' ({self.id}, {self.hash.size}B, {self.hash.sha1}) "
+                f"in folder {self.foldername} ({self.folderid})"
+            )
 
     @classmethod
     def from_json(cls, json_dict):
