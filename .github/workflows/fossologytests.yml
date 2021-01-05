@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  test:
+  test-latest:
     name: Unit Tests
     runs-on: ubuntu-latest
 
@@ -32,7 +32,40 @@ jobs:
         run: nmap fossology -p 80
       - name: Run tests
         run: |
+          export API_LATEST=true
           poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
           poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
  
+
+  test-3.9.0:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.9-slim
+
+    services:
+      fossology:
+        image: fossology/fossology:3.9.0
+        ports:
+          - 8081:80
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install host dependencies
+        run: |
+          apt-get -qq update
+          apt-get install -qq gcc git nmap
+          rm -rf /var/lib/apt/lists/*
+      - name: Install Python dependencies
+        run: |
+          pip install poetry
+          poetry install
+      - name: Check services
+        run: nmap fossology -p 80
+      - name: Run tests
+        run: |
+          poetry run coverage run --source=fossology -m pytest
+          poetry run coverage report -m
+          poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
