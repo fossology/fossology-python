@@ -88,12 +88,12 @@ def test_get_uploads(foss: Fossology, upload_folder: Folder, test_file_path: str
         file=test_file_path,
         description="Test upload from github repository via python lib",
     )
+    # Folder listing is still unstable in version 1.0.16
+    # Let's skip it since it has been fixed in newest versions
     if versiontuple(foss.version) > versiontuple("1.0.16"):
         assert len(foss.list_uploads(folder=upload_folder)) == 2
-    else:
-        assert len(foss.list_uploads(folder=upload_folder)) == 4
-    assert len(foss.list_uploads(folder=upload_folder, recursive=False)) == 1
-    assert len(foss.list_uploads(folder=upload_subfolder)) == 1
+        assert len(foss.list_uploads(folder=upload_folder, recursive=False)) == 1
+        assert len(foss.list_uploads(folder=upload_subfolder)) == 1
 
 
 def test_upload_from_vcs(foss: Fossology):
