@@ -144,7 +144,8 @@ The testsuite available in this project expects a running Fossology instance und
   .. code:: shell
 
     docker pull fossology/fossology
-    docker run --name fossology -p 80:80 fossology/fossology
+    tar xJf tests/files/base-files_11.tar.xz -C /tmp
+    docker run --mount src="/tmp",dst=/tmp,type=bind --name fossology -p 80:80 fossology/fossology
 
 - Start the complete test suite or a specific test case (and generate coverage report):
 
