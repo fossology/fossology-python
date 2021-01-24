@@ -24,10 +24,15 @@ from fossology.exceptions import (
     AuthenticationError,
     AuthorizationError,
     FossologyApiError,
+    FossologyUnsupported,
 )
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+def versiontuple(v):
+    return tuple(map(int, (v.split("."))))
 
 
 def search_headers(
@@ -345,6 +350,10 @@ class Fossology(Folders, Uploads, Jobs, Report):
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
         """
+        if versiontuple(self.version) <= versiontuple("1.0.16"):
+            description = f"Endpoint /filesearch is not supported by your Fossology API version {self.version}"
+            raise FossologyUnsupported(description)
+
         headers = {}
         if group:
             headers["groupName"] = group

@@ -5,22 +5,29 @@ import secrets
 import pytest
 import responses
 
-from fossology import Fossology
+from fossology import Fossology, versiontuple
 from fossology.obj import AccessLevel, Folder, Upload, SearchTypes
 from fossology.exceptions import AuthorizationError, FossologyApiError
 
 
-def test_upload_sha1(upload: Upload):
+def test_upload_sha1(foss: Fossology, upload: Upload):
     assert upload.uploadname == "base-files_11.tar.xz"
-    assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
-    assert str(upload) == (
-        f"Upload '{upload.uploadname}' ({upload.id}, {upload.hash.size}B, {upload.hash.sha1}) "
-        f"in folder {upload.foldername} ({upload.folderid})"
-    )
-    assert str(upload.hash) == (
-        f"File SHA1: {upload.hash.sha1} MD5 {upload.hash.md5} "
-        f"SH256 {upload.hash.sha256} Size {upload.hash.size}B"
-    )
+    if versiontuple(foss.version) > versiontuple("1.0.16"):
+        assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+        assert str(upload) == (
+            f"Upload '{upload.uploadname}' ({upload.id}, {upload.hash.size}B, {upload.hash.sha1}) "
+            f"in folder {upload.foldername} ({upload.folderid})"
+        )
+        assert str(upload.hash) == (
+            f"File SHA1: {upload.hash.sha1} MD5 {upload.hash.md5} "
+            f"SH256 {upload.hash.sha256} Size {upload.hash.size}B"
+        )
+    else:
+        assert upload.filesha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+        assert str(upload) == (
+            f"Upload '{upload.uploadname}' ({upload.id}, {upload.filesize}B, {upload.filesha1}) "
+            f"in folder {upload.foldername} ({upload.folderid})"
+        )
 
 
 def test_get_upload_unauthorized(foss: Fossology, upload: Upload):
@@ -81,9 +88,12 @@ def test_get_uploads(foss: Fossology, upload_folder: Folder, test_file_path: str
         file=test_file_path,
         description="Test upload from github repository via python lib",
     )
-    assert len(foss.list_uploads(folder=upload_folder)) == 2
-    assert len(foss.list_uploads(folder=upload_folder, recursive=False)) == 1
-    assert len(foss.list_uploads(folder=upload_subfolder)) == 1
+    # Folder listing is still unstable in version 1.0.16
+    # Let's skip it since it has been fixed in newest versions
+    if versiontuple(foss.version) > versiontuple("1.0.16"):
+        assert len(foss.list_uploads(folder=upload_folder)) == 2
+        assert len(foss.list_uploads(folder=upload_folder, recursive=False)) == 1
+        assert len(foss.list_uploads(folder=upload_subfolder)) == 1
 
 
 def test_upload_from_vcs(foss: Fossology):
@@ -235,7 +245,10 @@ def test_upload_licenses_containers(foss: Fossology, scanned_upload: Upload):
 
 def test_upload_licenses_unscheduled(foss: Fossology, scanned_upload: Upload):
     licenses = foss.upload_licenses(scanned_upload, agent="ojo")
-    assert not licenses[0].findings.conclusion
+    if versiontuple(foss.version) > versiontuple("1.0.16"):
+        assert not licenses[0].findings.conclusion
+    else:
+        assert not licenses[0].findings
 
 
 def test_upload_licenses_from_agent(foss: Fossology, scanned_upload: Upload):
@@ -253,15 +266,27 @@ def test_upload_licenses_nogroup(foss: Fossology, upload: Upload):
 
 
 def test_delete_unknown_upload(foss: Fossology):
-    upload = Upload(
-        foss.rootFolder,
-        "Root Folder",
-        secrets.randbelow(1000),
-        "",
-        "Non Upload",
-        "2020-05-05",
-        {"sha1": None, "md5": None, "sha256": None, "size": None},
-    )
+    if versiontuple(foss.version) > versiontuple("1.0.16"):
+        upload = Upload(
+            foss.rootFolder,
+            "Root Folder",
+            secrets.randbelow(1000),
+            "",
+            "Non Upload",
+            "2020-05-05",
+            hash={"sha1": None, "md5": None, "sha256": None, "size": None},
+        )
+    else:
+        upload = Upload(
+            foss.rootFolder,
+            "Root Folder",
+            secrets.randbelow(1000),
+            "",
+            "Non Upload",
+            "2020-05-05",
+            filesize="1024",
+            filesha1="597d209fd962f401866f12db9fa1f7301aee15a9",
+        )
     with pytest.raises(FossologyApiError):
         foss.delete_upload(upload)
 

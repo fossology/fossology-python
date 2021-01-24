@@ -208,10 +208,16 @@ class Uploads:
         if response.status_code == 201:
             try:
                 upload = self.detail_upload(response.json()["message"], wait_time)
-                logger.info(
-                    f"Upload {upload.uploadname} ({upload.hash.size}) "
-                    f"has been uploaded on {upload.uploaddate}"
-                )
+                if upload.filesize:
+                    logger.info(
+                        f"Upload {upload.uploadname} ({upload.filesize}) "
+                        f"has been uploaded on {upload.uploaddate}"
+                    )
+                else:
+                    logger.info(
+                        f"Upload {upload.uploadname} ({upload.hash.size}) "
+                        f"has been uploaded on {upload.uploaddate}"
+                    )
                 return upload
             except TryAgain:
                 description = f"Upload of {source} failed"
