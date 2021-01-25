@@ -161,6 +161,23 @@ def test_upload_from_url(foss: Fossology):
     foss.delete_upload(url_upload)
 
 
+def test_upload_from_server(foss: Fossology):
+    server = {
+        "path": "/tmp/base-files-11",
+        "name": "base-files-11",
+    }
+    server_upload = foss.upload_file(
+        foss.rootFolder,
+        server=server,
+        description="Test upload from server via python lib",
+        access_level=AccessLevel.PUBLIC,
+    )
+    assert server_upload.uploadname == server["name"]
+
+    # Cleanup
+    foss.delete_upload(server_upload)
+
+
 def test_empty_upload(foss: Fossology):
     empty_upload = foss.upload_file(
         foss.rootFolder,
