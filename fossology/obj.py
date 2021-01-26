@@ -253,6 +253,7 @@ class Findings(object):
 
     :param scanner: the list of licenses found by the specified scanners
     :param conclusion: the concluded license by user of for a package
+    :param copyright: the copyrights found in the package
     :param kwargs: handle any other finding information provided by the fossology instance
     :type scanner: list
     :type conclusion: list
@@ -260,14 +261,18 @@ class Findings(object):
     """
 
     def __init__(
-        self, scanner, conclusion, **kwargs,
+        self, scanner, conclusion, copyright=None, **kwargs,
     ):
         self.scanner = scanner
         self.conclusion = conclusion
+        self.copyright = copyright
         self.additional_info = kwargs
 
     def __str__(self):
-        return f"Licenses found by scanners: {self.scanner}, concluded licenses: {self.conclusion}"
+        return (
+            f"Licenses found by scanners: {self.scanner}, concluded licenses: {self.conclusion}, "
+            f"{len(self.copyright)} copyrights"
+        )
 
     @classmethod
     def from_json(cls, json_dict):

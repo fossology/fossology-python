@@ -65,8 +65,7 @@ def test_upload_nogroup(foss: Fossology, upload_folder: Folder, test_file_path: 
         in str(excinfo.value)
     )
 
-
-def test_get_uploads_nogroup(foss: Fossology):
+    # Get get upload unknown group
     with pytest.raises(AuthorizationError) as excinfo:
         foss.list_uploads(group="test")
     assert "Retrieving list of uploads for group test not authorized" in str(
@@ -222,8 +221,7 @@ def test_move_copy_upload(foss: Fossology, upload: Upload, move_folder: Folder):
             test_upload = upload
     assert test_upload
 
-
-def test_move_copy_arbitrary_folder(foss: Fossology, upload: Upload):
+    # To arbitrary folder
     non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
     with pytest.raises(AuthorizationError):
         foss.move_upload(upload, non_folder)
@@ -240,49 +238,40 @@ def test_upload_summary(foss: Fossology, scanned_upload: Upload):
         f" main license = {summary.mainLicense}"
     )
 
-
-def test_upload_summary_nogroup(foss: Fossology, upload: Upload):
+    # Unknown group
     with pytest.raises(AuthorizationError) as excinfo:
-        foss.upload_summary(upload, group="test")
+        foss.upload_summary(scanned_upload, group="test")
     assert (
-        f"Getting summary of upload {upload.id} for group test not authorized"
+        f"Getting summary of upload {scanned_upload.id} for group test not authorized"
         in str(excinfo.value)
     )
 
 
 def test_upload_licenses(foss: Fossology, scanned_upload: Upload):
+    # Default agent "nomos"
     licenses = foss.upload_licenses(scanned_upload)
     assert len(licenses) == 56
-
-
-def test_upload_licenses_containers(foss: Fossology, scanned_upload: Upload):
     licenses = foss.upload_licenses(scanned_upload, containers=True)
     assert len(licenses) == 56
 
-
-def test_upload_licenses_unscheduled(foss: Fossology, scanned_upload: Upload):
+    # Specific agent "ojo"
     licenses = foss.upload_licenses(scanned_upload, agent="ojo")
-    if versiontuple(foss.version) > versiontuple("1.0.16"):
-        assert not licenses[0].findings.conclusion
-    else:
-        assert not licenses[0].findings
+    assert len(licenses) == 9
 
-
-def test_upload_licenses_from_agent(foss: Fossology, scanned_upload: Upload):
+    # Specific agent "monk"
     licenses = foss.upload_licenses(scanned_upload, agent="monk")
     assert len(licenses) == 23
 
-
-def test_upload_licenses_nogroup(foss: Fossology, upload: Upload):
+    # Unknown group
     with pytest.raises(AuthorizationError) as excinfo:
-        foss.upload_licenses(upload, group="test")
+        foss.upload_licenses(scanned_upload, group="test")
     assert (
-        f"Getting license for upload {upload.id} for group test not authorized"
+        f"Getting license for upload {scanned_upload.id} for group test not authorized"
         in str(excinfo.value)
     )
 
 
-def test_delete_unknown_upload(foss: Fossology):
+def test_delete_unknown_upload_unknown_group(foss: Fossology):
     if versiontuple(foss.version) > versiontuple("1.0.16"):
         upload = Upload(
             foss.rootFolder,
@@ -307,8 +296,6 @@ def test_delete_unknown_upload(foss: Fossology):
     with pytest.raises(FossologyApiError):
         foss.delete_upload(upload)
 
-
-def test_delete_upload_nogroup(foss: Fossology, upload: Upload):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.delete_upload(upload, group="test")
     assert f"Deleting upload {upload.id} for group test not authorized" in str(
