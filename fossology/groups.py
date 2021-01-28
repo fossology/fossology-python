@@ -1,8 +1,8 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
-from fossology import versiontuple
 import logging
+import fossology
 from typing import List
 
 from fossology.obj import Group
@@ -24,7 +24,7 @@ class Groups:
         :rtype: list()
         :raises FossologyApiError: if the REST call failed
         """
-        if versiontuple(self.version) < versiontuple("1.2.1"):
+        if fossology.versiontuple(self.version) < fossology.versiontuple("1.2.1"):
             description = f"Endpoint /groups is not supported by your Fossology API version {self.version}"
             raise FossologyUnsupported(description)
 
@@ -49,7 +49,7 @@ class Groups:
         :type name: str
         :raises FossologyApiError: if the REST call failed
         """
-        if versiontuple(self.version) < versiontuple("1.2.1"):
+        if fossology.versiontuple(self.version) < fossology.versiontuple("1.2.1"):
             description = f"Endpoint /groups is not supported by your Fossology API version {self.version}"
             raise FossologyUnsupported(description)
 

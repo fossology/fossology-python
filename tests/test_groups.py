@@ -4,15 +4,15 @@
 import secrets
 import pytest
 import responses
+import fossology
 
-from fossology import Fossology, versiontuple
 from fossology.obj import Group
 from fossology.exceptions import FossologyApiError, FossologyUnsupported
 
 
 @responses.activate
-def test_list_groups_error(foss_server: str, foss: Fossology):
-    if versiontuple(foss.version) < versiontuple("1.2.1"):
+def test_list_groups_error(foss_server: str, foss: fossology.Fossology):
+    if fossology.versiontuple(foss.version) < fossology.versiontuple("1.2.1"):
         with pytest.raises(FossologyUnsupported) as excinfo:
             foss.list_groups()
             assert (
@@ -23,11 +23,13 @@ def test_list_groups_error(foss_server: str, foss: Fossology):
         responses.add(responses.GET, f"{foss_server}/api/v1/groups", status=500)
         with pytest.raises(FossologyApiError) as excinfo:
             foss.list_groups()
-        assert f"Unable to get a list of groups for {foss.user.name}" in str(excinfo.value)
+        assert f"Unable to get a list of groups for {foss.user.name}" in str(
+            excinfo.value
+        )
 
 
-def test_create_group(foss: Fossology):
-    if versiontuple(foss.version) < versiontuple("1.2.1"):
+def test_create_group(foss: fossology.Fossology):
+    if fossology.versiontuple(foss.version) < fossology.versiontuple("1.2.1"):
         with pytest.raises(FossologyUnsupported) as excinfo:
             foss.create_group("FossGroupTest")
             assert (

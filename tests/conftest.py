@@ -5,9 +5,9 @@ import time
 import pytest
 import secrets
 import logging
+import fossology
 
 from typing import Dict
-from fossology import Fossology, fossology_token
 from fossology.obj import Folder, TokenScope, AccessLevel, Agents, Upload
 from fossology.exceptions import FossologyApiError, AuthenticationError
 
@@ -97,15 +97,15 @@ def foss_user(foss_user_agents) -> Dict:
 
 @pytest.fixture(scope="session")
 def foss_token(foss_server: str) -> str:
-    return fossology_token(
+    return fossology.fossology_token(
         foss_server, "fossy", "fossy", secrets.token_urlsafe(8), TokenScope.WRITE
     )
 
 
 @pytest.fixture(scope="session")
-def foss(foss_server: str, foss_token: str, foss_agents: Agents) -> Fossology:
+def foss(foss_server: str, foss_token: str, foss_agents: Agents) -> fossology.Fossology:
     try:
-        foss = Fossology(foss_server, foss_token, "fossy")
+        foss = fossology.Fossology(foss_server, foss_token, "fossy")
     except (FossologyApiError, AuthenticationError) as error:
         exit(error.message)
 
@@ -121,7 +121,7 @@ def test_file_path() -> str:
 
 
 @pytest.fixture(scope="session")
-def upload_folder(foss: Fossology) -> Folder:
+def upload_folder(foss: fossology.Fossology) -> Folder:
     name = "FossPythonTestUploads"
     desc = "Created via the Fossology Python API"
     folder = foss.create_folder(foss.rootFolder, name, description=desc)
@@ -130,7 +130,7 @@ def upload_folder(foss: Fossology) -> Folder:
 
 
 @pytest.fixture(scope="session")
-def move_folder(foss: Fossology) -> Folder:
+def move_folder(foss: fossology.Fossology) -> Folder:
     folder = foss.create_folder(
         foss.rootFolder, "MoveUploadTest", "Test move upload function"
     )
@@ -139,7 +139,7 @@ def move_folder(foss: Fossology) -> Folder:
 
 
 @pytest.fixture(scope="session")
-def upload(foss: Fossology, test_file_path: str) -> Upload:
+def upload(foss: fossology.Fossology, test_file_path: str) -> Upload:
     test_upload = foss.upload_file(
         foss.rootFolder,
         file=test_file_path,
@@ -153,7 +153,7 @@ def upload(foss: Fossology, test_file_path: str) -> Upload:
 
 @pytest.fixture(scope="session")
 def scanned_upload(
-    foss: Fossology, test_file_path: str, foss_schedule_agents: Dict
+    foss: fossology.Fossology, test_file_path: str, foss_schedule_agents: Dict
 ) -> Upload:
     test_upload = foss.upload_file(
         foss.rootFolder,
