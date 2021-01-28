@@ -17,6 +17,7 @@ from fossology.obj import (
     get_options,
 )
 from fossology.folders import Folders
+from fossology.groups import Groups
 from fossology.uploads import Uploads
 from fossology.jobs import Jobs
 from fossology.report import Report
@@ -123,7 +124,7 @@ def fossology_token(
         exit(f"Server {url} does not seem to be running or is unreachable: {error}")
 
 
-class Fossology(Folders, Uploads, Jobs, Report):
+class Fossology(Folders, Groups, Uploads, Jobs, Report):
 
     """Main Fossology API class
 

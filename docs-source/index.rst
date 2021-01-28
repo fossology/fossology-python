@@ -9,6 +9,7 @@ Welcome to fossology's documentation!
 
    fossology
    folders
+   groups
    uploads
    jobs
    report
