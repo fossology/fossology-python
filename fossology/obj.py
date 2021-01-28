@@ -279,6 +279,33 @@ class Findings(object):
         return cls(**json_dict)
 
 
+class Group(object):
+
+    """FOSSology group.
+
+    Represents a FOSSology group.
+
+    :param id: the ID of the group
+    :param name: the name of the group
+    :param kwargs: handle any other folder information provided by the fossology instance
+    :type id: int
+    :type name: string
+    :type kwargs: key word argument
+    """
+
+    def __init__(self, id, name, **kwargs):
+        self.id = id
+        self.name = name
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Group {self.name} ({self.id})"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 class Licenses(object):
 
     """FOSSology file license findings.
