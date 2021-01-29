@@ -306,6 +306,42 @@ class Group(object):
         return cls(**json_dict)
 
 
+class License(object):
+
+    """FOSSology license.
+
+    Represents a FOSSology license.
+
+    :param id: the ID of the license
+    :param shortName: the short name of the license
+    :param fullName: the full name of the license
+    :param text: the text of the license
+    :param risk: the risk level of the license
+    :param kwargs: handle any other folder information provided by the fossology instance
+    :type id: int
+    :type shortName: string
+    :type fullName: string
+    :type text: string
+    :type risk: int
+    :type kwargs: key word argument
+    """
+
+    def __init__(self, id, shortName, fullName, text, risk, **kwargs):
+        self.id = id
+        self.shortName = shortName
+        self.fullName = fullName
+        self.text = text
+        self.risk = risk
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"License {self.fullName} - {self.shortName} ({self.id}) with risk level {self.risk}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 class Licenses(object):
 
     """FOSSology file license findings.
