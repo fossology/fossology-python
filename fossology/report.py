@@ -1,13 +1,14 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
+import logging
 import re
 import time
-import logging
 from typing import Tuple
 
-from tenacity import retry, TryAgain, stop_after_attempt, retry_if_exception_type
-from fossology.exceptions import FossologyApiError, AuthorizationError
+from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
+
+from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import ReportFormat, Upload, get_options
 
 logger = logging.getLogger(__name__)

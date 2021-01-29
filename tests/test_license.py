@@ -3,10 +3,10 @@
 
 import pytest
 import responses
-import fossology
 
-from fossology.obj import License
+import fossology
 from fossology.exceptions import FossologyApiError, FossologyUnsupported
+from fossology.obj import License
 
 short = "GPL-2.0+"
 

@@ -2,12 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 import json
-import time
 import logging
+import time
 
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, TryAgain
-from fossology.obj import Upload, Summary, Licenses, get_options
+from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
+
 from fossology.exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import Licenses, Summary, Upload, get_options
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

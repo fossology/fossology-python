@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 import logging
-import fossology
 
-from fossology.obj import License
+import fossology
 from fossology.exceptions import FossologyApiError, FossologyUnsupported
+from fossology.obj import License
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

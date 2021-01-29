@@ -2,12 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 import secrets
+
 import pytest
 import responses
-import fossology
 
-from fossology.obj import Group
+import fossology
 from fossology.exceptions import FossologyApiError, FossologyUnsupported
+from fossology.obj import Group
 
 
 @responses.activate

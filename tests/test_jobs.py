@@ -2,13 +2,14 @@
 # SPDX-License-Identifier: MIT
 
 import secrets
+from typing import Dict
+
 import pytest
 import responses
 
-from typing import Dict
 from fossology import Fossology
-from fossology.obj import Upload
 from fossology.exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import Upload
 
 
 def test_unpack_jobs(foss: Fossology, upload: Upload):
