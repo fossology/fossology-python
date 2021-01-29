@@ -1,14 +1,15 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
-import time
-import pytest
 import secrets
+import time
+
+import pytest
 import responses
 
 from fossology import Fossology
-from fossology.obj import Folder
 from fossology.exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import Folder
 
 
 @responses.activate

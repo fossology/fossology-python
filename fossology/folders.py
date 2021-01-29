@@ -3,8 +3,8 @@
 
 import logging
 
-from fossology.obj import Folder, get_options
 from fossology.exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import Folder, get_options
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

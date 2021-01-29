@@ -1,16 +1,17 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
-import os
-import pytest
-import secrets
 import mimetypes
+import os
+import secrets
+from pathlib import Path
+
+import pytest
 import responses
 
-from pathlib import Path
 from fossology import Fossology
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import Upload, ReportFormat
+from fossology.obj import ReportFormat, Upload
 
 
 def test_report_nogroup(foss: Fossology, upload: Upload):

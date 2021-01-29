@@ -1,33 +1,34 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
-import re
 import logging
-import requests
+import re
 from datetime import date, timedelta
-
 from typing import Dict, List
-from fossology.obj import (
-    Agents,
-    Upload,
-    User,
-    File,
-    TokenScope,
-    SearchTypes,
-    get_options,
-)
-from fossology.folders import Folders
-from fossology.groups import Groups
-from fossology.license import LicenseEndpoint
-from fossology.uploads import Uploads
-from fossology.jobs import Jobs
-from fossology.report import Report
+
+import requests
+
 from fossology.exceptions import (
     AuthenticationError,
     AuthorizationError,
     FossologyApiError,
     FossologyUnsupported,
 )
+from fossology.folders import Folders
+from fossology.groups import Groups
+from fossology.jobs import Jobs
+from fossology.license import LicenseEndpoint
+from fossology.obj import (
+    Agents,
+    File,
+    SearchTypes,
+    TokenScope,
+    Upload,
+    User,
+    get_options,
+)
+from fossology.report import Report
+from fossology.uploads import Uploads
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

@@ -1,16 +1,17 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
-import pytest
-import secrets
 import logging
+import secrets
+from datetime import date, timedelta
+from unittest.mock import Mock
+
+import pytest
 import requests
 import responses
 
-from datetime import date, timedelta
-from unittest.mock import Mock
 from fossology import Fossology, fossology_token
-from fossology.exceptions import FossologyApiError, AuthenticationError
+from fossology.exceptions import AuthenticationError, FossologyApiError
 
 logger = logging.getLogger("fossology-tests")
 console = logging.StreamHandler()

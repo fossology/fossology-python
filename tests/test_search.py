@@ -2,16 +2,17 @@
 # SPDX-License-Identifier: MIT
 
 import secrets
+
 import pytest
 import responses
 
 from fossology import Fossology, versiontuple
-from fossology.obj import SearchTypes, Upload
 from fossology.exceptions import (
     AuthorizationError,
     FossologyApiError,
     FossologyUnsupported,
 )
+from fossology.obj import SearchTypes, Upload
 
 
 def test_search_nogroup(foss: Fossology):

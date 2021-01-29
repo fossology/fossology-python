@@ -2,12 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 import secrets
+
 import pytest
 import responses
 
 from fossology import Fossology, versiontuple
-from fossology.obj import AccessLevel, Folder, Upload, SearchTypes
 from fossology.exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import AccessLevel, Folder, SearchTypes, Upload
 
 
 def test_upload_sha1(foss: Fossology, upload: Upload):

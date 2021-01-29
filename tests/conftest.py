@@ -1,15 +1,16 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
-import time
-import pytest
-import secrets
 import logging
-import fossology
-
+import secrets
+import time
 from typing import Dict
-from fossology.obj import Folder, TokenScope, AccessLevel, Agents, Upload
-from fossology.exceptions import FossologyApiError, AuthenticationError
+
+import pytest
+
+import fossology
+from fossology.exceptions import AuthenticationError, FossologyApiError
+from fossology.obj import AccessLevel, Agents, Folder, TokenScope, Upload
 
 logger = logging.getLogger("fossology")
 console = logging.StreamHandler()

@@ -33,3 +33,5 @@ jobs:
         run: poetry run black . --check
       - name: Lint with flake8
         run: poetry run flake8 .
+      - name: Sort imports with isort
+        run: poetry run isort .
