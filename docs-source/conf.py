@@ -9,13 +9,12 @@
 import os
 import sys
 
-sys.path.append("../")
-sys.path.append(os.path.dirname(__file__))
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath("../.."))
+current_dir = os.path.dirname(__file__)
+target_dir = os.path.abspath(os.path.join(current_dir, "../"))
+sys.path.insert(0, target_dir)
 
 # -- Project information -----------------------------------------------------
 
@@ -23,7 +22,7 @@ project = "fossology"
 copyright = "2021, Siemens AG"
 
 # The full version, including major/minor/patch tags
-release = "1.2.0"
+release = "1.2.1"
 
 
 # -- General configuration ---------------------------------------------------
