@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to fossology’s documentation! &#8212; fossology 1.0.0 documentation</title>
+    <title>Welcome to fossology’s documentation! &#8212; fossology 1.2.1 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -46,6 +46,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groups.html">Fossology Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Fossology License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
@@ -103,7 +105,7 @@
 <p>A simple wrapper for the Fossology REST API.</p>
 <p>See <a class="reference external" href="https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml">the OpenAPI specification</a> used to implement this library.</p>
 <blockquote>
-<div><p>Compatible with API version 1.1.1</p>
+<div><p>Compatible from API version 1.0.16 up to 1.2.1</p>
 </div></blockquote>
 </div>
 <div class="section" id="documentation">
@@ -213,7 +215,8 @@ git push origin vx.x.x
 <ul>
 <li><p>Use the latest Fossology container from <a class="reference external" href="https://hub.docker.com/r/fossology/fossology">Docker hub</a>:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker pull fossology/fossology
-docker run --name fossology -p <span class="m">80</span>:80 fossology/fossology
+tar xJf tests/files/base-files_11.tar.xz -C /tmp
+docker run --mount <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/tmp&quot;</span>,dst<span class="o">=</span>/tmp,type<span class="o">=</span><span class="nb">bind</span> --name fossology -p <span class="m">80</span>:80 fossology/fossology
 </pre></div>
 </div>
 </li>
@@ -241,7 +244,7 @@ poetry run coverage html
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

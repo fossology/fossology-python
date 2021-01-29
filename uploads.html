@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fossology Uploads &#8212; fossology 1.0.0 documentation</title>
+    <title>Fossology Uploads &#8212; fossology 1.2.1 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fossology Jobs" href="jobs.html" />
-    <link rel="prev" title="Fossology Folders" href="folders.html" />
+    <link rel="prev" title="Fossology License" href="license.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -47,6 +47,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groups.html">Fossology Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Fossology License</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Uploads</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
@@ -68,7 +70,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="folders.html" title="previous chapter">Fossology Folders</a></li>
+      <li>Previous: <a href="license.html" title="previous chapter">Fossology License</a></li>
       <li>Next: <a href="jobs.html" title="next chapter">Fossology Jobs</a></li>
   </ul></li>
 </ul>
@@ -243,7 +245,7 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 
 <dl class="py method">
 <dt id="fossology.uploads.Uploads.upload_file">
-<code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vcs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">access_level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ignore_scm</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wait_time</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span></em>, <em class="sig-param"><span class="n">file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vcs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">url</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">server</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">access_level</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ignore_scm</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wait_time</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.uploads.Uploads.upload_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload a package to FOSSology</p>
 <p>API Endpoint: POST /uploads</p>
 <p>Perform a file, VCS or URL upload and get information about the upload using <a class="reference internal" href="#fossology.uploads.Uploads.detail_upload" title="fossology.uploads.Uploads.detail_upload"><code class="xref py py-func docutils literal notranslate"><span class="pre">detail_upload()</span></code></a> and passing the <code class="docutils literal notranslate"><span class="pre">wait_time</span></code> argument.</p>
@@ -302,12 +304,29 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 </pre></div>
 </div>
 <dl class="field-list simple">
+<dt class="field-odd">Example for a SERVER upload</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">server</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">        &quot;path&quot;: &quot;/tmp/fossology-python&quot;,</span>
+<span class="go">        &quot;name&quot;: &quot;fossology-python&quot;,</span>
+<span class="go">    }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">server_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+<span class="go">        foss.rootFolder,</span>
+<span class="go">        server=server,</span>
+<span class="go">        description=&quot;Upload from SERVER&quot;,</span>
+<span class="go">        access_level=AccessLevel.PUBLIC,</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a>) – the upload Fossology folder</p></li>
 <li><p><strong>file</strong> (<em>string</em>) – the local path of the file to be uploaded</p></li>
 <li><p><strong>vcs</strong> (<em>dict</em><em>(</em><em>)</em>) – the VCS specification to upload from an online repository</p></li>
 <li><p><strong>url</strong> (<em>dict</em><em>(</em><em>)</em>) – the URL specification to upload from a url</p></li>
+<li><p><strong>server</strong> (<em>dict</em><em>(</em><em>)</em>) – the SERVER specification to upload from fossology server</p></li>
 <li><p><strong>description</strong> (<em>string</em>) – description of the upload (default: None)</p></li>
 <li><p><strong>access_level</strong> (<a class="reference internal" href="obj.html#fossology.obj.AccessLevel" title="fossology.obj.AccessLevel"><em>AccessLevel</em></a>) – access permissions of the upload (default: protected)</p></li>
 <li><p><strong>ignore_scm</strong> (<em>boolean</em>) – ignore SCM files (Git, SVN, TFS) (default: True)</p></li>
@@ -405,7 +424,7 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
