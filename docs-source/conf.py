@@ -22,7 +22,7 @@ project = "fossology"
 copyright = "2021, Siemens AG"
 
 # The full version, including major/minor/patch tags
-release = "1.2.1"
+release = "1.3.0"
 
 
 # -- General configuration ---------------------------------------------------

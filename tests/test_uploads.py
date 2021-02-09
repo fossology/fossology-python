@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import secrets
+import time
 
 import pytest
 import responses
@@ -91,9 +92,9 @@ def test_get_uploads(foss: Fossology, upload_folder: Folder, test_file_path: str
     # Folder listing is still unstable in version 1.0.16
     # Let's skip it since it has been fixed in newest versions
     if versiontuple(foss.version) > versiontuple("1.0.16"):
-        assert len(foss.list_uploads(folder=upload_folder)) == 2
-        assert len(foss.list_uploads(folder=upload_folder, recursive=False)) == 1
-        assert len(foss.list_uploads(folder=upload_subfolder)) == 1
+        assert len(foss.list_uploads(folder=upload_folder)[0]) == 2
+        assert len(foss.list_uploads(folder=upload_folder, recursive=False)[0]) == 1
+        assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
 
 
 def test_upload_from_vcs(foss: Fossology):
@@ -215,7 +216,7 @@ def test_move_copy_upload(foss: Fossology, upload: Upload, move_folder: Folder):
     assert moved_upload.folderid == move_folder.id
 
     foss.copy_upload(moved_upload, foss.rootFolder)
-    list_uploads = foss.list_uploads()
+    list_uploads, _ = foss.list_uploads()
     test_upload = None
     for upload in list_uploads:
         if upload.folderid == foss.rootFolder.id:
@@ -302,3 +303,37 @@ def test_delete_unknown_upload_unknown_group(foss: Fossology):
     assert f"Deleting upload {upload.id} for group test not authorized" in str(
         excinfo.value
     )
+
+
+def test_paginated_list_uploads(foss: Fossology, upload: Upload, test_file_path: str):
+    if versiontuple(foss.version) < versiontuple("1.1.1"):
+        # Upload pagination not available yet
+        return
+    # Add a second upload
+    second_upload = foss.upload_file(
+        foss.rootFolder,
+        file=test_file_path,
+        description="Test second upload via fossology-python lib",
+        access_level=AccessLevel.PUBLIC,
+    )
+    time.sleep(3)
+    uploads, _ = foss.list_uploads(page_size=1, page=1)
+    assert len(uploads) == 1
+
+    uploads, _ = foss.list_uploads(page_size=1, page=2)
+    assert len(uploads) == 1
+
+    uploads, _ = foss.list_uploads(page_size=2, page=1)
+    assert len(uploads) == 2
+
+    uploads, _ = foss.list_uploads(page_size=1, all_pages=True)
+    num_known_uploads = 0
+    for up in uploads:
+        if up.description in (
+            "Test upload via fossology-python lib",
+            "Test second upload via fossology-python lib",
+        ):
+            num_known_uploads += 1
+    assert num_known_uploads >= 2
+
+    foss.delete_upload(second_upload)

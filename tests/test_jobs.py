@@ -13,7 +13,7 @@ from fossology.obj import Upload
 
 
 def test_unpack_jobs(foss: Fossology, upload: Upload):
-    jobs = foss.list_jobs(upload=upload)
+    jobs, _ = foss.list_jobs(upload=upload)
     assert len(jobs) == 1
 
 
@@ -28,7 +28,7 @@ def test_schedule_jobs(foss: Fossology, upload: Upload, foss_schedule_agents: Di
     job = foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
     assert job.name == upload.uploadname
 
-    jobs = foss.list_jobs(upload=upload)
+    jobs, _ = foss.list_jobs(upload=upload)
     assert len(jobs) == 2
 
     job = foss.detail_job(jobs[1].id, wait=True, timeout=30)
@@ -39,7 +39,7 @@ def test_schedule_jobs(foss: Fossology, upload: Upload, foss_schedule_agents: Di
     )
 
     # Use pagination
-    jobs = foss.list_jobs(upload=upload, page_size=1, page=2)
+    jobs, _ = foss.list_jobs(upload=upload, page_size=1, page=2)
     assert len(jobs) == 1
     assert jobs[0].id == job.id
 
@@ -59,7 +59,7 @@ def test_list_jobs_error(foss_server: str, foss: Fossology):
     responses.add(responses.GET, f"{foss_server}/api/v1/jobs", status=404)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.list_jobs()
-    assert "Getting the list of jobs failed" in str(excinfo.value)
+    assert "Unable to retrieve the list of jobs from page 1" in str(excinfo.value)
 
 
 @responses.activate
@@ -73,3 +73,27 @@ def test_detail_job_error(foss_server: str, foss: Fossology):
     with pytest.raises(FossologyApiError) as excinfo:
         foss.detail_job(job_id)
     assert f"Error while getting details for job {job_id}" in str(excinfo.value)
+
+
+def test_paginated_list_jobs(foss: Fossology, scanned_upload: Upload):
+    jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=1, page=1)
+    print(jobs, total_pages)
+    assert len(jobs) == 1
+    assert total_pages == 3
+
+    jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=1, page=2)
+    print(jobs, total_pages)
+    assert len(jobs) == 1
+    assert total_pages == 3
+
+    jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=2, page=1)
+    print(jobs, total_pages)
+    assert len(jobs) == 2
+    assert total_pages == 2
+
+    jobs, total_pages = foss.list_jobs(
+        upload=scanned_upload, page_size=1, all_pages=True
+    )
+    assert len(jobs) == 2
+    # FIXME: total number of pages should be 2
+    # assert total_pages == 3

@@ -15,36 +15,56 @@ logger.setLevel(logging.DEBUG)
 class Jobs:
     """Class dedicated to all "jobs" related endpoints"""
 
-    def list_jobs(self, page_size=20, page=1, upload=None):
+    def list_jobs(self, upload=None, page_size=100, page=1, all_pages=False):
         """Get all available jobs
 
         API Endpoint: GET /jobs
 
         The answer is limited to the first page of 20 results by default
 
+        :param upload: list only jobs of the given upload (default: None)
         :param page_size: the maximum number of results per page
         :param page: the number of pages to be retrieved
-        :param upload: list only jobs of the given upload (default: None)
-        :type page_size: int (default: 20)
-        :type page: int (default: 1)
+        :param all_pages: get all jobs (default: False)
         :type upload: Upload
-        :return: the jobs data
-        :rtype: list of Job
+        :type page_size: int (default: 100)
+        :type page: int (default: 1)
+        :type all_pages: boolean
+        :return: a tuple containing the list of jobs and the total number of pages
+        :rtype: Tuple(list of Job, int)
         :raises FossologyApiError: if the REST call failed
         """
         params = {}
-        headers = {"limit": str(page_size), "page": str(page)}
+        headers = {"limit": str(page_size)}
         if upload:
             params["upload"] = upload.id
-        response = self.session.get(f"{self.api}/jobs", params=params, headers=headers)
-        if response.status_code == 200:
-            jobs_list = list()
-            for job in response.json():
-                jobs_list.append(Job.from_json(job))
-            return jobs_list
+
+        jobs_list = list()
+        if all_pages:
+            # will be reset after the total number of pages has been retrieved from the API
+            x_total_pages = 2
         else:
-            description = "Getting the list of jobs failed"
-            raise FossologyApiError(description, response)
+            x_total_pages = page
+        while page <= x_total_pages:
+            headers["page"] = str(page)
+            response = self.session.get(
+                f"{self.api}/jobs", params=params, headers=headers
+            )
+            if response.status_code == 200:
+                for job in response.json():
+                    jobs_list.append(Job.from_json(job))
+                x_total_pages = int(response.headers.get("X-TOTAL-PAGES", 0))
+                if not all_pages or x_total_pages == 0:
+                    logger.info(
+                        f"Retrieved page {page} of jobs, {x_total_pages} pages are in total available"
+                    )
+                    return jobs_list, x_total_pages
+                page += 1
+            else:
+                description = f"Unable to retrieve the list of jobs from page {page}"
+                raise FossologyApiError(description, response)
+        logger.info(f"Retrieved all {x_total_pages} pages of jobs")
+        return jobs_list, x_total_pages
 
     def detail_job(self, job_id, wait=False, timeout=30):
         """Get detailled information about a job
