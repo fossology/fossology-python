@@ -403,7 +403,13 @@ class Uploads:
             raise FossologyApiError(description, response)
 
     def list_uploads(
-        self, folder=None, group=None, recursive=True, page_size=20, page=1
+        self,
+        folder=None,
+        group=None,
+        recursive=True,
+        page_size=100,
+        page=1,
+        all_pages=False,
     ):
         """Get all uploads available to the registered user
 
@@ -412,20 +418,22 @@ class Uploads:
         :param folder: only list uploads from the given folder
         :param group: list uploads from a specific group (not only your own uploads) (default: None)
         :param recursive: wether to list uploads from children folders or not (default: True)
-        :param page_size: limit the number of uploads per page (default: 20)
+        :param page_size: limit the number of uploads per page (default: 100)
         :param page: the number of the page to fetch uploads from (default: 1)
+        :param all_pages: get all uploads (default: False)
         :type folder: Folder
         :type group: string
         :type recursive: boolean
         :type page_size: int
         :type page: int
-        :return: a list of uploads
-        :rtype: list of Upload
+        :type all_pages: boolean
+        :return: a tuple containing the list of uploads and the total number of pages
+        :rtype: Tuple(list of Upload, int)
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
         """
         params = {}
-        headers = {"limit": str(page_size), "page": str(page)}
+        headers = {"limit": str(page_size)}
         if group:
             headers["groupName"] = group
         if folder:
@@ -433,28 +441,37 @@ class Uploads:
         if not recursive:
             params["recursive"] = "false"
 
-        response = self.session.get(
-            f"{self.api}/uploads", headers=headers, params=params
-        )
-
-        if response.status_code == 200:
-            uploads_list = list()
-            for upload in response.json():
-                uploads_list.append(Upload.from_json(upload))
-            logger.info(
-                f"Retrieved page {page} of uploads, {response.headers.get('X-TOTAL-PAGES', 'Unknown')} pages are in total available"
-            )
-            return uploads_list
-
-        elif response.status_code == 403:
-            description = (
-                f"Retrieving list of uploads {get_options(group, folder)}not authorized"
-            )
-            raise AuthorizationError(description, response)
-
+        uploads_list = list()
+        if all_pages:
+            # will be reset after the total number of pages has been retrieved from the API
+            x_total_pages = 2
         else:
-            description = "Unable to retrieve the list of uploads"
-            raise FossologyApiError(description, response)
+            x_total_pages = page
+        while page <= x_total_pages:
+            headers["page"] = str(page)
+            response = self.session.get(
+                f"{self.api}/uploads", headers=headers, params=params
+            )
+            if response.status_code == 200:
+                for upload in response.json():
+                    uploads_list.append(Upload.from_json(upload))
+                x_total_pages = int(response.headers.get("X-TOTAL-PAGES", 0))
+                if not all_pages or x_total_pages == 0:
+                    logger.info(
+                        f"Retrieved page {page} of uploads, {x_total_pages} pages are in total available"
+                    )
+                    return uploads_list, x_total_pages
+                page += 1
+
+            elif response.status_code == 403:
+                description = f"Retrieving list of uploads {get_options(group, folder)}not authorized"
+                raise AuthorizationError(description, response)
+
+            else:
+                description = f"Unable to retrieve the list of uploads from page {page}"
+                raise FossologyApiError(description, response)
+        logger.info(f"Retrieved all {x_total_pages} of uploads")
+        return uploads_list, x_total_pages
 
     def move_upload(self, upload, folder, group=None):
         """Move an upload to another folder
