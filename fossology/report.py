@@ -80,7 +80,7 @@ class Report:
         >>> # Generate a report for upload 1
         >>> report_id = foss.generate_report(foss.detail_upload(1))
         >>> report_content, report_name = foss.download_report(report_id)
-        >>> with open(report_name, "w+") as report_file:
+        >>> with open(report_name, "wb") as report_file:
         >>>     report_file.write(report_content)
 
         :param report_id: the id of the generated report
@@ -102,7 +102,7 @@ class Report:
             content = response.headers["Content-Disposition"]
             report_name_pattern = '(^attachment; filename=")(.*)("$)'
             report_name = re.match(report_name_pattern, content).group(2)
-            return response.text, report_name
+            return response.content, report_name
         elif response.status_code == 403:
             description = (
                 f"Getting report {report_id} {get_options(group)}not authorized"

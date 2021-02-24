@@ -39,7 +39,7 @@ def test_generate_report(foss: Fossology, upload: Upload):
     # Plain text
     report, report_name = foss.download_report(report_id)
     report_path = Path.cwd() / "tests/files"
-    with open(report_path / report_name, "w+") as report_file:
+    with open(report_path / report_name, "wb") as report_file:
         report_file.write(report)
 
     filetype = mimetypes.guess_type(report_path / report_name)
