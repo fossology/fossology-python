@@ -185,11 +185,14 @@ extension</a></p></li>
 </pre></div>
 </div>
 </li>
-<li><p>Build documentation (the generated static site must be pushed to the <strong>gh-pages</strong> branch):</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone -b gh-pages git@github.com:fossology/fossology-python.git docs/
-poetry run sphinx-build docs-source docs/
-<span class="nb">cd</span> docs/
-<span class="c1"># Create a new branch to be merged into gh-pages and commit your changes</span>
+<li><p>Build documentation:</p>
+<p>The static site is generated automatically by
+<a class="reference external" href="https://github.com/fossology/fossology-python/actions/workflows/doc-deploy.yml">GitHub Actions</a>
+on every merge to main branch and pushed to <strong>gh-pages</strong> branch. The action uses
+<a class="reference external" href="https://github.com/JamesIves/github-pages-deploy-action">JamesIves/github-pages-deploy-action</a>
+to deploy the static pages.</p>
+<p>To build it locally</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run sphinx-build -b html docs-source docs/
 </pre></div>
 </div>
 </li>

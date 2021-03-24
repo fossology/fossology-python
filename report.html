@@ -124,7 +124,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate a report for upload 1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">report_id</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="n">foss</span><span class="o">.</span><span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">report_content</span><span class="p">,</span> <span class="n">report_name</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">download_report</span><span class="p">(</span><span class="n">report_id</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">report_name</span><span class="p">,</span> <span class="s2">&quot;w+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">report_file</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">report_name</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">report_file</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">report_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">report_content</span><span class="p">)</span>
 </pre></div>
 </div>
