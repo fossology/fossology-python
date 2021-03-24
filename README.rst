@@ -11,7 +11,7 @@
 
 .. |Static Checks| image:: https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg
    :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22
-   
+
 .. |Fossology Tests| image:: https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg
    :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22
 
@@ -106,14 +106,19 @@ Build
 
     poetry build
 
-- Build documentation (the generated static site must be pushed to the **gh-pages** branch):
+- Build documentation:
+
+  The static site is generated automatically by
+  `GitHub Actions <https://github.com/fossology/fossology-python/actions/workflows/doc-deploy.yml>`_
+  on every merge to main branch and pushed to **gh-pages** branch. The action uses
+  `JamesIves/github-pages-deploy-action <https://github.com/JamesIves/github-pages-deploy-action>`_
+  to deploy the static pages.
+
+  To build it locally
 
   .. code:: shell
 
-     git clone -b gh-pages git@github.com:fossology/fossology-python.git docs/
-     poetry run sphinx-build docs-source docs/
-     cd docs/
-     # Create a new branch to be merged into gh-pages and commit your changes
+     poetry run sphinx-build -b html docs-source docs/
 
 - Cleanup builds:
 

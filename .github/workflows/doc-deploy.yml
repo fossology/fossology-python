@@ -1,0 +1,35 @@
+name: Publish Document Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  doc-deploy:
+    name: Deploy document pages
+    runs-on: ubuntu-latest
+    container: 'python:3.9-slim'
+    steps:
+      - name: Install host dependencies
+        run: |
+          apt-get -qq update
+          apt-get install -qqy gcc git rsync
+
+      - uses: actions/checkout@v2
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade poetry
+          poetry install
+
+      - name: Build the documents
+        run: poetry run sphinx-build -b html docs-source docs
+
+      - name: Publish the pages
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          branch: gh-pages
+          folder: docs
+
