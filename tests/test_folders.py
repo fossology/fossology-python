@@ -45,11 +45,38 @@ def test_create_folder(foss: Fossology):
     foss.delete_folder(test_folder)
 
 
+def test_create_folder_same_name_different_case(foss: Fossology):
+    name = "FossTest"
+    desc = "Created via the Fossology Python API"
+    test_folder = foss.create_folder(foss.rootFolder, name, description=desc)
+    assert test_folder.name == name
+    assert test_folder.description == desc
+
+    # Recreate folder with a different name to test API response 200
+    same_folder = foss.create_folder(foss.rootFolder, "fOSStEST", description=desc)
+    assert test_folder == same_folder
+
+    # Cleanup
+    foss.delete_folder(test_folder)
+
+
 def test_create_folder_no_parent(foss: Fossology):
     parent = Folder(secrets.randbelow(1000), "Parent", "", 0)
     with pytest.raises(AuthorizationError) as excinfo:
         foss.create_folder(parent, "FossFolderNoParent")
     assert f"Folder creation in folder {parent.id} not authorized" in str(excinfo.value)
+
+
+@responses.activate
+def test_create_folder_returns_200_but_folder_does_not_exists(
+    foss_server: str, foss: Fossology
+):
+    responses.add(responses.POST, f"{foss_server}/api/v1/folders", status=200)
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.create_folder(foss.rootFolder, "NoFolder")
+    assert "Folder NoFolder exists but was not found in the user's folder list" in str(
+        excinfo.value
+    )
 
 
 @responses.activate

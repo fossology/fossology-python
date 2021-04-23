@@ -62,6 +62,7 @@ class Folders:
         """Create a new (sub)folder
 
         The name of the new folder must be unique under the same parent.
+        Folder names are case insensitive.
 
         API Endpoint: POST /folders/{id}
 
@@ -90,11 +91,15 @@ class Folders:
 
         if response.status_code == 200:
             logger.info(f"Folder '{name}' already exists")
+            # Foldernames with similar letter but different cases
+            # are not allowed in Fossology, compare with lower case
             for folder in self.folders:
-                if folder.name == name:
+                if folder.name.lower() == name.lower():
                     return folder
-            logger.error("Folder exists but was not found in the user's folder list")
-            return
+            description = (
+                f"Folder {name} exists but was not found in the user's folder list"
+            )
+            raise FossologyApiError(description, response)
 
         elif response.status_code == 201:
             logger.info(f"Folder {name} has been created")
