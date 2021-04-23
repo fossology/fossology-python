@@ -90,15 +90,19 @@ class Folders:
         response = self.session.post(f"{self.api}/folders", headers=headers)
 
         if response.status_code == 200:
-            logger.info(f"Folder '{name}' already exists")
+            logger.info(
+                f"Folder '{name}' already exists under the folder {parent.name} ({parent.id})"
+            )
             # Foldernames with similar letter but different cases
             # are not allowed in Fossology, compare with lower case
-            for folder in self.folders:
-                if folder.name.lower() == name.lower():
-                    return folder
-            description = (
-                f"Folder {name} exists but was not found in the user's folder list"
-            )
+            existing_folder = [
+                folder
+                for folder in self.folders
+                if folder.name.lower() == name.lower() and folder.parent == parent.id
+            ]
+            if existing_folder:
+                return existing_folder[0]
+            description = f"Folder '{name}' exists but was not found under the folder {parent.name} ({parent.id})"
             raise FossologyApiError(description, response)
 
         elif response.status_code == 201:
