@@ -28,7 +28,6 @@ class Folders:
             response_list = response.json()
             for folder in response_list:
                 sub_folder = Folder.from_json(folder)
-                sub_folder.parent = self.rootFolder.id
                 folders_list.append(sub_folder)
             return folders_list
         else:
