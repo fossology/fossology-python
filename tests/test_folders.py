@@ -125,7 +125,18 @@ def test_move_folder(foss: Fossology):
     test_folder = foss.move_folder(test_folder, move_copy_folder)
     assert test_folder.parent == move_copy_folder.id
 
-    folder_copy = foss.copy_folder(test_folder, foss.rootFolder)
+    # Cleanup
+    foss.delete_folder(move_copy_folder)
+
+
+def test_copy_folder(foss: Fossology):
+    move_copy_folder = foss.create_folder(
+        foss.rootFolder, "MoveCopyTest", "Test move() and copy() functions"
+    )
+    test_folder = foss.create_folder(
+        foss.rootFolder, "TestFolder", "Folder to be moved and copied via API"
+    )
+    folder_copy = foss.copy_folder(test_folder, move_copy_folder)
     folder_list = foss.list_folders()
     folder_copy = [
         folder
