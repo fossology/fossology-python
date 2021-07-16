@@ -36,10 +36,10 @@ class Uploads:
         :Examples:
 
         >>> # Wait up to 20 minutes until the upload is ready
-        >>> long_upload = detail_upload(1, 120)
+        >>> long_upload = detail_upload(1, wait_time=120)
 
         >>> # Wait up to 5 minutes until the upload is ready
-        >>> long_upload = detail_upload(1, 30)
+        >>> long_upload = detail_upload(1, wait_time=30)
 
         :param upload_id: the id of the upload
         :param group: the group the upload shall belong to
@@ -230,7 +230,7 @@ class Uploads:
 
         if response.status_code == 201:
             try:
-                upload = self.detail_upload(response.json()["message"], wait_time)
+                upload = self.detail_upload(response.json()["message"], group, wait_time)
                 if upload.filesize:
                     logger.info(
                         f"Upload {upload.uploadname} ({upload.filesize}) "
