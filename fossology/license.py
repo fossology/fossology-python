@@ -14,15 +14,15 @@ logger.setLevel(logging.DEBUG)
 class LicenseEndpoint:
     """Class dedicated to all "license" related endpoints"""
 
-    def detail_license(self, name) -> License:
+    def detail_license(self, name) -> list[License]:
         """Get a license from the DB
 
         API Endpoint: GET /license
 
         :param name: Short name of the license
         :rtype name: str
-        :return: a list of groups
-        :rtype: License() object
+        :return: a list of licenses
+        :rtype: list of License objects
         :raises FossologyApiError: if the REST call failed
         """
         if fossology.versiontuple(self.version) < fossology.versiontuple("1.1.3"):
@@ -32,7 +32,11 @@ class LicenseEndpoint:
         headers = {"shortName": f"{name}"}
         response = self.session.get(f"{self.api}/license", headers=headers)
         if response.status_code == 200:
-            return License.from_json(response.json())
+            licenses = list()
+            json_licenses = response.json()
+            for license in json_licenses:
+                licenses.append(License.from_json(license))
+            return licenses
         else:
             description = f"Unable to get license {name}"
             raise FossologyApiError(description, response)
