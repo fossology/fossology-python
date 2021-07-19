@@ -7,7 +7,7 @@ from typing import Dict
 import pytest
 import responses
 
-from fossology import Fossology
+from fossology import Fossology, versiontuple
 from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import Upload
 
@@ -76,24 +76,22 @@ def test_detail_job_error(foss_server: str, foss: Fossology):
 
 
 def test_paginated_list_jobs(foss: Fossology, scanned_upload: Upload):
-    jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=1, page=1)
-    print(jobs, total_pages)
-    assert len(jobs) == 1
-    assert total_pages == 3
+    # Versions prior to 1.3.2 return corrupt number of pages
+    if versiontuple(foss.version) > versiontuple("1.3.1"):
+        jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=1, page=1)
+        assert len(jobs) == 1
+        assert total_pages == 2
 
-    jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=1, page=2)
-    print(jobs, total_pages)
-    assert len(jobs) == 1
-    assert total_pages == 3
+        jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=1, page=2)
+        assert len(jobs) == 1
+        assert total_pages == 2
 
-    jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=2, page=1)
-    print(jobs, total_pages)
-    assert len(jobs) == 2
-    assert total_pages == 2
+        jobs, total_pages = foss.list_jobs(upload=scanned_upload, page_size=2, page=1)
+        assert len(jobs) == 2
+        assert total_pages == 1
 
-    jobs, total_pages = foss.list_jobs(
-        upload=scanned_upload, page_size=1, all_pages=True
-    )
-    assert len(jobs) == 2
-    # FIXME: total number of pages should be 2
-    # assert total_pages == 3
+        jobs, total_pages = foss.list_jobs(
+            upload=scanned_upload, page_size=1, all_pages=True
+        )
+        assert len(jobs) == 2
+        assert total_pages == 2
