@@ -72,11 +72,10 @@ Using the API
 
       from fossology import Fossology
 
-      foss = Fossology(
-            FOSSOLOGY_SERVER,
-            token,
-            FOSSOLOGY_USER
-      )
+      # Starting from API version 1.2.3,
+      # the `FOSSOLOGY_USER`option is not needed anymore
+      foss = Fossology(FOSSOLOGY_SERVER, token, FOSSOLOGY_USER)
+      print(f"Logged in as user {foss.user.name}")
 
 
 Contribute
