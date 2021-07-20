@@ -110,7 +110,7 @@
 <dd><p>Class dedicated to all “license” related endpoints</p>
 <dl class="py method">
 <dt id="fossology.license.LicenseEndpoint.detail_license">
-<code class="sig-name descname">detail_license</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License">fossology.obj.License</a><a class="headerlink" href="#fossology.license.LicenseEndpoint.detail_license" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">detail_license</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#fossology.license.LicenseEndpoint.detail_license" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a license from the DB</p>
 <p>API Endpoint: GET /license</p>
 <dl class="field-list simple">
@@ -121,10 +121,10 @@
 <dd class="field-even"><p>str</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of groups</p>
+<dd class="field-odd"><p>a list of licenses</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License">License</a>() object</p>
+<dd class="field-even"><p>list of License objects</p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
