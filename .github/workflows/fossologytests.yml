@@ -46,7 +46,7 @@ jobs:
  
 
   test-last-release:
-    name: Integration Tests (Fossology 3.9.0)
+    name: Integration Tests (Fossology 3.10.0)
     runs-on: ubuntu-latest
 
     container:
@@ -56,7 +56,7 @@ jobs:
 
     services:
       fossology:
-        image: fossology/fossology:3.9.0
+        image: fossology/fossology:3.10.0
         ports: 
           - 8081:80
         volumes:
