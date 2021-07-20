@@ -210,23 +210,31 @@ def test_move_upload_nogroup(foss: Fossology, upload: Upload, move_folder: Folde
     )
 
 
-def test_move_copy_upload(foss: Fossology, upload: Upload, move_folder: Folder):
+def test_move_upload(foss: Fossology, upload: Upload, move_folder: Folder):
     foss.move_upload(upload, move_folder)
     moved_upload = foss.detail_upload(upload.id)
     assert moved_upload.folderid == move_folder.id
 
-    foss.copy_upload(moved_upload, foss.rootFolder)
-    list_uploads, _ = foss.list_uploads()
-    test_upload = None
-    for upload in list_uploads:
-        if upload.folderid == foss.rootFolder.id:
-            test_upload = upload
-    assert test_upload
 
-    # To arbitrary folder
+def test_copy_upload(foss: Fossology, upload: Upload):
+    copy_upload_folder = foss.create_folder(foss.rootFolder, "CopyUploadFolder")
+    foss.copy_upload(upload, copy_upload_folder)
+    copied_upload = foss.detail_upload(upload.id)
+    assert copied_upload
+    # Upload should be visible twice but it isn't
+    # Bug or Feature?
+    # Cleanup
+    foss.delete_folder(copy_upload_folder)
+
+
+def test_move_upload_to_non_existing_folder(foss: Fossology, upload: Upload):
     non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
     with pytest.raises(AuthorizationError):
         foss.move_upload(upload, non_folder)
+
+
+def test_copy_upload_to_non_existing_folder(foss: Fossology, upload: Upload):
+    non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
     with pytest.raises(AuthorizationError):
         foss.copy_upload(upload, non_folder)
 

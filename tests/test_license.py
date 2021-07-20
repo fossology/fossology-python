@@ -38,4 +38,4 @@ def test_detail_license(foss: fossology.Fossology):
     else:
         license = foss.detail_license(short)
         assert license
-        assert type(license) == License
+        assert type(license[0]) == License

@@ -230,7 +230,9 @@ class Uploads:
 
         if response.status_code == 201:
             try:
-                upload = self.detail_upload(response.json()["message"], group, wait_time)
+                upload = self.detail_upload(
+                    response.json()["message"], group, wait_time
+                )
                 if upload.filesize:
                     logger.info(
                         f"Upload {upload.uploadname} ({upload.filesize}) "
