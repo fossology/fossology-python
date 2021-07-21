@@ -60,6 +60,25 @@ class ClearingStatus(Enum):
     REJECTED = "Rejected"
 
 
+class LicenseType(Enum):
+    """Clearing statuses
+    """
+
+    CANDIDATE = "candidate"
+    MAIN = "main"
+    ALL = "all"
+
+
+class ObligationClass(Enum):
+    """Classification of an obligation
+    """
+
+    GREEN = "green"
+    WHITE = "white"
+    YELLOW = "yellow"
+    RED = "red"
+
+
 class Agents(object):
 
     """FOSSology agents.
@@ -312,30 +331,101 @@ class License(object):
 
     Represents a FOSSology license.
 
-    :param id: the ID of the license
     :param shortName: the short name of the license
     :param fullName: the full name of the license
     :param text: the text of the license
+    :param url: URL of the license text
     :param risk: the risk level of the license
+    :param isCandidate: is the license a candidate?
     :param kwargs: handle any other folder information provided by the fossology instance
-    :type id: int
     :type shortName: string
     :type fullName: string
     :type text: string
+    :type url: string
     :type risk: int
+    :type isCandidate: bool
     :type kwargs: key word argument
     """
 
-    def __init__(self, id, shortName, fullName, text, risk, **kwargs):
+    def __init__(
+        self, shortName, fullName, text, url, risk, isCandidate, id=None, **kwargs
+    ):
         self.id = id
         self.shortName = shortName
         self.fullName = fullName
         self.text = text
+        self.url = url
         self.risk = risk
+        self.isCandidate = isCandidate
         self.additional_info = kwargs
 
     def __str__(self):
-        return f"License {self.fullName} - {self.shortName} ({self.id}) with risk level {self.risk}"
+        license_type = "License"
+        if self.isCandidate:
+            license_type = "Candidate license"
+        return f"{license_type} {self.fullName} - {self.shortName} ({self.id}) with risk level {self.risk}"
+
+    def to_dict(self):
+        """Get a directory with the license data
+
+        :return: the license data
+        :rtype: dict
+        """
+        return {
+            "shortName": self.shortName,
+            "fullName": self.fullName,
+            "text": self.text,
+            "url": self.url,
+            "risk": self.risk,
+            "isCandidate": self.isCandidate,
+        }
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+    def to_json(self) -> str:
+        """Get a JSON object with the license data
+
+        :return: the license data
+        :rtype: JSON
+        """
+        return json.dumps(self.to_dict())
+
+
+class Obligation(object):
+
+    """FOSSology license obligation.
+
+    Represents a FOSSology license obligation.
+
+    :param id: the ID of the obligation
+    :param topic: the topic of the obligation
+    :param type: the type of the obligation
+    :param text: the text of the obligation
+    :param classification: level of attention it should raise in the clearing process
+    :param comment: comment for the obligation
+    :param kwargs: handle any other folder information provided by the fossology instance
+    :type id: int
+    :type topic: string
+    :type type: string
+    :type text: string
+    :type classification: string
+    :type comment: string
+    :type kwargs: key word argument
+    """
+
+    def __init__(self, id, topic, type, text, classification, comment, **kwargs):
+        self.id = id
+        self.topic = topic
+        self.type = type
+        self.text = text
+        self.classification = classification
+        self.comment = comment
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Obligation {self.topic}, {self.type} ({self.id}) is classified {self.classification}"
 
     @classmethod
     def from_json(cls, json_dict):

@@ -135,6 +135,8 @@ class Jobs:
         >>>         "reuse_group": 0,
         >>>         "reuse_main": True,
         >>>         "reuse_enhanced": True
+        >>>         "reuse_report": True
+        >>>         "reuse_copyright": True
         >>>     }
         >>> }
 
