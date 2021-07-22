@@ -60,6 +60,8 @@ def foss_schedule_agents() -> Dict:
             "reuse_group": 0,
             "reuse_main": True,
             "reuse_enhanced": True,
+            "reuse_report": True,
+            "reuse_copyright": True,
         },
     }
 
