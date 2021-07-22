@@ -41,16 +41,16 @@ class LicenseEndpoint:
 
         API Endpoint: GET /license
 
-        :param active: list only active licenses
-        :param kind: list only licenses from type LicenseType
-        :param page_size: the maximum number of results per page
-        :param page: the number of pages to be retrieved
-        :param all_pages: get all licenses
-        :type active: bool (default: False)
-        :type kind: LicenseType (default: LicenseType.ALL)
-        :type page_size: int (default: 100)
-        :type page: int (default: 1)
-        :type all_pages: boolean (default: False)
+        :param active: list only active licenses (default: False)
+        :param kind: list only licenses from type LicenseType  (default: LicenseType.ALL)
+        :param page_size: the maximum number of results per page (default: 100)
+        :param page: the number of pages to be retrieved (default: 1)
+        :param all_pages: get all licenses (default: False)
+        :type active: bool
+        :type kind: LicenseType
+        :type page_size: int
+        :type page: int
+        :type all_pages: boolean
         :return: a list of licenses
         :rtype: list[License]
         :raises FossologyApiError: if the REST call failed
@@ -101,9 +101,9 @@ class LicenseEndpoint:
         API Endpoint: GET /license/{shortname}
 
         :param shortname: Short name of the license
-        :param group: the group this license belongs to
-        :rtype name: str
-        :rtype group: int (default: None)
+        :param group: the group this license belongs to (default: None)
+        :type name: str
+        :type group: int
         :return: the license id, the license data and the associated obligations
         :rtype: tuple(int, License, list[Obligation])
         :raises FossologyApiError: if the REST call failed
@@ -148,9 +148,9 @@ class LicenseEndpoint:
         >>> foss.add_license(new_license, merge_request=True)
 
         :param license: the license data
-        :param merge_request: open a merge request for the license candidate?
+        :param merge_request: open a merge request for the license candidate? (default: False)
         :type license: License
-        :type merge_request: bool (default: False)
+        :type merge_request: bool
         :raises FossologyApiError: if the REST call failed
         """
         headers = {"Content-Type": "application/json"}
@@ -184,12 +184,12 @@ class LicenseEndpoint:
         :param fullName: the new fullName of the license (optional)
         :param text: the new text of the license (optional)
         :param url: the new url of the license (optional)
-        :param risk: the new risk of the license (optional)
+        :param risk: the new risk of the license (default: 2)
         :type shortName: str
         :type fullName: str
         :type text: str
         :type url: str
-        :type risk: int (default: 2)
+        :type risk: int
         :raises FossologyApiError: if the REST call failed
         """
         headers = {"Content-Type": "application/json"}

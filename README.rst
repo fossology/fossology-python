@@ -22,7 +22,10 @@ A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
-   Compatible from API version 1.0.16 up to 1.2.1
+   Compatible API versions:
+
+   - 1.2.1 (Fossology 3.10.0)
+   - 1.3.2 (Fossology 3.11.0)
 
 Documentation
 =============
@@ -72,8 +75,7 @@ Using the API
 
       from fossology import Fossology
 
-      # Starting from API version 1.2.3,
-      # the `FOSSOLOGY_USER`option is not needed anymore
+      # Starting from API version 1.2.3, the `FOSSOLOGY_USER` option is not needed anymore
       foss = Fossology(FOSSOLOGY_SERVER, token, FOSSOLOGY_USER)
       print(f"Logged in as user {foss.user.name}")
 
