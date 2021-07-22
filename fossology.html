@@ -107,7 +107,7 @@
 get user relevant information.</p>
 <span class="target" id="module-fossology"></span><dl class="py class">
 <dt id="fossology.Fossology">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.</code><code class="sig-name descname">Fossology</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">token</span></em>, <em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fossology.</code><code class="sig-name descname">Fossology</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">token</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main Fossology API class</p>
 <p>Authentication against a running Fossology instance is performed using an API token.</p>
 <dl class="field-list simple">
@@ -128,7 +128,7 @@ can’t be established</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> (<em>str</em>) – URL of the Fossology instance</p></li>
 <li><p><strong>token</strong> (<em>str</em>) – The API token generated using the Fossology UI</p></li>
-<li><p><strong>name</strong> (<em>str</em>) – The name of the token owner</p></li>
+<li><p><strong>name</strong> (<em>str</em><em> (</em><em>deprecated since API version 1.2.3</em><em>)</em>) – The name of the token owner (deprecated since API version 1.2.3)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
@@ -195,6 +195,24 @@ can’t be established</p>
 <li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
 <li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fossology.Fossology.get_self">
+<code class="sig-name descname">get_self</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.get_self" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the first API request and populate user variables</p>
+<p>API Endpoint: GET /users/self</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the authenticated user’s details</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="obj.html#fossology.obj.User" title="fossology.obj.User">User</a></p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
 </dd></dl>

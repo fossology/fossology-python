@@ -152,11 +152,10 @@
 <li><p>Start using the API:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">Fossology</span>
 
-<span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span>
-      <span class="n">FOSSOLOGY_SERVER</span><span class="p">,</span>
-      <span class="n">token</span><span class="p">,</span>
-      <span class="n">FOSSOLOGY_USER</span>
-<span class="p">)</span>
+<span class="c1"># Starting from API version 1.2.3,</span>
+<span class="c1"># the `FOSSOLOGY_USER`option is not needed anymore</span>
+<span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSSOLOGY_SERVER</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">FOSSOLOGY_USER</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Logged in as user </span><span class="si">{</span><span class="n">foss</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
