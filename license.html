@@ -109,25 +109,109 @@
 <em class="property">class </em><code class="sig-prename descclassname">fossology.license.</code><code class="sig-name descname">LicenseEndpoint</code><a class="headerlink" href="#fossology.license.LicenseEndpoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class dedicated to all “license” related endpoints</p>
 <dl class="py method">
-<dt id="fossology.license.LicenseEndpoint.detail_license">
-<code class="sig-name descname">detail_license</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#fossology.license.LicenseEndpoint.detail_license" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a license from the DB</p>
-<p>API Endpoint: GET /license</p>
+<dt id="fossology.license.LicenseEndpoint.add_license">
+<code class="sig-name descname">add_license</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">license</span><span class="p">:</span> <span class="n"><a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License">fossology.obj.License</a></span></em>, <em class="sig-param"><span class="n">merge_request</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.license.LicenseEndpoint.add_license" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new license to the DB</p>
+<p>API Endpoint: POST /license</p>
+<p>License data are added to the request body, here is an example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_license</span> <span class="o">=</span> <span class="n">License</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;GPL-1.0&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;GNU General Public License 1.0&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;Text of the license...&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;http://www.gnu.org/licenses/gpl-1.0.txt&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;red&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s2">&quot;false&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span><span class="o">.</span><span class="n">add_license</span><span class="p">(</span><span class="n">new_license</span><span class="p">,</span> <span class="n">merge_request</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> – Short name of the license</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>license</strong> (<a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License"><em>License</em></a>) – the license data</p></li>
+<li><p><strong>merge_request</strong> (<em>bool</em><em> (</em><em>default: False</em><em>)</em>) – open a merge request for the license candidate?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fossology.license.LicenseEndpoint.detail_license">
+<code class="sig-name descname">detail_license</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shortname</span></em>, <em class="sig-param"><span class="n">group</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; tuple<a class="headerlink" href="#fossology.license.LicenseEndpoint.detail_license" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a license from the DB</p>
+<p>API Endpoint: GET /license/{shortname}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shortname</strong> – Short name of the license</p></li>
+<li><p><strong>group</strong> – the group this license belongs to</p></li>
+</ul>
 </dd>
 <dt class="field-even">Rtype name</dt>
 <dd class="field-even"><p>str</p>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of licenses</p>
+<dt class="field-odd">Rtype group</dt>
+<dd class="field-odd"><p>int (default: None)</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of License objects</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the license id, the license data and the associated obligations</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple(int, <a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License">License</a>, list[<a class="reference internal" href="obj.html#fossology.obj.Obligation" title="fossology.obj.Obligation">Obligation</a>])</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fossology.license.LicenseEndpoint.list_licenses">
+<code class="sig-name descname">list_licenses</code><span class="sig-paren">(</span><em class="sig-param">active: bool = False</em>, <em class="sig-param">kind: fossology.obj.LicenseType = &lt;LicenseType.ALL: 'all'&gt;</em>, <em class="sig-param">page_size: int = 100</em>, <em class="sig-param">page: int = 1</em>, <em class="sig-param">all_pages: bool = False</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#fossology.license.LicenseEndpoint.list_licenses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all license from the DB</p>
+<p>API Endpoint: GET /license</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>active</strong> (<em>bool</em><em> (</em><em>default: False</em><em>)</em>) – list only active licenses</p></li>
+<li><p><strong>kind</strong> (<a class="reference internal" href="obj.html#fossology.obj.LicenseType" title="fossology.obj.LicenseType"><em>LicenseType</em></a><em> (</em><em>default: LicenseType.ALL</em><em>)</em>) – list only licenses from type LicenseType</p></li>
+<li><p><strong>page_size</strong> (<em>int</em><em> (</em><em>default: 100</em><em>)</em>) – the maximum number of results per page</p></li>
+<li><p><strong>page</strong> (<em>int</em><em> (</em><em>default: 1</em><em>)</em>) – the number of pages to be retrieved</p></li>
+<li><p><strong>all_pages</strong> (<em>boolean</em><em> (</em><em>default: False</em><em>)</em>) – get all licenses</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of licenses</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[<a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License">License</a>]</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fossology.license.LicenseEndpoint.update_license">
+<code class="sig-name descname">update_license</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shortname</span></em>, <em class="sig-param"><span class="n">fullname</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">text</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">''</span></em>, <em class="sig-param"><span class="n">risk</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.license.LicenseEndpoint.update_license" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update a license</p>
+<p>API Endpoint: PATCH /license/{shortname}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shortName</strong> (<em>str</em>) – the short name of the license to be updated</p></li>
+<li><p><strong>fullName</strong> (<em>str</em>) – the new fullName of the license (optional)</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – the new text of the license (optional)</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – the new url of the license (optional)</p></li>
+<li><p><strong>risk</strong> (<em>int</em><em> (</em><em>default: 2</em><em>)</em>) – the new risk of the license (optional)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
 </dd></dl>

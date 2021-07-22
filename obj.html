@@ -279,21 +279,56 @@
 
 <dl class="py class">
 <dt id="fossology.obj.License">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">License</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">shortName</span></em>, <em class="sig-param"><span class="n">fullName</span></em>, <em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">risk</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.License" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">License</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shortName</span></em>, <em class="sig-param"><span class="n">fullName</span></em>, <em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">risk</span></em>, <em class="sig-param"><span class="n">isCandidate</span></em>, <em class="sig-param"><span class="n">id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.License" title="Permalink to this definition">¶</a></dt>
 <dd><p>FOSSology license.</p>
 <p>Represents a FOSSology license.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the license</p></li>
 <li><p><strong>shortName</strong> (<em>string</em>) – the short name of the license</p></li>
 <li><p><strong>fullName</strong> (<em>string</em>) – the full name of the license</p></li>
 <li><p><strong>text</strong> (<em>string</em>) – the text of the license</p></li>
+<li><p><strong>url</strong> (<em>string</em>) – URL of the license text</p></li>
 <li><p><strong>risk</strong> (<em>int</em>) – the risk level of the license</p></li>
+<li><p><strong>isCandidate</strong> (<em>bool</em>) – is the license a candidate?</p></li>
 <li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="fossology.obj.License.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.License.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a directory with the license data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the license data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fossology.obj.License.to_json">
+<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#fossology.obj.License.to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a JSON object with the license data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the license data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>JSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.LicenseType">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">LicenseType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.LicenseType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clearing statuses</p>
 </dd></dl>
 
 <dl class="py class">
@@ -310,6 +345,32 @@
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.Obligation">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">Obligation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em>, <em class="sig-param"><span class="n">topic</span></em>, <em class="sig-param"><span class="n">type</span></em>, <em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">classification</span></em>, <em class="sig-param"><span class="n">comment</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Obligation" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology license obligation.</p>
+<p>Represents a FOSSology license obligation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – the ID of the obligation</p></li>
+<li><p><strong>topic</strong> (<em>string</em>) – the topic of the obligation</p></li>
+<li><p><strong>type</strong> (<em>string</em>) – the type of the obligation</p></li>
+<li><p><strong>text</strong> (<em>string</em>) – the text of the obligation</p></li>
+<li><p><strong>classification</strong> (<em>string</em>) – level of attention it should raise in the clearing process</p></li>
+<li><p><strong>comment</strong> (<em>string</em>) – comment for the obligation</p></li>
+<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fossology.obj.ObligationClass">
+<em class="property">class </em><code class="sig-prename descclassname">fossology.obj.</code><code class="sig-name descname">ObligationClass</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ObligationClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classification of an obligation</p>
 </dd></dl>
 
 <dl class="py class">
