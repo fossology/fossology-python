@@ -33,9 +33,12 @@ class LicenseEndpoint:
         response = self.session.get(f"{self.api}/license", headers=headers)
         if response.status_code == 200:
             licenses = list()
-            json_licenses = response.json()
-            for license in json_licenses:
-                licenses.append(License.from_json(license))
+            if fossology.versiontuple(self.version) >= fossology.versiontuple("1.3.0"):
+                json_licenses = response.json()
+                for license in json_licenses:
+                    licenses.append(License.from_json(license))
+            else:
+                licenses.append(License.from_json(response.json()))
             return licenses
         else:
             description = f"Unable to get license {name}"
