@@ -87,8 +87,15 @@ def test_backward_compatibility(foss_server: str, foss_token: str):
         foss = Fossology(foss_server, foss_token, "test")
         assert foss.name == "fossy"
     else:
-        with pytest.raises(AuthenticationError):
+        with pytest.raises(AuthenticationError) as excinfo:
             Fossology(foss_server, foss_token, "test")
+        assert f"User test was not found on {foss_server}" in str(excinfo.value)
+
+        with pytest.raises(AuthenticationError) as excinfo:
+            Fossology(foss_server, foss_token)
+        assert "You need to provide a username to create an API session" in str(
+            excinfo.value
+        )
 
 
 def test_unknown_user(foss: Fossology):
@@ -99,6 +106,29 @@ def test_unknown_user(foss: Fossology):
 def test_list_users(foss: Fossology):
     users = foss.list_users()
     assert len(users) == 1
+
+
+@responses.activate
+def test_get_self_error(foss_server: str, foss: Fossology):
+    if versiontuple(foss.version) >= versiontuple("1.2.3"):
+        responses.add(
+            responses.GET, f"{foss_server}/api/v1/users/self", status=500,
+        )
+        with pytest.raises(FossologyApiError):
+            foss.get_self()
+
+
+@responses.activate
+def test_get_self_with_agents(
+    foss_server: str, foss: Fossology, foss_user: dict, foss_user_agents: dict
+):
+    if versiontuple(foss.version) >= versiontuple("1.2.3"):
+        user = foss_user
+        responses.add(
+            responses.GET, f"{foss_server}/api/v1/users/self", status=200, json=user
+        )
+        user_from_api = foss.get_self()
+        assert user_from_api.agents.to_dict() == foss_user_agents
 
 
 @responses.activate
