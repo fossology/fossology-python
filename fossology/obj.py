@@ -51,8 +51,7 @@ class TokenScope(Enum):
 
 
 class ClearingStatus(Enum):
-    """Clearing statuses
-    """
+    """Clearing statuses: OPEN, PROGRESS, CLOSED, REJECTED"""
 
     OPEN = "Open"
     PROGRESS = "InProgress"
@@ -61,8 +60,7 @@ class ClearingStatus(Enum):
 
 
 class LicenseType(Enum):
-    """Clearing statuses
-    """
+    """License types: CANDIDATE, MAIN, ALL"""
 
     CANDIDATE = "candidate"
     MAIN = "main"
@@ -70,8 +68,7 @@ class LicenseType(Enum):
 
 
 class ObligationClass(Enum):
-    """Classification of an obligation
-    """
+    """Classification of an obligation: GREEN, WHITE, YELLOW, RED"""
 
     GREEN = "green"
     WHITE = "white"

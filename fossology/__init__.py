@@ -87,14 +87,14 @@ def fossology_token(
     :param username: name of the user the token will be generated for
     :param password: the password of the user
     :param name: the name of the token
-    :param scope: the scope of the token (default: READ)
-    :param expire: the expire date of the token (default: max. 30 days)
+    :param scope: the scope of the token (default: TokenScope.READ)
+    :param expire: the expire date of the token, e.g. 2019-12-25 (default: max. 30 days)
     :type url: string
     :type username: string
     :type password: string
     :type name: string
-    :type scope: TokenScope (default: TokenScope.READ)
-    :type expire: string, e.g. 2019-12-25
+    :type scope: TokenScope
+    :type expire: string
     :return: the new token
     :rtype: string
     :raises AuthenticationError: if the username or password is incorrect
@@ -137,18 +137,14 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
     >>> from fossology import Fossology
     >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
 
-    .. note::
-
-        The class instantiation exits if the session with the Fossology server
-        can't be established
-
     :param url: URL of the Fossology instance
     :param token: The API token generated using the Fossology UI
     :param name: The name of the token owner (deprecated since API version 1.2.3)
     :type url: str
     :type token: str
     :type name: str (deprecated since API version 1.2.3)
-    :raises AuthenticationError: if the user couldn't be found
+    :raises FossologyApiError: if a REST call failed
+    :raises AuthenticationError: if the user couldn't be authenticated
     """
 
     def __init__(self, url, token, name=None):
@@ -179,6 +175,7 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
         :return: the authenticated user's details
         :rtype: User
         :raises FossologyApiError: if the REST call failed
+        :raises AuthenticationError: if the user couldn't be found
         """
         if versiontuple(self.version) >= versiontuple("1.2.3"):
             response = self.session.get(f"{self.api}/users/self")
