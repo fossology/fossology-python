@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fossology &#8212; fossology 1.3.2 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Fossology &#8212; fossology 1.3.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -79,7 +80,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -101,13 +102,13 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="fossology">
+  <section id="fossology">
 <h1>Fossology<a class="headerlink" href="#fossology" title="Permalink to this headline">¶</a></h1>
 <p>The initialization class, used to create a session with the FOSSology server and
 get user relevant information.</p>
 <span class="target" id="module-fossology"></span><dl class="py class">
-<dt id="fossology.Fossology">
-<em class="property">class </em><code class="sig-prename descclassname">fossology.</code><code class="sig-name descname">Fossology</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">token</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.Fossology">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fossology.</span></span><span class="sig-name descname"><span class="pre">Fossology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main Fossology API class</p>
 <p>Authentication against a running Fossology instance is performed using an API token.</p>
 <dl class="field-list simple">
@@ -118,11 +119,6 @@ get user relevant information.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The class instantiation exits if the session with the Fossology server
-can’t be established</p>
-</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -132,12 +128,15 @@ can’t be established</p>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthenticationError" title="fossology.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – if the user couldn’t be found</p>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if a REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthenticationError" title="fossology.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – if the user couldn’t be authenticated</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="fossology.Fossology.delete_user">
-<code class="sig-name descname">delete_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.delete_user" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.Fossology.delete_user">
+<span class="sig-name descname"><span class="pre">delete_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.delete_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a Fossology user.</p>
 <p>API Endpoint: DELETE /users/{id}</p>
 <dl class="field-list simple">
@@ -151,8 +150,8 @@ can’t be established</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fossology.Fossology.detail_user">
-<code class="sig-name descname">detail_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.detail_user" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.Fossology.detail_user">
+<span class="sig-name descname"><span class="pre">detail_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.detail_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get details of Fossology user.</p>
 <p>API Endpoint: GET /users/{id}</p>
 <dl class="field-list simple">
@@ -172,8 +171,8 @@ can’t be established</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fossology.Fossology.filesearch">
-<code class="sig-name descname">filesearch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filelist</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">group</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.filesearch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.Fossology.filesearch">
+<span class="sig-name descname"><span class="pre">filesearch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filelist</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.filesearch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for files from hash sum</p>
 <p>API Endpoint: POST /filesearch</p>
 <p>The response does not generate Python objects yet, the plain JSON data is simply returned.</p>
@@ -200,8 +199,8 @@ can’t be established</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fossology.Fossology.get_self">
-<code class="sig-name descname">get_self</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.get_self" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.Fossology.get_self">
+<span class="sig-name descname"><span class="pre">get_self</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.get_self" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform the first API request and populate user variables</p>
 <p>API Endpoint: GET /users/self</p>
 <dl class="field-list simple">
@@ -212,14 +211,17 @@ can’t be established</p>
 <dd class="field-even"><p><a class="reference internal" href="obj.html#fossology.obj.User" title="fossology.obj.User">User</a></p>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthenticationError" title="fossology.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – if the user couldn’t be found</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fossology.Fossology.get_version">
-<code class="sig-name descname">get_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.get_version" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.Fossology.get_version">
+<span class="sig-name descname"><span class="pre">get_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.get_version" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get API version from the server</p>
 <p>API endpoint: GET /version</p>
 <dl class="field-list simple">
@@ -236,8 +238,8 @@ can’t be established</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fossology.Fossology.list_users">
-<code class="sig-name descname">list_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.list_users" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.Fossology.list_users">
+<span class="sig-name descname"><span class="pre">list_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.list_users" title="Permalink to this definition">¶</a></dt>
 <dd><p>List all users from the Fossology instance</p>
 <p>API Endpoint: GET /users</p>
 <dl class="field-list simple">
@@ -254,8 +256,8 @@ can’t be established</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fossology.Fossology.search">
-<code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param">searchType: fossology.obj.SearchTypes = &lt;SearchTypes.ALLFILES: 'allfiles'&gt;</em>, <em class="sig-param">upload: Optional[fossology.obj.Upload] = None</em>, <em class="sig-param">filename: Optional[str] = None</em>, <em class="sig-param">tag: Optional[str] = None</em>, <em class="sig-param">filesizemin: Optional[int] = None</em>, <em class="sig-param">filesizemax: Optional[int] = None</em>, <em class="sig-param">license: Optional[str] = None</em>, <em class="sig-param">copyright: Optional[str] = None</em>, <em class="sig-param">group: Optional[str] = None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.search" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.Fossology.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">searchType</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="obj.html#fossology.obj.SearchTypes" title="fossology.obj.SearchTypes"><span class="pre">fossology.obj.SearchTypes</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">SearchTypes.ALLFILES</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><span class="pre">fossology.obj.Upload</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filesizemin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filesizemax</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copyright</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology.search" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for a specific file</p>
 <p>API Endpoint: GET /search</p>
 <dl class="field-list simple">
@@ -290,8 +292,8 @@ can’t be established</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fossology.fossology_token">
-<code class="sig-prename descclassname">fossology.</code><code class="sig-name descname">fossology_token</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">username</em>, <em class="sig-param">password</em>, <em class="sig-param">token_name</em>, <em class="sig-param">token_scope=&lt;TokenScope.READ: 'read'&gt;</em>, <em class="sig-param">token_expire=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.fossology_token" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fossology.fossology_token">
+<span class="sig-prename descclassname"><span class="pre">fossology.</span></span><span class="sig-name descname"><span class="pre">fossology_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">TokenScope.READ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_expire</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.fossology_token" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an API token using username/password</p>
 <p>API endpoint: POST /tokens</p>
 <dl class="field-list simple">
@@ -310,8 +312,8 @@ can’t be established</p>
 <li><p><strong>username</strong> (<em>string</em>) – name of the user the token will be generated for</p></li>
 <li><p><strong>password</strong> (<em>string</em>) – the password of the user</p></li>
 <li><p><strong>name</strong> (<em>string</em>) – the name of the token</p></li>
-<li><p><strong>scope</strong> (<a class="reference internal" href="obj.html#fossology.obj.TokenScope" title="fossology.obj.TokenScope"><em>TokenScope</em></a><em> (</em><em>default: TokenScope.READ</em><em>)</em>) – the scope of the token (default: READ)</p></li>
-<li><p><strong>expire</strong> (<em>string</em><em>, </em><em>e.g. 2019-12-25</em>) – the expire date of the token (default: max. 30 days)</p></li>
+<li><p><strong>scope</strong> (<a class="reference internal" href="obj.html#fossology.obj.TokenScope" title="fossology.obj.TokenScope"><em>TokenScope</em></a>) – the scope of the token (default: TokenScope.READ)</p></li>
+<li><p><strong>expire</strong> (<em>string</em>) – the expire date of the token, e.g. 2019-12-25 (default: max. 30 days)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -329,7 +331,7 @@ can’t be established</p>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -342,7 +344,7 @@ can’t be established</p>
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
