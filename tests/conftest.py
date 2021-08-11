@@ -8,9 +8,12 @@ from typing import Dict
 
 import pytest
 
+from click.testing import CliRunner
+
 import fossology
 from fossology.exceptions import AuthenticationError, FossologyApiError
 from fossology.obj import AccessLevel, Agents, Folder, TokenScope, Upload
+
 
 logger = logging.getLogger("fossology")
 console = logging.StreamHandler()
@@ -168,3 +171,10 @@ def scanned_upload(
     foss.schedule_jobs(foss.rootFolder, test_upload, foss_schedule_agents)
     yield test_upload
     foss.delete_upload(test_upload)
+
+# click runner
+@pytest.fixture(scope="session")
+def runner():
+    the_runner = CliRunner() 
+    yield the_runner
+    # cleanup
