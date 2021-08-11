@@ -37,7 +37,7 @@ Create token - if not already done - and store it in local file for reuse.
 .. code-block:: python
 
   if not os.path.exists(".token"):
-    print("username/password within the testenvironment is fossy/fossy")
+    print("Enter your Fossology credentials, e.g. in the test environment 'username: fossy' and 'password: fossy'")
     username = input("username: ")
     pw = getpass()
     token = fossology_token(
@@ -252,6 +252,5 @@ Output
     scan job Job 'my_base-files_11.tar.xz' (3) queued on 2021-08-09 14:03:20.253572+00 (Status: Processing ETA: 0) set up
     report created with id 4 
     report was written to file /tmp/ReadMe_OSS_my_base-files_11.tar.xz_1628517800.txt
-
 
 
