@@ -24,7 +24,7 @@ Needed imports and Variables
     import requests
     from fossology import Fossology, fossology_token
     from fossology.obj import Group, AccessLevel, TokenScope
-
+    from fossology.exceptions  import FossologyApiError
 
     FOSSOLOGY_SERVER = "http://fossology/repo"
 
@@ -90,23 +90,18 @@ Create Group If needed.
 .. code-block:: python
 
   group_name = "clearing"
-  group_already_created = False
-
-  for group in foss.list_groups():
-    if group.name == group_name:
-      group_already_created = True
-      print(f"Group {group_name} already created")
-      test_group = group
-
-  if not group_already_created:
+  # The name of the group created by `create_group` can be used in subsequent
+  # call to restrict access to resources from this group, see 
+  # https://fossology.github.io/fossology-python/groups.html for further resources
+  try:
     foss.create_group(group_name)
-    # The name of the group created by `create_group` can be used in subsequent
-    # call to restrict access to resources from this group, see 
-    # https://fossology.github.io/fossology-python/groups.html for further resources
-    for group in foss.list_groups():
-      if group.name == group_name:
-        test_group = group
-    print(f"Created group named {test_group.name}")
+  except FossologyApiError as e:
+    if "Details: Group already exists.  Not added." in e.message:
+      print(f" group {group_name} already created")
+    else:
+      raise e
+   print(f"group named {group_name} is created")
+
 
 
 Upload File 
@@ -129,7 +124,7 @@ upload it to the server.
      test_folder,
      file=path_to_upload_file,
      description="Test upload via fossology-python lib",
-     group=test_group.name,
+     group=group_name,
      access_level=AccessLevel.PUBLIC,
    )   
 
@@ -198,9 +193,9 @@ of the analysis - download the report and store it on disk.
 
 .. code-block:: python
 
-  report_id = foss.generate_report(my_upload, group=test_group.name)
+  report_id = foss.generate_report(my_upload, group=group_name)
   print(f"report created with id {report_id} ")
-  content, name = foss.download_report(report_id, test_group.name)
+  content, name = foss.download_report(report_id, group_name)
   print(f"report downloaded with name {name}")
   with open(name, "wb") as fp:
     fp.write(content)
