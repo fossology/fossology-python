@@ -44,7 +44,7 @@ jobs:
           poetry run coverage report -m
       - name: upload codecoverage results 
           if: ${{ github.repository == ‘fossology/fossology-python’ }}
-            poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
+          run: poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
  
 
   test-last-release:
@@ -86,4 +86,4 @@ jobs:
           poetry run coverage report -m
       - name: upload codecoverage results 
           if: ${{ github.repository == ‘fossology/fossology-python’ }}
-          poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
+          run: poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
