@@ -42,7 +42,8 @@ jobs:
           export API_LATEST=true
           poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
-          if: github.repository == ‘fossology/fossology-python’
+      - name: upload codecoverage results 
+          if: ${{ github.repository == ‘fossology/fossology-python’ }}
             poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
  
 
@@ -83,5 +84,6 @@ jobs:
         run: |
           poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
-          if:  github.repository == ‘fossology/fossology-python’
+      - name: upload codecoverage results 
+          if: ${{ github.repository == ‘fossology/fossology-python’ }}
           poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
