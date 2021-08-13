@@ -1,8 +1,8 @@
 __doc__ = """
-        The foss_cli cmdline interface uses the provided REST-API to communicate 
+        The foss_cli cmdline interface uses the provided REST-API to communicate
         with the Fossology Server.
         Logging is implemented using the standard python logging framework.
-        Log Level can be adapted using the -v/-vv option to foss_cli. 
+        Log Level can be adapted using the -v/-vv option to foss_cli.
         Logging could be sent to console (option --log_to_file) and/or to a log_file
         (option --log_to_file). The name of the log_file (default is .foss_cli.log)
         could be adapted using the option --log_file_name <filename>.
@@ -12,8 +12,6 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 import click
-import pprint
-import time
 from fossology import Fossology
 
 logger = logging.getLogger(__name__)
@@ -27,7 +25,7 @@ MAX_NUMBER_OF_LOGFILES = 5
 
 
 def init_foss(ctx):
-    if ctx.obj["TOKEN"] == None:
+    if ctx.obj["TOKEN"] is None:
         try:
             ctx.obj["TOKEN"] = os.environ["FOSS_TOKEN"]
         except Exception as e:
@@ -76,7 +74,7 @@ def cli(ctx, server, token, verbose, log_to_console, log_to_file, log_file_name)
        - foss_cli  -v  ==>  verbosity = 1  \n
        - foss_cli  -vv  ==>  verbosity =  2 \n
     """
-    group_commands = ["Log", "CreateFolder", "CreateGroup"]
+    group_commands = ["Log", "CreateFolder", "CreateGroup"]  # noqa: F841
     if log_to_console:
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
@@ -102,12 +100,12 @@ def cli(ctx, server, token, verbose, log_to_console, log_to_file, log_file_name)
 @click.option("--message_text", default="log message", help="Text of the log message.")
 @click.pass_context
 def Log(ctx, log_level, message_text):
-    """Add a Log Message to the log.  If a log message is printed to the log depends 
+    """Add a Log Message to the log.  If a log message is printed to the log depends
        on  the verbosity defined starting the foss_cli (default level 0 /-v level 1/-vv level 2).
-       Beeing on global verbosity level 0 only messages of --log_level 2 will be printed. 
-       Beeing on global verbosity level 1  messages of --log_level 1 and 2 will be printed. 
-       Beeing on global verbosity level 2 messages of --log_level 0,1,2 will be printed. 
-       Where the log messages are printed depends on the global configuration for --log_to_console, 
+       Beeing on global verbosity level 0 only messages of --log_level 2 will be printed.
+       Beeing on global verbosity level 1  messages of --log_level 1 and 2 will be printed.
+       Beeing on global verbosity level 2 messages of --log_level 0,1,2 will be printed.
+       Where the log messages are printed depends on the global configuration for --log_to_console,
        --log_to_file and --log_file_name.
     """
 

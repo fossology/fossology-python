@@ -4,14 +4,13 @@ __doc__ = """Test the logging of the foss_cli
               FOSS_LOGGING_MAP = {0: logging.WARNING, 1: logging.INFO, 2: logging.DEBUG}
            and set with:
               logger.setLevel(FOSS_LOGGING_MAP.get(verbose, logging.DEBUG))
-           in the cli main command. 
+           in the cli main command.
            The Log command uses:
                Log --log-level 0  ==> logger.debug
                Log --log-level 1  ==> logger.info
                Log --log-level 2  ==> logger.warning
 """
 
-import pytest
 import os
 from fossology import foss_cli
 

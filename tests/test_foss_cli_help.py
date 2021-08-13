@@ -1,7 +1,5 @@
 __doc__ = """Test the "help" text of the different sub commands of foss_cli"""
 
-import pytest
-
 from fossology import foss_cli
 
 
