@@ -35,10 +35,12 @@ def init_foss(ctx):
                 "No Token provided. Either provide FOSS_TOKEN in environment or use the -t option."
             )
             raise e
-    foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])
-    ctx.obj["USER"] = foss.user.name
-    logger.info(f"Logged in as user {foss.user.name}")
-    return foss
+    if "FOSS" not in ctx.obj.keys():
+        foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])
+        ctx.obj["FOSS"] = foss
+        ctx.obj["USER"] = foss.user.name
+        logger.info(f"Logged in as user {foss.user.name}")
+    return ctx.obj["FOSS"]  
 
 
 @click.group()
@@ -122,14 +124,23 @@ def Log(ctx, log_level, message_text):
 
 
 @cli.command("CreateFolder")
-@click.option("--bla1", help="bla1 help.")
-@click.option("--bla2", help="bla2 help.")
+@click.option("--folder_name", help="The name of the folder.")
+@click.option("--folder_description", help="Description of the Folder.")
+@click.option("--folder_group", help="Name of the Group owning the Folder.")
 @click.pass_context
-def CreateFolder(ctx, bla1, bla2):
+def CreateFolder(ctx, folder_name, folder_description,folder_group):
     """The fossology CreateFolder command."""
-    ctx.obj["FOSS"] = init_foss(ctx)
-    foss = ctx.obj["FOSS"]
-    click.echo(f"Logged in as user {foss.user.name}")
+
+    ctx.obj["FOLDER_NAME"] = folder_name 
+    ctx.obj["FOLDER_DESCRIPTION"] = folder_description
+    ctx.obj["FOLDER_GROUP"] = folder_group
+    foss = init_foss(ctx)
+    folder = foss.create_folder( foss.rootFolder, folder_name, description=folder_description, group=folder_group )
+
+
+    message = f"Folder {folder.name} with description {folder.description} created"
+    logger.info(message)
+    click.echo(message)
 
 
 @cli.command("CreateGroup")

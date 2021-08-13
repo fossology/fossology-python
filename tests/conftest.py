@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import os
 import secrets
 import time
 from typing import Dict
@@ -174,7 +175,8 @@ def scanned_upload(
 
 # click runner
 @pytest.fixture(scope="session")
-def runner():
+def runner(foss_token :str):
+    os.environ["FOSS_TOKEN"] = foss_token 
     the_runner = CliRunner() 
     yield the_runner
     # cleanup
