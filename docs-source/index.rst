@@ -17,3 +17,4 @@ Welcome to fossology's documentation!
    obj
    exceptions
    logging
+   sample_workflow
