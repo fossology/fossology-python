@@ -22,7 +22,7 @@ jobs:
           - /tmp:/tmp
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
       - name: Install host dependencies
         run: |
           apt-get -qq update
@@ -42,7 +42,7 @@ jobs:
           export API_LATEST=true
           poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
-      - name: upload codecoverage results 
+      - name: upload codecoverage results only if we are on the repository fossology/fossology-python 
         if: ${{ github.repository == 'fossology/fossology-python' }}
         run: poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
  
@@ -84,6 +84,6 @@ jobs:
         run: |
           poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
-      - name: upload codecoverage results 
+      - name: upload codecoverage results only if we are on the repository fossology/fossology-python 
         if: ${{ github.repository == 'fossology/fossology-python' }}
         run: poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
