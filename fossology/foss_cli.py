@@ -40,7 +40,7 @@ def init_foss(ctx):
         ctx.obj["FOSS"] = foss
         ctx.obj["USER"] = foss.user.name
         logger.info(f"Logged in as user {foss.user.name}")
-    return ctx.obj["FOSS"]  
+    return ctx.obj["FOSS"]
 
 
 @click.group()
@@ -128,15 +128,16 @@ def Log(ctx, log_level, message_text):
 @click.option("--folder_description", help="Description of the Folder.")
 @click.option("--folder_group", help="Name of the Group owning the Folder.")
 @click.pass_context
-def CreateFolder(ctx, folder_name, folder_description,folder_group):
+def CreateFolder(ctx, folder_name, folder_description, folder_group):
     """The fossology CreateFolder command."""
 
-    ctx.obj["FOLDER_NAME"] = folder_name 
+    ctx.obj["FOLDER_NAME"] = folder_name
     ctx.obj["FOLDER_DESCRIPTION"] = folder_description
     ctx.obj["FOLDER_GROUP"] = folder_group
     foss = init_foss(ctx)
-    folder = foss.create_folder( foss.rootFolder, folder_name, description=folder_description, group=folder_group )
-
+    folder = foss.create_folder(
+        foss.rootFolder, folder_name, description=folder_description, group=folder_group
+    )
 
     message = f"Folder {folder.name} with description {folder.description} created"
     logger.info(message)

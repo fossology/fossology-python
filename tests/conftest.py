@@ -173,10 +173,11 @@ def scanned_upload(
     yield test_upload
     foss.delete_upload(test_upload)
 
+
 # click runner
 @pytest.fixture(scope="session")
-def runner(foss_token :str):
-    os.environ["FOSS_TOKEN"] = foss_token 
-    the_runner = CliRunner() 
+def runner(foss_token: str):
+    os.environ["FOSS_TOKEN"] = foss_token
+    the_runner = CliRunner()
     yield the_runner
     # cleanup

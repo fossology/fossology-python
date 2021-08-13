@@ -46,8 +46,11 @@ def test_help_on_CreateFolder(runner):
     help_result = runner.invoke(foss_cli.cli, ["CreateFolder", "--help"], obj={})
     assert help_result.exit_code == 0
     assert "--folder_name TEXT".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "--folder_description TEXT".replace(" ", "") in help_result.output.replace(" ", "")
+    assert "--folder_description TEXT".replace(" ", "") in help_result.output.replace(
+        " ", ""
+    )
     assert "--folder_group TEXT".replace(" ", "") in help_result.output.replace(" ", "")
+
 
 def test_help_on_CreateGroup(runner):
     help_result = runner.invoke(foss_cli.cli, ["CreateGroup", "--help"], obj={})
