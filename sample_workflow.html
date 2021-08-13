@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Sample Workflow &#8212; fossology 1.3.4 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Logging" href="logging.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">fossology</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=fossology&repo=fossology-python&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groups.html">Fossology Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Fossology License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Sample Workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#needed-imports-and-variables">Needed imports and Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-jwt-token">Create JWT Token</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#login-to-the-fossology-server">Login to the Fossology Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-folder-if-needed">Create Folder If needed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-group-if-needed">Create Group If needed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upload-file">Upload File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-default-scan-jobs">Start default scan jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-report">Generate report</a></li>
+</ul>
+</li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/fossology/">Package on PyPi</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/fossology/fossology-python/">Source on Github</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="logging.html" title="previous chapter">Logging</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="sample-workflow">
+<h1>Sample Workflow<a class="headerlink" href="#sample-workflow" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><dl class="simple">
+<dt>A small code sample :</dt><dd><ul class="simple">
+<li><p>create token (if necessary)</p></li>
+<li><p>login on Fossology (using the token)</p></li>
+<li><p>create a “clearing” group</p></li>
+<li><p>upload a source file (visible for the group)</p></li>
+<li><p>start default scan jobs</p></li>
+<li><p>generate report</p></li>
+<li><p>download report</p></li>
+<li><p>store report in local file</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<section id="needed-imports-and-variables">
+<h2>Needed imports and Variables<a class="headerlink" href="#needed-imports-and-variables" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">secrets</span>
+<span class="kn">from</span> <span class="nn">getpass</span> <span class="kn">import</span> <span class="n">getpass</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">Fossology</span><span class="p">,</span> <span class="n">fossology_token</span>
+<span class="kn">from</span> <span class="nn">fossology.obj</span> <span class="kn">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">AccessLevel</span><span class="p">,</span> <span class="n">TokenScope</span>
+<span class="kn">from</span> <span class="nn">fossology.exceptions</span>  <span class="kn">import</span> <span class="n">FossologyApiError</span>
+
+<span class="n">FOSSOLOGY_SERVER</span> <span class="o">=</span> <span class="s2">&quot;http://fossology/repo&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="create-jwt-token">
+<h2>Create JWT Token<a class="headerlink" href="#create-jwt-token" title="Permalink to this headline">¶</a></h2>
+<p>Create token - if not already done - and store it in local file for reuse.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path_to_token_file</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s1">&#39;.token&#39;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">path_to_token_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Enter your Fossology credentials, e.g. in the test environment &#39;username: fossy&#39; and &#39;password: fossy&#39;&quot;</span><span class="p">)</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;username: &quot;</span><span class="p">)</span>
+  <span class="n">pw</span> <span class="o">=</span> <span class="n">getpass</span><span class="p">()</span>
+  <span class="n">token</span> <span class="o">=</span> <span class="n">fossology_token</span><span class="p">(</span>
+      <span class="n">FOSSOLOGY_SERVER</span><span class="p">,</span>
+      <span class="n">username</span><span class="p">,</span>
+      <span class="n">pw</span><span class="p">,</span>
+      <span class="n">secrets</span><span class="o">.</span><span class="n">token_urlsafe</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="c1"># TOKEN_NAME seen in the database</span>
+      <span class="n">TokenScope</span><span class="o">.</span><span class="n">WRITE</span><span class="p">,</span>
+  <span class="p">)</span>
+  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_token_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+      <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;token written to .token&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reuse token from .token&quot;</span><span class="p">)</span>
+  <span class="c1"># Load the token</span>
+  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;.token&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+      <span class="n">token</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="login-to-the-fossology-server">
+<h2>Login to the Fossology Server<a class="headerlink" href="#login-to-the-fossology-server" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>Create the Fossology Instance.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSSOLOGY_SERVER</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Logged in as user </span><span class="si">{</span><span class="n">foss</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="create-folder-if-needed">
+<h2>Create Folder If needed<a class="headerlink" href="#create-folder-if-needed" title="Permalink to this headline">¶</a></h2>
+<p>Create Folder if needed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">folder_name</span> <span class="o">=</span> <span class="s2">&quot;AwesomeFossFolder&quot;</span>
+<span class="n">folder_desc</span> <span class="o">=</span> <span class="s2">&quot;AwesomeProjectSources&quot;</span>
+<span class="n">test_folder</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">create_folder</span><span class="p">(</span>
+      <span class="n">foss</span><span class="o">.</span><span class="n">rootFolder</span><span class="p">,</span> <span class="n">folder_name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">folder_desc</span>
+  <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Created </span><span class="si">{</span><span class="n">test_folder</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> with description </span><span class="si">{</span><span class="n">test_folder</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="create-group-if-needed">
+<h2>Create Group If needed<a class="headerlink" href="#create-group-if-needed" title="Permalink to this headline">¶</a></h2>
+<p>Create Group If needed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">group_name</span> <span class="o">=</span> <span class="s2">&quot;clearing&quot;</span>
+<span class="c1"># The name of the group created by `create_group` can be used in subsequent</span>
+<span class="c1"># call to restrict access to resources from this group, see</span>
+<span class="c1"># https://fossology.github.io/fossology-python/groups.html for further resources</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="n">foss</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">group_name</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">FossologyApiError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+  <span class="k">if</span> <span class="s2">&quot;Details: Group already exists.  Not added.&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; group </span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2"> already created&quot;</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">e</span>
+ <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;group named </span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2"> is created&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="upload-file">
+<h2>Upload File<a class="headerlink" href="#upload-file" title="Permalink to this headline">¶</a></h2>
+<p>We first get an example file from our github repository testenvironment and then
+upload it to the server.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;my_base-files_11.tar.xz&quot;</span>
+<span class="n">path_to_upload_file</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="n">filename</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">path_to_upload_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+  <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://github.com/fossology/fossology-python/blob/master/tests/files/base-files_11.tar.xz&quot;</span>
+  <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Get a local copy of </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_to_upload_file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+    <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+<span class="n">my_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
+  <span class="n">test_folder</span><span class="p">,</span>
+  <span class="n">file</span><span class="o">=</span><span class="n">path_to_upload_file</span><span class="p">,</span>
+  <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Test upload via fossology-python lib&quot;</span><span class="p">,</span>
+  <span class="n">group</span><span class="o">=</span><span class="n">group_name</span><span class="p">,</span>
+  <span class="n">access_level</span><span class="o">=</span><span class="n">AccessLevel</span><span class="o">.</span><span class="n">PUBLIC</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="start-default-scan-jobs">
+<h2>Start default scan jobs<a class="headerlink" href="#start-default-scan-jobs" title="Permalink to this headline">¶</a></h2>
+<p>After uploading a source code archive a scan job could be triggered to analyze
+the archive.  There are different agents available to scan/analyze for license relevant
+text/Copyrights/Export Control and Customs (ECC)/… .
+Furthermore multiple possibilities for decisions or reusing components are available.</p>
+<p>The doings of this step are best explained showing the corresponding web interface on the Fossology Server.</p>
+<img alt="CreateScanJob.png" src="_images/CreateScanJob.png" />
+<p>The below given job_specification resemble the buttons activated in the web-ui.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">job_specification</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s2">&quot;analysis&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;bucket&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;copyright_email_author&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;ecc&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;monk&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;mime&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;monk&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;nomos&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;ojo&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;package&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;specific_agent&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;decider&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;nomos_monk&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;bulk_reused&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;new_scanner&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;ojo_decider&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;reuse&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;reuse_upload&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;reuse_group&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;reuse_main&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;reuse_enhanced&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;reuse_report&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+          <span class="s2">&quot;reuse_copyright&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+      <span class="p">},</span>
+  <span class="p">}</span>
+
+<span class="n">detailed_job</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">schedule_jobs</span><span class="p">(</span>
+  <span class="n">test_folder</span><span class="p">,</span>
+  <span class="n">my_upload</span><span class="p">,</span>
+  <span class="n">job_specification</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scan job </span><span class="si">{</span><span class="n">detailed_job</span><span class="si">}</span><span class="s2"> set up&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="generate-report">
+<h2>Generate report<a class="headerlink" href="#generate-report" title="Permalink to this headline">¶</a></h2>
+<p>Generate a  report based on the uploaded archive  and the findings
+of the analysis - download the report and store it on disk.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">report_id</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="n">my_upload</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">group_name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;report created with id </span><span class="si">{</span><span class="n">report_id</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+<span class="n">content</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">download_report</span><span class="p">(</span><span class="n">report_id</span><span class="p">,</span> <span class="n">group_name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;report downloaded with name </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+  <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;report was written to file </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2021, Siemens AG.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sample_workflow.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
