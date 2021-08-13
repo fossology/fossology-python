@@ -8,13 +8,11 @@ import time
 from typing import Dict
 
 import pytest
-
 from click.testing import CliRunner
 
 import fossology
 from fossology.exceptions import AuthenticationError, FossologyApiError
 from fossology.obj import AccessLevel, Agents, Folder, TokenScope, Upload
-
 
 logger = logging.getLogger("fossology")
 console = logging.StreamHandler()

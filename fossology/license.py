@@ -2,14 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 import json
-from json.decoder import JSONDecodeError
 import logging
+from json.decoder import JSONDecodeError
+from urllib.parse import quote
 
 import fossology
 from fossology.exceptions import FossologyApiError, FossologyUnsupported
 from fossology.obj import License, LicenseType, Obligation
-
-from urllib.parse import quote
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 from unittest.mock import MagicMock
+
 import pytest
 import responses
 

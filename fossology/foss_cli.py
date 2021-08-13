@@ -7,11 +7,13 @@ __doc__ = """
         (option --log_to_file). The name of the log_file (default is .foss_cli.log)
         could be adapted using the option --log_file_name <filename>.
 """
-import sys
-import os
 import logging
+import os
+import sys
 from logging.handlers import RotatingFileHandler
+
 import click
+
 from fossology import Fossology
 
 logger = logging.getLogger(__name__)

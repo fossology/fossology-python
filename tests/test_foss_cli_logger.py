@@ -12,6 +12,7 @@ __doc__ = """Test the logging of the foss_cli
 """
 
 import os
+
 from fossology import foss_cli
 
 TEST_MESSAGE = "This is a Test Message."
