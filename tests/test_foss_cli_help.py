@@ -16,6 +16,7 @@ def test_help_on_top_level(runner):
     assert "--help  ".replace(" ", "") in help_result.output.replace(" ", "")
     assert "-t, --token TEXT ".replace(" ", "") in help_result.output.replace(" ", "")
     assert "-s, --server TEXT".replace(" ", "") in help_result.output.replace(" ", "")
+    assert "-u, --username TEXT".replace(" ", "") in help_result.output.replace(" ", "")
     assert "-v, --verbose ".replace(" ", "") in help_result.output.replace(" ", "")
     assert (
         "--log_to_console ".replace(" ", "")
