@@ -37,23 +37,31 @@ def init_foss(ctx):
             )
             raise e
     if "FOSS" not in ctx.obj.keys():  # Initial try to connect to the server
-       try: 
-         foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"]) # using new API
-       except AuthenticationError as e1:  # Maybe it is an old version needing the username ?
-         try:
-           if ctx.obj["USERNAME"] is None:
-             logger.fatal('Connecting to the Fossology Server using new API failed - \
-                          to check with the old API a username is needed - but not provided',exc_info=True)
-             raise e1
-           else:
-             foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"], ctx.obj["USERNAME"],)
-         except AuthenticationError as e2:
-             logger.fatal('Connecting to the Fossology Server using new API failed - \
-                         even connecting to the old API with user {ctx.obj["USERNAME"]} failed',exc_info=True)
-             raise e2
-       ctx.obj["FOSS"] = foss
-       ctx.obj["USER"] = foss.user.name
-       logger.info(f"Logged in as user {foss.user.name}")
+        try:
+            foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])  # using new API
+        except AuthenticationError as e1:  # Maybe it is an old version needing the username ?
+            try:
+                if ctx.obj["USERNAME"] is None:
+                    logger.fatal(
+                        "Connecting to the Fossology Server using new API failed - \
+                          to check with the old API a username is needed - but not provided",
+                        exc_info=True,
+                    )
+                    raise e1
+                else:
+                    foss = Fossology(
+                        ctx.obj["SERVER"], ctx.obj["TOKEN"], ctx.obj["USERNAME"],
+                    )
+            except AuthenticationError as e2:
+                logger.fatal(
+                    'Connecting to the Fossology Server using new API failed - \
+                         even connecting to the old API with user {ctx.obj["USERNAME"]} failed',
+                    exc_info=True,
+                )
+                raise e2
+        ctx.obj["FOSS"] = foss
+        ctx.obj["USER"] = foss.user.name
+        logger.info(f"Logged in as user {foss.user.name}")
     return ctx.obj["FOSS"]
 
 
@@ -85,7 +93,9 @@ def init_foss(ctx):
     help="Specify log File Name if log is sent to file.  Default is .foss_cli.log.",
 )
 @click.pass_context
-def cli(ctx, server, username, token, verbose, log_to_console, log_to_file, log_file_name):
+def cli(
+    ctx, server, username, token, verbose, log_to_console, log_to_file, log_file_name
+):
     """The fossology cmdline client. \n
        - foss_cli    ==>  verbosity = 0 \n
        - foss_cli  -v  ==>  verbosity = 1  \n
@@ -108,7 +118,7 @@ def cli(ctx, server, username, token, verbose, log_to_console, log_to_file, log_
     ctx.obj["VERBOSE"] = verbose
     ctx.obj["SERVER"] = server
     ctx.obj["TOKEN"] = token
-    ctx.obj["USERNAME"] = username 
+    ctx.obj["USERNAME"] = username
 
 
 @cli.command("Log")
