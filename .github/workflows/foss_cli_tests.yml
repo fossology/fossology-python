@@ -1,7 +1,11 @@
 name: foss_cli_test 
-on: [push,pull_request] 
-  branches:
-    - 'feat-create-cli**'
+on: 
+  push:
+    branches:
+      - 'feat-create-cli**'
+  pull_request :
+    branches:
+      - 'feat-create-cli**'
 
 jobs:
   test-latest:
