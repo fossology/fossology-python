@@ -13,6 +13,7 @@ __doc__ = """Test the logging of the foss_cli
 
 import os
 
+import pytest
 from fossology import foss_cli
 
 TEST_MESSAGE = "This is a Test Message."
@@ -20,6 +21,7 @@ DEFAULT_LOG_FILE_NAME = ".foss_cli.log"
 TEST_LOG_FILE_NAME = "my.log"
 
 
+@pytest.mark.foss_cli
 def test_global_zero(runner):
     """Test with global verbosity level 0."""
     # Should be seen on console
@@ -48,6 +50,7 @@ def test_global_zero(runner):
     assert TEST_MESSAGE not in result.output
 
 
+@pytest.mark.foss_cli
 def test_global_one(runner):
     """Test with global verbosity level 1."""
     # Should be seen on console
@@ -76,6 +79,7 @@ def test_global_one(runner):
     assert TEST_MESSAGE not in result.output
 
 
+@pytest.mark.foss_cli
 def test_global_two(runner):
     """Test with global verbosity level 2."""
     # Should be seen on console
@@ -108,6 +112,7 @@ def test_global_two(runner):
 # --log_to_file/log_file_name conceirning output  to the correct file.
 
 
+@pytest.mark.foss_cli
 def test_log_to_default_file(runner):
     with runner.isolated_filesystem():
         result = runner.invoke(
@@ -128,6 +133,7 @@ def test_log_to_default_file(runner):
         assert TEST_MESSAGE in open(DEFAULT_LOG_FILE_NAME).read()
 
 
+@pytest.mark.foss_cli
 def test_log_to_userdefined_file(runner):
     with runner.isolated_filesystem():
         result = runner.invoke(

@@ -18,6 +18,10 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
 ]
 
+[tool.pytest.ini_options]
+markers = [ 
+  "foss_cli: foss_cli Tests", 
+]
 [tool.isort]
 profile = "black"
 
