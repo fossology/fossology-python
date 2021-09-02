@@ -46,7 +46,7 @@ Create token - if not already done - and store it in local file for reuse.
 ...        TokenScope.WRITE,
 ...    )
 ...   with open(path_to_token_file, "w") as fp:
-...        fp.write(token)
+...        len = fp.write(token)
 ... else:
 ...   # Load the token
 ...   with open(".token", "r") as fp:
@@ -108,7 +108,6 @@ upload it to the server.
 >>> path_to_upload_file = pathlib.Path.cwd() / filename
 >>> if not path_to_upload_file.exists():
 ...    url = "https://github.com/fossology/fossology-python/blob/master/tests/files/base-files_11.tar.xz"
-...    print(f"Get a local copy of {filename} from {url}")
 ...    r = requests.get(url)
 ...    with open(path_to_upload_file, "wb") as fp: 
 ...        fp.write(r.content)
