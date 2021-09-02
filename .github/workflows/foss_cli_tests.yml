@@ -43,7 +43,7 @@ jobs:
         run: nmap fossology -p 80
       - name: Run tests
         run: |
-          poetry run coverage run --source=fossology -m pytest -m  foss_cli
+          poetry run coverage run --source=fossology -m pytest  tests/test_foss_cli*.py
           poetry run coverage report -m
  
 

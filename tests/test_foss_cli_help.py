@@ -1,11 +1,6 @@
 __doc__ = """Test the "help" text of the different sub commands of foss_cli"""
 
-import pytest
 from fossology import foss_cli
-
-# apply mark to all tests defined in the file
-# https://docs.pytest.org/en/latest/example/markers.html#mark-examples
-pytestmark = pytest.mark.foss_cli
 
 
 def test_smoke(runner):

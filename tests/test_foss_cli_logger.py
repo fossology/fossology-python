@@ -13,16 +13,11 @@ __doc__ = """Test the logging of the foss_cli
 
 import os
 
-import pytest
 from fossology import foss_cli
 
 TEST_MESSAGE = "This is a Test Message."
 DEFAULT_LOG_FILE_NAME = ".foss_cli.log"
 TEST_LOG_FILE_NAME = "my.log"
-
-# apply mark to all tests defined in the file
-# https://docs.pytest.org/en/latest/example/markers.html#mark-examples
-pytestmark = pytest.mark.foss_cli
 
 
 def test_global_zero(runner):
