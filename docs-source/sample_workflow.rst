@@ -24,7 +24,6 @@ Needed imports and Variables
 >>> from fossology import Fossology, fossology_token
 >>> from fossology.obj import Group, AccessLevel, TokenScope
 >>> from fossology.exceptions  import FossologyApiError
-
 >>> FOSSOLOGY_SERVER = "http://fossology/repo"
 
 Create JWT Token
@@ -35,7 +34,7 @@ Create token - if not already done - and store it in local file for reuse.
 
 >>> path_to_token_file = pathlib.Path.cwd() / '.token'
 >>> if not path_to_token_file.exists():
-...   print("Enter your Fossology credentials, e.g. in the test environment 'username: fossy' and 'password: fossy'")
+...   #print("Enter your Fossology credentials, e.g. in the test environment 'username: fossy' and 'password: fossy'")
 ...   #username = input("username: ")
 ...   #pw = getpass()
 ...   username, pw = "fossy","fossy"
