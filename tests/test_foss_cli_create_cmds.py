@@ -4,7 +4,11 @@ import pytest
 from fossology import foss_cli
 
 
-@pytest.mark.foss_cli
+# apply mark to all tests defined in the file
+# https://docs.pytest.org/en/latest/example/markers.html#mark-examples
+pytestmark = pytest.mark.foss_cli
+
+
 def test_CreateFolder(runner):
     """Test the CLI."""
     result = runner.invoke(

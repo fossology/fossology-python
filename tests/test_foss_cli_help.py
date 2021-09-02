@@ -3,15 +3,17 @@ __doc__ = """Test the "help" text of the different sub commands of foss_cli"""
 import pytest
 from fossology import foss_cli
 
+# apply mark to all tests defined in the file
+# https://docs.pytest.org/en/latest/example/markers.html#mark-examples
+pytestmark = pytest.mark.foss_cli
 
-@pytest.mark.foss_cli
+
 def test_smoke(runner):
     """Test the CLI."""
     result = runner.invoke(foss_cli.cli, None, obj={})
     assert result.exit_code == 0
 
 
-@pytest.mark.foss_cli
 def test_help_on_top_level(runner):
     help_result = runner.invoke(foss_cli.cli, ["--help"], obj={})
     assert help_result.exit_code == 0
@@ -37,7 +39,6 @@ def test_help_on_top_level(runner):
     assert " Log ".replace(" ", "") in help_result.output.replace(" ", "")
 
 
-@pytest.mark.foss_cli
 def test_help_on_Log(runner):
     help_result = runner.invoke(foss_cli.cli, ["Log", "--help"], obj={})
     assert help_result.exit_code == 0
@@ -45,7 +46,6 @@ def test_help_on_Log(runner):
     assert "--message_text TEXT".replace(" ", "") in help_result.output.replace(" ", "")
 
 
-@pytest.mark.foss_cli
 def test_help_on_CreateFolder(runner):
     help_result = runner.invoke(foss_cli.cli, ["CreateFolder", "--help"], obj={})
     assert help_result.exit_code == 0
@@ -56,7 +56,6 @@ def test_help_on_CreateFolder(runner):
     assert "--folder_group TEXT".replace(" ", "") in help_result.output.replace(" ", "")
 
 
-@pytest.mark.foss_cli
 def test_help_on_CreateGroup(runner):
     help_result = runner.invoke(foss_cli.cli, ["CreateGroup", "--help"], obj={})
     assert help_result.exit_code == 0
