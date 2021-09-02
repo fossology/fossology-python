@@ -110,7 +110,7 @@ upload it to the server.
 ...    url = "https://github.com/fossology/fossology-python/blob/master/tests/files/base-files_11.tar.xz"
 ...    r = requests.get(url)
 ...    with open(path_to_upload_file, "wb") as fp: 
-...        fp.write(r.content)
+...        len = fp.write(r.content)
 >>> my_upload = foss.upload_file(
 ...     test_folder,
 ...     file=path_to_upload_file,
@@ -189,7 +189,6 @@ report created with id...
 report downloaded...
 >>> with open(name, "wb") as fp: 
 ...    len = fp.write(content)
->>> fp.close()
 >>> print(f"report was written to file {name}.") # doctest: +ELLIPSIS  
 report was written to file...
 
