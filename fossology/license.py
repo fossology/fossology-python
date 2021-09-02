@@ -138,14 +138,14 @@ class LicenseEndpoint:
         License data are added to the request body, here is an example:
 
         >>> new_license = License(
-        >>>     "GPL-1.0",
-        >>>     "GNU General Public License 1.0",
-        >>>     "Text of the license...",
-        >>>     "http://www.gnu.org/licenses/gpl-1.0.txt",
-        >>>     "red"
-        >>>     "false"
-        >>> )
-        >>> foss.add_license(new_license, merge_request=True)
+        ...     "GPL-1.0",
+        ...     "GNU General Public License 1.0",
+        ...     "Text of the license...",
+        ...     "http://www.gnu.org/licenses/gpl-1.0.txt",
+        ...     "red",
+        ...     "false"
+        ... )
+        >>> foss.add_license(new_license, merge_request=True) # doctest: +SKIP
 
         :param license: the license data
         :param merge_request: open a merge request for the license candidate? (default: False)
