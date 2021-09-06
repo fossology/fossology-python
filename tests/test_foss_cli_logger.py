@@ -25,7 +25,7 @@ def test_global_zero(runner):
     # Should be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["Log", "--log_level", "2", "--message_text", TEST_MESSAGE],
+        ["log", "--log_level", "2", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -33,7 +33,7 @@ def test_global_zero(runner):
     # Should not be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["Log", "--log_level", "1", "--message_text", TEST_MESSAGE],
+        ["log", "--log_level", "1", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -41,7 +41,7 @@ def test_global_zero(runner):
     # Should not be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["Log", "--log_level", "0", "--message_text", TEST_MESSAGE],
+        ["log", "--log_level", "0", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -53,7 +53,7 @@ def test_global_one(runner):
     # Should be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["-v", "Log", "--log_level", "2", "--message_text", TEST_MESSAGE],
+        ["-v", "log", "--log_level", "2", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -61,7 +61,7 @@ def test_global_one(runner):
     # Should  be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["-v", "Log", "--log_level", "1", "--message_text", TEST_MESSAGE],
+        ["-v", "log", "--log_level", "1", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -69,7 +69,7 @@ def test_global_one(runner):
     # Should not be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["-v", "Log", "--log_level", "0", "--message_text", TEST_MESSAGE],
+        ["-v", "log", "--log_level", "0", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -81,7 +81,7 @@ def test_global_two(runner):
     # Should be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "Log", "--log_level", "2", "--message_text", TEST_MESSAGE],
+        ["-vv", "log", "--log_level", "2", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -89,7 +89,7 @@ def test_global_two(runner):
     # Should  be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "Log", "--log_level", "1", "--message_text", TEST_MESSAGE],
+        ["-vv", "log", "--log_level", "1", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -97,7 +97,7 @@ def test_global_two(runner):
     # Should  be seen on console
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "Log", "--log_level", "0", "--message_text", TEST_MESSAGE],
+        ["-vv", "log", "--log_level", "0", "--message_text", TEST_MESSAGE],
         obj={},
     )
     assert result.exit_code == 0
@@ -115,7 +115,7 @@ def test_log_to_default_file(runner):
             [
                 "--log_to_file",
                 "-vv",
-                "Log",
+                "log",
                 "--log_level",
                 "2",
                 "--message_text",
@@ -137,7 +137,7 @@ def test_log_to_userdefined_file(runner):
                 "-vv",
                 "--log_file_name",
                 TEST_LOG_FILE_NAME,
-                "Log",
+                "log",
                 "--log_level",
                 "2",
                 "--message_text",

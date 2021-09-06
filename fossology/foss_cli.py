@@ -7,6 +7,7 @@ __doc__ = """
         (option --log_to_file). The name of the log_file (default is .foss_cli.log)
         could be adapted using the option --log_file_name <filename>.
 """
+import pprint
 import logging
 import os
 import sys
@@ -15,7 +16,8 @@ from logging.handlers import RotatingFileHandler
 import click
 
 from fossology import Fossology
-from fossology.exceptions import AuthenticationError
+from fossology.exceptions import AuthenticationError, FossologyApiError
+from fossology.obj import AccessLevel, ReportFormat
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter(
@@ -39,6 +41,7 @@ def init_foss(ctx):
     if "FOSS" not in ctx.obj.keys():  # Initial try to connect to the server
         try:
             foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])  # using new API
+            ctx.obj["FOSS"] = foss
         except AuthenticationError as e1:  # Maybe it is an old version needing the username ?
             try:
                 if ctx.obj["USERNAME"] is None:
@@ -61,7 +64,6 @@ def init_foss(ctx):
                 raise e2
         ctx.obj["FOSS"] = foss
         ctx.obj["USER"] = foss.user.name
-        logger.info(f"Logged in as user {foss.user.name}")
     return ctx.obj["FOSS"]
 
 
@@ -92,16 +94,33 @@ def init_foss(ctx):
     default=".foss_cli.log",
     help="Specify log File Name if log is sent to file.  Default is .foss_cli.log.",
 )
+@click.option(
+    "--debug/--no_debug",
+    is_flag=True,
+    default=False,
+    help="Send detailed logging output to console. Default is --nodebug.",
+)
 @click.pass_context
 def cli(
-    ctx, server, username, token, verbose, log_to_console, log_to_file, log_file_name
+    ctx,
+    server,
+    username,
+    token,
+    verbose,
+    log_to_console,
+    log_to_file,
+    log_file_name,
+    debug,
 ):
-    """The fossology cmdline client. \n
-       - foss_cli    ==>  verbosity = 0 \n
-       - foss_cli  -v  ==>  verbosity = 1  \n
-       - foss_cli  -vv  ==>  verbosity =  2 \n
+    """The fossology cmdline client.  Multiple -v increase verbosity-level.
     """
-    group_commands = ["Log", "CreateFolder", "CreateGroup"]  # noqa: F841
+    # XXX ? Really needed
+    # group_commands = [
+    #     "log",
+    #     "create_folder",
+    #     "create_group",
+    #     #    "upload_file",
+    # ]  # noqa: F841
     if log_to_console:
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
@@ -119,15 +138,34 @@ def cli(
     ctx.obj["SERVER"] = server
     ctx.obj["TOKEN"] = token
     ctx.obj["USERNAME"] = username
+    ctx.obj["DEBUG"] = debug
+
+    foss = init_foss(ctx)  # leaves the foss instance within the ctx dict
+    logger.debug(f"Logged in as user {foss.user.name}")
+    if debug:
+        logger.debug("Started in debug mode")
+        logger.debug(f"Servers users:{pprint.pformat(foss.users)}")
+        folder_ids = [folder.id for folder in foss.folders]
+        for id in folder_ids:
+            detail = foss.detail_folder(id)
+            logger.debug(f"Get Folder {detail.id}")
+            logger.debug(f"    Name: {detail.name}  Parent:   {detail.parent}")
+            logger.debug(
+                f"    desc: {detail.description}  Add-Info: {detail.additional_info}"
+            )
+        logger.debug(f"Servers api:{pprint.pformat(foss.api)}")
+        logger.debug(f"Servers version:{pprint.pformat(foss.version)}")
+        logger.debug(f"User Authorized on Server:{pprint.pformat(foss.user.name)}")
+        logger.debug(f"Root Folder on Server:{pprint.pformat(foss.rootFolder.name)}")
 
 
-@cli.command("Log")
+@cli.command("log")
 @click.option(
     "--log_level", default=0, help="Set the log_level of the message [0,1,2]."
 )
 @click.option("--message_text", default="log message", help="Text of the log message.")
 @click.pass_context
-def Log(ctx, log_level, message_text):
+def log(ctx, log_level, message_text):
     """Add a Log Message to the log.  If a log message is printed to the log depends
        on  the verbosity defined starting the foss_cli (default level 0 /-v level 1/-vv level 2).
        Beeing on global verbosity level 0 only messages of --log_level 2 will be printed.
@@ -149,36 +187,268 @@ def Log(ctx, log_level, message_text):
         raise click.UsageError(error_text, ctx=ctx)
 
 
-@cli.command("CreateFolder")
+@cli.command("create_folder")
 @click.option("--folder_name", help="The name of the folder.")
 @click.option("--folder_description", help="Description of the Folder.")
 @click.option("--folder_group", help="Name of the Group owning the Folder.")
 @click.pass_context
-def CreateFolder(ctx, folder_name, folder_description, folder_group):
-    """The fossology CreateFolder command."""
-
+def create_folder(ctx, folder_name, folder_description, folder_group):
+    """The fossology create_folder command."""
     ctx.obj["FOLDER_NAME"] = folder_name
     ctx.obj["FOLDER_DESCRIPTION"] = folder_description
     ctx.obj["FOLDER_GROUP"] = folder_group
-    foss = init_foss(ctx)
-    folder = foss.create_folder(
-        foss.rootFolder, folder_name, description=folder_description, group=folder_group
-    )
-
-    message = f"Folder {folder.name} with description {folder.description} created"
-    logger.info(message)
-    click.echo(message)
-
-
-@cli.command("CreateGroup")
-@click.option("--bla1", help="bla1 help.")
-@click.option("--bla2", help="bla2 help.")
-@click.pass_context
-def CreateGroup(ctx, bla1, bla2):
-    """The fossology CreateGroup command."""
-    ctx.obj["FOSS"] = init_foss(ctx)
     foss = ctx.obj["FOSS"]
-    click.echo(f"Logged in as user {foss.user.name}")
+    try:
+        logger.debug(
+            f" Try to create folder {folder_name} for group {folder_group} desc: {folder_description}"
+        )
+        folder = foss.create_folder(
+            foss.rootFolder,
+            folder_name,
+            description=folder_description,
+            group=folder_group,
+        )
+        message = f"Folder {folder.name} with description {folder.description} created"
+        logger.debug(message)
+    except Exception as e:
+        logger.fatal(f"Error creating Folder {folder_name} ", exc_info=True)
+        raise e
+
+
+@cli.command("create_group")
+@click.argument("group_name")
+@click.pass_context
+def create_group(ctx, group_name):
+    """The fossology create_group command."""
+    logger.debug(f"Try to create group {group_name}")
+    foss = ctx.obj["FOSS"]
+    try:
+        foss.create_group(group_name)
+        logger.debug(f" group {group_name} created")
+    except FossologyApiError as e:
+        if "Details: Group already exists.  Not added." in e.message:
+            logger.debug(
+                f" group {group_name} already exists. Anyway the group is available."
+            )
+        else:
+            logger.fatal(f"Error adding group {group_name} ", exc_info=True)
+            raise e
+
+
+@cli.command("upload_file")
+@click.argument(
+    "upload_file", type=click.Path(exists=True),
+)
+@click.option("--folder_name", default=None, help="The name of the folderto upload to.")
+@click.option("--description", default=None, help="The decription of the upload.")
+@click.option("--access_level", default="Public", help="The acces Level  the upload.")
+@click.option(
+    "--reuse_last_upload/--no_reuse_last_upload",
+    is_flag=True,
+    default=False,
+    help="Reuse last upload if available.",
+)
+@click.option(
+    "--summary/--no_summary",
+    is_flag=True,
+    default=False,
+    help="Get summary of upload.",
+)
+@click.pass_context
+def upload_file(
+    ctx, upload_file, folder_name, description, access_level, reuse_last_upload, summary
+):
+    """The fossology upload_file command."""
+
+    logger.debug(f"Try to upload file {upload_file}")
+    foss = ctx.obj["FOSS"]
+    if access_level != "Public":
+        logger.fatal(
+            f"{access_level}  AccesLevel other than public not yet implemented"
+        )
+
+    if reuse_last_upload:
+        the_uploads, pages = foss.list_uploads(
+            folder=folder_name if folder_name else foss.rootFolder,
+        )
+        found = None
+        newest_date = "0000-09-05 13:25:38.079869+00"
+        for a_upload in the_uploads:
+            if upload_file.endswith(a_upload.uploadname):
+                if a_upload.uploaddate > newest_date:
+                    newest_date = a_upload.uploaddate
+                    found = a_upload
+        if found:
+            the_upload = foss.detail_upload(a_upload.id)
+            logger.info(
+                f"Reused upload id {a_upload.id} matches {upload_file} and is the newest"
+            )
+            assert a_upload.id == the_upload.id
+
+        else:
+            the_upload = None
+
+    #
+    if the_upload is None:
+        the_upload = foss.upload_file(
+            folder_name if folder_name else foss.rootFolder,
+            file=upload_file,
+            description=description if description else "upload via foss-cli",
+            access_level=AccessLevel.PUBLIC,
+        )
+
+    ctx.obj["UPLOAD"] = the_upload
+
+    if summary:
+        summary = foss.upload_summary(the_upload)
+        if ctx.obj["DEBUG"]:
+            logger.debug(
+                f"Summary of Upload id {summary.id} Name {summary.uploadName} "
+            )
+            logger.debug(
+                f"    Main Lic {summary.mainLicense} Unique Lic  {summary.uniqueLicenses} "
+            )
+            logger.debug(
+                f"    Total Lic {summary.totalLicenses} Unique Concl Lic  {summary.uniqueConcludedLicenses}"
+            )
+            logger.debug(
+                f"    totalConcludedLicenses {summary.totalConcludedLicenses} FileToBeCleared  {summary.filesToBeCleared} "
+            )
+            logger.debug(
+                f"    Files Cleared {summary.filesCleared}  ClearingStatus  {summary.clearingStatus} "
+            )
+            logger.debug(
+                f"    CopyRightCount {summary.copyrightCount}  Add Info  {summary.additional_info} "
+            )
+
+
+@cli.command("schedule_jobs")
+@click.argument(
+    "file_name", type=click.Path(exists=True),
+)
+@click.option("--folder_name", default=None, help="The name of the folderto upload to.")
+@click.option(
+    "--report_format", default="unifiedreport", help="The name of the reportformat."
+)
+@click.pass_context
+def schedule_jobs(ctx, file_name, folder_name, report_format):
+    """The fossology upload_file command."""
+
+    job_spec = {
+        "analysis": {
+            "bucket": True,
+            "copyright_email_author": True,
+            "ecc": True,
+            "keyword": True,
+            "monk": True,
+            "mime": True,
+            "monk": True,
+            "nomos": True,
+            "ojo": True,
+            "package": True,
+            "specific_agent": True,
+        },
+        "decider": {
+            "nomos_monk": True,
+            "bulk_reused": True,
+            "new_scanner": True,
+            "ojo_decider": True,
+        },
+        "reuse": {
+            "reuse_upload": 0,
+            "reuse_group": 0,
+            "reuse_main": True,
+            "reuse_enhanced": True,
+            "reuse_report": True,
+            "reuse_copyright": True,
+        },
+    }
+
+    logger.debug(f"report format {report_format}")
+    # if report_format == "dep5":
+    #    the_report_format = ReportFormat.DEP5
+    # elif report_format == "spx2":
+    #    the_report_format = ReportFormat.SPDX2
+    # elif report_format == "spx2tv":
+    #    the_report_format = ReportFormat.SPDX2TV
+    # elif report_format == "reameoss":
+    #    the_report_format = ReportFormat.READMEOSS
+    # elif report_format == "unifiedreport":
+    #    the_report_format = ReportFormat.UNIFIEDREPORT
+    # else:
+    #    logger.fatal(f"Impossible report format {report_format}")
+    #    # sys.exit(1)
+
+    the_report_format = ReportFormat.SPDX2
+    logger.debug(f"Try to shedule job {file_name}")
+    foss = ctx.obj["FOSS"]
+
+    # Uploads
+
+    the_uploads, pages = foss.list_uploads(
+        folder=folder_name if folder_name else foss.rootFolder,
+    )
+    found = None
+    newest_date = "0000-09-05 13:25:38.079869+00"
+    for a_upload in the_uploads:
+        if file_name.endswith(a_upload.uploadname):
+            if a_upload.uploaddate > newest_date:
+                newest_date = a_upload.uploaddate
+                found = a_upload
+    if found:
+        the_upload = foss.detail_upload(a_upload.id)
+        logger.info(
+            f"Reused upload id {a_upload.id} matches {file_name} and is the newest"
+        )
+        assert a_upload.id == the_upload.id
+
+    else:
+        the_upload = None
+        logger.fatal(f"Unable to find upload for {file_name}.")
+        logger.fatal("Fix the current cache thinking")
+        sys.exit(0)
+
+    logger.info(f"upload id {the_upload.id} is the newest")
+
+    # old Jobs
+    the_jobs, pages = foss.list_jobs(the_upload)
+    # logger.info(f"jobs {the_jobs}")
+    job = None
+    newest_date = "0000-09-05 13:25:38.079869+00"
+    for the_job in the_jobs:
+        if the_job.queueDate > newest_date:
+            newest_date = the_job.queueDate
+            job = the_job
+        # logger.info(f" Job  {dir(job)} ")
+    if job:
+        logger.info(f"Newest Job id {job.id} is from {job.queueDate} ")
+    else:
+        job = foss.schedule_jobs(
+            folder_name if folder_name else foss.rootFolder, the_upload, job_spec
+        )
+        logger.debug(f"Try to schedule job {job}")
+        logger.debug(f"Try to schedule job {dir(job)}")
+
+    if ctx.obj["DEBUG"]:
+        logger.debug(f"Job  {job.id} name {job.name}")
+
+    detail = foss.detail_job(job.id)
+    logger.debug(f"job  {job.id}  state {job.status} ")
+    logger.debug(f"Detail {dir(detail)} ")
+
+    report_id = foss.generate_report(the_upload, report_format=the_report_format)
+
+    logger.debug(f"report {report_id}  Generated ")
+    #   content, name = foss.download_report(report_id, group_name)
+    content, name = foss.download_report(report_id)
+    logger.debug(f"content type: {type(content)} len {len(content)} Downloaded")
+
+    content = content.splitlines()
+    logger.debug(f"content {pprint.pformat(content)} ")
+
+    content = b"content".decode("utf-8")
+    logger.debug(f"report {name}  Downloaded")
+    logger.debug(f"report {name}  had content {pprint.pformat(content.splitlines())}")
 
 
 def main():
@@ -186,4 +456,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+    sys.exit(main(sys.argv[1:]))  # pragma: no cover

@@ -102,6 +102,8 @@ def foss_user(foss_user_agents) -> Dict:
 
 @pytest.fixture(scope="session")
 def foss_token(foss_server: str) -> str:
+    logger.fatal("HUHU")
+    print("HUHU")
     return fossology.fossology_token(
         foss_server, "fossy", "fossy", secrets.token_urlsafe(8), TokenScope.WRITE
     )
