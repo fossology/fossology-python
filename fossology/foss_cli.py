@@ -28,8 +28,86 @@ FOSS_LOGGING_MAP = {0: logging.WARNING, 1: logging.INFO, 2: logging.DEBUG}
 MAX_SIZE_OF_LOGFILE = 200000
 MAX_NUMBER_OF_LOGFILES = 5
 
+IS_REQUEST_FOR_HELP = False
 
-def init_foss(ctx):
+
+JOB_SPEC = {
+    "analysis": {
+        "bucket": True,
+        "copyright_email_author": True,
+        "ecc": True,
+        "keyword": True,
+        "monk": True,
+        "mime": True,
+        "monk": True,
+        "nomos": True,
+        "ojo": True,
+        "package": True,
+        "specific_agent": True,
+    },
+    "decider": {
+        "nomos_monk": True,
+        "bulk_reused": True,
+        "new_scanner": True,
+        "ojo_decider": True,
+    },
+    "reuse": {
+        "reuse_upload": 0,
+        "reuse_group": 0,
+        "reuse_main": True,
+        "reuse_enhanced": True,
+        "reuse_report": True,
+        "reuse_copyright": True,
+    },
+}
+
+
+def get_report_format(format: str):
+    """[Get report format.]
+    :param format: [name of a report format]
+    :type format: str
+    :return: []
+    :rtype: [ReportFormat Attribute]
+    """
+    if format == "dep5":
+        the_report_format = ReportFormat.DEP5
+    elif format == "spx2":
+        the_report_format = ReportFormat.SPDX2
+    elif format == "spx2tv":
+        the_report_format = ReportFormat.SPDX2TV
+    elif format == "readmeoss":
+        the_report_format = ReportFormat.READMEOSS
+    elif format == "unifiedreport":
+        the_report_format = ReportFormat.UNIFIEDREPORT
+    else:
+        logger.fatal(f"Impossible report format {format}")
+        sys.exit(1)
+    return the_report_format
+
+
+def is_help():
+    """[summary]
+    :return: [Indicates if it is a --help invocation]
+    :rtype: [bool]
+    """
+    global IS_REQUEST_FOR_HELP
+    if IS_REQUEST_FOR_HELP:
+        logger.debug("Skip Initialisation as it is a --help call")
+        return True
+    return False
+
+
+def init_foss(ctx: dict):
+    """[Initialize Fossology Instance.]
+
+    :param ctx: [context provided by all click-commands]
+    :type ctx: [dict]
+    :raises e: [Bearer TOKEN not set in environment]
+    :raises e1: [Authentication with new API failed. Tried with old_api - but usernamewas missing in environment.]
+    :raises e2: [Authentication with old APi failed -too.]
+    :return: [foss_instance]
+    :rtype: [Fossology]
+    """
     if ctx.obj["TOKEN"] is None:
         try:
             ctx.obj["TOKEN"] = os.environ["FOSS_TOKEN"]
@@ -64,6 +142,7 @@ def init_foss(ctx):
                 raise e2
         ctx.obj["FOSS"] = foss
         ctx.obj["USER"] = foss.user.name
+    logger.debug(f"Logged in as user {foss.user.name}")
     return ctx.obj["FOSS"]
 
 
@@ -114,13 +193,6 @@ def cli(
 ):
     """The fossology cmdline client.  Multiple -v increase verbosity-level.
     """
-    # XXX ? Really needed
-    # group_commands = [
-    #     "log",
-    #     "create_folder",
-    #     "create_group",
-    #     #    "upload_file",
-    # ]  # noqa: F841
     if log_to_console:
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
@@ -140,8 +212,8 @@ def cli(
     ctx.obj["USERNAME"] = username
     ctx.obj["DEBUG"] = debug
 
-    foss = init_foss(ctx)  # leaves the foss instance within the ctx dict
-    logger.debug(f"Logged in as user {foss.user.name}")
+    if not is_help():
+        foss = init_foss(ctx)  # leaves the foss instance within the ctx dict
     if debug:
         logger.debug("Started in debug mode")
         logger.debug(f"Servers users:{pprint.pformat(foss.users)}")
@@ -235,6 +307,36 @@ def create_group(ctx, group_name):
             raise e
 
 
+def get_last_upload_of_file(ctx: dict, filename: str, folder_name: str):
+    """[summary]
+
+    :param ctx: [click Context]
+    :param filename: []
+    :param folder_name: []
+    :return Upload
+    """
+    foss = ctx.obj["FOSS"]
+    the_uploads, pages = foss.list_uploads(
+        folder=folder_name if folder_name else foss.rootFolder,
+    )
+    found = None
+    newest_date = "0000-09-05 13:25:38.079869+00"
+    for a_upload in the_uploads:
+        if filename.endswith(a_upload.uploadname):
+            if a_upload.uploaddate > newest_date:
+                newest_date = a_upload.uploaddate
+                found = a_upload
+    if found:
+        the_upload = foss.detail_upload(a_upload.id)
+        logger.info(
+            f"Reused upload id {a_upload.id} matches {upload_file} and is the newest"
+        )
+        assert a_upload.id == the_upload.id
+        return the_upload
+    else:
+        return None
+
+
 @cli.command("upload_file")
 @click.argument(
     "upload_file", type=click.Path(exists=True),
@@ -268,27 +370,10 @@ def upload_file(
         )
 
     if reuse_last_upload:
-        the_uploads, pages = foss.list_uploads(
-            folder=folder_name if folder_name else foss.rootFolder,
-        )
-        found = None
-        newest_date = "0000-09-05 13:25:38.079869+00"
-        for a_upload in the_uploads:
-            if upload_file.endswith(a_upload.uploadname):
-                if a_upload.uploaddate > newest_date:
-                    newest_date = a_upload.uploaddate
-                    found = a_upload
-        if found:
-            the_upload = foss.detail_upload(a_upload.id)
-            logger.info(
-                f"Reused upload id {a_upload.id} matches {upload_file} and is the newest"
-            )
-            assert a_upload.id == the_upload.id
+        the_upload = get_last_upload_of_file(ctx, upload_file, folder_name)
+    else:
+        the_upload = None
 
-        else:
-            the_upload = None
-
-    #
     if the_upload is None:
         the_upload = foss.upload_file(
             folder_name if folder_name else foss.rootFolder,
@@ -326,108 +411,43 @@ def upload_file(
 @click.argument(
     "file_name", type=click.Path(exists=True),
 )
-@click.option("--folder_name", default=None, help="The name of the folderto upload to.")
+@click.option(
+    "--folder_name", default=None, help="The name of the folder to upload to."
+)
 @click.option(
     "--report_format", default="unifiedreport", help="The name of the reportformat."
 )
 @click.pass_context
 def schedule_jobs(ctx, file_name, folder_name, report_format):
-    """The fossology upload_file command."""
-
-    job_spec = {
-        "analysis": {
-            "bucket": True,
-            "copyright_email_author": True,
-            "ecc": True,
-            "keyword": True,
-            "monk": True,
-            "mime": True,
-            "monk": True,
-            "nomos": True,
-            "ojo": True,
-            "package": True,
-            "specific_agent": True,
-        },
-        "decider": {
-            "nomos_monk": True,
-            "bulk_reused": True,
-            "new_scanner": True,
-            "ojo_decider": True,
-        },
-        "reuse": {
-            "reuse_upload": 0,
-            "reuse_group": 0,
-            "reuse_main": True,
-            "reuse_enhanced": True,
-            "reuse_report": True,
-            "reuse_copyright": True,
-        },
-    }
-
-    logger.debug(f"report format {report_format}")
-    # if report_format == "dep5":
-    #    the_report_format = ReportFormat.DEP5
-    # elif report_format == "spx2":
-    #    the_report_format = ReportFormat.SPDX2
-    # elif report_format == "spx2tv":
-    #    the_report_format = ReportFormat.SPDX2TV
-    # elif report_format == "reameoss":
-    #    the_report_format = ReportFormat.READMEOSS
-    # elif report_format == "unifiedreport":
-    #    the_report_format = ReportFormat.UNIFIEDREPORT
-    # else:
-    #    logger.fatal(f"Impossible report format {report_format}")
-    #    # sys.exit(1)
-
-    the_report_format = ReportFormat.SPDX2
+    """The fossology schedule_jobs command."""
+    global JOB_SPEC
+    the_report_format = get_report_format(report_format)
     logger.debug(f"Try to shedule job {file_name}")
     foss = ctx.obj["FOSS"]
 
-    # Uploads
+    the_upload = get_last_upload_of_file(ctx, file_name, folder_name)
 
-    the_uploads, pages = foss.list_uploads(
-        folder=folder_name if folder_name else foss.rootFolder,
-    )
-    found = None
-    newest_date = "0000-09-05 13:25:38.079869+00"
-    for a_upload in the_uploads:
-        if file_name.endswith(a_upload.uploadname):
-            if a_upload.uploaddate > newest_date:
-                newest_date = a_upload.uploaddate
-                found = a_upload
-    if found:
-        the_upload = foss.detail_upload(a_upload.id)
-        logger.info(
-            f"Reused upload id {a_upload.id} matches {file_name} and is the newest"
-        )
-        assert a_upload.id == the_upload.id
-
-    else:
-        the_upload = None
+    if the_upload is None:
         logger.fatal(f"Unable to find upload for {file_name}.")
         logger.fatal("Fix the current cache thinking")
         sys.exit(0)
+    else:
+        logger.info(f"upload id {the_upload.id} is the newest")
 
-    logger.info(f"upload id {the_upload.id} is the newest")
-
-    # old Jobs
     the_jobs, pages = foss.list_jobs(the_upload)
-    # logger.info(f"jobs {the_jobs}")
     job = None
     newest_date = "0000-09-05 13:25:38.079869+00"
     for the_job in the_jobs:
         if the_job.queueDate > newest_date:
             newest_date = the_job.queueDate
             job = the_job
-        # logger.info(f" Job  {dir(job)} ")
     if job:
         logger.info(f"Newest Job id {job.id} is from {job.queueDate} ")
     else:
         job = foss.schedule_jobs(
-            folder_name if folder_name else foss.rootFolder, the_upload, job_spec
+            folder_name if folder_name else foss.rootFolder, the_upload, JOB_SPEC
         )
         logger.debug(f"Try to schedule job {job}")
-        logger.debug(f"Try to schedule job {dir(job)}")
 
     if ctx.obj["DEBUG"]:
         logger.debug(f"Job  {job.id} name {job.name}")
@@ -452,6 +472,10 @@ def schedule_jobs(ctx, file_name, folder_name, report_format):
 
 
 def main():
+    global IS_REQUEST_FOR_HELP
+    for i in sys.argv[1:]:
+        if i == "--help":
+            IS_REQUEST_FOR_HELP = True
     cli(obj={})  # pragma: no cover
 
 
