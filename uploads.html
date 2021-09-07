@@ -163,11 +163,11 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Wait up to 20 minutes until the upload is ready</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">long_upload</span> <span class="o">=</span> <span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">wait_time</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">long_upload</span> <span class="o">=</span> <span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">wait_time</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span> 
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Wait up to 5 minutes until the upload is ready</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">long_upload</span> <span class="o">=</span> <span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">wait_time</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">long_upload</span> <span class="o">=</span> <span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">wait_time</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span> 
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -259,13 +259,13 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">Fossology</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.obj</span> <span class="kn">import</span> <span class="n">AccessLevel</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
-<span class="go">        foss.rootFolder,</span>
-<span class="go">        file=&quot;my-package.zip&quot;,</span>
-<span class="go">        description=&quot;My product package&quot;,</span>
-<span class="go">        access_level=AccessLevel.PUBLIC,</span>
-<span class="go">    )</span>
+<span class="gp">... </span>       <span class="n">foss</span><span class="o">.</span><span class="n">rootFolder</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">file</span><span class="o">=</span><span class="s2">&quot;my-package.zip&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">description</span><span class="o">=</span><span class="s2">&quot;My product package&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">access_level</span><span class="o">=</span><span class="n">AccessLevel</span><span class="o">.</span><span class="n">PUBLIC</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="p">)</span>  
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -273,18 +273,18 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vcs</span> <span class="o">=</span> <span class="p">{</span>
-<span class="go">        &quot;vcsType&quot;: &quot;git&quot;,</span>
-<span class="go">        &quot;vcsUrl&quot;: &quot;https://github.com/fossology/fossology-python&quot;,</span>
-<span class="go">        &quot;vcsName&quot;: &quot;fossology-python-github-master&quot;,</span>
-<span class="go">        &quot;vcsUsername&quot;: &quot;&quot;,</span>
-<span class="go">        &quot;vcsPassword&quot;: &quot;&quot;,</span>
-<span class="go">    }</span>
+<span class="gp">... </span>       <span class="s2">&quot;vcsType&quot;</span><span class="p">:</span> <span class="s2">&quot;git&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;vcsUrl&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/fossology/fossology-python&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;vcsName&quot;</span><span class="p">:</span> <span class="s2">&quot;fossology-python-github-master&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;vcsUsername&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;vcsPassword&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">vcs_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
-<span class="go">        foss.rootFolder,</span>
-<span class="go">        vcs=vcs,</span>
-<span class="go">        description=&quot;Upload from VCS&quot;,</span>
-<span class="go">        access_level=AccessLevel.PUBLIC,</span>
-<span class="go">    )</span>
+<span class="gp">... </span>       <span class="n">foss</span><span class="o">.</span><span class="n">rootFolder</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">vcs</span><span class="o">=</span><span class="n">vcs</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Upload from VCS&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">access_level</span><span class="o">=</span><span class="n">AccessLevel</span><span class="o">.</span><span class="n">PUBLIC</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="p">)</span>  
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -292,18 +292,18 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="p">{</span>
-<span class="go">        &quot;url&quot;: &quot;https://github.com/fossology/fossology-python/archive/master.zip&quot;,</span>
-<span class="go">        &quot;name&quot;: &quot;fossology-python-master.zip&quot;,</span>
-<span class="go">        &quot;accept&quot;: &quot;zip&quot;,</span>
-<span class="go">        &quot;reject&quot;: &quot;&quot;,</span>
-<span class="go">        &quot;maxRecursionDepth&quot;: &quot;1&quot;,</span>
-<span class="go">    }</span>
+<span class="gp">... </span>       <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/fossology/fossology-python/archive/master.zip&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;fossology-python-master.zip&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;accept&quot;</span><span class="p">:</span> <span class="s2">&quot;zip&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;reject&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;maxRecursionDepth&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">url_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
-<span class="go">        foss.rootFolder,</span>
-<span class="go">        url=url,</span>
-<span class="go">        description=&quot;Upload from URL&quot;,</span>
-<span class="go">        access_level=AccessLevel.PUBLIC,</span>
-<span class="go">    )</span>
+<span class="gp">... </span>       <span class="n">foss</span><span class="o">.</span><span class="n">rootFolder</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Upload from URL&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">access_level</span><span class="o">=</span><span class="n">AccessLevel</span><span class="o">.</span><span class="n">PUBLIC</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="p">)</span>  
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -311,15 +311,15 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">server</span> <span class="o">=</span> <span class="p">{</span>
-<span class="go">        &quot;path&quot;: &quot;/tmp/fossology-python&quot;,</span>
-<span class="go">        &quot;name&quot;: &quot;fossology-python&quot;,</span>
-<span class="go">    }</span>
+<span class="gp">... </span>       <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/tmp/fossology-python&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;fossology-python&quot;</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">server_upload</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span>
-<span class="go">        foss.rootFolder,</span>
-<span class="go">        server=server,</span>
-<span class="go">        description=&quot;Upload from SERVER&quot;,</span>
-<span class="go">        access_level=AccessLevel.PUBLIC,</span>
-<span class="go">    )</span>
+<span class="gp">... </span>       <span class="n">foss</span><span class="o">.</span><span class="n">rootFolder</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">server</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Upload from SERVER&quot;</span><span class="p">,</span>
+<span class="gp">... </span>       <span class="n">access_level</span><span class="o">=</span><span class="n">AccessLevel</span><span class="o">.</span><span class="n">PUBLIC</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="p">)</span>  
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -427,7 +427,7 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -119,15 +119,15 @@
 <dt class="field-odd">Example</dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.api</span> <span class="kn">import</span> <span class="n">Fossology</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">Fossology</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span> 
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate a report for upload 1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">report_id</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="n">foss</span><span class="o">.</span><span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">report_content</span><span class="p">,</span> <span class="n">report_name</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">download_report</span><span class="p">(</span><span class="n">report_id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_id</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="n">foss</span><span class="o">.</span><span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">report_content</span><span class="p">,</span> <span class="n">report_name</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">download_report</span><span class="p">(</span><span class="n">report_id</span><span class="p">)</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">report_name</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">report_file</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">report_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">report_content</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">report_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">report_content</span><span class="p">)</span> 
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -196,7 +196,7 @@
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
