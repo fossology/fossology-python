@@ -16,6 +16,7 @@ Needed imports and Variables
 ============================
 
 
+>>> import os 
 >>> import sys
 >>> import pathlib 
 >>> import secrets
@@ -25,6 +26,8 @@ Needed imports and Variables
 >>> from fossology.obj import Group, AccessLevel, TokenScope
 >>> from fossology.exceptions  import FossologyApiError
 >>> FOSSOLOGY_SERVER = "http://fossology/repo"
+>>> os.environ["FOSSOLOGY_USER"] = "fossy"
+>>> os.environ["FOSSOLOGY_USER_PASS"] = "fossy"
 
 Create JWT Token
 ================
@@ -34,10 +37,13 @@ Create token - if not already done - and store it in local file for reuse.
 
 >>> path_to_token_file = pathlib.Path.cwd() / '.token'
 >>> if not path_to_token_file.exists():
-...   #print("Enter your Fossology credentials, e.g. in the test environment 'username: fossy' and 'password: fossy'")
-...   #username = input("username: ")
-...   #pw = getpass()
-...   username, pw = "fossy","fossy"
+...   if os.environ["FOSSOLOGY_USER"] and os.environ["FOSSOLGY_USER_PASS"]:
+...       username =  os.environ["FOSSOLOGY_USER"]
+...       pw =  os.environ["FOSSOLOGY_USER_PASS"]
+...   else:
+...       print("Enter your Fossology credentials, e.g. in the test environment 'username: fossy' and 'password: fossy'")
+...       username = input("username: ")
+...       pw = getpass()
 ...   token = fossology_token(
 ...        FOSSOLOGY_SERVER,
 ...        username,

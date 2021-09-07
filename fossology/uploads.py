@@ -35,7 +35,7 @@ class Uploads:
         :Examples:
 
         >>> # Wait up to 20 minutes until the upload is ready
-        >>> long_upload = u.detail_upload(1, wait_time=120) # doctest: +SKIP
+        >>> long_upload = detail_upload(1, wait_time=120) # doctest: +SKIP
 
         >>> # Wait up to 5 minutes until the upload is ready
         >>> long_upload = detail_upload(1, wait_time=30) # doctest: +SKIP

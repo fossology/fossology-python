@@ -21,6 +21,9 @@ classifiers = [
 [tool.isort]
 profile = "black"
 
+[tool.pytest.ini_options]
+addopts = "--doctest-glob='*.rst' --doctest-modules"
+
 [tool.poetry.dependencies]
 python = "^3.6"
 requests = ">=2.22.0"
@@ -33,7 +36,7 @@ black = "^19.10b0"
 coverage = "^5.1"
 codecov = "^2.0.22"
 pyflakes = "^2.2.0"
-pytest = "^5.4.3"
+pytest = "^6.2.5"
 responses = "^0.10.15"
 isort = "^5.7.0"
 
