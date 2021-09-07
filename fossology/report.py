@@ -73,15 +73,15 @@ class Report:
 
         :Example:
 
-        >>> from fossology.api import Fossology
+        >>> from fossology import Fossology
         >>>
-        >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
+        >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username) # doctest: +SKIP
         >>>
         >>> # Generate a report for upload 1
-        >>> report_id = foss.generate_report(foss.detail_upload(1))
-        >>> report_content, report_name = foss.download_report(report_id)
+        >>> report_id = foss.generate_report(foss.detail_upload(1)) # doctest: +SKIP
+        >>> report_content, report_name = foss.download_report(report_id) # doctest: +SKIP
         >>> with open(report_name, "wb") as report_file:
-        >>>     report_file.write(report_content)
+        ...     report_file.write(report_content) # doctest: +SKIP
 
         :param report_id: the id of the generated report
         :param group: the group name to choose while downloading a specific report (default: None)

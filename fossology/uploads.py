@@ -1,6 +1,5 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
-
 import json
 import logging
 import time
@@ -36,10 +35,10 @@ class Uploads:
         :Examples:
 
         >>> # Wait up to 20 minutes until the upload is ready
-        >>> long_upload = detail_upload(1, wait_time=120)
+        >>> long_upload = detail_upload(1, wait_time=120) # doctest: +SKIP
 
         >>> # Wait up to 5 minutes until the upload is ready
-        >>> long_upload = detail_upload(1, wait_time=30)
+        >>> long_upload = detail_upload(1, wait_time=30) # doctest: +SKIP
 
         :param upload_id: the id of the upload
         :param group: the group the upload shall belong to
@@ -103,58 +102,58 @@ class Uploads:
 
         >>> from fossology import Fossology
         >>> from fossology.obj import AccessLevel
-        >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
+        >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username) # doctest: +SKIP
         >>> my_upload = foss.upload_file(
-                foss.rootFolder,
-                file="my-package.zip",
-                description="My product package",
-                access_level=AccessLevel.PUBLIC,
-            )
+        ...        foss.rootFolder,
+        ...        file="my-package.zip",
+        ...        description="My product package",
+        ...        access_level=AccessLevel.PUBLIC,
+        ...    )  # doctest: +SKIP
 
         :Example for a VCS upload:
 
         >>> vcs = {
-                "vcsType": "git",
-                "vcsUrl": "https://github.com/fossology/fossology-python",
-                "vcsName": "fossology-python-github-master",
-                "vcsUsername": "",
-                "vcsPassword": "",
-            }
+        ...        "vcsType": "git",
+        ...        "vcsUrl": "https://github.com/fossology/fossology-python",
+        ...        "vcsName": "fossology-python-github-master",
+        ...        "vcsUsername": "",
+        ...        "vcsPassword": "",
+        ...    }
         >>> vcs_upload = foss.upload_file(
-                foss.rootFolder,
-                vcs=vcs,
-                description="Upload from VCS",
-                access_level=AccessLevel.PUBLIC,
-            )
+        ...        foss.rootFolder,
+        ...        vcs=vcs,
+        ...        description="Upload from VCS",
+        ...        access_level=AccessLevel.PUBLIC,
+        ...    )  # doctest: +SKIP
 
         :Example for a URL upload:
 
         >>> url = {
-                "url": "https://github.com/fossology/fossology-python/archive/master.zip",
-                "name": "fossology-python-master.zip",
-                "accept": "zip",
-                "reject": "",
-                "maxRecursionDepth": "1",
-            }
+        ...        "url": "https://github.com/fossology/fossology-python/archive/master.zip",
+        ...        "name": "fossology-python-master.zip",
+        ...        "accept": "zip",
+        ...        "reject": "",
+        ...        "maxRecursionDepth": "1",
+        ...    }
         >>> url_upload = foss.upload_file(
-                foss.rootFolder,
-                url=url,
-                description="Upload from URL",
-                access_level=AccessLevel.PUBLIC,
-            )
+        ...        foss.rootFolder,
+        ...        url=url,
+        ...        description="Upload from URL",
+        ...        access_level=AccessLevel.PUBLIC,
+        ...    )  # doctest: +SKIP
 
         :Example for a SERVER upload:
 
         >>> server = {
-                "path": "/tmp/fossology-python",
-                "name": "fossology-python",
-            }
+        ...        "path": "/tmp/fossology-python",
+        ...        "name": "fossology-python",
+        ...    }
         >>> server_upload = foss.upload_file(
-                foss.rootFolder,
-                server=server,
-                description="Upload from SERVER",
-                access_level=AccessLevel.PUBLIC,
-            )
+        ...        foss.rootFolder,
+        ...        server=server,
+        ...        description="Upload from SERVER",
+        ...        access_level=AccessLevel.PUBLIC,
+        ...    )  # doctest: +SKIP
 
 
         :param folder: the upload Fossology folder
