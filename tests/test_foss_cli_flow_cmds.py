@@ -4,45 +4,30 @@ from pathlib import PurePath
 from fossology import foss_cli
 
 
-#  def test_upload_file(runner):
-#      """Test the CLI."""
-#      d = {}
-#      filepath = "tests/files"
-#      filename = "zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz"
-#      q_path = PurePath(filepath, filename)
-#      print(f"path {q_path}")
-#      result = runner.invoke(
-#         foss_cli.cli,
-#         [
-#         "-vv",
-#         "--debug",
-#         "upload_file",
-#         (q_path),
-#         "--reuse_last_upload",
-#         "--summary",
-#        ],
-#        obj=d,
-#        catch_exceptions=False,
-#      )
-#      assert d["VERBOSE"] == 2
-#     assert d["DEBUG"]
-#     assert d["UPLOAD"].uploadname == filename
-#     assert result.exit_code == 0
-
-
-def test_schedule_jobs(runner):
+def test_upload_file(runner, click_test_file_path, click_test_file):
     """Test the CLI."""
     d = {}
-    filepath = "tests/files"
-    filename = "zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz"
-    q_path = PurePath(filepath, filename)
-    print(f"path {q_path}")
+    q_path = PurePath(click_test_file_path, click_test_file)
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "--debug", "schedule_jobs", str(q_path),],
+        [
+            "-vv",
+            "--debug",
+            "upload_file",
+            str(q_path),
+            "--reuse_newest_upload",
+            "--summary",
+        ],
         obj=d,
         catch_exceptions=False,
     )
     assert d["VERBOSE"] == 2
     assert d["DEBUG"]
+    assert d["UPLOAD"].uploadname == click_test_file
     assert result.exit_code == 0
+    assert "Summary of Upload" in result.output
+    assert "Main License" in result.output
+    assert "Total License" in result.output
+    assert "totalConcludedLicenses" in result.output
+    assert "Files Cleared " in result.output
+    assert "CopyRightCount" in result.output

@@ -11,7 +11,6 @@ def test_create_folder(runner):
         [
             "-vv",
             "create_folder",
-            "--folder_name",
             "AwesomeFolder",
             "--folder_description",
             "Description of Awesome Folder",

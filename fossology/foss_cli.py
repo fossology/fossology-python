@@ -16,8 +16,12 @@ from logging.handlers import RotatingFileHandler
 import click
 
 from fossology import Fossology
-from fossology.exceptions import AuthenticationError, FossologyApiError
-from fossology.obj import AccessLevel, ReportFormat
+from fossology.exceptions import (
+    AuthenticationError,
+    FossologyApiError,
+    FossologyUnsupported,
+)
+from fossology.obj import AccessLevel, ReportFormat, Folder
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter(
@@ -29,7 +33,8 @@ MAX_SIZE_OF_LOGFILE = 200000
 MAX_NUMBER_OF_LOGFILES = 5
 
 IS_REQUEST_FOR_HELP = False
-
+DEFAULT_LOG_FILE_NAME = ".foss_cli.log"
+DEFAULT_RESULT_DIR = ".foss_cli_results"
 
 JOB_SPEC = {
     "analysis": {
@@ -62,7 +67,37 @@ JOB_SPEC = {
 }
 
 
-def get_report_format(format: str):
+def check_get_folder(ctx: dict, folder_name: str):
+    """[summary]
+    :raises FossologyUnsupported: [description]
+    :raises FossologyUnsupported: [description]
+    :return: [A Folder]
+    :rtype: [Folder]
+    """
+    folder_to_use = None
+    foss = ctx.obj["FOSS"]
+    if folder_name == "":
+        logger.warning(
+            "folder_name not specified - upload will be to the Fossology Root folder."
+        )
+        folder_to_use = foss.rootFolder
+    else:
+        for a_folder in foss.folders:
+            if a_folder.name == folder_name:
+                logger.debug(f"Found upload folder {folder_name} with id {a_folder.id}")
+                if folder_to_use is None:
+                    folder_to_use = a_folder
+                else:
+                    description = "Multiple Folders with same name are not supported."
+                    raise FossologyUnsupported(description)
+        if folder_to_use is None:
+            description = f"Requested Upload Folder {folder_name} does not exist."
+            raise FossologyUnsupported(description)
+    assert isinstance(folder_to_use, Folder)
+    return folder_to_use
+
+
+def check_get_report_format(format: str):
     """[Get report format.]
     :param format: [name of a report format]
     :type format: str
@@ -85,6 +120,25 @@ def get_report_format(format: str):
     return the_report_format
 
 
+def check_get_access_level(level: str):
+    """[Get access level.]
+    :param level: [name of a level]
+    :type  str
+    :return: []
+    :rtype: [AccessLevel Attribute]
+    """
+    if level == "private":
+        access_level = AccessLevel.PRIVATE
+    elif level == "protected":
+        access_level = AccessLevel.PROTECTED
+    elif level == "public":
+        access_level = AccessLevel.PUBLIC
+    else:
+        logger.fatal(f"Impossible access level {level}")
+        sys.exit(1)
+    return access_level
+
+
 def is_help():
     """[summary]
     :return: [Indicates if it is a --help invocation]
@@ -103,7 +157,7 @@ def init_foss(ctx: dict):
     :param ctx: [context provided by all click-commands]
     :type ctx: [dict]
     :raises e: [Bearer TOKEN not set in environment]
-    :raises e1: [Authentication with new API failed. Tried with old_api - but usernamewas missing in environment.]
+    :raises e1: [Authentication with new API failed. Tried with old_api - but username was missing in environment.]
     :raises e2: [Authentication with old APi failed -too.]
     :return: [foss_instance]
     :rtype: [Fossology]
@@ -111,7 +165,7 @@ def init_foss(ctx: dict):
     if ctx.obj["TOKEN"] is None:
         try:
             ctx.obj["TOKEN"] = os.environ["FOSS_TOKEN"]
-        except Exception as e:
+        except KeyError as e:
             logger.fatal(
                 "No Token provided. Either provide FOSS_TOKEN in environment or use the -t option."
             )
@@ -170,14 +224,19 @@ def init_foss(ctx: dict):
 )
 @click.option(
     "--log_file_name",
-    default=".foss_cli.log",
-    help="Specify log File Name if log is sent to file.  Default is .foss_cli.log.",
+    default=DEFAULT_LOG_FILE_NAME,
+    help=f"Specify log File Name if log is sent to file.  Default is {DEFAULT_LOG_FILE_NAME}.",
 )
 @click.option(
     "--debug/--no_debug",
     is_flag=True,
     default=False,
     help="Send detailed logging output to console. Default is --nodebug.",
+)
+@click.option(
+    "--result_dir",
+    default=DEFAULT_RESULT_DIR,
+    help=f"Name of the directory where foss_cli writes results. Default is {DEFAULT_RESULT_DIR}",
 )
 @click.pass_context
 def cli(
@@ -190,6 +249,7 @@ def cli(
     log_to_file,
     log_file_name,
     debug,
+    result_dir,
 ):
     """The fossology cmdline client.  Multiple -v increase verbosity-level.
     """
@@ -197,20 +257,27 @@ def cli(
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
         logger.addHandler(console_handler)
+    if not os.path.isdir(result_dir):
+        os.mkdir(result_dir)
+
     if log_to_file:
         logfile_handler = RotatingFileHandler(
-            log_file_name,
+            os.path.join(result_dir, log_file_name),
             maxBytes=MAX_SIZE_OF_LOGFILE,
             backupCount=MAX_NUMBER_OF_LOGFILES,
         )
         logfile_handler.setFormatter(formatter)
         logger.addHandler(logfile_handler)
     logger.setLevel(FOSS_LOGGING_MAP.get(verbose, logging.DEBUG))
+    assert os.path.isdir(result_dir)
     ctx.obj["VERBOSE"] = verbose
     ctx.obj["SERVER"] = server
     ctx.obj["TOKEN"] = token
     ctx.obj["USERNAME"] = username
     ctx.obj["DEBUG"] = debug
+    ctx.obj["RESULT_DIR"] = result_dir
+    if ctx.obj["VERBOSE"] >= 2:
+        logger.debug(f"foss_cli called with: {pprint.pformat(sys.argv)}")
 
     if not is_help():
         foss = init_foss(ctx)  # leaves the foss instance within the ctx dict
@@ -260,28 +327,26 @@ def log(ctx, log_level, message_text):
 
 
 @cli.command("create_folder")
-@click.option("--folder_name", help="The name of the folder.")
+@click.argument("folder_name")
 @click.option("--folder_description", help="Description of the Folder.")
 @click.option("--folder_group", help="Name of the Group owning the Folder.")
 @click.pass_context
 def create_folder(ctx, folder_name, folder_description, folder_group):
     """The fossology create_folder command."""
-    ctx.obj["FOLDER_NAME"] = folder_name
-    ctx.obj["FOLDER_DESCRIPTION"] = folder_description
-    ctx.obj["FOLDER_GROUP"] = folder_group
     foss = ctx.obj["FOSS"]
+    logger.debug(
+        f" Try to create folder {folder_name} for group {folder_group} desc: {folder_description}"
+    )
     try:
-        logger.debug(
-            f" Try to create folder {folder_name} for group {folder_group} desc: {folder_description}"
-        )
         folder = foss.create_folder(
             foss.rootFolder,
             folder_name,
             description=folder_description,
             group=folder_group,
         )
-        message = f"Folder {folder.name} with description {folder.description} created"
-        logger.debug(message)
+        logger.debug(
+            f"Folder {folder.name} with description {folder.description} created"
+        )
     except Exception as e:
         logger.fatal(f"Error creating Folder {folder_name} ", exc_info=True)
         raise e
@@ -307,7 +372,7 @@ def create_group(ctx, group_name):
             raise e
 
 
-def get_last_upload_of_file(ctx: dict, filename: str, folder_name: str):
+def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
     """[summary]
 
     :param ctx: [click Context]
@@ -329,7 +394,7 @@ def get_last_upload_of_file(ctx: dict, filename: str, folder_name: str):
     if found:
         the_upload = foss.detail_upload(a_upload.id)
         logger.info(
-            f"Reused upload id {a_upload.id} matches {upload_file} and is the newest"
+            f"Can reuse upload for {a_upload.uploadname}. The uploads id is {a_upload.id}."
         )
         assert a_upload.id == the_upload.id
         return the_upload
@@ -341,11 +406,11 @@ def get_last_upload_of_file(ctx: dict, filename: str, folder_name: str):
 @click.argument(
     "upload_file", type=click.Path(exists=True),
 )
-@click.option("--folder_name", default=None, help="The name of the folderto upload to.")
-@click.option("--description", default=None, help="The decription of the upload.")
-@click.option("--access_level", default="Public", help="The acces Level  the upload.")
+@click.option("--folder_name", default="", help="The name of the folderto upload to.")
+@click.option("--description", default="", help="The decription of the upload.")
+@click.option("--access_level", default="public", help="The acces Level  the upload.")
 @click.option(
-    "--reuse_last_upload/--no_reuse_last_upload",
+    "--reuse_newest_upload/--no_reuse_newest_upload",
     is_flag=True,
     default=False,
     help="Reuse last upload if available.",
@@ -358,28 +423,36 @@ def get_last_upload_of_file(ctx: dict, filename: str, folder_name: str):
 )
 @click.pass_context
 def upload_file(
-    ctx, upload_file, folder_name, description, access_level, reuse_last_upload, summary
+    ctx,
+    upload_file,
+    folder_name,
+    description,
+    access_level,
+    reuse_newest_upload,
+    summary,
 ):
     """The fossology upload_file command."""
 
     logger.debug(f"Try to upload file {upload_file}")
     foss = ctx.obj["FOSS"]
-    if access_level != "Public":
-        logger.fatal(
-            f"{access_level}  AccesLevel other than public not yet implemented"
-        )
 
-    if reuse_last_upload:
-        the_upload = get_last_upload_of_file(ctx, upload_file, folder_name)
+    # check/set the requested access level
+    the_access_level = check_get_access_level(access_level)
+
+    # check/set the requested folder
+    folder_to_use = check_get_folder(ctx, folder_name)
+
+    if reuse_newest_upload:
+        the_upload = get_newest_upload_of_file(ctx, upload_file, folder_name)
     else:
         the_upload = None
 
     if the_upload is None:
         the_upload = foss.upload_file(
-            folder_name if folder_name else foss.rootFolder,
+            folder_to_use,
             file=upload_file,
             description=description if description else "upload via foss-cli",
-            access_level=AccessLevel.PUBLIC,
+            access_level=the_access_level,
         )
 
     ctx.obj["UPLOAD"] = the_upload
@@ -391,10 +464,10 @@ def upload_file(
                 f"Summary of Upload id {summary.id} Name {summary.uploadName} "
             )
             logger.debug(
-                f"    Main Lic {summary.mainLicense} Unique Lic  {summary.uniqueLicenses} "
+                f"    Main License {summary.mainLicense} Unique License  {summary.uniqueLicenses} "
             )
             logger.debug(
-                f"    Total Lic {summary.totalLicenses} Unique Concl Lic  {summary.uniqueConcludedLicenses}"
+                f"    Total License {summary.totalLicenses} Unique Concluded License  {summary.uniqueConcludedLicenses}"
             )
             logger.debug(
                 f"    totalConcludedLicenses {summary.totalConcludedLicenses} FileToBeCleared  {summary.filesToBeCleared} "
@@ -411,70 +484,166 @@ def upload_file(
 @click.argument(
     "file_name", type=click.Path(exists=True),
 )
+@click.option("--folder_name", default="", help="The name of the folder to upload to.")
 @click.option(
-    "--folder_name", default=None, help="The name of the folder to upload to."
+    "--file_description",
+    default="upload via foss-cli",
+    help="The description of the upload.",
 )
 @click.option(
-    "--report_format", default="unifiedreport", help="The name of the reportformat."
+    "--dry_run/--no_dry_run",
+    is_flag=True,
+    default=False,
+    help="Do not upload but show what would be done. Use -vv to see output.",
+)
+@click.option(
+    "--reuse_newest_upload/--no_reuse_newest_upload",
+    is_flag=True,
+    default=False,
+    help="Reuse newest upload if available.",
+)
+@click.option(
+    "--reuse_newest_job/--no_reuse_newest_job",
+    is_flag=True,
+    default=False,
+    help="Reuse newest scheduled job for the upload if available.",
+)
+@click.option(
+    "--report_format",
+    default="unifiedreport",
+    help="The name of the reportformat. [dep5, spdx2,spdxtv,readmeoss,unifiedreport]",
+)
+@click.option(
+    "--access_level",
+    default="protected",
+    help="The access level of the upload.[private,protected,public]",
 )
 @click.pass_context
-def schedule_jobs(ctx, file_name, folder_name, report_format):
-    """The fossology schedule_jobs command."""
+def schedule_jobs(  # noqa: C901
+    ctx: dict,
+    file_name: str,
+    file_description: str,
+    folder_name: str,
+    report_format: str,
+    access_level: str,
+    reuse_newest_upload: bool,
+    reuse_newest_job: bool,
+    dry_run: bool,
+):
+    """The foss_cli schedule_jobs command."""
     global JOB_SPEC
-    the_report_format = get_report_format(report_format)
-    logger.debug(f"Try to shedule job {file_name}")
+    logger.debug(f"Try to schedule job for {file_name}")
     foss = ctx.obj["FOSS"]
 
-    the_upload = get_last_upload_of_file(ctx, file_name, folder_name)
+    # check/set the requested report format
+    the_report_format = check_get_report_format(report_format)
+
+    # check/set the requested access level
+    the_access_level = check_get_access_level(access_level)
+
+    # check/get the folder to use identified by the provided  folder_name
+    folder_to_use = check_get_folder(ctx, folder_name)
+    # folder_to_use = None
+    # if folder_name == "":
+    #    logger.debug(
+    #        "folder_name not specified - upload will be to the Fossology Root folder."
+    #    )
+    # else:
+    #    for a_folder in foss.folders:
+    #        if a_folder.name == folder_name:
+    #            logger.debug(f"Found upload folder {folder_name} with id {a_folder.id}")
+    #            if folder_to_use is None:
+    #                folder_to_use = a_folder
+    #            else:
+    #                description = "Multiple Folders with same name are not supported."
+    #                raise FossologyUnsupported(description)
+    #    if folder_to_use is None:
+    #        description = f"Requested Upload Folder {folder_name} does not exist."
+    #        raise FossologyUnsupported(description)
+
+    # check/get the foss.upload to use
+    if reuse_newest_upload:
+        the_upload = get_newest_upload_of_file(ctx, file_name, folder_name)
+    else:
+        if dry_run:
+            logger.warning(
+                "Skip upload as dry_run is requested without --reuse_newest_upload"
+            )
+            the_upload = None
+        else:
+            logger.debug(f"Initiate new upload for {file_name}")
+
+            the_upload = foss.upload_file(
+                folder_to_use,
+                file=file_name,
+                description=file_description,
+                access_level=the_access_level,
+            )
+            logger.debug(f"Finished upload for {file_name}")
 
     if the_upload is None:
         logger.fatal(f"Unable to find upload for {file_name}.")
-        logger.fatal("Fix the current cache thinking")
-        sys.exit(0)
-    else:
-        logger.info(f"upload id {the_upload.id} is the newest")
+        ctx.exit(1)
 
-    the_jobs, pages = foss.list_jobs(the_upload)
+    # check/get job correlated with the upload
     job = None
-    newest_date = "0000-09-05 13:25:38.079869+00"
-    for the_job in the_jobs:
-        if the_job.queueDate > newest_date:
-            newest_date = the_job.queueDate
-            job = the_job
-    if job:
-        logger.info(f"Newest Job id {job.id} is from {job.queueDate} ")
-    else:
+    if reuse_newest_job:
+        logger.debug(f"Try to find a scheduled job on {the_upload.uploadname}")
+        the_jobs, pages = foss.list_jobs(the_upload)
+        newest_date = "0000-09-05 13:25:38.079869+00"
+        for the_job in the_jobs:
+            if the_job.queueDate > newest_date:
+                newest_date = the_job.queueDate
+                job = the_job
+        if job is None:
+            logger.info(f"Upload {the_upload.uplodname} never started a job ")
+        else:
+            logger.debug(
+                f"Can reuse old job on Upload {the_upload.uploadname}: Newest Job id {job.id} is from {job.queueDate} "
+            )
+
+    if job is None:  # always true if --no_reuse_newest_job
         job = foss.schedule_jobs(
-            folder_name if folder_name else foss.rootFolder, the_upload, JOB_SPEC
+            folder_to_use if folder_to_use else foss.rootFolder,
+            the_upload,
+            JOB_SPEC,
+            wait=True,
         )
-        logger.debug(f"Try to schedule job {job}")
+        logger.debug(f"Schedule new job {job}")
 
-    if ctx.obj["DEBUG"]:
-        logger.debug(f"Job  {job.id} name {job.name}")
+    # check/get state of job correlated with the upload
+    logger.debug(f"job  {job.id}  is in state {job.status} ")
+    if job.status == "Processing":
+        logger.fatal(
+            f"job  {job.id}  is still in state {job.status}: Please try again later with --reuse_newest_upload --reuse_newest_job "
+        )
+        sys.exit(1)
 
-    detail = foss.detail_job(job.id)
-    logger.debug(f"job  {job.id}  state {job.status} ")
-    logger.debug(f"Detail {dir(detail)} ")
+    assert job.status == "Completed"
 
+    # trigger generation of report
     report_id = foss.generate_report(the_upload, report_format=the_report_format)
+    logger.debug(f"Generated report {report_id}")
 
-    logger.debug(f"report {report_id}  Generated ")
-    #   content, name = foss.download_report(report_id, group_name)
+    # download report
     content, name = foss.download_report(report_id)
-    logger.debug(f"content type: {type(content)} len {len(content)} Downloaded")
+    logger.debug(
+        f"Report downloaded: {name}:  content type: {type(content)} len:  {len(content)}."
+    )
 
-    content = content.splitlines()
-    logger.debug(f"content {pprint.pformat(content)} ")
-
-    content = b"content".decode("utf-8")
-    logger.debug(f"report {name}  Downloaded")
-    logger.debug(f"report {name}  had content {pprint.pformat(content.splitlines())}")
+    destination_file = os.path.join(ctx.obj["RESULT_DIR"], name)
+    with open(destination_file, "wb") as fp:
+        written = fp.write(content)
+        assert written == len(content)
+        logger.info(
+            f"Report written to file: report_name {name}  written to {destination_file}"
+        )
 
 
 def main():
     global IS_REQUEST_FOR_HELP
-    for i in sys.argv[1:]:
-        if i == "--help":
+    for arg in sys.argv[1:]:
+        if arg == "--help":
             IS_REQUEST_FOR_HELP = True
     cli(obj={})  # pragma: no cover
 

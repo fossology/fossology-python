@@ -102,8 +102,6 @@ def foss_user(foss_user_agents) -> Dict:
 
 @pytest.fixture(scope="session")
 def foss_token(foss_server: str) -> str:
-    logger.fatal("HUHU")
-    print("HUHU")
     return fossology.fossology_token(
         foss_server, "fossy", "fossy", secrets.token_urlsafe(8), TokenScope.WRITE
     )
@@ -174,7 +172,17 @@ def scanned_upload(
     foss.delete_upload(test_upload)
 
 
-# click runner
+# click
+@pytest.fixture(scope="session")
+def click_test_file_path() -> str:
+    return "tests/files"
+
+
+@pytest.fixture(scope="session")
+def click_test_file() -> str:
+    return "zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz"
+
+
 @pytest.fixture(scope="session")
 def runner(foss_token: str):
     os.environ["FOSS_TOKEN"] = foss_token

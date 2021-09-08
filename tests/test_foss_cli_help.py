@@ -10,64 +10,96 @@ def test_smoke(runner):
 
 
 def test_help_on_top_level(runner):
+    cmds = [
+        "cli [OPTIONS] COMMAND [ARGS]...",
+        "-t, --token TEXT ",
+        "-s, --server TEXT",
+        " -u, --username TEXT",
+        " -v, --verbose",
+        " --log_to_console / --no_log_to_console",
+        " --log_to_file / --no_log_to_file",
+        " --log_file_name TEXT",
+        " --debug / --no_debug",
+        " --result_dir TEXT",
+        " --help ",
+        "Commands:",
+        "create_folder",
+        "create_group",
+        "log",
+        "upload_file",
+        "schedule_jobs",
+    ]
     help_result = runner.invoke(foss_cli.cli, ["--help"], obj={})
+    for cmd in cmds:
+        assert cmd.replace(" ", "") in help_result.output.replace(" ", "")
     assert help_result.exit_code == 0
-    print(help_result.output)
-    assert "--help  ".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "-t, --token TEXT ".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "-s, --server TEXT".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "-u, --username TEXT".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "-v, --verbose ".replace(" ", "") in help_result.output.replace(" ", "")
-    assert (
-        "--log_to_console ".replace(" ", "")
-        in help_result.output.replace(" ", "").strip()
-    )
-    assert "--log_to_file / --no_log_to_file".replace(
-        " ", ""
-    ) in help_result.output.replace(" ", "")
-    assert "--debug/ --no_debug".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "--debug/ --no_debug".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "--log_file_name TEXT".replace(" ", "") in help_result.output.replace(
-        " ", ""
-    )
-    assert "Commands".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "create_folder".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "create_group ".replace(" ", "") in help_result.output.replace(" ", "")
-    assert " log ".replace(" ", "") in help_result.output.replace(" ", "")
-    assert " upload_file ".replace(" ", "") in help_result.output.replace(" ", "")
 
 
 def test_help_on_log(runner):
+    cmds = [
+        "log [OPTIONS]",
+        "--log_level INTEGER ",
+        "--message_text TEXT",
+        "--help",
+    ]
     help_result = runner.invoke(foss_cli.cli, ["log", "--help"], obj={})
+    for cmd in cmds:
+        assert cmd.replace(" ", "") in help_result.output.replace(" ", "")
     assert help_result.exit_code == 0
-    assert "--log_level INTEGER".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "--message_text TEXT".replace(" ", "") in help_result.output.replace(" ", "")
 
 
 def test_help_on_create_folder(runner):
+    cmds = [
+        "create_folder [OPTIONS] FOLDER_NAME",
+        "--folder_description TEXT",
+        "--folder_group TEXT",
+        "--help",
+    ]
     help_result = runner.invoke(foss_cli.cli, ["create_folder", "--help"], obj={})
+    for cmd in cmds:
+        assert cmd.replace(" ", "") in help_result.output.replace(" ", "")
     assert help_result.exit_code == 0
-    assert "--folder_name TEXT".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "--folder_description TEXT".replace(" ", "") in help_result.output.replace(
-        " ", ""
-    )
-    assert "--folder_group TEXT".replace(" ", "") in help_result.output.replace(" ", "")
 
 
 def test_help_on_create_group(runner):
+    cmds = [
+        "create_group [OPTIONS] GROUP_NAME",
+        "--help",
+    ]
     help_result = runner.invoke(foss_cli.cli, ["create_group", "--help"], obj={})
+    for cmd in cmds:
+        assert cmd.replace(" ", "") in help_result.output.replace(" ", "")
     assert help_result.exit_code == 0
 
 
 def test_help_on_upload_file(runner):
+    cmds = [
+        "upload_file [OPTIONS] UPLOAD_FILE",
+        "--folder_name TEXT",
+        "--description TEXT",
+        "--access_level TEXT",
+        "--summary/ --no_summary",
+        "--reuse_newest_upload/ --no_reuse_newest_upload",
+        "--help",
+    ]
     help_result = runner.invoke(foss_cli.cli, ["upload_file", "--help"], obj={})
-    assert "--folder_name TEXT".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "--description TEXT".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "--access_level TEXT".replace(" ", "") in help_result.output.replace(" ", "")
-    assert "--summary/ --no_summary".replace(" ", "") in help_result.output.replace(
-        " ", ""
-    )
-    assert "--reuse_last_upload/ --no_reuse_last_upload".replace(
-        " ", ""
-    ) in help_result.output.replace(" ", "")
+    for cmd in cmds:
+        assert cmd.replace(" ", "") in help_result.output.replace(" ", "")
+    assert help_result.exit_code == 0
+
+
+def test_help_on_schedule_jobs(runner):
+    cmds = [
+        "schedule_jobs [OPTIONS] FILE_NAME",
+        "--folder_name TEXT",
+        "--file_description TEXT",
+        "--reuse_newest_upload / --no_reuse_newest_upload",
+        "--reuse_newest_job/ --no_reuse_newest_job",
+        "--report_format TEXT",
+        "--access_level TEXT",
+        "--help",
+    ]
+    help_result = runner.invoke(foss_cli.cli, ["schedule_jobs", "--help"], obj={})
+    for cmd in cmds:
+        assert cmd.replace(" ", "") in help_result.output.replace(" ", "")
     assert help_result.exit_code == 0
