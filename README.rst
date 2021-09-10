@@ -113,6 +113,23 @@ It leaves a log-file in directory .foss_cli_results named .foss_cli.log.
 
 This way ALL cmds could be logged.
 
+To  create  a group:
+
+     .. code:: bash
+
+           poetry run foss_cli -vv create_group  AwesomeGroup
+
+The looging again is left in directory .foss_cli_results named .foss_cli.log by default.
+
+To create a a folder:
+
+     .. code:: bash
+
+          poetry run foss_cli -vv create_folder AwesomeFolder \
+                   --folder_group AwesomeGroup \
+                   --folder_description "Description of AwesomeFolder"
+
+
 To upload a source package to the server and initialize a the schedule_jobs command could be used:
 
     .. code:: bash
