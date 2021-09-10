@@ -9,19 +9,23 @@ __doc__ = """
 """
 import pprint
 import logging
+from getpass import getpass
 import os
+import secrets
+import pathlib
 import sys
 from logging.handlers import RotatingFileHandler
+import configparser
 
 import click
 
-from fossology import Fossology
+from fossology import Fossology, fossology_token
 from fossology.exceptions import (
     AuthenticationError,
     FossologyApiError,
     FossologyUnsupported,
 )
-from fossology.obj import AccessLevel, ReportFormat, Folder
+from fossology.obj import AccessLevel, ReportFormat, Folder, TokenScope
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter(
@@ -32,9 +36,9 @@ FOSS_LOGGING_MAP = {0: logging.WARNING, 1: logging.INFO, 2: logging.DEBUG}
 MAX_SIZE_OF_LOGFILE = 200000
 MAX_NUMBER_OF_LOGFILES = 5
 
-IS_REQUEST_FOR_HELP = False
 DEFAULT_LOG_FILE_NAME = ".foss_cli.log"
 DEFAULT_RESULT_DIR = ".foss_cli_results"
+DEFAULT_CONFIG_FILE_NAME = ".foss_cli.ini"
 
 JOB_SPEC = {
     "analysis": {
@@ -69,8 +73,12 @@ JOB_SPEC = {
 
 def check_get_folder(ctx: dict, folder_name: str):
     """[summary]
-    :raises FossologyUnsupported: [description]
-    :raises FossologyUnsupported: [description]
+
+    :param ctx: [click context]
+    :type ctx: [dict]
+    :param folder_name: [name of the folder]
+    :type folder_name: [str]
+    :raises FossologyUnsupported: [if folder_name is (not or multiple times)  found.]
     :return: [A Folder]
     :rtype: [Folder]
     """
@@ -98,10 +106,11 @@ def check_get_folder(ctx: dict, folder_name: str):
 
 
 def check_get_report_format(format: str):
-    """[Get report format.]
+    """[summary.]
+
     :param format: [name of a report format]
     :type format: str
-    :return: []
+    :return: [report format]
     :rtype: [ReportFormat Attribute]
     """
     if format == "dep5":
@@ -121,11 +130,13 @@ def check_get_report_format(format: str):
 
 
 def check_get_access_level(level: str):
-    """[Get access level.]
+    """[summary.]
+
     :param level: [name of a level]
-    :type  str
-    :return: []
+    :type:  str
+    :return: [access_level]
     :rtype: [AccessLevel Attribute]
+
     """
     if level == "private":
         access_level = AccessLevel.PRIVATE
@@ -139,20 +150,60 @@ def check_get_access_level(level: str):
     return access_level
 
 
-def is_help():
+def needs_later_initialision_of_foss_instance(ctx):
     """[summary]
-    :return: [Indicates if it is a --help invocation]
+
+    :return: [Indicates if it is a invocation needing later initialisation of foss instance]
     :rtype: [bool]
     """
-    global IS_REQUEST_FOR_HELP
-    if IS_REQUEST_FOR_HELP:
+    return_val = True
+    logger.debug(
+        f" function needs_later_initialision_of_foss_instance  Called {pprint.pformat(ctx.obj)}"
+    )
+    if ctx.obj["IS_REQUEST_FOR_HELP"]:
         logger.debug("Skip Initialisation as it is a --help call")
-        return True
-    return False
+        return_val = False
+    if ctx.obj["IS_REQUEST_FOR_CONFIG"]:
+        logger.debug("Skip Initialisation as it is a  config call")
+        return_val = False
+
+    logger.debug(f"needs_later_initialision_of_foss_instance returne {return_val}")
+    return return_val
+
+
+def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
+    """[summary]
+
+    :param ctx: [click Context]
+    :param filename: [str]
+    :param folder_name: [str]
+    :return: Upload Instance or None
+    """
+
+    foss = ctx.obj["FOSS"]
+    the_uploads, pages = foss.list_uploads(
+        folder=folder_name if folder_name else foss.rootFolder,
+    )
+    found = None
+    newest_date = "0000-09-05 13:25:38.079869+00"
+    for a_upload in the_uploads:
+        if filename.endswith(a_upload.uploadname):
+            if a_upload.uploaddate > newest_date:
+                newest_date = a_upload.uploaddate
+                found = a_upload
+    if found:
+        the_upload = foss.detail_upload(a_upload.id)
+        logger.info(
+            f"Can reuse upload for {a_upload.uploadname}. The uploads id is {a_upload.id}."
+        )
+        assert a_upload.id == the_upload.id
+        return the_upload
+    else:
+        return None
 
 
 def init_foss(ctx: dict):
-    """[Initialize Fossology Instance.]
+    """[summary.]
 
     :param ctx: [context provided by all click-commands]
     :type ctx: [dict]
@@ -162,6 +213,20 @@ def init_foss(ctx: dict):
     :return: [foss_instance]
     :rtype: [Fossology]
     """
+    logger.debug("INIT FOSS")
+    if os.path.exists(DEFAULT_CONFIG_FILE_NAME):
+        config = configparser.ConfigParser()
+        ctx.obj["CONFIG"] = config
+        config.read(DEFAULT_CONFIG_FILE_NAME)
+        assert "FOSSOLOGY" in config.sections()
+        ctx.obj["TOKEN"] = config["FOSSOLOGY"]["token"]
+        ctx.obj["SERVER"] = config["FOSSOLOGY"]["server_url"]
+        logger.debug(
+            f'set server:token from configfile  {ctx.obj["SERVER"]}:{ctx.obj["TOKEN"]} '
+        )
+    else:
+        logger.debug("INIT FOSS: No config file found")
+
     if ctx.obj["TOKEN"] is None:
         try:
             ctx.obj["TOKEN"] = os.environ["FOSS_TOKEN"]
@@ -170,40 +235,38 @@ def init_foss(ctx: dict):
                 "No Token provided. Either provide FOSS_TOKEN in environment or use the -t option."
             )
             raise e
-    if "FOSS" not in ctx.obj.keys():  # Initial try to connect to the server
+    try:
+        foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])  # using new API
+        ctx.obj["FOSS"] = foss
+    except AuthenticationError as e1:  # Maybe it is an old version needing the username ?
         try:
-            foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])  # using new API
-            ctx.obj["FOSS"] = foss
-        except AuthenticationError as e1:  # Maybe it is an old version needing the username ?
-            try:
-                if ctx.obj["USERNAME"] is None:
-                    logger.fatal(
-                        "Connecting to the Fossology Server using new API failed - \
-                          to check with the old API a username is needed - but not provided",
-                        exc_info=True,
-                    )
-                    raise e1
-                else:
-                    foss = Fossology(
-                        ctx.obj["SERVER"], ctx.obj["TOKEN"], ctx.obj["USERNAME"],
-                    )
-            except AuthenticationError as e2:
+            if ctx.obj["USERNAME"] is None:
                 logger.fatal(
-                    'Connecting to the Fossology Server using new API failed - \
-                         even connecting to the old API with user {ctx.obj["USERNAME"]} failed',
+                    "Connecting to the Fossology Server using new API failed - \
+                     to check with the old API a username is needed - but not provided",
                     exc_info=True,
                 )
-                raise e2
-        ctx.obj["FOSS"] = foss
-        ctx.obj["USER"] = foss.user.name
-    logger.debug(f"Logged in as user {foss.user.name}")
+                raise e1
+            else:
+                foss = Fossology(
+                    ctx.obj["SERVER"], ctx.obj["TOKEN"], ctx.obj["USERNAME"],
+                )
+        except AuthenticationError as e2:
+            logger.fatal(
+                'Connecting to the Fossology Server using new API failed - \
+                even connecting to the old API with user {ctx.obj["USERNAME"]} failed',
+                exc_info=True,
+            )
+            raise e2
+    ctx.obj["FOSS"] = foss
+    # ctx.obj["USER"] = foss.user.name
+    # logger.debug(f"Logged in as user {foss.user.name}")
+
     return ctx.obj["FOSS"]
 
 
 @click.group()
 @click.option("--token", "-t", help="token to be used.")
-@click.option("--server", "-s", default="http://fossology/repo", help="url of server.")
-@click.option("--username", "-u", default="fossy", help="Username on Fossology Server.")
 @click.option(
     "--verbose",
     "-v",
@@ -240,18 +303,16 @@ def init_foss(ctx: dict):
 )
 @click.pass_context
 def cli(
-    ctx,
-    server,
-    username,
-    token,
-    verbose,
-    log_to_console,
-    log_to_file,
-    log_file_name,
-    debug,
-    result_dir,
+    ctx: dict,
+    token: str,
+    verbose: int,
+    log_to_console: bool,
+    log_to_file: bool,
+    log_file_name: str,
+    debug: bool,
+    result_dir: str,
 ):
-    """The fossology cmdline client.  Multiple -v increase verbosity-level.
+    """The foss_cli cmdline.  Multiple -v increase verbosity-level.
     """
     if log_to_console:
         console_handler = logging.StreamHandler()
@@ -271,31 +332,134 @@ def cli(
     logger.setLevel(FOSS_LOGGING_MAP.get(verbose, logging.DEBUG))
     assert os.path.isdir(result_dir)
     ctx.obj["VERBOSE"] = verbose
-    ctx.obj["SERVER"] = server
     ctx.obj["TOKEN"] = token
-    ctx.obj["USERNAME"] = username
     ctx.obj["DEBUG"] = debug
     ctx.obj["RESULT_DIR"] = result_dir
+
     if ctx.obj["VERBOSE"] >= 2:
         logger.debug(f"foss_cli called with: {pprint.pformat(sys.argv)}")
 
-    if not is_help():
+    foss_needs_inititialisation = needs_later_initialision_of_foss_instance(ctx)
+    logger.debug(f"foss_needs_inititialisation is {foss_needs_inititialisation}")
+    if needs_later_initialision_of_foss_instance(ctx):
         foss = init_foss(ctx)  # leaves the foss instance within the ctx dict
+    else:
+        logger.debug("No need to init foss")
+
     if debug:
         logger.debug("Started in debug mode")
-        logger.debug(f"Servers users:{pprint.pformat(foss.users)}")
-        folder_ids = [folder.id for folder in foss.folders]
-        for id in folder_ids:
-            detail = foss.detail_folder(id)
-            logger.debug(f"Get Folder {detail.id}")
-            logger.debug(f"    Name: {detail.name}  Parent:   {detail.parent}")
+        if foss_needs_inititialisation:
+            logger.debug(f"Servers users:{pprint.pformat(foss.users)}")
+            folder_ids = [folder.id for folder in foss.folders]
+            for id in folder_ids:
+                detail = foss.detail_folder(id)
+                logger.debug(f"Get Folder {detail.id}")
+                logger.debug(f"    Name: {detail.name}  Parent:   {detail.parent}")
+                logger.debug(
+                    f"    desc: {detail.description}  Add-Info: {detail.additional_info}"
+                )
+            logger.debug(f"Servers api:{pprint.pformat(foss.api)}")
+            logger.debug(f"Servers version:{pprint.pformat(foss.version)}")
+            logger.debug(f"User Authorized on Server:{pprint.pformat(foss.user.name)}")
             logger.debug(
-                f"    desc: {detail.description}  Add-Info: {detail.additional_info}"
+                f"Root Folder on Server:{pprint.pformat(foss.rootFolder.name)}"
             )
-        logger.debug(f"Servers api:{pprint.pformat(foss.api)}")
-        logger.debug(f"Servers version:{pprint.pformat(foss.version)}")
-        logger.debug(f"User Authorized on Server:{pprint.pformat(foss.user.name)}")
-        logger.debug(f"Root Folder on Server:{pprint.pformat(foss.rootFolder.name)}")
+        else:
+            logger.debug("foss not initialized")
+
+
+@cli.command("config")
+@click.option("--server", default="http://fossology/repo", help="url of server.")
+@click.option("--username", default="fossy", help="Username on Fossology Server.")
+@click.option(
+    "--password", default="fossy", help="Password for User on Fossology Server."
+)
+@click.option(
+    "--token_scope",
+    default="read",
+    help="Access scope on Fossology Server [read/write].",
+)
+@click.option(
+    "--interactive/--nointeractive",
+    is_flag=True,
+    default=True,
+    help="Get Config Values via stdin. Default is --interactive.",
+)
+@click.pass_context
+def config(
+    ctx: dict,
+    server: str,
+    username: str,
+    password: str,
+    token_scope: str,
+    interactive: bool,
+):
+    """Create a foss_cli config file."""
+
+    if interactive:
+        print("server url within the testenvironment is http://fossology/repo")
+        server = input("server url: ")
+        print("username/password. (within the testenvironment this is fossy/fossy)")
+        username = input("username: ")
+        password = getpass()
+        token_scope = "undefined"
+        while True:
+            try:
+                print("token scope. (Either read or write):")
+                token_scope = input("token_scope: ")
+                assert token_scope in ["read", "write"]
+                break
+            except Exception:
+                print("Allowed values are read or write")
+
+    logger.warning(
+        f"Create New Config server: {server} username: {username} scope {token_scope}"
+    )
+
+    if token_scope == "read":
+        the_token_scope = TokenScope.READ
+    elif token_scope == "write":
+        the_token_scope = TokenScope.WRITE
+    else:
+        logger.fatal(f"Impossible token_scope: {token_scope}:")
+        ctx.exit(1)
+
+    logger.debug(f"Create Token for {username} on {server}")
+    token = fossology_token(
+        server,
+        username,
+        password,
+        secrets.token_urlsafe(8),  # TOKEN_NAME
+        the_token_scope,
+    )
+    logger.debug(f"Created Token {token} ")
+
+    path_to_cfg_file = pathlib.Path.cwd() / DEFAULT_CONFIG_FILE_NAME
+
+    if path_to_cfg_file.exists():
+        logger.info(f"Found existing foss_cli config file {path_to_cfg_file} ")
+        config = configparser.ConfigParser()
+        config.read(path_to_cfg_file)
+
+    else:
+        logger.info(f"Not Found existing foss_cli config file {path_to_cfg_file}")
+        config = configparser.ConfigParser()
+
+    config["FOSSOLOGY"] = {
+        "SERVER_URL": server,
+        "USERNAME": username,
+        "TOKEN": token,
+    }
+    with open(path_to_cfg_file, "w") as fp:
+        config.write(fp)
+
+    for section in config.sections():
+        for name, value in config.items(section):
+            logger.debug(f" Section : [{section}] name: {name} value:  {value}")
+
+    logger.warning(
+        f"New Config section server: {server} username: {username} scope {token_scope} generated in {path_to_cfg_file}"
+    )
 
 
 @cli.command("log")
@@ -304,7 +468,7 @@ def cli(
 )
 @click.option("--message_text", default="log message", help="Text of the log message.")
 @click.pass_context
-def log(ctx, log_level, message_text):
+def log(ctx: dict, log_level: int, message_text: str):
     """Add a Log Message to the log.  If a log message is printed to the log depends
        on  the verbosity defined starting the foss_cli (default level 0 /-v level 1/-vv level 2).
        Beeing on global verbosity level 0 only messages of --log_level 2 will be printed.
@@ -331,8 +495,10 @@ def log(ctx, log_level, message_text):
 @click.option("--folder_description", help="Description of the Folder.")
 @click.option("--folder_group", help="Name of the Group owning the Folder.")
 @click.pass_context
-def create_folder(ctx, folder_name, folder_description, folder_group):
-    """The fossology create_folder command."""
+def create_folder(
+    ctx: dict, folder_name: str, folder_description: str, folder_group: str
+):
+    """The foss_cli create_folder command."""
     foss = ctx.obj["FOSS"]
     logger.debug(
         f" Try to create folder {folder_name} for group {folder_group} desc: {folder_description}"
@@ -355,8 +521,8 @@ def create_folder(ctx, folder_name, folder_description, folder_group):
 @cli.command("create_group")
 @click.argument("group_name")
 @click.pass_context
-def create_group(ctx, group_name):
-    """The fossology create_group command."""
+def create_group(ctx: dict, group_name: str):
+    """The foss_cli create_group command."""
     logger.debug(f"Try to create group {group_name}")
     foss = ctx.obj["FOSS"]
     try:
@@ -370,36 +536,6 @@ def create_group(ctx, group_name):
         else:
             logger.fatal(f"Error adding group {group_name} ", exc_info=True)
             raise e
-
-
-def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
-    """[summary]
-
-    :param ctx: [click Context]
-    :param filename: []
-    :param folder_name: []
-    :return Upload
-    """
-    foss = ctx.obj["FOSS"]
-    the_uploads, pages = foss.list_uploads(
-        folder=folder_name if folder_name else foss.rootFolder,
-    )
-    found = None
-    newest_date = "0000-09-05 13:25:38.079869+00"
-    for a_upload in the_uploads:
-        if filename.endswith(a_upload.uploadname):
-            if a_upload.uploaddate > newest_date:
-                newest_date = a_upload.uploaddate
-                found = a_upload
-    if found:
-        the_upload = foss.detail_upload(a_upload.id)
-        logger.info(
-            f"Can reuse upload for {a_upload.uploadname}. The uploads id is {a_upload.id}."
-        )
-        assert a_upload.id == the_upload.id
-        return the_upload
-    else:
-        return None
 
 
 @cli.command("upload_file")
@@ -423,15 +559,15 @@ def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
 )
 @click.pass_context
 def upload_file(
-    ctx,
-    upload_file,
-    folder_name,
-    description,
-    access_level,
-    reuse_newest_upload,
-    summary,
+    ctx: dict,
+    upload_file: str,
+    folder_name: str,
+    description: str,
+    access_level: str,
+    reuse_newest_upload: bool,
+    summary: bool,
 ):
-    """The fossology upload_file command."""
+    """The foss_cli upload_file command."""
 
     logger.debug(f"Try to upload file {upload_file}")
     foss = ctx.obj["FOSS"]
@@ -543,23 +679,6 @@ def schedule_jobs(  # noqa: C901
 
     # check/get the folder to use identified by the provided  folder_name
     folder_to_use = check_get_folder(ctx, folder_name)
-    # folder_to_use = None
-    # if folder_name == "":
-    #    logger.debug(
-    #        "folder_name not specified - upload will be to the Fossology Root folder."
-    #    )
-    # else:
-    #    for a_folder in foss.folders:
-    #        if a_folder.name == folder_name:
-    #            logger.debug(f"Found upload folder {folder_name} with id {a_folder.id}")
-    #            if folder_to_use is None:
-    #                folder_to_use = a_folder
-    #            else:
-    #                description = "Multiple Folders with same name are not supported."
-    #                raise FossologyUnsupported(description)
-    #    if folder_to_use is None:
-    #        description = f"Requested Upload Folder {folder_name} does not exist."
-    #        raise FossologyUnsupported(description)
 
     # check/get the foss.upload to use
     if reuse_newest_upload:
@@ -607,9 +726,9 @@ def schedule_jobs(  # noqa: C901
             folder_to_use if folder_to_use else foss.rootFolder,
             the_upload,
             JOB_SPEC,
-            wait=True,
+            wait=True,  # we wait (default 30 sec) for the job to complete
         )
-        logger.debug(f"Schedule new job {job}")
+        logger.debug(f"Scheduled new job {job}")
 
     # check/get state of job correlated with the upload
     logger.debug(f"job  {job.id}  is in state {job.status} ")
@@ -617,7 +736,7 @@ def schedule_jobs(  # noqa: C901
         logger.fatal(
             f"job  {job.id}  is still in state {job.status}: Please try again later with --reuse_newest_upload --reuse_newest_job "
         )
-        sys.exit(1)
+        ctx.exit(1)
 
     assert job.status == "Completed"
 
@@ -641,11 +760,16 @@ def schedule_jobs(  # noqa: C901
 
 
 def main():
-    global IS_REQUEST_FOR_HELP
+    d = dict()
+    d["IS_REQUEST_FOR_HELP"] = False
+    d["IS_REQUEST_FOR_CONFIG"] = False
     for arg in sys.argv[1:]:
         if arg == "--help":
-            IS_REQUEST_FOR_HELP = True
-    cli(obj={})  # pragma: no cover
+            d["IS_REQUEST_FOR_HELP"] = True
+    for arg in sys.argv[1:]:
+        if arg == "config":
+            d["IS_REQUEST_FOR_CONFIG"] = True
+    cli(obj=d)  # pragma: no cover
 
 
 if __name__ == "__main__":

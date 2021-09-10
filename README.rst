@@ -80,6 +80,70 @@ Using the API
       print(f"Logged in as user {foss.user.name}")
 
 
+Using  the Cmd Line (Pre  Alpha)
+--------------------------------
+
+Generate a configuration File:
+
+    .. code:: bash
+
+        $poetry run foss_cli  config
+           server url within the testenvironment is http://fossology/repo
+           server url: http://fossology/repo
+           username/password. (within the testenvironment this is fossy/fossy)
+           username: fossy
+           Password: 
+           token scope. (Either read or write):
+           token_scope: write
+           ... - WARNING - [foss_cli.py:406] - Create New Config server: ...h
+           ... - WARNING - [foss_cli.py:451] - New Config section server: ...
+
+This will get a token from Fossology Server and store it within the local .foss_cli.ini file. 
+On subsequent foss_cli calls those values will be reused.
+
+Verbosity of all foss_cli commands could be increased using the -v verbosity option.
+
+
+    .. code:: bash
+
+        $poetry run foss_cli  -vv config
+
+Runs the same command with verbosity level  2.
+It leaves a log-file in directory .foss_cli_results named .foss_cli.log.
+
+This way ALL cmds could be logged.
+
+To upload a source package to the server and initialize a the schedule_jobs command could be used:
+
+    .. code:: bash
+
+       Usage: foss_cli schedule_jobs [OPTIONS] FILE_NAME
+       The foss_cli schedule_jobs command.
+       Options:
+         --folder_name TEXT              The name of the folder to upload to.
+         --file_description TEXT         The description of the upload.
+         --dry_run / --no_dry_run        Do not upload but show what would be done.
+                                         Use -vv to see output.
+         --reuse_newest_upload / --no_reuse_newest_upload
+                                         Reuse newest upload if available.
+         --reuse_newest_job / --no_reuse_newest_job
+                                         Reuse newest scheduled job for the upload if
+                                         available.
+         --report_format TEXT            The name of the reportformat. [dep5,
+                                         spdx2,spdxtv,readmeoss,unifiedreport]
+         --access_level TEXT             The access level of the
+                                         upload.[private,protected,public]
+         --help                          Show this message and exit.
+
+To upload a file from the development source:
+
+    .. code:: bash
+
+        poetry run foss_cli -vv schedule_jobs tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz \
+                            --folder_name AwesomeFolder \
+                            --access_level public \
+                            --report_format unifiedreport
+
 Contribute
 ==========
 

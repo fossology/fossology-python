@@ -172,7 +172,7 @@ def scanned_upload(
     foss.delete_upload(test_upload)
 
 
-# click
+# foss_cli specific
 @pytest.fixture(scope="session")
 def click_test_file_path() -> str:
     return "tests/files"
@@ -181,6 +181,15 @@ def click_test_file_path() -> str:
 @pytest.fixture(scope="session")
 def click_test_file() -> str:
     return "zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz"
+
+
+@pytest.fixture(scope="session")
+def click_test_dict(foss_server) -> str:
+    d = dict()
+    d["IS_REQUEST_FOR_HELP"] = False
+    d["IS_REQUEST_FOR_CONFIG"] = False
+    d["SERVER"] = foss_server
+    return d
 
 
 @pytest.fixture(scope="session")

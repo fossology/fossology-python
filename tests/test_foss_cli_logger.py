@@ -20,12 +20,13 @@ TEST_LOG_FILE_NAME = "my.log"
 TEST_RESULT_DIR = "test_result_dir"
 
 
-def test_with_verbosity_0(runner):
+def test_with_verbosity_0(runner, click_test_dict):
     # Should be seen on console
+    d = click_test_dict
     result = runner.invoke(
         foss_cli.cli,
         ["log", "--log_level", "2", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE in result.output
@@ -33,7 +34,7 @@ def test_with_verbosity_0(runner):
     result = runner.invoke(
         foss_cli.cli,
         ["log", "--log_level", "1", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE not in result.output
@@ -41,18 +42,19 @@ def test_with_verbosity_0(runner):
     result = runner.invoke(
         foss_cli.cli,
         ["log", "--log_level", "0", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE not in result.output
 
 
-def test_with_verbosity_1(runner):
+def test_with_verbosity_1(runner, click_test_dict):
     # Should be seen on console
+    d = click_test_dict
     result = runner.invoke(
         foss_cli.cli,
         ["-v", "log", "--log_level", "2", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE in result.output
@@ -60,7 +62,7 @@ def test_with_verbosity_1(runner):
     result = runner.invoke(
         foss_cli.cli,
         ["-v", "log", "--log_level", "1", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE in result.output
@@ -68,18 +70,19 @@ def test_with_verbosity_1(runner):
     result = runner.invoke(
         foss_cli.cli,
         ["-v", "log", "--log_level", "0", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE not in result.output
 
 
-def test_with_verbosity_2(runner):
+def test_with_verbosity_2(runner, click_test_dict):
     # Should be seen on console
+    d = click_test_dict
     result = runner.invoke(
         foss_cli.cli,
         ["-vv", "log", "--log_level", "2", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE in result.output
@@ -87,7 +90,7 @@ def test_with_verbosity_2(runner):
     result = runner.invoke(
         foss_cli.cli,
         ["-vv", "log", "--log_level", "1", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE in result.output
@@ -95,17 +98,18 @@ def test_with_verbosity_2(runner):
     result = runner.invoke(
         foss_cli.cli,
         ["-vv", "log", "--log_level", "0", "--message_text", TEST_MESSAGE],
-        obj={},
+        obj=d,
     )
     assert result.exit_code == 0
     assert TEST_MESSAGE in result.output
 
 
 # As console and filehandler work the  same way corresponding to verbosity, it suffices to test the
-# --log_to_file/log_file_name conceirning output  to the correct file.
+# --log_to_file/log_file_name conceirning output  to the correct file and dir.
 
 
-def test_log_to_default_file(runner):
+def test_log_to_default_file(runner, click_test_dict):
+    d = click_test_dict
     with runner.isolated_filesystem():
         result = runner.invoke(
             foss_cli.cli,
@@ -118,7 +122,7 @@ def test_log_to_default_file(runner):
                 "--message_text",
                 TEST_MESSAGE,
             ],
-            obj={},
+            obj=d,
         )
         assert result.exit_code == 0
         filename = os.path.join(
@@ -128,7 +132,8 @@ def test_log_to_default_file(runner):
         assert TEST_MESSAGE in open(filename).read()
 
 
-def test_log_to_userdefined_file(runner):
+def test_log_to_userdefined_file(runner, click_test_dict):
+    d = click_test_dict
     with runner.isolated_filesystem():
         result = runner.invoke(
             foss_cli.cli,
@@ -143,7 +148,7 @@ def test_log_to_userdefined_file(runner):
                 "--message_text",
                 TEST_MESSAGE,
             ],
-            obj={},
+            obj=d,
         )
         assert result.exit_code == 0
         filename = os.path.join(foss_cli.DEFAULT_RESULT_DIR, TEST_LOG_FILE_NAME)
@@ -152,7 +157,8 @@ def test_log_to_userdefined_file(runner):
         assert TEST_MESSAGE in open(filename).read()
 
 
-def test_log_to_userdefined_file_in_userdefined_result_dir(runner):
+def test_log_to_userdefined_file_in_userdefined_result_dir(runner, click_test_dict):
+    d = click_test_dict
     with runner.isolated_filesystem():
         result = runner.invoke(
             foss_cli.cli,
@@ -169,7 +175,7 @@ def test_log_to_userdefined_file_in_userdefined_result_dir(runner):
                 "--message_text",
                 TEST_MESSAGE,
             ],
-            obj={},
+            obj=d,
         )
         assert result.exit_code == 0
         filename = os.path.join(TEST_RESULT_DIR, TEST_LOG_FILE_NAME)
@@ -178,9 +184,9 @@ def test_log_to_userdefined_file_in_userdefined_result_dir(runner):
         assert TEST_MESSAGE in open(filename).read()
 
 
-def test_debug_and_verbosity_is_captured_in_context(runner):
+def test_debug_and_verbosity_is_captured_in_context(runner, click_test_dict):
     with runner.isolated_filesystem():
-        d = {}
+        d = click_test_dict
         result = runner.invoke(foss_cli.cli, ["-vv", "--debug", "log",], obj=d,)
         assert result.exit_code == 0
         assert d["VERBOSE"] == 2

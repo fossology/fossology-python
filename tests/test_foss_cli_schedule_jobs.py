@@ -3,9 +3,9 @@ from pathlib import PurePath
 
 
 def test_schedule_jobs_calling_with_wrong_report_format_exits_with_1(
-    runner, click_test_file_path, click_test_file
+    runner, click_test_file_path, click_test_file, click_test_dict
 ):
-    d = {}
+    d = click_test_dict
     q_path = PurePath(click_test_file_path, click_test_file)
     result = runner.invoke(
         foss_cli.cli,
@@ -18,9 +18,9 @@ def test_schedule_jobs_calling_with_wrong_report_format_exits_with_1(
 
 
 def test_schedule_jobs_calling_with_wrong_access_level_exits_with_1(
-    runner, click_test_file_path, click_test_file
+    runner, click_test_file_path, click_test_file, click_test_dict
 ):
-    d = {}
+    d = click_test_dict
     q_path = PurePath(click_test_file_path, click_test_file)
     result = runner.invoke(
         foss_cli.cli,
@@ -33,9 +33,9 @@ def test_schedule_jobs_calling_with_wrong_access_level_exits_with_1(
 
 
 def test_schedule_jobs_a_dry_run_without_reuse_newest_upload_always_exits_with_1(
-    runner, click_test_file_path, click_test_file
+    runner, click_test_file_path, click_test_file, click_test_dict
 ):
-    d = {}
+    d = click_test_dict
     q_path = PurePath(click_test_file_path, click_test_file)
     result = runner.invoke(
         foss_cli.cli,
@@ -56,8 +56,10 @@ def test_schedule_jobs_a_dry_run_without_reuse_newest_upload_always_exits_with_1
     assert f"Unable to find upload for {str(q_path)}" in result.output
 
 
-def test_schedule_jobs_reuse_newest_job(runner, click_test_file_path, click_test_file):
-    d = dict()
+def test_schedule_jobs_reuse_newest_job(
+    runner, click_test_file_path, click_test_file, click_test_dict
+):
+    d = click_test_dict
     # first upload  is the initial one
     #  - it uploads
     #  - it triggers a job on the upload
@@ -72,12 +74,12 @@ def test_schedule_jobs_reuse_newest_job(runner, click_test_file_path, click_test
     assert result.exit_code == 0
     assert f"Initiate new upload for {str(q_path)}" in result.output
     assert f"Finished upload for {str(q_path)}" in result.output
-    assert "Schedule new job" in result.output
+    assert "Scheduled new job" in result.output
 
     # second upload  is able to reuse
     #   --reuse_newest_upload
     #   --reuse_newest_job
-    d = dict()
+    d = click_test_dict
     result = runner.invoke(
         foss_cli.cli,
         [
