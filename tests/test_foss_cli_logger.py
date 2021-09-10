@@ -128,7 +128,7 @@ def test_log_to_default_file(runner, click_test_dict):
         filename = os.path.join(
             foss_cli.DEFAULT_RESULT_DIR, foss_cli.DEFAULT_LOG_FILE_NAME
         )
-        assert os.path.isfile(filename)
+        assert os.path.exists(filename)
         assert TEST_MESSAGE in open(filename).read()
 
 
@@ -153,7 +153,7 @@ def test_log_to_userdefined_file(runner, click_test_dict):
         assert result.exit_code == 0
         filename = os.path.join(foss_cli.DEFAULT_RESULT_DIR, TEST_LOG_FILE_NAME)
         assert os.path.isdir(foss_cli.DEFAULT_RESULT_DIR)
-        assert os.path.isfile(filename)
+        assert os.path.exists(filename)
         assert TEST_MESSAGE in open(filename).read()
 
 
@@ -180,7 +180,7 @@ def test_log_to_userdefined_file_in_userdefined_result_dir(runner, click_test_di
         assert result.exit_code == 0
         filename = os.path.join(TEST_RESULT_DIR, TEST_LOG_FILE_NAME)
         assert os.path.isdir(TEST_RESULT_DIR)
-        assert os.path.isfile(filename)
+        assert os.path.exists(filename)
         assert TEST_MESSAGE in open(filename).read()
 
 
