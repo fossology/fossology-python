@@ -134,7 +134,7 @@ To upload a source package to the server and initialize a scan workflow includin
 
     .. code:: bash
 
-       Usage: foss_cli schedule_jobs [OPTIONS] FILE_NAME
+       Usage: foss_cli start_workflow [OPTIONS] FILE_NAME
        The foss_cli schedule_jobs command.
        Options:
          --folder_name TEXT              The name of the folder to upload to.
