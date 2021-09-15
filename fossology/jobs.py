@@ -110,35 +110,35 @@ class Jobs:
         Job specifications `spec` are added to the request body,
         following options are available:
 
-        >>> {
-        >>>     "analysis": {
-        >>>         "bucket": True,
-        >>>         "copyright_email_author": True,
-        >>>         "ecc": True,
-        >>>         "keyword": True,
-        >>>         "monk": True,
-        >>>         "mime": True,
-        >>>         "monk": True,
-        >>>         "nomos": True,
-        >>>         "ojo": True,
-        >>>         "package": True,
-        >>>         "specific_agent": True,
-        >>>     },
-        >>>     "decider": {
-        >>>         "nomos_monk": True,
-        >>>         "bulk_reused": True,
-        >>>         "new_scanner": True,
-        >>>         "ojo_decider": True
-        >>>     },
-        >>>     "reuse": {
-        >>>         "reuse_upload": 0,
-        >>>         "reuse_group": 0,
-        >>>         "reuse_main": True,
-        >>>         "reuse_enhanced": True
-        >>>         "reuse_report": True
-        >>>         "reuse_copyright": True
-        >>>     }
-        >>> }
+        >>> job_spec = {
+        ...     "analysis": {
+        ...         "bucket": True,
+        ...         "copyright_email_author": True,
+        ...         "ecc": True,
+        ...         "keyword": True,
+        ...         "monk": True,
+        ...         "mime": True,
+        ...         "monk": True,
+        ...         "nomos": True,
+        ...         "ojo": True,
+        ...         "package": True,
+        ...         "specific_agent": True,
+        ...     },
+        ...     "decider": {
+        ...         "nomos_monk": True,
+        ...         "bulk_reused": True,
+        ...         "new_scanner": True,
+        ...         "ojo_decider": True
+        ...     },
+        ...     "reuse": {
+        ...         "reuse_upload": 0,
+        ...         "reuse_group": 0,
+        ...         "reuse_main": True,
+        ...         "reuse_enhanced": True,
+        ...         "reuse_report": True,
+        ...         "reuse_copyright": True,
+        ...     }
+        ... }
 
         :param folder: the upload folder
         :param upload: the upload for which jobs will be scheduled

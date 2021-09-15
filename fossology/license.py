@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 import json
-import logging
 from json.decoder import JSONDecodeError
+import logging
 from urllib.parse import quote
+from typing import List, Tuple
 
 import fossology
 from fossology.exceptions import FossologyApiError, FossologyUnsupported
@@ -35,7 +36,7 @@ class LicenseEndpoint:
         page_size: int = 100,
         page: int = 1,
         all_pages: bool = False,
-    ) -> list[License]:
+    ) -> List[License]:
         """Get all license from the DB
 
         API Endpoint: GET /license
@@ -51,7 +52,7 @@ class LicenseEndpoint:
         :type page: int
         :type all_pages: boolean
         :return: a list of licenses
-        :rtype: list[License]
+        :rtype: List[License]
         :raises FossologyApiError: if the REST call failed
         """
         if fossology.versiontuple(self.version) < fossology.versiontuple("1.3.0"):
@@ -94,7 +95,7 @@ class LicenseEndpoint:
 
     def detail_license(
         self, shortname, group=None
-    ) -> tuple[int, License, list[Obligation]]:
+    ) -> Tuple[int, License, List[Obligation]]:
         """Get a license from the DB
 
         API Endpoint: GET /license/{shortname}
@@ -104,7 +105,7 @@ class LicenseEndpoint:
         :type name: str
         :type group: int
         :return: the license id, the license data and the associated obligations
-        :rtype: tuple(int, License, list[Obligation])
+        :rtype: tuple(int, License, List[Obligation])
         :raises FossologyApiError: if the REST call failed
         """
         if fossology.versiontuple(self.version) < fossology.versiontuple("1.3.0"):
@@ -137,14 +138,14 @@ class LicenseEndpoint:
         License data are added to the request body, here is an example:
 
         >>> new_license = License(
-        >>>     "GPL-1.0",
-        >>>     "GNU General Public License 1.0",
-        >>>     "Text of the license...",
-        >>>     "http://www.gnu.org/licenses/gpl-1.0.txt",
-        >>>     "red"
-        >>>     "false"
-        >>> )
-        >>> foss.add_license(new_license, merge_request=True)
+        ...     "GPL-1.0",
+        ...     "GNU General Public License 1.0",
+        ...     "Text of the license...",
+        ...     "http://www.gnu.org/licenses/gpl-1.0.txt",
+        ...     "red",
+        ...     "false"
+        ... )
+        >>> foss.add_license(new_license, merge_request=True) # doctest: +SKIP
 
         :param license: the license data
         :param merge_request: open a merge request for the license candidate? (default: False)

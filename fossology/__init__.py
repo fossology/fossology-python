@@ -78,9 +78,9 @@ def fossology_token(
 
     :Example:
 
-    >>> from fossology import fossology_token
-    >>> from fossology.obj import TokenScope
-    >>> token = fossology_token("https://fossology.example.com", "Me", "MyPassword", "MyToken")
+    >>> from fossology import fossology_token # doctest: +SKIP
+    >>> from fossology.obj import TokenScope # doctest: +SKIP
+    >>> token = fossology_token("https://fossology.example.com", "Me", "MyPassword", "MyToken") # doctest: +SKIP
 
 
     :param url: the URL of the Fossology server
@@ -135,7 +135,7 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
     :Example:
 
     >>> from fossology import Fossology
-    >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username)
+    >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username) # doctest: +SKIP
 
     :param url: URL of the Fossology instance
     :param token: The API token generated using the Fossology UI
