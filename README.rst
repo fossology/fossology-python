@@ -130,7 +130,7 @@ To create a a folder:
                    --folder_description "Description of AwesomeFolder"
 
 
-To upload a source package to the server and initialize a the schedule_jobs command could be used:
+To upload a source package to the server and initialize a scan workflow including report generation, the start_workflow command could be used:
 
     .. code:: bash
 
