@@ -156,7 +156,7 @@ To upload a file from the development source:
 
     .. code:: bash
 
-        poetry run foss_cli -vv schedule_jobs tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz \
+        poetry run foss_cli -vv start_workflow tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz \
                             --folder_name AwesomeFolder \
                             --access_level public \
                             --report_format unifiedreport
