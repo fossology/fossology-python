@@ -1,4 +1,4 @@
-__doc__ = """Test the "CreateXXX" sub commands of foss_cli"""
+__doc__ = """Test 'create_*' sub commands of foss_cli"""
 
 from fossology import foss_cli
 
