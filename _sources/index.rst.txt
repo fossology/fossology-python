@@ -18,3 +18,4 @@ Welcome to fossology's documentation!
    exceptions
    logging
    sample_workflow
+   foss_cli
