@@ -28,6 +28,7 @@ addopts = "--doctest-glob='*.rst' --doctest-modules"
 python = "^3.6"
 requests = ">=2.22.0"
 tenacity = ">=6.0.0"
+click = "^8.0.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = ">=3.7.8"
@@ -40,7 +41,10 @@ pytest = "^6.2.5"
 responses = "^0.10.15"
 isort = "^5.7.0"
 
+[tool.poetry.scripts]
+foss_cli = "fossology.foss_cli:main"
 
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
+

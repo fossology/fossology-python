@@ -2,11 +2,13 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import os
 import secrets
 import time
 from typing import Dict
 
 import pytest
+from click.testing import CliRunner
 
 import fossology
 from fossology.exceptions import AuthenticationError, FossologyApiError
@@ -168,3 +170,31 @@ def scanned_upload(
     foss.schedule_jobs(foss.rootFolder, test_upload, foss_schedule_agents)
     yield test_upload
     foss.delete_upload(test_upload)
+
+
+# foss_cli specific
+@pytest.fixture(scope="session")
+def click_test_file_path() -> str:
+    return "tests/files"
+
+
+@pytest.fixture(scope="session")
+def click_test_file() -> str:
+    return "zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz"
+
+
+@pytest.fixture(scope="session")
+def click_test_dict(foss_server) -> str:
+    d = dict()
+    d["IS_REQUEST_FOR_HELP"] = False
+    d["IS_REQUEST_FOR_CONFIG"] = False
+    d["SERVER"] = foss_server
+    return d
+
+
+@pytest.fixture(scope="session")
+def runner(foss_token: str):
+    os.environ["FOSS_TOKEN"] = foss_token
+    the_runner = CliRunner()
+    yield the_runner
+    # cleanup

@@ -4,13 +4,12 @@
 import json
 from json.decoder import JSONDecodeError
 import logging
+from urllib.parse import quote
 from typing import List, Tuple
 
 import fossology
 from fossology.exceptions import FossologyApiError, FossologyUnsupported
 from fossology.obj import License, LicenseType, Obligation
-
-from urllib.parse import quote
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
