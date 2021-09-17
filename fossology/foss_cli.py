@@ -156,19 +156,12 @@ def needs_later_initialization_of_foss_instance(ctx):
     :return: [Indicates if an invocation needs later initialization of foss instance]
     :rtype: [bool]
     """
-    return_val = True
     logger.debug(
         f"Function needs_later_initialization_of_foss_instance called {pprint.pformat(ctx.obj)}"
     )
-    if ctx.obj["IS_REQUEST_FOR_HELP"]:
-        logger.debug("Skip Initialization as it is a --help call")
-        return_val = False
-    if ctx.obj["IS_REQUEST_FOR_CONFIG"]:
-        logger.debug("Skip Initialization as it is a config call")
-        return_val = False
-
-    logger.debug(f"needs_later_initialization_of_foss_instance returns {return_val}")
-    return return_val
+    if ctx.obj["IS_REQUEST_FOR_HELP"] or ctx.obj["IS_REQUEST_FOR_CONFIG"]:
+        return False
+    return True
 
 
 def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
@@ -220,6 +213,7 @@ def init_foss(ctx: dict):
         config.read(DEFAULT_CONFIG_FILE_NAME)
         assert "FOSSOLOGY" in config.sections()
         ctx.obj["TOKEN"] = config["FOSSOLOGY"]["token"]
+        ctx.obj["USERNAME"] = config["FOSSOLOGY"]["username"]
         ctx.obj["SERVER"] = config["FOSSOLOGY"]["server_url"]
         logger.debug(
             f"Set server token from configfile {ctx.obj['SERVER']}:{ctx.obj['TOKEN']}"
@@ -237,27 +231,8 @@ def init_foss(ctx: dict):
             raise e
     try:
         foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])  # using new API
-        ctx.obj["FOSS"] = foss
-    except AuthenticationError as e1:  # Maybe it is an old version needing the username ?
-        try:
-            if ctx.obj["USERNAME"] is None:
-                logger.fatal(
-                    "Connecting to the Fossology Server using new API failed - \
-                     to check with the old API a username is needed - but not provided",
-                    exc_info=True,
-                )
-                raise e1
-            else:
-                foss = Fossology(
-                    ctx.obj["SERVER"], ctx.obj["TOKEN"], ctx.obj["USERNAME"],
-                )
-        except AuthenticationError as e2:
-            logger.fatal(
-                f"Connecting to the Fossology Server using new API failed - \
-                even connecting to the old API with user {ctx.obj['USERNAME']} failed",
-                exc_info=True,
-            )
-            raise e2
+    except AuthenticationError:  # API version < 1.2.3 requires a username
+        foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"], name=ctx.obj["USERNAME"],)
     ctx.obj["FOSS"] = foss
     ctx.obj["USER"] = foss.user.name
     logger.debug(f"Logged in as user {foss.user.name}")
