@@ -28,7 +28,7 @@ def test_help_on_top_level(runner, click_test_dict):
         "create_group",
         "log",
         "upload_file",
-        "schedule_jobs",
+        "start_workflow",
     ]
     help_result = runner.invoke(foss_cli.cli, ["--help"], obj=d)
     for cmd in cmds:
@@ -109,11 +109,11 @@ def test_help_on_upload_file(runner, click_test_dict):
     assert help_result.exit_code == 0
 
 
-def test_help_on_schedule_jobs(runner, click_test_dict):
+def test_help_on_start_workflow(runner, click_test_dict):
     d = click_test_dict
     d["IS_REQUEST_FOR_HELP"] = True
     cmds = [
-        "schedule_jobs [OPTIONS] FILE_NAME",
+        "start_workflow [OPTIONS] FILE_NAME",
         "--folder_name TEXT",
         "--file_description TEXT",
         "--reuse_newest_upload / --no_reuse_newest_upload",
@@ -122,7 +122,7 @@ def test_help_on_schedule_jobs(runner, click_test_dict):
         "--access_level TEXT",
         "--help",
     ]
-    help_result = runner.invoke(foss_cli.cli, ["schedule_jobs", "--help"], obj=d)
+    help_result = runner.invoke(foss_cli.cli, ["start_workflow", "--help"], obj=d)
     for cmd in cmds:
         assert cmd.replace(" ", "") in help_result.output.replace(" ", "")
     assert help_result.exit_code == 0

@@ -26,15 +26,10 @@ def test_upload_file(runner, click_test_file_path, click_test_file, click_test_d
     assert d["VERBOSE"] == 2
     assert d["DEBUG"]
     assert d["UPLOAD"].uploadname == click_test_file
-    assert "Summary of Upload" in result.output
-    assert "Main License" in result.output
-    assert "Total License" in result.output
-    assert "totalConcludedLicenses" in result.output
-    assert "Files Cleared " in result.output
-    assert "CopyRightCount" in result.output
+    assert "Summary of upload" in result.output
 
 
-def test_create_config_file_fails_with_wrong_token_scope(
+def test_create_config_file_with_wrong_token_scope_uses_default_read(
     runner, foss_server, click_test_dict
 ):
     with runner.isolated_filesystem():
@@ -60,8 +55,8 @@ def test_create_config_file_fails_with_wrong_token_scope(
             catch_exceptions=False,
         )
         print(result.output)
-        assert result.exit_code == 1
-        assert "Impossible token_scope: fossy:" in result.output
+        assert result.exit_code == 0
+        assert "New config has been generated" in result.output
 
 
 def test_create_config_file_and_run_with_it(runner, foss_server, click_test_dict):
@@ -90,7 +85,7 @@ def test_create_config_file_and_run_with_it(runner, foss_server, click_test_dict
         )
         print(result.output)
         assert result.exit_code == 0
-        assert "Create New Config" in result.output
+        assert "New config has been generated" in result.output
         assert os.path.exists(foss_cli.DEFAULT_CONFIG_FILE_NAME)
         config = configparser.ConfigParser()
         config.read(f"{foss_cli.DEFAULT_CONFIG_FILE_NAME}")
@@ -107,4 +102,4 @@ def test_create_config_file_and_run_with_it(runner, foss_server, click_test_dict
         print(result.output)
         assert result.exit_code == 0
         assert "CONFIG" in d.keys()
-        assert "set server:token from configfile" in result.output
+        assert "Set server token from configfile" in result.output

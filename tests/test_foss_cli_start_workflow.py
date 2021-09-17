@@ -2,14 +2,14 @@ from fossology import foss_cli
 from pathlib import PurePath
 
 
-def test_schedule_jobs_calling_with_wrong_report_format_exits_with_1(
+def test_start_workflow_calling_with_wrong_report_format_exits_with_1(
     runner, click_test_file_path, click_test_file, click_test_dict
 ):
     d = click_test_dict
     q_path = PurePath(click_test_file_path, click_test_file)
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "schedule_jobs", str(q_path), "--report_format", "imp"],
+        ["-vv", "start_workflow", str(q_path), "--report_format", "imp"],
         obj=d,
         catch_exceptions=False,
     )
@@ -17,14 +17,14 @@ def test_schedule_jobs_calling_with_wrong_report_format_exits_with_1(
     assert "Impossible report format imp" in result.output
 
 
-def test_schedule_jobs_calling_with_wrong_access_level_exits_with_1(
+def test_start_workflow_calling_with_wrong_access_level_exits_with_1(
     runner, click_test_file_path, click_test_file, click_test_dict
 ):
     d = click_test_dict
     q_path = PurePath(click_test_file_path, click_test_file)
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "schedule_jobs", str(q_path), "--access_level", "imp"],
+        ["-vv", "start_workflow", str(q_path), "--access_level", "imp"],
         obj=d,
         catch_exceptions=False,
     )
@@ -32,7 +32,7 @@ def test_schedule_jobs_calling_with_wrong_access_level_exits_with_1(
     assert "Impossible access level imp" in result.output
 
 
-def test_schedule_jobs_a_dry_run_without_reuse_newest_upload_always_exits_with_1(
+def test_start_workflow_a_dry_run_without_reuse_newest_upload_always_exits_with_1(
     runner, click_test_file_path, click_test_file, click_test_dict
 ):
     d = click_test_dict
@@ -42,7 +42,7 @@ def test_schedule_jobs_a_dry_run_without_reuse_newest_upload_always_exits_with_1
         [
             "-vv",
             "--debug",
-            "schedule_jobs",
+            "start_workflow",
             str(q_path),
             "--access_level",
             "public",
@@ -56,7 +56,7 @@ def test_schedule_jobs_a_dry_run_without_reuse_newest_upload_always_exits_with_1
     assert f"Unable to find upload for {str(q_path)}" in result.output
 
 
-def test_schedule_jobs_reuse_newest_job(
+def test_start_workflow_reuse_newest_job(
     runner, click_test_file_path, click_test_file, click_test_dict
 ):
     d = click_test_dict
@@ -66,7 +66,7 @@ def test_schedule_jobs_reuse_newest_job(
     q_path = PurePath(click_test_file_path, click_test_file)
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "--debug", "schedule_jobs", str(q_path), "--access_level", "public",],
+        ["-vv", "--debug", "start_workflow", str(q_path), "--access_level", "public",],
         obj=d,
         catch_exceptions=False,
     )
@@ -85,7 +85,7 @@ def test_schedule_jobs_reuse_newest_job(
         [
             "-vv",
             "--debug",
-            "schedule_jobs",
+            "start_workflow",
             str(q_path),
             "--access_level",
             "public",
