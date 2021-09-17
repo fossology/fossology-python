@@ -1,15 +1,16 @@
-name: foss_cli_test 
+name: CLI Tests
+
 on: 
   push:
     branches:
-      - 'feat-create-cli**'
+      - '**cli**'
   pull_request :
     branches:
-      - 'feat-create-cli**'
+      - '**cli**'
 
 jobs:
   test-latest:
-    name: Integration Tests (latest Fossology) foss_cli only
+    name: foss_cli tests (latest Fossology)
     runs-on: ubuntu-latest
 
     container:
@@ -43,7 +44,44 @@ jobs:
         run: nmap fossology -p 80
       - name: Run tests
         run: |
-          poetry run coverage run --source=fossology -m pytest  tests/test_foss_cli*.py
+          poetry run coverage run --source=fossology -m pytest tests/test_foss_cli*.py
           poetry run coverage report -m
  
+  test-last_release:
+    name: foss_cli tests (Fossology 3.10.0)
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.9-slim
+      volumes:
+        - /tmp:/tmp
+
+    services:
+      fossology:
+        image: fossology/fossology:3.10.0
+        ports:
+          - 8081:80
+        volumes:
+          - /tmp:/tmp
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install host dependencies
+        run: |
+          apt-get -qq update
+          apt-get install -qq gcc git nmap xz-utils
+          rm -rf /var/lib/apt/lists/*
+      - name: Install Python dependencies
+        run: |
+          pip install poetry
+          poetry install
+      - name: Install files in shared volume
+        run: |
+          tar xJf tests/files/base-files_11.tar.xz -C /tmp
+      - name: Check services
+        run: nmap fossology -p 80
+      - name: Run tests
+        run: |
+          poetry run coverage run --source=fossology -m pytest tests/test_foss_cli*.py
+          poetry run coverage report -m
 
