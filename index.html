@@ -56,6 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sample_workflow.html">Sample Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foss_cli.html">Foss CLI</a></li>
 </ul>
 
 
@@ -122,9 +123,7 @@
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div><p>This project is available as <a class="reference external" href="https://pypi.org/project/fossology/">Python package on PyPi.org</a>.</p>
-</div></blockquote>
+<p>This project is available as <a class="reference external" href="https://pypi.org/project/fossology/">Python package on PyPi.org</a>.</p>
 <ul>
 <li><p>Install fossology and required dependencies:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install fossology requests
@@ -136,8 +135,8 @@
 <section id="using-the-api">
 <h2>Using the API<a class="headerlink" href="#using-the-api" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p>Get a REST API token either from the Fossology server under “User-&gt;Edit user account” or generate a token using the method available in this library:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">fossology_token</span>
+<li><p>Get a REST API token either from the Fossology server under <strong>``User-&gt;Edit user account``</strong> or generate a token using the method available in this library:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">fossology_token</span>
 <span class="kn">from</span> <span class="nn">fossology.obj</span> <span class="kn">import</span> <span class="n">TokenScope</span>
 
 <span class="n">FOSSOLOGY_SERVER</span> <span class="o">=</span> <span class="s2">&quot;https://fossology.example.com/&quot;</span>
@@ -166,80 +165,94 @@
 </li>
 </ul>
 </section>
-<section id="using-the-cmd-line-pre-alpha">
-<h2>Using  the Cmd Line (Pre  Alpha)<a class="headerlink" href="#using-the-cmd-line-pre-alpha" title="Permalink to this headline">¶</a></h2>
-<p>Generate a configuration File:</p>
+<section id="using-the-cli">
+<h2>Using the CLI<a class="headerlink" href="#using-the-cli" title="Permalink to this headline">¶</a></h2>
+<p>Fossology Python also offers a command line interface to simplify interactions with your Fossology server.</p>
+<ul>
+<li><p>To get a list of available commands, run:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$poetry</span> run foss_cli  config
-   server url within the testenvironment is http://fossology/repo
-   server url: http://fossology/repo
-   username/password. <span class="o">(</span>within the testenvironment this is fossy/fossy<span class="o">)</span>
-   username: fossy
-   Password:
-   token scope. <span class="o">(</span>Either <span class="nb">read</span> or write<span class="o">)</span>:
-   token_scope: write
-   ... - WARNING - <span class="o">[</span>foss_cli.py:406<span class="o">]</span> - Create New Config server: ...h
-   ... - WARNING - <span class="o">[</span>foss_cli.py:451<span class="o">]</span> - New Config section server: ...
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli --help
+Usage: foss_cli <span class="o">[</span>OPTIONS<span class="o">]</span> COMMAND <span class="o">[</span>ARGS<span class="o">]</span>...
 </pre></div>
 </div>
 </div></blockquote>
-<p>This will get a token from Fossology Server and store it within the local .foss_cli.ini file.
-On subsequent foss_cli calls those values will be reused.</p>
-<p>Verbosity of all foss_cli commands could be increased using the -v verbosity option.</p>
+</li>
+<li><p>Generate a configuration file:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$poetry</span> run foss_cli  -vv config
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli config
+Enter the URL to your Fossology server: e.g. http://fossology/repo
+Fossology URL: http://fossology/repo
+Enter Username and Password: e.g. fossy/fossy <span class="o">(</span><span class="k">in</span> the default environment<span class="o">)</span>
+Username: fossy
+Password:
+Enter a scope <span class="k">for</span> your Fossology token: either <span class="s1">&#39;read&#39;</span> or <span class="s1">&#39;write&#39;</span>
+Token scope: write
+</pre></div>
+</div>
+<p>This will get a token from Fossology server and store it within the local <code class="docutils literal notranslate"><span class="pre">.foss_cli.ini</span></code> file.</p>
+<p>On subsequent foss_cli calls those values will be reused.</p>
+<p>Re-run the config command to <strong>create a new token</strong> once it expired.</p>
+</div></blockquote>
+</li>
+<li><p>Verbosity of all foss_cli commands could be increased using the <code class="docutils literal notranslate"><span class="pre">-v</span></code> verbosity option:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv <span class="o">[</span>COMMAND<span class="o">]</span>
+</pre></div>
+</div>
+<p>This runs the given command with verbosity level 2 (all debug statements will be logged).</p>
+<p>A log file in directory <code class="docutils literal notranslate"><span class="pre">.foss_cli_results</span></code> named <code class="docutils literal notranslate"><span class="pre">.foss_cli.log</span></code> will be created.</p>
+</div></blockquote>
+</li>
+<li><p>To create a group:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv create_group FossGroup
 </pre></div>
 </div>
 </div></blockquote>
-<p>Runs the same command with verbosity level  2.
-It leaves a log-file in directory .foss_cli_results named .foss_cli.log.</p>
-<p>This way ALL cmds could be logged.</p>
-<p>To  create  a group:</p>
+</li>
+<li><p>To create a a folder:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run foss_cli -vv create_group  AwesomeGroup
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv create_folder FossFolder <span class="se">\</span>
+   --folder_group FossGroup <span class="se">\</span>
+   --folder_description <span class="s2">&quot;Description of FossFolder&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
-<p>The looging again is left in directory .foss_cli_results named .foss_cli.log by default.</p>
-<p>To create a a folder:</p>
+</li>
+<li><p>To upload a file:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run foss_cli -vv create_folder AwesomeFolder <span class="se">\</span>
-         --folder_group AwesomeGroup <span class="se">\</span>
-         --folder_description <span class="s2">&quot;Description of AwesomeFolder&quot;</span>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv upload_file tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz <span class="se">\</span>
+      --folder_name FossFolder
+      --access_level public
 </pre></div>
 </div>
 </div></blockquote>
-<p>To upload a source package to the server and initialize a scan workflow including report generation, the start_workflow command could be used:</p>
+</li>
+<li><p>To upload a source package to the server and initialize a scan workflow including report generation:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Usage: foss_cli start_workflow <span class="o">[</span>OPTIONS<span class="o">]</span> FILE_NAME
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv start_workflow --help
+Usage: foss_cli start_workflow <span class="o">[</span>OPTIONS<span class="o">]</span> FILE_NAME
 The foss_cli start_workflow command.
 Options:
-  --folder_name TEXT              The name of the folder to upload to.
-  --file_description TEXT         The description of the upload.
-  --dry_run / --no_dry_run        Do not upload but show what would be <span class="k">done</span>.
-                                  Use -vv to see output.
-  --reuse_newest_upload / --no_reuse_newest_upload
-                                  Reuse newest upload <span class="k">if</span> available.
-  --reuse_newest_job / --no_reuse_newest_job
-                                  Reuse newest scheduled job <span class="k">for</span> the upload <span class="k">if</span>
-                                  available.
-  --report_format TEXT            The name of the reportformat. <span class="o">[</span>dep5,
-                                  spdx2,spdxtv,readmeoss,unifiedreport<span class="o">]</span>
-  --access_level TEXT             The access level of the
-                                  upload.<span class="o">[</span>private,protected,public<span class="o">]</span>
-  --help                          Show this message and exit.
+      --folder_name TEXT            The name of the folder to upload to.
+      --file_description TEXT       The description of the upload.
+      --dry_run / --no_dry_run      Do not upload but show what would be <span class="k">done</span>.
+                                    Use -vv to see output.
+      --reuse_newest_upload / --no_reuse_newest_upload
+                                    Reuse newest upload <span class="k">if</span> available.
+      --reuse_newest_job / --no_reuse_newest_job
+                                    Reuse newest scheduled job <span class="k">for</span> the upload <span class="k">if</span>
+                                    available.
+      --report_format TEXT          The name of the reportformat. <span class="o">[</span>dep5,
+                                    spdx2,spdxtv,readmeoss,unifiedreport<span class="o">]</span>
+      --access_level TEXT           The access level of the
+                                    upload.<span class="o">[</span>private,protected,public<span class="o">]</span>
+      --help                        Show this message and exit.
 </pre></div>
 </div>
 </div></blockquote>
-<p>To upload a file from the development source:</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>poetry run foss_cli -vv start_workflow tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz <span class="se">\</span>
-                    --folder_name AwesomeFolder <span class="se">\</span>
-                    --access_level public <span class="se">\</span>
-                    --report_format unifiedreport
-</pre></div>
-</div>
-</div></blockquote>
+</li>
+</ul>
 </section>
 </section>
 <section id="contribute">
@@ -255,6 +268,11 @@ document functions and classes</p></li>
 <li><p>The <strong>documentation website</strong> can automatically be generated by the <a class="reference external" href="http://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html">Sphinx autodoc
 extension</a></p></li>
 </ul>
+<p><strong>HINT</strong></p>
+<blockquote>
+<div><p>To avoid running the whole testsuite during development of a new branch with changing only touching the code related
+to the CLI, name your branch <code class="docutils literal notranslate"><span class="pre">feat/cli-{something}</span></code> and only the <code class="docutils literal notranslate"><span class="pre">test_foss_cli_*</span></code> will run in the pull request context.</p>
+</div></blockquote>
 </section>
 <section id="build">
 <h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
@@ -326,7 +344,7 @@ poetry run coverage html
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
