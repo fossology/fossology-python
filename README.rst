@@ -117,7 +117,7 @@ Fossology Python also offers a command line interface to simplify interactions w
 
       $ foss_cli -vv [COMMAND]
 
-   This runs the given command with verbosity level 2 (all warning will be logged).
+   This runs the given command with verbosity level 2 (all debug statements will be logged).
 
    A log file in directory ``.foss_cli_results`` named ``.foss_cli.log`` will be created.
 
