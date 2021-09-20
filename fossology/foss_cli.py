@@ -110,44 +110,30 @@ def check_get_report_format(format: str):
 
     :param format: [name of a report format]
     :type format: str
-    :return: [report format]
-    :rtype: [ReportFormat Attribute]
+    :return: [ReportFormat]
+    :rtype: [Enum]
     """
-    if format == "dep5":
-        the_report_format = ReportFormat.DEP5
-    elif format == "spx2":
-        the_report_format = ReportFormat.SPDX2
-    elif format == "spx2tv":
-        the_report_format = ReportFormat.SPDX2TV
-    elif format == "readmeoss":
-        the_report_format = ReportFormat.READMEOSS
-    elif format == "unifiedreport":
-        the_report_format = ReportFormat.UNIFIEDREPORT
-    else:
-        logger.fatal(f"Impossible report format {format}")
-        sys.exit(1)
-    return the_report_format
+    for member in ReportFormat:
+        if member.value == format:
+            return member
+    logger.fatal(f"Impossible report format {format}")
+    sys.exit(1)
 
 
 def check_get_access_level(level: str):
     """[summary.]
 
     :param level: [name of a level]
-    :type: str
-    :return: [access_level]
-    :rtype: [AccessLevel Attribute]
+    :type:  str
+    :return: [AccessLevel]
+    :rtype: [Enum]
 
     """
-    if level == "private":
-        access_level = AccessLevel.PRIVATE
-    elif level == "protected":
-        access_level = AccessLevel.PROTECTED
-    elif level == "public":
-        access_level = AccessLevel.PUBLIC
-    else:
-        logger.fatal(f"Impossible access level {level}")
-        sys.exit(1)
-    return access_level
+    for member in AccessLevel:
+        if member.value == level:
+            return member
+    logger.fatal(f"Impossible access level {level}")
+    sys.exit(1)
 
 
 def needs_later_initialization_of_foss_instance(ctx):
