@@ -189,6 +189,7 @@ def click_test_dict(foss_server) -> str:
     d["IS_REQUEST_FOR_HELP"] = False
     d["IS_REQUEST_FOR_CONFIG"] = False
     d["SERVER"] = foss_server
+    d["USERNAME"] = "fossy"
     return d
 
 
