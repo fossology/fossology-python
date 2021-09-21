@@ -72,15 +72,15 @@ JOB_SPEC = {
 
 
 def check_get_folder(ctx: dict, folder_name: str):
-    """[summary]
+    """Get a Folder Instance based on the Folders name.
 
-    :param ctx: [click context]
-    :type ctx: [dict]
-    :param folder_name: [name of the folder]
-    :type folder_name: [str]
-    :raises FossologyUnsupported: [if folder_name is (not or multiple times) found.]
-    :return: [A Folder]
-    :rtype: [Folder]
+    :param ctx: click context
+    :param folder_name: the name of the folder
+    :type ctx: click.core.Context
+    :type folder_name: str
+    :return: the requested Folder
+    :rtype: Folder()
+    :raises FossologyUnsupported: if folder_name is (not or multiple times) found.
     """
     folder_to_use = None
     foss = ctx.obj["FOSS"]
@@ -106,12 +106,12 @@ def check_get_folder(ctx: dict, folder_name: str):
 
 
 def check_get_report_format(format: str):
-    """[summary.]
+    """Check if the  given format is a valid ReportFormat value.
 
-    :param format: [name of a report format]
+    :param format: name of a ReportFormat
     :type format: str
-    :return: [ReportFormat]
-    :rtype: [Enum]
+    :return: ReportFormat
+    :rtype: Enum
     """
     for member in ReportFormat:
         if member.value == format:
@@ -121,13 +121,12 @@ def check_get_report_format(format: str):
 
 
 def check_get_access_level(level: str):
-    """[summary.]
+    """Check if the given level is a valid AccessLevel value.
 
-    :param level: [name of a level]
+    :param level: name of a Access level
     :type:  str
-    :return: [AccessLevel]
-    :rtype: [Enum]
-
+    :return: AccessLevel
+    :rtype: Enum
     """
     for member in AccessLevel:
         if member.value == level:
@@ -137,10 +136,13 @@ def check_get_access_level(level: str):
 
 
 def needs_later_initialization_of_foss_instance(ctx):
-    """[summary]
+    """Check if lateron a Fossology Instance will be created.
 
-    :return: [Indicates if an invocation needs later initialization of foss instance]
-    :rtype: [bool]
+    :param ctx: click context
+    :type ctx: click.core.Context
+    :return: Indicator
+    :rtype: bool
+
     """
     logger.debug(
         f"Function needs_later_initialization_of_foss_instance called {pprint.pformat(ctx.obj)}"
@@ -151,12 +153,16 @@ def needs_later_initialization_of_foss_instance(ctx):
 
 
 def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
-    """[summary]
+    """Given a  filename and folder_name return the newest upload if available.
 
-    :param ctx: [click Context]
-    :param filename: [str]
-    :param folder_name: [str]
+    :param ctx: click Context
+    :param filename: str
+    :param folder_name: str
+    :type ctx: click.core.Context
+    :type filename: str
+    :type folder_name: str
     :return: Upload Instance or None
+    :rtype: Upload or None
     """
 
     foss = ctx.obj["FOSS"]
@@ -182,15 +188,13 @@ def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
 
 
 def init_foss(ctx: dict):
-    """[summary.]
+    """Initialize a Fossology Instance and store it in the context.
 
-    :param ctx: [context provided by all click-commands]
-    :type ctx: [dict]
-    :raises e: [Bearer TOKEN not set in environment]
-    :raises e1: [Authentication with new API failed. Tried with old_api - but username was missing in environment.]
-    :raises e2: [Authentication with old APi failed -too.]
-    :return: [foss_instance]
-    :rtype: [Fossology]
+    :param ctx: click Context
+    :type ctx: click.core.Context
+    :raises e: KeyError Bearer TOKEN not set in environment
+    :return: foss_instance
+    :rtype: Fossology
     """
     logger.debug("INIT FOSS")
     if os.path.exists(DEFAULT_CONFIG_FILE_NAME):
@@ -266,7 +270,7 @@ def init_foss(ctx: dict):
 )
 @click.pass_context
 def cli(
-    ctx: dict,
+    ctx: click.core.Context,
     token: str,
     verbose: int,
     log_to_console: bool,
@@ -275,8 +279,7 @@ def cli(
     debug: bool,
     result_dir: str,
 ):
-    """The foss_cli cmdline.  Multiple -v increase verbosity-level.
-    """
+    """The foss_cli cmdline.  Multiple -v increase verbosity-level. """
     if log_to_console:
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
@@ -351,7 +354,7 @@ def cli(
 )
 @click.pass_context
 def config(
-    ctx: dict,
+    ctx: click.core.Context,
     server: str,
     username: str,
     password: str,
@@ -438,7 +441,7 @@ def config(
     help="Text of the log message",
 )
 @click.pass_context
-def log(ctx: dict, log_level: int, message_text: str):
+def log(ctx: click.core.Context, log_level: int, message_text: str):
     """Add a Log Message to the log. If a log message is printed to the log depends
        on the verbosity defined starting the foss_cli (default level 0 /-v level 1/-vv level 2).
        Beeing on global verbosity level 0 only messages of --log_level 2 will be printed.
@@ -466,7 +469,10 @@ def log(ctx: dict, log_level: int, message_text: str):
 @click.option("--folder_group", help="Name of the Group owning the Folder.")
 @click.pass_context
 def create_folder(
-    ctx: dict, folder_name: str, folder_description: str, folder_group: str
+    ctx: click.core.Context,
+    folder_name: str,
+    folder_description: str,
+    folder_group: str,
 ):
     """The foss_cli create_folder command."""
     foss = ctx.obj["FOSS"]
@@ -491,7 +497,7 @@ def create_folder(
 @cli.command("create_group")
 @click.argument("group_name")
 @click.pass_context
-def create_group(ctx: dict, group_name: str):
+def create_group(ctx: click.core.Context, group_name: str):
     """The foss_cli create_group command."""
     logger.debug(f"Create group {group_name}")
     foss = ctx.obj["FOSS"]
@@ -536,7 +542,7 @@ def create_group(ctx: dict, group_name: str):
 )
 @click.pass_context
 def upload_file(
-    ctx: dict,
+    ctx: click.core.Context,
     upload_file: str,
     folder_name: str,
     description: str,
@@ -639,7 +645,7 @@ def upload_file(
 )
 @click.pass_context
 def start_workflow(  # noqa: C901
-    ctx: dict,
+    ctx: click.core.Context,
     file_name: str,
     file_description: str,
     folder_name: str,
@@ -749,7 +755,6 @@ def main():
     for arg in sys.argv[1:]:
         if arg == "--help":
             d["IS_REQUEST_FOR_HELP"] = True
-    for arg in sys.argv[1:]:
         if arg == "config":
             d["IS_REQUEST_FOR_CONFIG"] = True
     cli(obj=d)  # pragma: no cover
