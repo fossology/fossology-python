@@ -37,7 +37,7 @@ Create token - if not already done - and store it in local file for reuse.
 
 >>> path_to_token_file = pathlib.Path.cwd() / '.token'
 >>> if not path_to_token_file.exists():
-...   if os.environ["FOSSOLOGY_USER"] and os.environ["FOSSOLGY_USER_PASS"]:
+...   if os.environ["FOSSOLOGY_USER"] and os.environ["FOSSOLOGY_USER_PASS"]:
 ...       username =  os.environ["FOSSOLOGY_USER"]
 ...       pw =  os.environ["FOSSOLOGY_USER_PASS"]
 ...   else:
@@ -65,7 +65,8 @@ Login to the Fossology Server
  Create the Fossology Instance.
 
 
->>> foss = Fossology(FOSSOLOGY_SERVER, token)
+>>> # The username is only needed for Fossology API version < 1.2.3
+>>> foss = Fossology(FOSSOLOGY_SERVER, token, name=os.environ["FOSSOLOGY_USER"])
 >>> print(f"Logged in as user {foss.user.name}")
 Logged in as user fossy
 
