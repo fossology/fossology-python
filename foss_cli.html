@@ -115,19 +115,19 @@ could be adapted using the option –log_file_name &lt;filename&gt;.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fossology.foss_cli.check_get_access_level">
 <span class="sig-prename descclassname"><span class="pre">fossology.foss_cli.</span></span><span class="sig-name descname"><span class="pre">check_get_access_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.foss_cli.check_get_access_level" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary.]</p>
+<dd><p>Check if the given level is a valid AccessLevel value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>level</strong> – [name of a level]</p>
+<dd class="field-odd"><p><strong>level</strong> – name of a Access level</p>
 </dd>
 <dt class="field-even">Type</dt>
 <dd class="field-even"><p>str</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>[AccessLevel]</p>
+<dd class="field-odd"><p>AccessLevel</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>[Enum]</p>
+<dd class="field-even"><p>Enum</p>
 </dd>
 </dl>
 </dd></dl>
@@ -135,22 +135,22 @@ could be adapted using the option –log_file_name &lt;filename&gt;.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fossology.foss_cli.check_get_folder">
 <span class="sig-prename descclassname"><span class="pre">fossology.foss_cli.</span></span><span class="sig-name descname"><span class="pre">check_get_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.foss_cli.check_get_folder" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
+<dd><p>Get a Folder Instance based on the Folders name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ctx</strong> (<em>[</em><em>dict</em><em>]</em>) – [click context]</p></li>
-<li><p><strong>folder_name</strong> (<em>[</em><em>str</em><em>]</em>) – [name of the folder]</p></li>
+<li><p><strong>ctx</strong> (<em>click.core.Context</em>) – click context</p></li>
+<li><p><strong>folder_name</strong> (<em>str</em>) – the name of the folder</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the requested Folder</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder">Folder</a>()</p>
+</dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyUnsupported" title="fossology.exceptions.FossologyUnsupported"><strong>FossologyUnsupported</strong></a> – [if folder_name is (not or multiple times) found.]</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>[A Folder]</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>[<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder">Folder</a>]</p>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyUnsupported" title="fossology.exceptions.FossologyUnsupported"><strong>FossologyUnsupported</strong></a> – if folder_name is (not or multiple times) found.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -158,16 +158,16 @@ could be adapted using the option –log_file_name &lt;filename&gt;.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fossology.foss_cli.check_get_report_format">
 <span class="sig-prename descclassname"><span class="pre">fossology.foss_cli.</span></span><span class="sig-name descname"><span class="pre">check_get_report_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.foss_cli.check_get_report_format" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary.]</p>
+<dd><p>Check if the  given format is a valid ReportFormat value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>format</strong> (<em>str</em>) – [name of a report format]</p>
+<dd class="field-odd"><p><strong>format</strong> (<em>str</em>) – name of a ReportFormat</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>[ReportFormat]</p>
+<dd class="field-even"><p>ReportFormat</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>[Enum]</p>
+<dd class="field-odd"><p>Enum</p>
 </dd>
 </dl>
 </dd></dl>
@@ -175,17 +175,20 @@ could be adapted using the option –log_file_name &lt;filename&gt;.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fossology.foss_cli.get_newest_upload_of_file">
 <span class="sig-prename descclassname"><span class="pre">fossology.foss_cli.</span></span><span class="sig-name descname"><span class="pre">get_newest_upload_of_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.foss_cli.get_newest_upload_of_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
+<dd><p>Given a  filename and folder_name return the newest upload if available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ctx</strong> – [click Context]</p></li>
-<li><p><strong>filename</strong> – [str]</p></li>
-<li><p><strong>folder_name</strong> – [str]</p></li>
+<li><p><strong>ctx</strong> (<em>click.core.Context</em>) – click Context</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – str</p></li>
+<li><p><strong>folder_name</strong> (<em>str</em>) – str</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Upload Instance or None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload">Upload</a> or None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -193,23 +196,19 @@ could be adapted using the option –log_file_name &lt;filename&gt;.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fossology.foss_cli.init_foss">
 <span class="sig-prename descclassname"><span class="pre">fossology.foss_cli.</span></span><span class="sig-name descname"><span class="pre">init_foss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.foss_cli.init_foss" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary.]</p>
+<dd><p>Initialize a Fossology Instance and store it in the context.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ctx</strong> (<em>[</em><em>dict</em><em>]</em>) – [context provided by all click-commands]</p>
+<dd class="field-odd"><p><strong>ctx</strong> (<em>click.core.Context</em>) – click Context</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>e</strong> – [Bearer TOKEN not set in environment]</p></li>
-<li><p><strong>e1</strong> – [Authentication with new API failed. Tried with old_api - but username was missing in environment.]</p></li>
-<li><p><strong>e2</strong> – [Authentication with old APi failed -too.]</p></li>
-</ul>
+<dd class="field-even"><p><strong>e</strong> – KeyError Bearer TOKEN not set in environment</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>[foss_instance]</p>
+<dd class="field-odd"><p>foss_instance</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>[<a class="reference internal" href="fossology.html#fossology.Fossology" title="fossology.Fossology">Fossology</a>]</p>
+<dd class="field-even"><p><a class="reference internal" href="fossology.html#fossology.Fossology" title="fossology.Fossology">Fossology</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -217,13 +216,16 @@ could be adapted using the option –log_file_name &lt;filename&gt;.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fossology.foss_cli.needs_later_initialization_of_foss_instance">
 <span class="sig-prename descclassname"><span class="pre">fossology.foss_cli.</span></span><span class="sig-name descname"><span class="pre">needs_later_initialization_of_foss_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.foss_cli.needs_later_initialization_of_foss_instance" title="Permalink to this definition">¶</a></dt>
-<dd><p>[summary]</p>
+<dd><p>Check if lateron a Fossology Instance will be created.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>[Indicates if an invocation needs later initialization of foss instance]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ctx</strong> (<em>click.core.Context</em>) – click context</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>[bool]</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Indicator</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
