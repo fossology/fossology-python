@@ -211,7 +211,7 @@ def init_foss(ctx: dict):
     else:
         logger.debug("INIT FOSS: No config file found")
 
-    if ctx.obj["TOKEN"] is None:
+    if not ctx.obj["TOKEN"]:
         try:
             ctx.obj["TOKEN"] = os.environ["FOSS_TOKEN"]
         except KeyError as e:

@@ -1,9 +1,13 @@
 name: API Tests
 
 on:
+  pull_request:
+    paths-ignore:
+      - '**cli**'
   push:
     branches:
-      - '!**cli**'
+      - master
+
 jobs:
   test-latest:
     name: Integration Tests (latest Fossology)

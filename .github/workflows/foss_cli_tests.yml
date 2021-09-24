@@ -2,10 +2,10 @@ name: CLI Tests
 
 on: 
   push:
-    branches:
+    paths:
       - '**cli**'
-  pull_request :
-    branches:
+  pull_request:
+    paths:
       - '**cli**'
 
 jobs:
