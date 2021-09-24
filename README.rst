@@ -12,8 +12,8 @@
 .. |Static Checks| image:: https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg
    :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22
 
-.. |Fossology Tests| image:: https://github.com/deveaud-m/fossology-python/workflows/Fossology%20Tests/badge.svg
-   :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Fossology+Tests%22
+.. |Fossology Tests| image:: https://github.com/deveaud-m/fossology-python/workflows/API%20Tests/badge.svg
+   :target: https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22API+Tests%22
 
 .. |Coverage| image:: https://codecov.io/gh/fossology/fossology-python/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/fossology/fossology-python
