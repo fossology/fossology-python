@@ -7,15 +7,15 @@ __doc__ = """
         (option --log_to_file). The name of the log_file (default is .foss_cli.log)
         could be adapted using the option --log_file_name <filename>.
 """
-import pprint
-import logging
-from getpass import getpass
-import os
-import secrets
-import pathlib
-import sys
-from logging.handlers import RotatingFileHandler
 import configparser
+import logging
+import os
+import pathlib
+import pprint
+import secrets
+import sys
+from getpass import getpass
+from logging.handlers import RotatingFileHandler
 
 import click
 
@@ -25,7 +25,7 @@ from fossology.exceptions import (
     FossologyApiError,
     FossologyUnsupported,
 )
-from fossology.obj import AccessLevel, ReportFormat, Folder, TokenScope
+from fossology.obj import AccessLevel, Folder, ReportFormat, TokenScope
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter(

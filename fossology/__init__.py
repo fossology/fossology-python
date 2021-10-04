@@ -20,7 +20,9 @@ from fossology.jobs import Jobs
 from fossology.license import LicenseEndpoint
 from fossology.obj import (
     Agents,
+    ApiInfo,
     File,
+    HealthInfo,
     SearchTypes,
     TokenScope,
     Upload,
@@ -157,6 +159,9 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         self.version = self.get_version()
+        if versiontuple(self.version) >= versiontuple("1.3.3"):
+            self.info = self.get_info()
+            self.health = self.get_health()
 
         self.user = self.get_self(name)
         self.name = self.user.name
@@ -208,7 +213,7 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
     def get_version(self):
         """Get API version from the server
 
-        API endpoint: GET /version
+        API endpoint: GET /version (deprecated since API version 1.3.3)
 
         :return: the API version string
         :rtype: string
@@ -219,6 +224,38 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
             return response.json()["version"]
         else:
             description = "Error while getting API version"
+            raise FossologyApiError(description, response)
+
+    def get_info(self) -> ApiInfo:
+        """Get info from the server
+
+        API endpoint: GET /info
+
+        :return: the API information
+        :rtype: ApiInfo
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.get(f"{self.api}/info")
+        if response.status_code == 200:
+            return ApiInfo.from_json(response.json())
+        else:
+            description = "Error while getting API info"
+            raise FossologyApiError(description, response)
+
+    def get_health(self) -> ApiInfo:
+        """Get health from the server
+
+        API endpoint: GET /health
+
+        :return: the server health information
+        :rtype: HealthInfo
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.get(f"{self.api}/health")
+        if response.status_code == 200:
+            return HealthInfo.from_json(response.json())
+        else:
+            description = "Error while getting health info"
             raise FossologyApiError(description, response)
 
     def detail_user(self, user_id):

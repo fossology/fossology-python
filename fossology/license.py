@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 import json
-from json.decoder import JSONDecodeError
 import logging
-from urllib.parse import quote
+from json.decoder import JSONDecodeError
 from typing import List, Tuple
+from urllib.parse import quote
 
 import fossology
 from fossology.exceptions import FossologyApiError, FossologyUnsupported

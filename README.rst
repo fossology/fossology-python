@@ -26,6 +26,7 @@ See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/foss
 
    - 1.2.1 (Fossology 3.10.0)
    - 1.3.2 (Fossology 3.11.0)
+   - 1.3.3 (next Fossology release)
 
 Documentation
 =============
