@@ -722,6 +722,114 @@ class Job(object):
         return cls(**json_dict)
 
 
+class ApiLicense(object):
+
+    """FOSSology API License.
+
+    :param name: name of the API license
+    :param url: link to the license text
+    :type name: string
+    :type url: string
+    """
+
+    def __init__(self, name, url):
+        self.name = name
+        self.url = url
+
+    def __str__(self):
+        return f"API license '{self.name}' ({self.url})"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class ApiInfo(object):
+
+    """FOSSology API info.
+
+    Represents the info endpoint of FOSSology API.
+
+    :param name: the name of the API service
+    :param description: additional information
+    :param version: current API version
+    :param security: security methods allowed
+    :param contact: email contact from the API documentation
+    :param license: licensing of the API
+    :type name: string
+    :type description: string
+    :type version: string
+    :type security: list
+    :type contact: string
+    :type license: ApiLicense object
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self, name, description, version, security, contact, license, **kwargs
+    ):
+        self.name = name
+        self.description = description
+        self.version = version
+        self.security = security
+        self.contact = contact
+        self.license = ApiLicense.from_json(license)
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"FOSSology API {self.name} is deployed with version {self.version}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class Status(object):
+
+    """FOSSology server status
+
+    Represent the status of FOSSology sub-systems
+
+    :param status: the status of the sub-system (OK, ERROR)
+    :type status: string
+    """
+
+    def __init__(self, status):
+        self.status = status
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class HealthInfo(object):
+
+    """FOSSology server health info.
+
+    Represents the health endpoint of FOSSology API.
+
+    :param status: the overall status of the API service (OK, WARN, ERROR)
+    :param scheduler: the status of the FOSSology scheduler
+    :param db: the status of the FOSSology DB
+    :type status: string
+    :type scheduler: Status object
+    :type db: Status object
+    :type kwargs: key word argument
+    """
+
+    def __init__(self, status, scheduler, db, **kwargs):
+        self.status = status
+        self.scheduler = Status.from_json(scheduler)
+        self.db = Status.from_json(db)
+
+    def __str__(self):
+        return f"FOSSology server status is: {self.status} (Scheduler: {self.scheduler.status} - DB: {self.db.status})"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 def get_options(group: str = None, folder: Folder = None) -> str:
     options = ""
     if group:
