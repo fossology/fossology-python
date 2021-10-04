@@ -1,7 +1,8 @@
 __doc__ = """Test the "workflow" sub commands of foss_cli"""
+import configparser
 import os
 from pathlib import PurePath
-import configparser
+
 from fossology import foss_cli
 
 

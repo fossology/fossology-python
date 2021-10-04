@@ -1,5 +1,6 @@
-from fossology import foss_cli
 from pathlib import PurePath
+
+from fossology import foss_cli
 
 
 def test_start_workflow_calling_with_wrong_report_format_exits_with_1(
