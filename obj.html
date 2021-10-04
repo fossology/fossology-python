@@ -168,6 +168,39 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.ApiInfo">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">ApiInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ApiInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology API info.</p>
+<p>Represents the info endpoint of FOSSology API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) – the name of the API service</p></li>
+<li><p><strong>description</strong> (<em>string</em>) – additional information</p></li>
+<li><p><strong>version</strong> (<em>string</em>) – current API version</p></li>
+<li><p><strong>security</strong> (<em>list</em>) – security methods allowed</p></li>
+<li><p><strong>contact</strong> (<em>string</em>) – email contact from the API documentation</p></li>
+<li><p><strong>license</strong> (<em>ApiLicense object</em>) – licensing of the API</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.ApiLicense">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">ApiLicense</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ApiLicense" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology API License.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) – name of the API license</p></li>
+<li><p><strong>url</strong> (<em>string</em>) – link to the license text</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.ClearingStatus">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">ClearingStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ClearingStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clearing statuses: OPEN, PROGRESS, CLOSED, REJECTED</p>
@@ -253,6 +286,22 @@
 <li><p><strong>sha256</strong> (<em>string</em>) – the SHA256 hash sum of the file</p></li>
 <li><p><strong>size</strong> (<em>int</em>) – the size of the file in bytes</p></li>
 <li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other hash information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.HealthInfo">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">HealthInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.HealthInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology server health info.</p>
+<p>Represents the health endpoint of FOSSology API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status</strong> (<em>string</em>) – the overall status of the API service (OK, WARN, ERROR)</p></li>
+<li><p><strong>scheduler</strong> (<em>Status object</em>) – the status of the FOSSology scheduler</p></li>
+<li><p><strong>db</strong> (<em>Status object</em>) – the status of the FOSSology DB</p></li>
 </ul>
 </dd>
 </dl>
@@ -386,6 +435,18 @@
 <dt class="sig sig-object py" id="fossology.obj.SearchTypes">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">SearchTypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.SearchTypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type of item that can be searched: ALLFILES, CONTAINERS, DIRECTORIES</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.Status">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Status" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology server status</p>
+<p>Represent the status of FOSSology sub-systems</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>status</strong> (<em>string</em>) – the status of the sub-system (OK, ERROR)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
