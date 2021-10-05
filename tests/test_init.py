@@ -12,8 +12,6 @@ def test_get_info(foss: Fossology):
     if versiontuple(foss.version) >= versiontuple("1.3.3"):
         assert foss.info.name == "FOSSology API"
         assert foss.info.license.name == "GPL-2.0-only"
-    else:
-        assert not foss.info
 
 
 @responses.activate
@@ -34,8 +32,6 @@ def test_get_health(foss: Fossology):
         assert foss.health.status == "OK"
         assert foss.health.scheduler.status == "OK"
         assert foss.health.db.status == "OK"
-    else:
-        assert not foss.health
 
 
 @responses.activate
