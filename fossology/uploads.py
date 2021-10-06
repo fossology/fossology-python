@@ -2,16 +2,47 @@
 # SPDX-License-Identifier: MIT
 import json
 import logging
-import time
 import re
+import time
 
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import ClearingStatus, Licenses, Summary, Upload, get_options
+from fossology.obj import ClearingStatus, Folder, Licenses, Summary, Upload, get_options
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+def list_uploads_parameters(
+    folder: Folder,
+    recursive: bool = True,
+    name: str = None,
+    status: ClearingStatus = None,
+    assignee: str = None,
+    since: str = None,
+) -> dict:
+    """Helper function to list of query parameters for GET /uploads endpoint"""
+    date_pattern = re.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}")
+    params = {}
+    if folder:
+        params["folderId"] = folder.id
+    if not recursive:
+        params["recursive"] = "false"
+    if name:
+        params["name"] = name
+    if status:
+        params["status"] = status.value
+    if assignee:
+        params["assignee"] = assignee
+    if since:
+        if not date_pattern.match(since):
+            logger.error(
+                f"Date format for 'since' query parameter {since} does not match expected format YYYY-MM-DD"
+            )
+        else:
+            params["since"] = since
+    return params
 
 
 class Uploads:
@@ -446,29 +477,11 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
         """
-        date_pattern = re.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}")
-        params = {}
         headers = {"limit": str(page_size)}
         if group:
             headers["groupName"] = group
-        if folder:
-            params["folderId"] = folder.id
-        if not recursive:
-            params["recursive"] = "false"
-        if name:
-            params["name"] = name
-        if status:
-            params["status"] = status.value
-        if assignee:
-            params["assignee"] = assignee
-        if since:
-            if not date_pattern.match(since):
-                logger.error(
-                    f"Date format for 'since' query parameter {since} does not match expected format YYYY-MM-DD"
-                )
-            else:
-                params["since"] = since
 
+        params = list_uploads_parameters(folder, name, status, assignee, since)
         uploads_list = list()
         if all_pages:
             # will be reset after the total number of pages has been retrieved from the API

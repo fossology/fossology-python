@@ -3,11 +3,11 @@
 
 import secrets
 import time
+from datetime import date, timedelta
 
 import pytest
 import responses
 
-from datetime import date, timedelta
 from fossology import Fossology, versiontuple
 from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import AccessLevel, ClearingStatus, Folder, SearchTypes, Upload
