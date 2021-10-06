@@ -8,11 +8,10 @@ from enum import Enum
 class AccessLevel(Enum):
     """Available access levels for uploads:
 
-    PRIVATE: the upload will only be visible to the owner
+    PRIVATE
+    PROTECTED
+    PUBLIC
 
-    PROTECTED: ?
-
-    PUBLIC: the upload will be visible for everyone
     """
 
     PRIVATE = "private"
@@ -21,7 +20,15 @@ class AccessLevel(Enum):
 
 
 class ReportFormat(Enum):
-    """Available report format: DEP5, SPDX2, SPDX2TV, READMEOSS, UNIFIEDREPORT"""
+    """Available report format:
+
+    DEP5
+    SPDX2
+    SPDX2TV
+    READMEOSS
+    UNIFIEDREPORT
+
+    """
 
     DEP5 = "dep5"
     SPDX2 = "spdx2"
@@ -31,7 +38,13 @@ class ReportFormat(Enum):
 
 
 class SearchTypes(Enum):
-    """Type of item that can be searched: ALLFILES, CONTAINERS, DIRECTORIES"""
+    """Type of item that can be searched:
+
+    ALLFILES
+    CONTAINERS
+    DIRECTORIES
+
+    """
 
     ALLFILES = "allfiles"
     CONTAINERS = "containers"
@@ -44,6 +57,7 @@ class TokenScope(Enum):
     READ: Read only access, limited only to "GET" calls
 
     WRITE: Read/Write access, required for calls other than "GET"
+
     """
 
     READ = "read"
@@ -51,16 +65,29 @@ class TokenScope(Enum):
 
 
 class ClearingStatus(Enum):
-    """Clearing statuses: OPEN, PROGRESS, CLOSED, REJECTED"""
+    """Clearing statuses:
+
+    OPEN
+    INPROGRESS
+    CLOSED
+    REJECTED
+
+    """
 
     OPEN = "Open"
-    PROGRESS = "InProgress"
+    INPROGRESS = "InProgress"
     CLOSED = "Closed"
     REJECTED = "Rejected"
 
 
 class LicenseType(Enum):
-    """License types: CANDIDATE, MAIN, ALL"""
+    """License types:
+
+    CANDIDATE
+    MAIN
+    ALL
+
+    """
 
     CANDIDATE = "candidate"
     MAIN = "main"
@@ -68,7 +95,14 @@ class LicenseType(Enum):
 
 
 class ObligationClass(Enum):
-    """Classification of an obligation: GREEN, WHITE, YELLOW, RED"""
+    """Classification of an obligation:
+
+    GREEN
+    WHITE
+    YELLOW
+    RED
+
+    """
 
     GREEN = "green"
     WHITE = "white"
