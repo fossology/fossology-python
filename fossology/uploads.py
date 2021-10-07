@@ -2,15 +2,47 @@
 # SPDX-License-Identifier: MIT
 import json
 import logging
+import re
 import time
 
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import Licenses, Summary, Upload, get_options
+from fossology.obj import ClearingStatus, Folder, Licenses, Summary, Upload, get_options
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+def list_uploads_parameters(
+    folder: Folder,
+    recursive: bool = True,
+    name: str = None,
+    status: ClearingStatus = None,
+    assignee: str = None,
+    since: str = None,
+) -> dict:
+    """Helper function to list of query parameters for GET /uploads endpoint"""
+    date_pattern = re.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}")
+    params = {}
+    if folder:
+        params["folderId"] = folder.id
+    if not recursive:
+        params["recursive"] = "false"
+    if name:
+        params["name"] = name
+    if status:
+        params["status"] = status.value
+    if assignee:
+        params["assignee"] = assignee
+    if since:
+        if not date_pattern.match(since):
+            logger.error(
+                f"Date format for 'since' query parameter {since} does not match expected format YYYY-MM-DD"
+            )
+        else:
+            params["since"] = since
+    return params
 
 
 class Uploads:
@@ -405,26 +437,38 @@ class Uploads:
 
     def list_uploads(
         self,
-        folder=None,
-        group=None,
-        recursive=True,
+        folder: int = None,
+        group: str = None,
+        recursive: bool = True,
+        name: str = None,
+        status: ClearingStatus = None,
+        assignee: str = None,
+        since: str = None,
         page_size=100,
         page=1,
         all_pages=False,
     ):
-        """Get all uploads available to the registered user
+        """Get uploads according to filtering criteria (or all available)
 
         API Endpoint: GET /uploads
 
         :param folder: only list uploads from the given folder
         :param group: list uploads from a specific group (not only your own uploads) (default: None)
         :param recursive: wether to list uploads from children folders or not (default: True)
+        :param name: filter pattern for name and description
+        :param status: status of uploads
+        :param assignee: user name to which uploads are assigned to or "-me-" or "-unassigned-"
+        :param since: uploads since given date in YYYY-MM-DD format
         :param page_size: limit the number of uploads per page (default: 100)
         :param page: the number of the page to fetch uploads from (default: 1)
         :param all_pages: get all uploads (default: False)
         :type folder: Folder
         :type group: string
         :type recursive: boolean
+        :type name: str
+        :type status: ClearingStatus
+        :type assignee: str
+        :type since: str
         :type page_size: int
         :type page: int
         :type all_pages: boolean
@@ -433,15 +477,18 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
         """
-        params = {}
         headers = {"limit": str(page_size)}
         if group:
             headers["groupName"] = group
-        if folder:
-            params["folderId"] = folder.id
-        if not recursive:
-            params["recursive"] = "false"
 
+        params = list_uploads_parameters(
+            folder=folder,
+            recursive=recursive,
+            name=name,
+            status=status,
+            assignee=assignee,
+            since=since,
+        )
         uploads_list = list()
         if all_pages:
             # will be reset after the total number of pages has been retrieved from the API

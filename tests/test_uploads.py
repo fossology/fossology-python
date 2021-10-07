@@ -3,13 +3,14 @@
 
 import secrets
 import time
+from datetime import date, timedelta
 
 import pytest
 import responses
 
 from fossology import Fossology, versiontuple
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import AccessLevel, Folder, SearchTypes, Upload
+from fossology.obj import AccessLevel, ClearingStatus, Folder, SearchTypes, Upload
 
 
 def test_upload_sha1(foss: Fossology, upload: Upload):
@@ -95,6 +96,21 @@ def test_get_uploads(foss: Fossology, upload_folder: Folder, test_file_path: str
         assert len(foss.list_uploads(folder=upload_folder)[0]) == 2
         assert len(foss.list_uploads(folder=upload_folder, recursive=False)[0]) == 1
         assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
+
+
+def test_filter_uploads(foss: Fossology, upload: Upload):
+    today = date.today().isoformat()
+    tomorrow = (date.today() + timedelta(days=1)).isoformat()
+    # Uploads filtering has been enhance with API version 1.3.4
+    if versiontuple(foss.version) >= versiontuple("1.3.4"):
+        assert len(foss.list_uploads(assignee="-me-")[0]) == 0
+        assert len(foss.list_uploads(assignee="-unassigned-")[0]) >= 1
+        assert len(foss.list_uploads(name="Non-existing upload")[0]) == 0
+        assert len(foss.list_uploads(name="Test upload")[0]) >= 1
+        assert len(foss.list_uploads(status=ClearingStatus.CLOSED)[0]) == 0
+        assert len(foss.list_uploads(status=ClearingStatus.OPEN)[0]) >= 1
+        assert len(foss.list_uploads(since=tomorrow)[0]) == 0
+        assert len(foss.list_uploads(since=today)[0]) >= 1
 
 
 def test_upload_from_vcs(foss: Fossology):
