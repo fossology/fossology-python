@@ -104,13 +104,13 @@ def test_filter_uploads(foss: Fossology, upload: Upload):
     # Uploads filtering has been enhance with API version 1.3.4
     if versiontuple(foss.version) >= versiontuple("1.3.4"):
         assert len(foss.list_uploads(assignee="-me-")[0]) == 0
-        assert len(foss.list_uploads(assignee="-unassigned-")[0]) == 1
+        assert len(foss.list_uploads(assignee="-unassigned-")[0]) >= 1
         assert len(foss.list_uploads(name="Non-existing upload")[0]) == 0
-        assert len(foss.list_uploads(name="Test upload")[0]) == 1
-        assert len(foss.list_uploads(status=ClearingStatus.OPEN)[0]) == 1
+        assert len(foss.list_uploads(name="Test upload")[0]) >= 1
         assert len(foss.list_uploads(status=ClearingStatus.CLOSED)[0]) == 0
-        assert len(foss.list_uploads(since=today)[0]) == 1
+        assert len(foss.list_uploads(status=ClearingStatus.OPEN)[0]) >= 1
         assert len(foss.list_uploads(since=tomorrow)[0]) == 0
+        assert len(foss.list_uploads(since=today)[0]) >= 1
 
 
 def test_upload_from_vcs(foss: Fossology):

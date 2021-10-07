@@ -481,7 +481,14 @@ class Uploads:
         if group:
             headers["groupName"] = group
 
-        params = list_uploads_parameters(folder, name, status, assignee, since)
+        params = list_uploads_parameters(
+            folder=folder,
+            recursive=recursive,
+            name=name,
+            status=status,
+            assignee=assignee,
+            since=since,
+        )
         uploads_list = list()
         if all_pages:
             # will be reset after the total number of pages has been retrieved from the API
