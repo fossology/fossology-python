@@ -98,7 +98,7 @@ def test_download_report_filename_with_quotes(foss_server: str, foss: Fossology)
         responses.GET,
         f"{foss_server}/api/v1/report/{report_id}",
         status=200,
-        headers={'Content-Disposition': 'attachment; filename="Report_FileName.docx"'},
+        headers={"Content-Disposition": 'attachment; filename="Report_FileName.docx"'},
     )
     _, report_name = foss.download_report(report_id)
     assert report_name == "Report_FileName.docx"

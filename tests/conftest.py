@@ -31,7 +31,16 @@ def foss_server() -> str:
 def foss_agents() -> Agents:
     additional_agent = {"TestAgent": True}
     return Agents(
-        True, True, False, False, True, True, True, False, True, **additional_agent,
+        True,
+        True,
+        False,
+        False,
+        True,
+        True,
+        True,
+        False,
+        True,
+        **additional_agent,
     )
 
 
