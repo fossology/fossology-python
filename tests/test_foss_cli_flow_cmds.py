@@ -98,7 +98,14 @@ def test_create_config_file_and_run_with_it(runner, foss_server, click_test_dict
         d["IS_REQUEST_FOR_CONFIG"] = False
         d["IS_REQUEST_FOR_HELP"] = False
         result = runner.invoke(
-            foss_cli.cli, ["--debug", "-vv", "log",], obj=d, catch_exceptions=False,
+            foss_cli.cli,
+            [
+                "--debug",
+                "-vv",
+                "log",
+            ],
+            obj=d,
+            catch_exceptions=False,
         )
         print(result.output)
         assert result.exit_code == 0

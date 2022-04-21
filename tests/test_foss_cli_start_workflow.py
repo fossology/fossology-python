@@ -67,7 +67,14 @@ def test_start_workflow_reuse_newest_job(
     q_path = PurePath(click_test_file_path, click_test_file)
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "--debug", "start_workflow", str(q_path), "--access_level", "public",],
+        [
+            "-vv",
+            "--debug",
+            "start_workflow",
+            str(q_path),
+            "--access_level",
+            "public",
+        ],
         obj=d,
         catch_exceptions=False,
     )

@@ -283,7 +283,7 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
             raise FossologyApiError(description, response)
 
     def list_users(self):
-        """ List all users from the Fossology instance
+        """List all users from the Fossology instance
 
         API Endpoint: GET /users
 
@@ -389,7 +389,9 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
             raise FossologyApiError(description, response)
 
     def filesearch(
-        self, filelist: List = [], group: str = None,
+        self,
+        filelist: List = [],
+        group: str = None,
     ):
         """Search for files from hash sum
 

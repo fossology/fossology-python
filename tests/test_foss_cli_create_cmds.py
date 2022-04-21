@@ -27,7 +27,11 @@ def test_create_group(runner, click_test_dict):
     d = click_test_dict
     result = runner.invoke(
         foss_cli.cli,
-        ["-vv", "create_group", "FossGroup",],
+        [
+            "-vv",
+            "create_group",
+            "FossGroup",
+        ],
         obj=d,
         catch_exceptions=False,
     )

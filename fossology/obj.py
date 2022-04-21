@@ -311,7 +311,11 @@ class Findings(object):
     """
 
     def __init__(
-        self, scanner, conclusion, copyright=None, **kwargs,
+        self,
+        scanner,
+        conclusion,
+        copyright=None,
+        **kwargs,
     ):
         self.scanner = scanner
         self.conclusion = conclusion
@@ -478,7 +482,10 @@ class Licenses(object):
     """
 
     def __init__(
-        self, filePath, findings=None, **kwargs,
+        self,
+        filePath,
+        findings=None,
+        **kwargs,
     ):
         self.filepath = filePath
         if findings:
@@ -517,7 +524,12 @@ class Hash(object):
     """
 
     def __init__(
-        self, sha1, md5, sha256, size, **kwargs,
+        self,
+        sha1,
+        md5,
+        sha256,
+        size,
+        **kwargs,
     ):
         self.sha1 = sha1
         self.md5 = md5
@@ -548,7 +560,10 @@ class File(object):
     """
 
     def __init__(
-        self, hash, findings, **kwargs,
+        self,
+        hash,
+        findings,
+        **kwargs,
     ):
         self.hash = Hash.from_json(hash)
         self.findings = Findings.from_json(findings)

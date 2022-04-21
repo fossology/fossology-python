@@ -222,7 +222,11 @@ def init_foss(ctx: dict):
     try:
         foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])  # using new API
     except AuthenticationError:  # API version < 1.2.3 requires a username
-        foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"], name=ctx.obj["USERNAME"],)
+        foss = Fossology(
+            ctx.obj["SERVER"],
+            ctx.obj["TOKEN"],
+            name=ctx.obj["USERNAME"],
+        )
     ctx.obj["FOSS"] = foss
     ctx.obj["USER"] = foss.user.name
     logger.debug(f"Logged in as user {foss.user.name}")
@@ -233,7 +237,10 @@ def init_foss(ctx: dict):
 @click.group()
 @click.option("--token", "-t", help="The token to be used.")
 @click.option(
-    "--verbose", "-v", count=True, help="Increase verbosity level (e.g. -v -vv).",
+    "--verbose",
+    "-v",
+    count=True,
+    help="Increase verbosity level (e.g. -v -vv).",
 )
 @click.option(
     "--log_to_console/--no_log_to_console",
@@ -279,7 +286,7 @@ def cli(
     debug: bool,
     result_dir: str,
 ):
-    """The foss_cli cmdline.  Multiple -v increase verbosity-level. """
+    """The foss_cli cmdline.  Multiple -v increase verbosity-level."""
     if log_to_console:
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
@@ -443,12 +450,12 @@ def config(
 @click.pass_context
 def log(ctx: click.core.Context, log_level: int, message_text: str):
     """Add a Log Message to the log. If a log message is printed to the log depends
-       on the verbosity defined starting the foss_cli (default level 0 /-v level 1/-vv level 2).
-       Beeing on global verbosity level 0 only messages of --log_level 2 will be printed.
-       Beeing on global verbosity level 1 messages of --log_level 1 and 2 will be printed.
-       Beeing on global verbosity level 2 messages of --log_level 0,1,2 will be printed.
-       Where the log messages are printed depends on the global configuration for --log_to_console,
-       --log_to_file and --log_file_name.
+    on the verbosity defined starting the foss_cli (default level 0 /-v level 1/-vv level 2).
+    Beeing on global verbosity level 0 only messages of --log_level 2 will be printed.
+    Beeing on global verbosity level 1 messages of --log_level 1 and 2 will be printed.
+    Beeing on global verbosity level 2 messages of --log_level 0,1,2 will be printed.
+    Where the log messages are printed depends on the global configuration for --log_to_console,
+    --log_to_file and --log_file_name.
     """
 
     if log_level == 0:
@@ -514,7 +521,8 @@ def create_group(ctx: click.core.Context, group_name: str):
 
 @cli.command("upload_file")
 @click.argument(
-    "upload_file", type=click.Path(exists=True),
+    "upload_file",
+    type=click.Path(exists=True),
 )
 @click.option(
     "--folder_name", default="", show_default=True, help="The name of the upload folder"
@@ -596,7 +604,8 @@ def upload_file(
 
 @cli.command("start_workflow")
 @click.argument(
-    "file_name", type=click.Path(exists=True),
+    "file_name",
+    type=click.Path(exists=True),
 )
 @click.option(
     "--folder_name",

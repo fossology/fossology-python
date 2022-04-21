@@ -36,7 +36,8 @@ def test_upload_sha1(foss: Fossology, upload: Upload):
 def test_get_upload_unauthorized(foss: Fossology, upload: Upload):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.detail_upload(
-            upload.id, group="test",
+            upload.id,
+            group="test",
         )
     assert (
         f"Getting details for upload {upload.id} for group test not authorized"
@@ -48,7 +49,9 @@ def test_get_upload_unauthorized(foss: Fossology, upload: Upload):
 def test_get_upload_error(foss: Fossology, foss_server: str):
     upload_id = 100
     responses.add(
-        responses.GET, f"{foss_server}/api/v1/uploads/{upload_id}", status=500,
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload_id}",
+        status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.detail_upload(upload_id)
@@ -128,7 +131,10 @@ def test_upload_from_vcs(foss: Fossology):
         access_level=AccessLevel.PUBLIC,
     )
     assert vcs_upload.uploadname == vcs["vcsName"]
-    search_result = foss.search(searchType=SearchTypes.DIRECTORIES, filename=".git",)
+    search_result = foss.search(
+        searchType=SearchTypes.DIRECTORIES,
+        filename=".git",
+    )
     assert not search_result
     foss.delete_upload(vcs_upload)
 
@@ -207,12 +213,16 @@ def test_empty_upload(foss: Fossology):
 @responses.activate
 def test_upload_error(foss: Fossology, foss_server: str, test_file_path: str):
     responses.add(
-        responses.POST, f"{foss_server}/api/v1/uploads", status=500,
+        responses.POST,
+        f"{foss_server}/api/v1/uploads",
+        status=500,
     )
     description = "Test upload API error"
     with pytest.raises(FossologyApiError) as excinfo:
         foss.upload_file(
-            foss.rootFolder, file=test_file_path, description=description,
+            foss.rootFolder,
+            file=test_file_path,
+            description=description,
         )
     assert f"Upload {description} could not be performed" in str(excinfo.value)
 

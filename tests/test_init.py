@@ -20,7 +20,9 @@ def test_info_does_not_return_200(foss_server: str, foss: Fossology):
         return
 
     responses.add(
-        responses.GET, f"{foss_server}/api/v1/info", status=400,
+        responses.GET,
+        f"{foss_server}/api/v1/info",
+        status=400,
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.get_info()
@@ -40,7 +42,9 @@ def test_health_does_not_return_200(foss_server: str, foss: Fossology):
         return
 
     responses.add(
-        responses.GET, f"{foss_server}/api/v1/health", status=503,
+        responses.GET,
+        f"{foss_server}/api/v1/health",
+        status=503,
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.get_health()
