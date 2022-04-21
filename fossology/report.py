@@ -100,8 +100,8 @@ class Report:
         response = self.session.get(f"{self.api}/report/{report_id}", headers=headers)
         if response.status_code == 200:
             content = response.headers["Content-Disposition"]
-            report_name_pattern = '(^attachment; filename=")(.*)("$)'
-            report_name = re.match(report_name_pattern, content).group(2)
+            report_name_pattern = '(^attachment; filename=)("|\')?([^"|\']*)("|\'$)?'
+            report_name = re.match(report_name_pattern, content).group(3)
             return response.content, report_name
         elif response.status_code == 403:
             description = (
