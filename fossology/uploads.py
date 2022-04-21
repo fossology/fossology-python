@@ -4,11 +4,24 @@ import json
 import logging
 import re
 import time
+import fossology
 
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
-from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import ClearingStatus, Folder, Licenses, Summary, Upload, get_options
+from fossology.exceptions import (
+    AuthorizationError,
+    FossologyApiError,
+    FossologyUnsupported,
+)
+from fossology.obj import (
+    ClearingStatus,
+    Folder,
+    Licenses,
+    Summary,
+    Upload,
+    User,
+    get_options,
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -82,6 +95,7 @@ class Uploads:
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
+        :raises TryAgain: if the upload times out after 10 retries
         """
         headers = {}
         if group:
@@ -521,61 +535,96 @@ class Uploads:
         logger.info(f"Retrieved all {x_total_pages} of uploads")
         return uploads_list, x_total_pages
 
-    def move_upload(self, upload, folder, group=None):
-        """Move an upload to another folder
+    def update_upload(
+        self,
+        upload: Upload,
+        status: ClearingStatus = None,
+        comment: str = "",
+        assignee: User = None,
+        group: str = None,
+    ):
+        """Update an upload information
 
         API Endpoint: PATCH /uploads/{id}
 
-        :param upload: the Upload to be copied in another folder
-        :param folder: the destination Folder
+        :param upload: the Upload to be updated
+        :param status: the new status of the upload (Open, InProgress, Closed, Rejected)
+        :param comment: the comment on the status, required for Closed and Rejected states. Ignored for others. (default: empty)
+        :param assignee: the user assigned to the upload (default: None)
         :param group: the group name to chose while changing the upload (default: None)
         :type upload: Upload
-        :type folder: Folder
+        :type status: ClearingStatus
+        :type assignee: User
+        :type comment: string
         :type group: string
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group or folder
         """
-        headers = {"folderId": str(folder.id)}
+        if fossology.versiontuple(self.version) < fossology.versiontuple("1.4.0"):
+            description = f"Endpoint PATCH /uploads is not supported by your Fossology API version {self.version}"
+            raise FossologyUnsupported(description)
+
+        params = dict()
+        headers = dict()
+        if status:
+            params["status"] = status.value
+        if assignee:
+            params["assignee"] = assignee.id
         if group:
             headers["groupName"] = group
         response = self.session.patch(
-            f"{self.api}/uploads/{upload.id}", headers=headers
+            f"{self.api}/uploads/{upload.id}",
+            headers=headers,
+            params=params,
+            data=comment,
         )
 
         if response.status_code == 202:
-            logger.info(f"Upload {upload.uploadname} has been moved to {folder.name}")
+            logger.info(
+                f"Upload {upload.uploadname} has been updated with status {status.value}"
+            )
+
+        elif response.status_code == 403:
+            description = f"Updating upload {upload.id} not authorized"
+            raise AuthorizationError(description, response)
+
+        else:
+            description = f"Unable to update upload {upload.uploadname} with status {status.value}"
+            raise FossologyApiError(description, response)
+
+    def move_upload(self, upload: Upload, folder: Folder, action: str):
+        """Copy or move an upload by id
+
+        API Endpoint: PUT /uploads/{id}
+
+        :param upload: the Upload to be copied or moved in another folder
+        :param folder: the destination Folder
+        :param action: the action to be performed, 'copy' or 'move'
+        :type upload: Upload
+        :type folder: Folder
+        :type action: str
+        :raises FossologyApiError: if the REST call failed
+        """
+        if fossology.versiontuple(self.version) < fossology.versiontuple("1.4.0"):
+            description = f"Endpoint PUT /uploads is not supported by your Fossology API version {self.version}"
+            raise FossologyUnsupported(description)
+
+        headers = {"folderId": str(folder.id), "action": action}
+        response = self.session.put(f"{self.api}/uploads/{upload.id}", headers=headers)
+
+        if response.status_code == 202:
+            logger.info(
+                f"Upload {upload.uploadname} has been {action} to {folder.name}"
+            )
 
         elif response.status_code == 403:
             description = (
-                f"Moving upload {upload.id} {get_options(group, folder)}not authorized"
+                f"{action} upload {upload.id} {get_options(folder)}not authorized"
             )
             raise AuthorizationError(description, response)
 
         else:
-            description = f"Unable to move upload {upload.uploadname} to {folder.name}"
-            raise FossologyApiError(description, response)
-
-    def copy_upload(self, upload, folder):
-        """Copy an upload in another folder
-
-        API Endpoint: PUT /uploads/{id}
-
-        :param upload: the Upload to be copied in another folder
-        :param folder: the destination Folder
-        :type upload: Upload
-        :type folder: Folder
-        :raises FossologyApiError: if the REST call failed
-        """
-        headers = {"folderId": str(folder.id)}
-        response = self.session.put(f"{self.api}/uploads/{upload.id}", headers=headers)
-
-        if response.status_code == 202:
-            logger.info(f"Upload {upload.uploadname} has been copied to {folder.name}")
-
-        elif response.status_code == 403:
-            description = f"Copy upload {upload.id} {get_options(folder)}not authorized"
-            raise AuthorizationError(description, response)
-
-        else:
-            description = f"Unable to copy upload {upload.uploadname} to {folder.name}"
+            description = (
+                f"Unable to {action} upload {upload.uploadname} to {folder.name}"
+            )
             raise FossologyApiError(description, response)
