@@ -85,16 +85,16 @@ def test_search_error(foss_server: str, foss: Fossology):
     assert "Unable to get a result with the given search criteria" in str(excinfo.value)
 
 
-def test_filesearch(foss: Fossology, scanned_upload: Upload):
+def test_filesearch(foss: Fossology, upload: Upload):
     if versiontuple(foss.version) > versiontuple("1.0.16"):
         filelist = [
             {"md5": "F921793D03CC6D63EC4B15E9BE8FD3F8"},
-            {"sha1": scanned_upload.hash.sha1},
+            {"sha1": upload.hash.sha1},
         ]
         search_result = foss.filesearch(filelist=filelist)
         assert len(search_result) == 2
         assert (
-            f"File with SHA1 {scanned_upload.hash.sha1} doesn't have any concluded license yet"
+            f"File with SHA1 {upload.hash.sha1} doesn't have any concluded license yet"
             in str(search_result[1])
         )
 
