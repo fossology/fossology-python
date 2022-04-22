@@ -793,6 +793,37 @@ class ApiLicense(object):
         return cls(**json_dict)
 
 
+class FossologyServer(object):
+
+    """FOSSology server info.
+
+    :param version: version of the FOSSology server (e.g. 4.0.0)
+    :param branchName: branch deployed on the FOSSology server
+    :param commitHash: hash of commit deployed on the FOSSology server
+    :param commitDate: date of commit deployed on the FOSSology server in ISO8601 format
+    :param buildDate: date on which packages were built in ISO8601 format
+    :type version: string
+    :type branchName: string
+    :type commitHash: string
+    :type commitDate: string
+    :type buildDate: string
+    """
+
+    def __init__(self, version, branchName, commitHash, commitDate, buildDate):
+        self.version = version
+        self.branchName = branchName
+        self.commitHash = commitHash
+        self.commitDate = commitDate
+        self.buildDate = buildDate
+
+    def __str__(self):
+        return f"Fossology server version {self.version} (branch {self.branchName} - {self.commitHash})"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 class ApiInfo(object):
 
     """FOSSology API info.
@@ -805,17 +836,27 @@ class ApiInfo(object):
     :param security: security methods allowed
     :param contact: email contact from the API documentation
     :param license: licensing of the API
+    :param fossology: information about FOSSology server
     :type name: string
     :type description: string
     :type version: string
     :type security: list
     :type contact: string
     :type license: ApiLicense object
+    :type fossology: FossologyServer object
     :type kwargs: key word argument
     """
 
     def __init__(
-        self, name, description, version, security, contact, license, **kwargs
+        self,
+        name,
+        description,
+        version,
+        security,
+        contact,
+        license,
+        fossology,
+        **kwargs,
     ):
         self.name = name
         self.description = description
@@ -823,10 +864,11 @@ class ApiInfo(object):
         self.security = security
         self.contact = contact
         self.license = ApiLicense.from_json(license)
+        self.fossology = FossologyServer.from_json(fossology)
         self.additional_info = kwargs
 
     def __str__(self):
-        return f"FOSSology API {self.name} is deployed with version {self.version}"
+        return f"{self.name} is deployed with version {self.version}"
 
     @classmethod
     def from_json(cls, json_dict):
