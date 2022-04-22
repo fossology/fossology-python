@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fossology"
-version = "1.5.0"
+version = "1.5.1"
 description = "A library to automate Fossology from Python scripts"
 authors = ["Marion Deveaud <marion.deveaud@siemens.com>"]
 license = "MIT License"
@@ -42,6 +42,7 @@ responses = "^0.20.0"
 isort = "^5.10.1"
 sphinx-autobuild = "^2021.3.14"
 rstcheck = "^5.0.0"
+requests-toolbelt = "^0.9.1"
 
 [tool.poetry.scripts]
 foss_cli = "fossology.foss_cli:main"
