@@ -214,6 +214,7 @@ Clean up
 ========
 
 Cleanup created report and token files
+
 >>> os.unlink(name)
 >>> os.unlink(path_to_upload_file)
 >>> os.unlink(path_to_token_file)
