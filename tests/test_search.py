@@ -40,13 +40,18 @@ def test_search_nothing_found(foss: Fossology, upload):
 
 
 def test_search_directory(foss: Fossology, upload):
-    search_result = foss.search(searchType=SearchTypes.DIRECTORIES, filename="share",)
+    search_result = foss.search(
+        searchType=SearchTypes.DIRECTORIES,
+        filename="share",
+    )
     assert search_result
 
 
 def test_search_upload(foss: Fossology, upload):
     search_result = foss.search(
-        searchType=SearchTypes.ALLFILES, upload=upload, filename="share",
+        searchType=SearchTypes.ALLFILES,
+        upload=upload,
+        filename="share",
     )
     assert search_result
 
@@ -65,7 +70,9 @@ def test_search_upload_does_not_exist(foss: Fossology):
             hash=hash,
         )
         search_result = foss.search(
-            searchType=SearchTypes.ALLFILES, upload=fake_upload, filename="share",
+            searchType=SearchTypes.ALLFILES,
+            upload=fake_upload,
+            filename="share",
         )
         assert not search_result
 

@@ -116,27 +116,27 @@ def test_update_folder_error(foss_server: str, foss: Fossology):
 
 
 def test_move_folder(foss: Fossology):
-    move_copy_folder = foss.create_folder(
-        foss.rootFolder, "MoveCopyTest", "Test move() and copy() functions"
+    move_folder = foss.create_folder(
+        foss.rootFolder, "MoveFolderTest", "Test move() and copy() functions"
     )
     test_folder = foss.create_folder(
         foss.rootFolder, "TestFolder", "Folder to be moved and copied via API"
     )
-    test_folder = foss.move_folder(test_folder, move_copy_folder)
-    assert test_folder.parent == move_copy_folder.id
+    test_folder = foss.move_folder(test_folder, move_folder)
+    assert test_folder.parent == move_folder.id
 
     # Cleanup
-    foss.delete_folder(move_copy_folder)
+    foss.delete_folder(move_folder)
 
 
 def test_copy_folder(foss: Fossology):
-    move_copy_folder = foss.create_folder(
-        foss.rootFolder, "MoveCopyTest", "Test move() and copy() functions"
+    copy_folder = foss.create_folder(
+        foss.rootFolder, "CopyFolderTest", "Test move() and copy() functions"
     )
     test_folder = foss.create_folder(
         foss.rootFolder, "TestFolder", "Folder to be moved and copied via API"
     )
-    folder_copy = foss.copy_folder(test_folder, move_copy_folder)
+    folder_copy = foss.copy_folder(test_folder, copy_folder)
     folder_list = foss.list_folders()
     folder_copy = [
         folder
@@ -146,7 +146,7 @@ def test_copy_folder(foss: Fossology):
     assert folder_copy
 
     # Cleanup
-    foss.delete_folder(move_copy_folder)
+    foss.delete_folder(copy_folder)
     foss.delete_folder(folder_copy[0])
 
 

@@ -69,8 +69,49 @@ def test_report_error(foss_server: str, foss: Fossology, upload: Upload):
 def test_download_report_error(foss_server: str, foss: Fossology):
     report_id = secrets.randbelow(1000)
     responses.add(
-        responses.GET, f"{foss_server}/api/v1/report/{report_id}", status=500,
+        responses.GET,
+        f"{foss_server}/api/v1/report/{report_id}",
+        status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.download_report(report_id)
     assert f"Download of report {report_id} failed" in str(excinfo.value)
+
+
+@responses.activate
+def test_download_report_filename_without_quotes(foss_server: str, foss: Fossology):
+    report_id = "1"
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/report/{report_id}",
+        status=200,
+        headers={"Content-Disposition": "attachment; filename=Report_FileName.docx"},
+    )
+    _, report_name = foss.download_report(report_id)
+    assert report_name == "Report_FileName.docx"
+
+
+@responses.activate
+def test_download_report_filename_with_quotes(foss_server: str, foss: Fossology):
+    report_id = "1"
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/report/{report_id}",
+        status=200,
+        headers={"Content-Disposition": 'attachment; filename="Report_FileName.docx"'},
+    )
+    _, report_name = foss.download_report(report_id)
+    assert report_name == "Report_FileName.docx"
+
+
+@responses.activate
+def test_download_report_filename_with_single_quotes(foss_server: str, foss: Fossology):
+    report_id = "1"
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/report/{report_id}",
+        status=200,
+        headers={"Content-Disposition": "attachment; filename='Report_FileName.docx'"},
+    )
+    _, report_name = foss.download_report(report_id)
+    assert report_name == "Report_FileName.docx"

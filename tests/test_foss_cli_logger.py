@@ -187,7 +187,15 @@ def test_log_to_userdefined_file_in_userdefined_result_dir(runner, click_test_di
 def test_debug_and_verbosity_is_captured_in_context(runner, click_test_dict):
     with runner.isolated_filesystem():
         d = click_test_dict
-        result = runner.invoke(foss_cli.cli, ["-vv", "--debug", "log",], obj=d,)
+        result = runner.invoke(
+            foss_cli.cli,
+            [
+                "-vv",
+                "--debug",
+                "log",
+            ],
+            obj=d,
+        )
         assert result.exit_code == 0
         assert d["VERBOSE"] == 2
         assert d["DEBUG"]

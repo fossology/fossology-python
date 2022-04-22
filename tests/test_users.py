@@ -54,7 +54,9 @@ def test_generate_token_errors(foss_server: str):
         body=requests.exceptions.ConnectionError(),
     )
     responses.add(
-        responses.POST, f"{foss_server}/api/v1/tokens", status=404,
+        responses.POST,
+        f"{foss_server}/api/v1/tokens",
+        status=404,
     )
     with pytest.raises(SystemExit) as excinfo:
         fossology_token(
@@ -112,7 +114,9 @@ def test_list_users(foss: Fossology):
 def test_get_self_error(foss_server: str, foss: Fossology):
     if versiontuple(foss.version) >= versiontuple("1.2.3"):
         responses.add(
-            responses.GET, f"{foss_server}/api/v1/users/self", status=500,
+            responses.GET,
+            f"{foss_server}/api/v1/users/self",
+            status=500,
         )
         with pytest.raises(FossologyApiError):
             foss.get_self()

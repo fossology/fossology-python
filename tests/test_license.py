@@ -124,7 +124,10 @@ def test_add_license_error(
 
 @responses.activate
 def test_add_license_already_exists(
-    foss_server: str, foss: fossology.Fossology, monkeypatch, test_license: License,
+    foss_server: str,
+    foss: fossology.Fossology,
+    monkeypatch,
+    test_license: License,
 ):
     if fossology.versiontuple(foss.version) >= fossology.versiontuple("1.3.0"):
         mocked_logger = MagicMock()

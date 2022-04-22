@@ -65,11 +65,20 @@ class Report:
             description = f"Report generation for upload {upload.uploadname} failed"
             raise FossologyApiError(description, response)
 
-    @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
-    def download_report(self, report_id: int, group: str = None) -> Tuple[str, str]:
+    @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(10))
+    def download_report(
+        self, report_id: int, group: str = None, wait_time: int = 0
+    ) -> Tuple[str, str]:
         """Download a report
 
         API Endpoint: GET /report/{id}
+
+        Get report for a given upload. If the report is not ready wait another ``wait_time`` seconds or look at
+        the ``Retry-After`` to determine how long the wait period shall be.
+
+        If ``wait_time`` is 0, the time interval specified by the ``Retry-After`` header is used.
+
+        The function stops trying after **10 attempts**.
 
         :Example:
 
@@ -79,19 +88,22 @@ class Report:
         >>>
         >>> # Generate a report for upload 1
         >>> report_id = foss.generate_report(foss.detail_upload(1)) # doctest: +SKIP
-        >>> report_content, report_name = foss.download_report(report_id) # doctest: +SKIP
+        >>> # Wait up to 20 Minutes until the report is ready
+        >>> report_content, report_name = foss.download_report(report_id, wait_time=120) # doctest: +SKIP
         >>> with open(report_name, "wb") as report_file:
         ...     report_file.write(report_content) # doctest: +SKIP
 
         :param report_id: the id of the generated report
         :param group: the group name to choose while downloading a specific report (default: None)
+        :param wait_time: use a customized upload wait time instead of Retry-After (in seconds, default: 0)
         :type report_id: int
         :type group: string
+        :type wait_time: int
         :return: the report content and the report name
         :rtype: Tuple[str, str]
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
-        :raises TryAgain: if the report generation timed out after 3 retries
+        :raises TryAgain: if the report generation times out after 10 retries
         """
         headers = dict()
         if group:
@@ -100,8 +112,8 @@ class Report:
         response = self.session.get(f"{self.api}/report/{report_id}", headers=headers)
         if response.status_code == 200:
             content = response.headers["Content-Disposition"]
-            report_name_pattern = '(^attachment; filename=")(.*)("$)'
-            report_name = re.match(report_name_pattern, content).group(2)
+            report_name_pattern = "(^attachment; filename=)(\"|')?([^\"|']*)(\"|'$)?"
+            report_name = re.match(report_name_pattern, content).group(3)
             return response.content, report_name
         elif response.status_code == 403:
             description = (
@@ -109,8 +121,11 @@ class Report:
             )
             raise AuthorizationError(description, response)
         elif response.status_code == 503:
-            wait_time = response.headers["Retry-After"]
-            logger.debug(f"Retry get report after {wait_time} seconds")
+            if not wait_time:
+                wait_time = response.headers["Retry-After"]
+            logger.debug(
+                f"Retry GET report {report_id} after {wait_time} seconds: {response.json()['message']}"
+            )
             time.sleep(int(wait_time))
             raise TryAgain
         else:
