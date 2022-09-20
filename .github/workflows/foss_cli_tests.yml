@@ -46,6 +46,7 @@ jobs:
         run: |
           poetry run coverage run --source=fossology -m pytest tests/test_foss_cli*.py
           poetry run coverage report -m
+        continue-on-error: true
  
   test-last_release:
     name: foss_cli tests (Fossology 4.1.0)
