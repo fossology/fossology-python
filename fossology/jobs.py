@@ -15,7 +15,9 @@ logger.setLevel(logging.DEBUG)
 class Jobs:
     """Class dedicated to all "jobs" related endpoints"""
 
-    def list_jobs(self, upload=None, page_size=100, page=1, all_pages=False):
+    def list_jobs(
+        self, upload=None, page_size=100, page=1, all_pages=False
+    ) -> tuple[list, int]:
         """Get all available jobs
 
         API Endpoint: GET /jobs
@@ -66,8 +68,8 @@ class Jobs:
         logger.info(f"Retrieved all {x_total_pages} pages of jobs")
         return jobs_list, x_total_pages
 
-    def detail_job(self, job_id, wait=False, timeout=30):
-        """Get detailled information about a job
+    def detail_job(self, job_id, wait=False, timeout=30) -> Job:
+        """Get detailed information about a job
 
         API Endpoint: GET /jobs/{id}
 
@@ -102,7 +104,9 @@ class Jobs:
             description = f"Error while getting details for job {job_id}"
             raise FossologyApiError(description, response)
 
-    def schedule_jobs(self, folder, upload, spec, group=None, wait=False, timeout=30):
+    def schedule_jobs(
+        self, folder, upload, spec, group=None, wait=False, timeout=30
+    ) -> Job:
         """Schedule jobs for a specific upload
 
         API Endpoint: POST /jobs

@@ -80,6 +80,22 @@ class ClearingStatus(Enum):
     REJECTED = "Rejected"
 
 
+class JobStatus(Enum):
+    """Job statuses:
+
+    COMPLETED
+    FAILED
+    QUEUED
+    PROCESSING
+
+    """
+
+    COMPLETED = "Completed"
+    FAILED = "Failed"
+    QUEUED = "Queued"
+    PROCESSING = "Processing"
+
+
 class LicenseType(Enum):
     """License types:
 

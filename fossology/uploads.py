@@ -4,10 +4,10 @@ import json
 import logging
 import re
 import time
-import fossology
 
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
+import fossology
 from fossology.exceptions import (
     AuthorizationError,
     FossologyApiError,
