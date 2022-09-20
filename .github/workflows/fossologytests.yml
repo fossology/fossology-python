@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.9-slim
+      image: python:3.10-slim
       volumes:
         - /tmp:/tmp
 
@@ -53,17 +53,17 @@ jobs:
  
 
   test-last-release:
-    name: Integration Tests (Fossology 4.0.0)
+    name: Integration Tests (Fossology 4.1.0)
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.9-slim
+      image: python:3.10-slim
       volumes:
         - /tmp:/tmp
 
     services:
       fossology:
-        image: fossology/fossology:4.0.0
+        image: fossology/fossology:4.1.0
         ports: 
           - 8081:80
         volumes:
