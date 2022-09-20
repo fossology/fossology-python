@@ -87,12 +87,12 @@ def test_get_uploads(
     foss.upload_file(
         upload_subfolder,
         file=test_file_path,
-        description="Test upload from github repository via python lib",
+        description="Test upload in subdirectory",
         wait_time=5,
     )
-    assert len(foss.list_uploads()[0]) == 2
-    assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 2
-    assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 1
+    assert len(foss.list_uploads()[0]) == 3
+    assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 3
+    assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 2
     assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
     foss.delete_folder(upload_subfolder)
 
@@ -241,26 +241,26 @@ def test_upload_summary_with_unknown_group_raises_authorization_error(
     )
 
 
-def test_upload_licenses(foss: Fossology, upload: Upload):
+def test_upload_licenses(foss: Fossology, upload_with_jobs: Upload):
     # Default agent "nomos"
-    licenses = foss.upload_licenses(upload)
+    licenses = foss.upload_licenses(upload_with_jobs)
     assert len(licenses) == 56
-    licenses = foss.upload_licenses(upload, containers=True)
+    licenses = foss.upload_licenses(upload_with_jobs, containers=True)
     assert len(licenses) == 56
 
     # Specific agent "ojo"
-    licenses = foss.upload_licenses(upload, agent="ojo")
+    licenses = foss.upload_licenses(upload_with_jobs, agent="ojo")
     assert len(licenses) == 9
 
     # Specific agent "monk"
-    licenses = foss.upload_licenses(upload, agent="monk")
+    licenses = foss.upload_licenses(upload_with_jobs, agent="monk")
     assert len(licenses) == 23
 
     # Unknown group
     with pytest.raises(AuthorizationError) as excinfo:
-        foss.upload_licenses(upload, group="test")
+        foss.upload_licenses(upload_with_jobs, group="test")
     assert (
-        f"Getting license for upload {upload.id} for group test not authorized"
+        f"Getting license for upload {upload_with_jobs.id} for group test not authorized"
         in str(excinfo.value)
     )
 
