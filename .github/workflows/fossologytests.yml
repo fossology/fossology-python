@@ -47,6 +47,7 @@ jobs:
           export API_LATEST=true
           poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
+        continue-on-error: true
       - name: upload codecoverage results only if we are on the repository fossology/fossology-python 
         if: ${{ github.repository == 'fossology/fossology-python' }}
         run: poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
