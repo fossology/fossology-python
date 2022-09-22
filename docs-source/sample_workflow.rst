@@ -107,8 +107,8 @@ group named clearing is created
 
 Upload File 
 ===========
-We first get an example file from our github repository testenvironment and then
-upload it to the server. 
+We first get an example file from our github repository test environment and then
+upload it to the server.
 
 
 >>> filename = "my_base-files_11.tar.xz"
@@ -124,7 +124,7 @@ upload it to the server.
 ...     description="Test upload via fossology-python lib",
 ...     group=group_name,
 ...     access_level=AccessLevel.PUBLIC,
-... )   
+... )
 
 
 Start default scan jobs
@@ -199,3 +199,22 @@ report downloaded...
 >>> print(f"report was written to file {name}.") # doctest: +ELLIPSIS  
 report was written to file...
 
+
+Delete folder
+=============
+
+Cleanup existing folder and all included data.
+
+>>> foss.delete_folder(test_folder)
+>>> print(f"Folder {test_folder.name} has been deleted")
+Folder AwesomeFossFolder has been deleted
+
+
+Clean up
+========
+
+Cleanup created report and token files
+
+>>> os.unlink(name)
+>>> os.unlink(path_to_upload_file)
+>>> os.unlink(path_to_token_file)

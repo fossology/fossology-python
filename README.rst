@@ -27,6 +27,13 @@ See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/foss
    - 1.2.1 (Fossology 3.10.0)
    - 1.3.2 (Fossology 3.11.0)
    - 1.4.0 (Fossology 4.0.0)
+   - 1.4.3 (Fossology 4.1.0)
+
+**NOTE**
+
+   Version 2.0.0 of `fossology-python` only supports Fossology API version 1.4.3 onwards because of a breaking change in
+   the version format returned by the API. Other earlier version of the wrapper support a wider range of API versions,
+   e.g. 1.5.0 supports Fossology API 1.2.1 to 1.4.0.
 
 Documentation
 =============

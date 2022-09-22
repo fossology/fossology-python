@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.9-slim
+      image: python:3.10-slim
       volumes:
         - /tmp:/tmp
 
@@ -46,19 +46,20 @@ jobs:
         run: |
           poetry run coverage run --source=fossology -m pytest tests/test_foss_cli*.py
           poetry run coverage report -m
+        continue-on-error: true
  
   test-last_release:
-    name: foss_cli tests (Fossology 3.10.0)
+    name: foss_cli tests (Fossology 4.1.0)
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.9-slim
+      image: python:3.10-slim
       volumes:
         - /tmp:/tmp
 
     services:
       fossology:
-        image: fossology/fossology:3.10.0
+        image: fossology/fossology:4.1.0
         ports:
           - 8081:80
         volumes:

@@ -12,7 +12,7 @@ from click.testing import CliRunner
 
 import fossology
 from fossology.exceptions import AuthenticationError, FossologyApiError
-from fossology.obj import AccessLevel, Agents, Folder, TokenScope, Upload
+from fossology.obj import AccessLevel, Agents, Folder, JobStatus, TokenScope, Upload
 
 logger = logging.getLogger("fossology")
 console = logging.StreamHandler()
@@ -20,6 +20,19 @@ console.setLevel(logging.DEBUG)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 console.setFormatter(formatter)
 logger.addHandler(console)
+
+
+def jobs_lookup(foss: fossology.Fossology, upload: Upload):
+    for job in foss.list_jobs(upload=upload)[0]:
+        if job.status == JobStatus.FAILED.value:
+            logger.debug(f"Job {job.name} failed to complete, checking next job")
+            continue
+        while job.status != JobStatus.COMPLETED.value:
+            logger.debug(
+                f"Waiting for job {job.name} with status {job.status} to complete (eta: {job.eta})"
+            )
+            job = foss.detail_job(job.id)
+            time.sleep(5)
 
 
 @pytest.fixture(scope="session")
@@ -136,7 +149,7 @@ def test_file_path() -> str:
 
 @pytest.fixture(scope="session")
 def upload_folder(foss: fossology.Fossology) -> Folder:
-    name = "FossPythonTestUploads"
+    name = "UploadFolderTest"
     desc = "Created via the Fossology Python API"
     folder = foss.create_folder(foss.rootFolder, name, description=desc)
     yield folder
@@ -153,32 +166,39 @@ def move_folder(foss: fossology.Fossology) -> Folder:
 
 
 @pytest.fixture(scope="session")
-def upload(foss: fossology.Fossology, test_file_path: str) -> Upload:
-    test_upload = foss.upload_file(
+def upload(
+    foss: fossology.Fossology,
+    test_file_path: str,
+) -> Upload:
+    upload = foss.upload_file(
         foss.rootFolder,
         file=test_file_path,
         description="Test upload via fossology-python lib",
         access_level=AccessLevel.PUBLIC,
+        wait_time=5,
     )
-    time.sleep(3)
-    yield test_upload
-    foss.delete_upload(test_upload)
+    jobs_lookup(foss, upload)
+    yield upload
+    foss.delete_upload(upload)
+    time.sleep(5)
 
 
 @pytest.fixture(scope="session")
-def scanned_upload(
-    foss: fossology.Fossology, test_file_path: str, foss_schedule_agents: Dict
+def upload_with_jobs(
+    foss: fossology.Fossology, test_file_path: str, foss_schedule_agents: dict
 ) -> Upload:
-    test_upload = foss.upload_file(
+    upload = foss.upload_file(
         foss.rootFolder,
         file=test_file_path,
-        description="Test upload via fossology-python lib",
+        description="Test upload_with_jobs via fossology-python lib",
         access_level=AccessLevel.PUBLIC,
+        wait_time=5,
     )
-    time.sleep(3)
-    foss.schedule_jobs(foss.rootFolder, test_upload, foss_schedule_agents)
-    yield test_upload
-    foss.delete_upload(test_upload)
+    foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
+    jobs_lookup(foss, upload)
+    yield upload
+    foss.delete_upload(upload)
+    time.sleep(5)
 
 
 # foss_cli specific

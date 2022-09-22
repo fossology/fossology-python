@@ -4,10 +4,10 @@ import json
 import logging
 import re
 import time
-import fossology
 
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
+import fossology
 from fossology.exceptions import (
     AuthorizationError,
     FossologyApiError,
@@ -125,16 +125,17 @@ class Uploads:
 
     def upload_file(  # noqa: C901
         self,
-        folder,
-        file=None,
-        vcs=None,
-        url=None,
-        server=None,
-        description=None,
-        access_level=None,
-        ignore_scm=False,
-        group=None,
-        wait_time=0,
+        folder: Folder,
+        file: str = None,
+        vcs: dict = None,
+        url: dict = None,
+        server: dict = None,
+        description: str = None,
+        access_level: str = None,
+        apply_global: bool = False,
+        ignore_scm: bool = False,
+        group: str = None,
+        wait_time: int = 0,
     ):
         """Upload a package to FOSSology
 
@@ -209,6 +210,7 @@ class Uploads:
         :param server: the SERVER specification to upload from fossology server
         :param description: description of the upload (default: None)
         :param access_level: access permissions of the upload (default: protected)
+        :param apply_global: apply global decisions for current upload (default: False)
         :param ignore_scm: ignore SCM files (Git, SVN, TFS) (default: True)
         :param group: the group name to chose while uploading the file (default: None)
         :param wait_time: use a customized upload wait time instead of Retry-After (in seconds, default: 0)
@@ -219,6 +221,7 @@ class Uploads:
         :type server: dict()
         :type description: string
         :type access_level: AccessLevel
+        :type apply_global: boolean
         :type ignore_scm: boolean
         :type group: string
         :type wait_time: int
@@ -232,8 +235,10 @@ class Uploads:
             headers["uploadDescription"] = description
         if access_level:
             headers["public"] = access_level.value
+        if apply_global:
+            headers["applyGlobal"] = "true"
         if ignore_scm:
-            headers["ignoreScm"] = "false"
+            headers["ignoreScm"] = "true"
         if group:
             headers["groupName"] = group
 
@@ -589,7 +594,9 @@ class Uploads:
             raise AuthorizationError(description, response)
 
         else:
-            description = f"Unable to update upload {upload.uploadname} with status {status.value}"
+            description = (
+                f"Unable to update upload {upload.uploadname} with status {status}"
+            )
             raise FossologyApiError(description, response)
 
     def move_upload(self, upload: Upload, folder: Folder, action: str):
@@ -604,6 +611,7 @@ class Uploads:
         :type folder: Folder
         :type action: str
         :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the user can't access the upload or folder
         """
         if fossology.versiontuple(self.version) < fossology.versiontuple("1.4.0"):
             description = f"Endpoint PUT /uploads is not supported by your Fossology API version {self.version}"

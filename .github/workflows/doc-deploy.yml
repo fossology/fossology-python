@@ -9,7 +9,7 @@ jobs:
   doc-deploy:
     name: Deploy document pages
     runs-on: ubuntu-latest
-    container: 'python:3.9-slim'
+    container: 'python:3.10-slim'
     steps:
       - name: Install host dependencies
         run: |

@@ -4,37 +4,31 @@
 import secrets
 import time
 from datetime import date, timedelta
+from unittest.mock import Mock
 
 import pytest
 import responses
 
-from fossology import Fossology, versiontuple
+from fossology import Fossology
 from fossology.exceptions import (
     AuthorizationError,
     FossologyApiError,
     FossologyUnsupported,
 )
-from fossology.obj import AccessLevel, ClearingStatus, Folder, SearchTypes, Upload
+from fossology.obj import AccessLevel, ClearingStatus, Folder, Upload
 
 
 def test_upload_sha1(foss: Fossology, upload: Upload):
     assert upload.uploadname == "base-files_11.tar.xz"
-    if versiontuple(foss.version) > versiontuple("1.0.16"):
-        assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
-        assert str(upload) == (
-            f"Upload '{upload.uploadname}' ({upload.id}, {upload.hash.size}B, {upload.hash.sha1}) "
-            f"in folder {upload.foldername} ({upload.folderid})"
-        )
-        assert str(upload.hash) == (
-            f"File SHA1: {upload.hash.sha1} MD5 {upload.hash.md5} "
-            f"SH256 {upload.hash.sha256} Size {upload.hash.size}B"
-        )
-    else:
-        assert upload.filesha1 == "D4D663FC2877084362FB2297337BE05684869B00"
-        assert str(upload) == (
-            f"Upload '{upload.uploadname}' ({upload.id}, {upload.filesize}B, {upload.filesha1}) "
-            f"in folder {upload.foldername} ({upload.folderid})"
-        )
+    assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+    assert str(upload) == (
+        f"Upload '{upload.uploadname}' ({upload.id}, {upload.hash.size}B, {upload.hash.sha1}) "
+        f"in folder {upload.foldername} ({upload.folderid})"
+    )
+    assert str(upload.hash) == (
+        f"File SHA1: {upload.hash.sha1} MD5 {upload.hash.md5} "
+        f"SH256 {upload.hash.sha256} Size {upload.hash.size}B"
+    )
 
 
 def test_get_upload_unauthorized(foss: Fossology, upload: Upload):
@@ -75,7 +69,8 @@ def test_upload_nogroup(foss: Fossology, upload_folder: Folder, test_file_path: 
         in str(excinfo.value)
     )
 
-    # Get get upload unknown group
+
+def test_list_upload_unknown_group(foss: Fossology):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.list_uploads(group="test")
     assert "Retrieving list of uploads for group test not authorized" in str(
@@ -83,126 +78,36 @@ def test_upload_nogroup(foss: Fossology, upload_folder: Folder, test_file_path: 
     )
 
 
-def test_get_uploads(foss: Fossology, upload_folder: Folder, test_file_path: str):
-    name = "FossPythonTestUploadsSubfolder"
+def test_get_uploads(
+    foss: Fossology, upload: Upload, upload_folder: Folder, test_file_path: str
+):
+    name = "UploadSubfolderTest"
     desc = "Created via the Fossology Python API"
     upload_subfolder = foss.create_folder(upload_folder, name, description=desc)
     foss.upload_file(
-        upload_folder,
-        file=test_file_path,
-        description="Test upload from github repository via python lib",
-    )
-    foss.upload_file(
         upload_subfolder,
         file=test_file_path,
-        description="Test upload from github repository via python lib",
+        description="Test upload in subdirectory",
+        wait_time=5,
     )
-    # Folder listing is still unstable in version 1.0.16
-    # Let's skip it since it has been fixed in newest versions
-    if versiontuple(foss.version) > versiontuple("1.0.16"):
-        assert len(foss.list_uploads(folder=upload_folder)[0]) == 2
-        assert len(foss.list_uploads(folder=upload_folder, recursive=False)[0]) == 1
-        assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
+    assert len(foss.list_uploads()[0]) == 3
+    assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 3
+    assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 2
+    assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
+    foss.delete_folder(upload_subfolder)
 
 
 def test_filter_uploads(foss: Fossology, upload: Upload):
     today = date.today().isoformat()
     tomorrow = (date.today() + timedelta(days=1)).isoformat()
-    # Uploads filtering has been enhance with API version 1.3.4
-    if versiontuple(foss.version) >= versiontuple("1.3.4"):
-        assert len(foss.list_uploads(assignee="-me-")[0]) == 0
-        assert len(foss.list_uploads(assignee="-unassigned-")[0]) >= 1
-        assert len(foss.list_uploads(name="Non-existing upload")[0]) == 0
-        assert len(foss.list_uploads(name="Test upload")[0]) >= 1
-        assert len(foss.list_uploads(status=ClearingStatus.CLOSED)[0]) == 0
-        assert len(foss.list_uploads(status=ClearingStatus.OPEN)[0]) >= 1
-        assert len(foss.list_uploads(since=tomorrow)[0]) == 0
-        assert len(foss.list_uploads(since=today)[0]) >= 1
-
-
-def test_upload_from_vcs(foss: Fossology):
-    vcs = {
-        "vcsType": "git",
-        "vcsUrl": "https://github.com/fossology/fossology-python",
-        "vcsName": "fossology-python-github-master",
-        "vcsUsername": "",
-        "vcsPassword": "",
-    }
-    vcs_upload = foss.upload_file(
-        foss.rootFolder,
-        vcs=vcs,
-        description="Test upload from github repository via python lib",
-        access_level=AccessLevel.PUBLIC,
-    )
-    assert vcs_upload.uploadname == vcs["vcsName"]
-    search_result = foss.search(
-        searchType=SearchTypes.DIRECTORIES,
-        filename=".git",
-    )
-    assert not search_result
-    foss.delete_upload(vcs_upload)
-
-
-def test_upload_ignore_scm(foss: Fossology):
-    vcs = {
-        "vcsType": "git",
-        "vcsUrl": "https://github.com/fossology/fossology-python",
-        "vcsName": "fossology-python-github-master",
-        "vcsUsername": "",
-        "vcsPassword": "",
-    }
-    vcs_upload = foss.upload_file(
-        foss.rootFolder,
-        vcs=vcs,
-        description="Test upload with ignore_scm flag",
-        ignore_scm=False,
-        access_level=AccessLevel.PUBLIC,
-    )
-    assert vcs_upload.uploadname == vcs["vcsName"]
-    # FIXME: shall be fixed in the next release
-    # assert foss.search(
-    #    searchType=SearchTypes.DIRECTORIES, filename=".git",
-    # ) == $something
-
-    # Cleanup
-    foss.delete_upload(vcs_upload)
-
-
-def test_upload_from_url(foss: Fossology):
-    url = {
-        "url": "https://github.com/fossology/fossology-python/archive/master.zip",
-        "name": "fossology-python-master.zip",
-        "accept": "zip",
-        "reject": "",
-        "maxRecursionDepth": "1",
-    }
-    url_upload = foss.upload_file(
-        foss.rootFolder,
-        url=url,
-        description="Test upload from url via python lib",
-        access_level=AccessLevel.PUBLIC,
-    )
-    assert url_upload.uploadname == url["name"]
-
-    # Cleanup
-    foss.delete_upload(url_upload)
-
-
-def test_upload_from_server(foss: Fossology):
-    server = {
-        "path": "/tmp/base-files-11",
-        "name": "base-files-11",
-    }
-    server_upload = foss.upload_file(
-        foss.rootFolder,
-        server=server,
-        description="Test upload from server via python lib",
-        access_level=AccessLevel.PUBLIC,
-    )
-    assert server_upload.uploadname == server["name"]
-
-    # Cleanup
-    foss.delete_upload(server_upload)
+    assert len(foss.list_uploads(assignee="-me-")[0]) == 0
+    assert len(foss.list_uploads(assignee="-unassigned-")[0]) >= 1
+    assert len(foss.list_uploads(name="Non-existing upload")[0]) == 0
+    assert len(foss.list_uploads(name="Test upload")[0]) >= 1
+    assert len(foss.list_uploads(status=ClearingStatus.CLOSED)[0]) == 0
+    assert len(foss.list_uploads(status=ClearingStatus.OPEN)[0]) >= 1
+    assert len(foss.list_uploads(since=tomorrow)[0]) == 0
+    assert len(foss.list_uploads(since=today)[0]) >= 1
 
 
 def test_empty_upload(foss: Fossology):
@@ -231,78 +136,81 @@ def test_upload_error(foss: Fossology, foss_server: str, test_file_path: str):
     assert f"Upload {description} could not be performed" in str(excinfo.value)
 
 
-def test_move_upload(foss: Fossology):
-    upload = foss.upload_file(
-        foss.rootFolder,
-        file="tests/files/base-files_11.tar.xz",
-        description="Test upload via fossology-python lib",
-        access_level=AccessLevel.PUBLIC,
-    )
-    move_upload_folder = foss.create_folder(foss.rootFolder, "MoveUploadFolder")
-    if versiontuple(foss.version) < versiontuple("1.4.0"):
-        with pytest.raises(FossologyUnsupported):
-            foss.move_upload(upload, move_upload_folder, "move")
-    else:
-        foss.move_upload(upload, move_upload_folder, "move")
-        moved_upload = foss.detail_upload(upload.id)
-        assert moved_upload.folderid == move_upload_folder.id
-        foss.delete_folder(move_upload_folder)
+def test_move_upload_unsupported_version(foss: Fossology):
+    real_version = foss.version
+    foss.version = "1.3.9"
+    with pytest.raises(FossologyUnsupported):
+        foss.move_upload(Mock(), Mock(), "move")
+    foss.version = real_version
+
+
+def test_move_upload(foss: Fossology, upload: Upload, move_folder: Folder):
+    foss.move_upload(upload, move_folder, "move")
+    moved_upload = foss.detail_upload(upload.id)
+    assert moved_upload.folderid == move_folder.id
 
 
 def test_copy_upload(foss: Fossology, upload: Upload):
     copy_upload_folder = foss.create_folder(foss.rootFolder, "CopyUploadFolder")
-    if versiontuple(foss.version) < versiontuple("1.4.0"):
-        with pytest.raises(FossologyUnsupported):
-            foss.move_upload(upload, copy_upload_folder, "copy")
-    else:
-        foss.move_upload(upload, copy_upload_folder, "copy")
-        copied_upload = foss.detail_upload(upload.id)
-        assert copied_upload
-        # Upload should be visible twice but it isn't
-        # Bug or Feature?
-        foss.delete_folder(copy_upload_folder)
+    foss.move_upload(upload, copy_upload_folder, "copy")
+    copied_upload = foss.detail_upload(upload.id)
+    assert copied_upload
+    # Upload should be visible twice but it isn't
+    # Bug or Feature?
+    foss.delete_folder(copy_upload_folder)
 
 
 def test_move_upload_to_non_existing_folder(foss: Fossology, upload: Upload):
-    move_upload_folder = foss.create_folder(foss.rootFolder, "MoveUploadFolder")
-    if versiontuple(foss.version) < versiontuple("1.4.0"):
-        with pytest.raises(FossologyUnsupported):
-            foss.move_upload(upload, move_upload_folder, "move")
-    else:
-        non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
-        with pytest.raises(AuthorizationError):
-            foss.move_upload(upload, non_folder, "move")
+    non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
+    with pytest.raises(AuthorizationError):
+        foss.move_upload(upload, non_folder, "move")
 
 
-def test_update_upload(foss: Fossology, scanned_upload: Upload):
-    if versiontuple(foss.version) < versiontuple("1.4.0"):
-        with pytest.raises(FossologyUnsupported):
-            foss.update_upload(scanned_upload)
-    else:
-        foss.update_upload(
-            scanned_upload, ClearingStatus.INPROGRESS, "I am taking over", foss.user
-        )
-        summary = foss.upload_summary(scanned_upload)
-        assert summary.clearingStatus == "InProgress"
-        assert summary.additional_info["assignee"] == foss.user.id
+@responses.activate
+def test_move_upload_error(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.PUT,
+        f"{foss_server}/api/v1/uploads/{upload.id}",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.move_upload(upload, Mock(), "move")
 
 
-def test_update_upload_with_unknown_group_raises_error(
-    foss: Fossology, scanned_upload: Upload
-):
-    if versiontuple(foss.version) < versiontuple("1.4.0"):
-        with pytest.raises(FossologyUnsupported):
-            foss.update_upload(scanned_upload)
-    else:
-        with pytest.raises(AuthorizationError) as excinfo:
-            foss.update_upload(scanned_upload, group="test")
-        assert f"Updating upload {scanned_upload.id} not authorized" in str(
-            excinfo.value
-        )
+def test_update_upload_unsupported_version(foss: Fossology):
+    real_version = foss.version
+    foss.version = "1.3.9"
+    with pytest.raises(FossologyUnsupported):
+        foss.update_upload(Mock())
+    foss.version = real_version
 
 
-def test_upload_summary(foss: Fossology, scanned_upload: Upload):
-    summary = foss.upload_summary(scanned_upload)
+def test_update_upload(foss: Fossology, upload: Upload):
+    foss.update_upload(upload, ClearingStatus.INPROGRESS, "I am taking over", foss.user)
+    summary = foss.upload_summary(upload)
+    assert summary.clearingStatus == "InProgress"
+    assert summary.additional_info["assignee"] == foss.user.id
+
+
+def test_update_upload_with_unknown_group_raises_error(foss: Fossology, upload: Upload):
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.update_upload(upload, group="test")
+    assert f"Updating upload {upload.id} not authorized" in str(excinfo.value)
+
+
+@responses.activate
+def test_update_upload_error(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.PATCH,
+        f"{foss_server}/api/v1/uploads/{upload.id}",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.update_upload(upload)
+
+
+def test_upload_summary(foss: Fossology, upload: Upload):
+    summary = foss.upload_summary(upload)
     assert summary.clearingStatus == "InProgress"
     assert not summary.mainLicense
     assert str(summary) == (
@@ -311,63 +219,84 @@ def test_upload_summary(foss: Fossology, scanned_upload: Upload):
     )
 
 
+@responses.activate
+def test_upload_summary_500_error(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/summary",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.upload_summary(upload)
+
+
 def test_upload_summary_with_unknown_group_raises_authorization_error(
-    foss: Fossology, scanned_upload: Upload
+    foss: Fossology, upload: Upload
 ):
     with pytest.raises(AuthorizationError) as excinfo:
-        foss.upload_summary(scanned_upload, group="test")
+        foss.upload_summary(upload, group="test")
     assert (
-        f"Getting summary of upload {scanned_upload.id} for group test not authorized"
+        f"Getting summary of upload {upload.id} for group test not authorized"
         in str(excinfo.value)
     )
 
 
-def test_upload_licenses(foss: Fossology, scanned_upload: Upload):
+def test_upload_licenses(foss: Fossology, upload_with_jobs: Upload):
     # Default agent "nomos"
-    licenses = foss.upload_licenses(scanned_upload)
+    licenses = foss.upload_licenses(upload_with_jobs)
     assert len(licenses) == 56
-    licenses = foss.upload_licenses(scanned_upload, containers=True)
+    licenses = foss.upload_licenses(upload_with_jobs, containers=True)
     assert len(licenses) == 56
 
     # Specific agent "ojo"
-    licenses = foss.upload_licenses(scanned_upload, agent="ojo")
+    licenses = foss.upload_licenses(upload_with_jobs, agent="ojo")
     assert len(licenses) == 9
 
     # Specific agent "monk"
-    licenses = foss.upload_licenses(scanned_upload, agent="monk")
+    licenses = foss.upload_licenses(upload_with_jobs, agent="monk")
     assert len(licenses) == 23
 
     # Unknown group
     with pytest.raises(AuthorizationError) as excinfo:
-        foss.upload_licenses(scanned_upload, group="test")
+        foss.upload_licenses(upload_with_jobs, group="test")
     assert (
-        f"Getting license for upload {scanned_upload.id} for group test not authorized"
+        f"Getting license for upload {upload_with_jobs.id} for group test not authorized"
         in str(excinfo.value)
     )
 
 
+@responses.activate
+def test_upload_licenses_412_error(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/licenses",
+        status=412,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.upload_licenses(upload)
+
+
+@responses.activate
+def test_upload_licenses_500_error(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/licenses",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.upload_licenses(upload)
+
+
 def test_delete_unknown_upload_unknown_group(foss: Fossology):
-    if versiontuple(foss.version) > versiontuple("1.0.16"):
-        upload = Upload(
-            foss.rootFolder,
-            "Root Folder",
-            secrets.randbelow(1000),
-            "",
-            "Non Upload",
-            "2020-05-05",
-            hash={"sha1": None, "md5": None, "sha256": None, "size": None},
-        )
-    else:
-        upload = Upload(
-            foss.rootFolder,
-            "Root Folder",
-            secrets.randbelow(1000),
-            "",
-            "Non Upload",
-            "2020-05-05",
-            filesize="1024",
-            filesha1="597d209fd962f401866f12db9fa1f7301aee15a9",
-        )
+    upload = Upload(
+        foss.rootFolder,
+        "Root Folder",
+        secrets.randbelow(1000),
+        "",
+        "Non Upload",
+        "2020-05-05",
+        hash={"sha1": None, "md5": None, "sha256": None, "size": None},
+    )
     with pytest.raises(FossologyApiError):
         foss.delete_upload(upload)
 
@@ -379,15 +308,13 @@ def test_delete_unknown_upload_unknown_group(foss: Fossology):
 
 
 def test_paginated_list_uploads(foss: Fossology, upload: Upload, test_file_path: str):
-    if versiontuple(foss.version) < versiontuple("1.1.1"):
-        # Upload pagination not available yet
-        return
     # Add a second upload
     second_upload = foss.upload_file(
         foss.rootFolder,
         file=test_file_path,
         description="Test second upload via fossology-python lib",
         access_level=AccessLevel.PUBLIC,
+        wait_time=5,
     )
     time.sleep(3)
     uploads, _ = foss.list_uploads(page_size=1, page=1)
@@ -410,3 +337,14 @@ def test_paginated_list_uploads(foss: Fossology, upload: Upload, test_file_path:
     assert num_known_uploads >= 2
 
     foss.delete_upload(second_upload)
+
+
+@responses.activate
+def test_list_uploads_500_error(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.list_uploads()

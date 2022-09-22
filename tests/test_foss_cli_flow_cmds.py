@@ -1,6 +1,7 @@
 __doc__ = """Test the "workflow" sub commands of foss_cli"""
 import configparser
 import os
+import time
 from pathlib import PurePath
 
 from fossology import foss_cli
@@ -28,6 +29,18 @@ def test_upload_file(runner, click_test_file_path, click_test_file, click_test_d
     assert d["DEBUG"]
     assert d["UPLOAD"].uploadname == click_test_file
     assert "Summary of upload" in result.output
+    time.sleep(2)
+    result = runner.invoke(
+        foss_cli.cli,
+        [
+            "-vv",
+            "delete_upload",
+            click_test_file,
+        ],
+        obj=d,
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
 
 
 def test_create_config_file_with_wrong_token_scope_uses_default_read(
