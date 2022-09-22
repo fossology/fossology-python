@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Sample Workflow &#8212; fossology 1.5.0 documentation</title>
+    <title>Sample Workflow &#8212; fossology 2.0.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -65,6 +65,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#upload-file">Upload File</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#start-default-scan-jobs">Start default scan jobs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#generate-report">Generate report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#delete-folder">Delete folder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clean-up">Clean up</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="foss_cli.html">Foss CLI</a></li>
@@ -222,7 +224,7 @@
 </section>
 <section id="upload-file">
 <h2>Upload File<a class="headerlink" href="#upload-file" title="Permalink to this headline">¶</a></h2>
-<p>We first get an example file from our github repository testenvironment and then
+<p>We first get an example file from our github repository test environment and then
 upload it to the server.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;my_base-files_11.tar.xz&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">path_to_upload_file</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="n">filename</span>
@@ -303,6 +305,24 @@ of the analysis - download the report and store it on disk.</p>
 <span class="gp">... </span>   <span class="nb">len</span> <span class="o">=</span> <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;report was written to file </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span> 
 <span class="go">report was written to file...</span>
+</pre></div>
+</div>
+</section>
+<section id="delete-folder">
+<h2>Delete folder<a class="headerlink" href="#delete-folder" title="Permalink to this headline">¶</a></h2>
+<p>Cleanup existing folder and all included data.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span><span class="o">.</span><span class="n">delete_folder</span><span class="p">(</span><span class="n">test_folder</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Folder </span><span class="si">{</span><span class="n">test_folder</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has been deleted&quot;</span><span class="p">)</span>
+<span class="go">Folder AwesomeFossFolder has been deleted</span>
+</pre></div>
+</div>
+</section>
+<section id="clean-up">
+<h2>Clean up<a class="headerlink" href="#clean-up" title="Permalink to this headline">¶</a></h2>
+<p>Cleanup created report and token files</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">path_to_upload_file</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">path_to_token_file</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
