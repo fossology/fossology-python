@@ -136,7 +136,7 @@ def check_get_access_level(level: str):
 
 
 def needs_later_initialization_of_foss_instance(ctx):
-    """Check if lateron a Fossology Instance will be created.
+    """Check if later on a Fossology Instance will be created.
 
     :param ctx: click context
     :type ctx: click.core.Context
@@ -580,6 +580,7 @@ def upload_file(
             file=upload_file,
             description=description if description else "upload via foss-cli",
             access_level=the_access_level,
+            wait_time=10,
         )
 
     ctx.obj["UPLOAD"] = the_upload
@@ -600,6 +601,56 @@ def upload_file(
                 f"Copyright count: {summary.copyrightCount}"
                 f"Additional info: {summary.additional_info}"
             )
+
+
+@cli.command("delete_folder")
+@click.argument("folder_name")
+@click.pass_context
+def delete_folder(
+    ctx: click.core.Context,
+    folder_name: str,
+):
+    """The foss_cli delete_folder command."""
+
+    logger.debug(f"Try to delete folder {folder_name}")
+    foss = ctx.obj["FOSS"]
+
+    folder = None
+    for f in foss.list_folders():
+        if f.name == folder_name:
+            folder = f
+            logger.debug(f"Found folder to delete: {folder}")
+            break
+
+    if not folder:
+        logger.fatal(f"Unable to find folder {folder_name}.")
+        ctx.exit(1)
+
+    foss.delete_folder(folder)
+    logger.debug(f"Delete command was send to {foss.host} for folder {folder}")
+
+
+@cli.command("delete_upload")
+@click.argument("upload_name")
+@click.pass_context
+def delete_upload(
+    ctx: click.core.Context,
+    upload_name: str,
+):
+    """The foss_cli folder_id command."""
+
+    logger.debug(f"Try to delete upload {upload_name}")
+    foss = ctx.obj["FOSS"]
+
+    upload = None
+    for u in foss.list_uploads(all_pages=True)[0]:
+        if u.uploadname == upload_name:
+            upload = u
+            logger.debug(f"Found upload to delete: {upload}")
+            break
+
+    foss.delete_upload(upload)
+    logger.debug(f"Delete command was send to {foss.host} for upload {upload}")
 
 
 @cli.command("start_workflow")
@@ -695,6 +746,7 @@ def start_workflow(  # noqa: C901
                 file=file_name,
                 description=file_description,
                 access_level=the_access_level,
+                wait_time=10,
             )
             logger.debug(f"Finished upload for {file_name}")
 

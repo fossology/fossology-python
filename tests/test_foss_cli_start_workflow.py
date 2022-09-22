@@ -61,7 +61,7 @@ def test_start_workflow_reuse_newest_job(
     runner, click_test_file_path, click_test_file, click_test_dict
 ):
     d = click_test_dict
-    # first upload  is the initial one
+    # first upload is the initial one
     #  - it uploads
     #  - it triggers a job on the upload
     q_path = PurePath(click_test_file_path, click_test_file)
@@ -108,4 +108,16 @@ def test_start_workflow_reuse_newest_job(
     assert "Generated report" in result.output
     assert "Report downloaded" in result.output
     assert "Report written to file: " in result.output
+    assert result.exit_code == 0
+    # cleanup
+    result = runner.invoke(
+        foss_cli.cli,
+        [
+            "-vv",
+            "delete_upload",
+            click_test_file,
+        ],
+        obj=d,
+        catch_exceptions=False,
+    )
     assert result.exit_code == 0
