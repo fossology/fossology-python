@@ -308,6 +308,56 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report):
             description = f"Unable to get a list of users from {self.host}"
             raise FossologyApiError(description, response)
 
+    def create_user(self, user_spec: dict):
+        """Create a new Fossology user
+
+        API Endpoint: POST /users
+
+        :Example:
+
+        >>> user_spec = {
+            "id": 0,
+            "name": "New User",
+            "description": "A brand new user",
+            "email": "new.user@fossology.com",
+            "accessLevel": "none",
+            "rootFolderId": 0,
+            "emailNotification": True,
+            "defaultGroup": 0,
+            "agents": {
+                "bucket": True,
+                "copyright_email_author": True,
+                "ecc": True,
+                "keyword": True,
+                "mime": True,
+                "monk": True,
+                "nomos": True,
+                "ojo": True,
+                "package": True,
+                "reso": True,
+                "heritage": True
+            },
+            "defaultBucketpool": 0,
+            "user_pass": "$PASSWORD",
+            "defaultVisibility": "public"
+        }
+        >>> foss.create_user(user_spec)
+
+        :param user_spec: the user creation data
+        :type user_spec: dict
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.post(f"{self.api}/users", json=user_spec)
+        if response.status_code == 201:
+            logger.info(
+                f"User {user_spec['name']} was created, user list_users() to get more information."
+            )
+        elif response.status_code == 409:
+            logger.info(f"User {user_spec['name']} already exists.")
+        else:
+            description = f"Error while creating user {user_spec['name']}"
+            raise FossologyApiError(description, response)
+
     def delete_user(self, user):
         """Delete a Fossology user.
 
