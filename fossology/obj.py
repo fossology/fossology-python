@@ -5,6 +5,10 @@ import json
 from enum import Enum
 
 
+def versiontuple(v):
+    return tuple(map(int, (v.split("."))))
+
+
 class AccessLevel(Enum):
     """Available access levels for uploads:
 
@@ -42,13 +46,13 @@ class SearchTypes(Enum):
 
     ALLFILES
     CONTAINERS
-    DIRECTORIES
+    DIRECTORY
 
     """
 
     ALLFILES = "allfiles"
     CONTAINERS = "containers"
-    DIRECTORIES = "directories"
+    DIRECTORY = "directory"
 
 
 class TokenScope(Enum):
@@ -977,6 +981,36 @@ class HealthInfo(object):
 
     def __str__(self):
         return f"FOSSology server status is: {self.status} (Scheduler: {self.scheduler.status} - DB: {self.db.status})"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class SearchResult(object):
+
+    """Search result.
+
+    Represents a search response from FOSSology API.
+
+    :param upload: upload where the searched file has been found
+    :param uploadTreeId: id of the upload tree
+    :param filename: filename of the tree item
+    :param kwargs: handle any other job information provided by the fossology instance
+    :type upload: Upload
+    :type uploadTreeId: int
+    :type filename: string
+    :type kwargs: key word argument
+    """
+
+    def __init__(self, upload, uploadTreeId, filename, **kwargs):
+        self.upload = Upload.from_json(upload)
+        self.uploadTreeId = uploadTreeId
+        self.filename = filename
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"File found in upload {self.upload.uploadname} ({self.uploadTreeId}): {self.filename}"
 
     @classmethod
     def from_json(cls, json_dict):

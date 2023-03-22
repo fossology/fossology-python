@@ -20,6 +20,7 @@ from fossology.obj import (
     TokenScope,
     Upload,
     User,
+    versiontuple,
 )
 
 logger = logging.getLogger("fossology")
@@ -212,6 +213,8 @@ def upload_with_jobs(
 
 @pytest.fixture()
 def created_foss_user(foss: fossology.Fossology, foss_user: dict) -> User:
+    if versiontuple(foss.version) < versiontuple("1.5.1"):
+        pytest.skip(f"user creation is not supported by API version {foss.version}")
     foss.create_user(foss_user)
     for user in foss.list_users():
         if user.name == foss_user["name"]:

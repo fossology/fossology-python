@@ -15,7 +15,7 @@ from fossology.exceptions import (
     FossologyApiError,
     FossologyUnsupported,
 )
-from fossology.obj import AccessLevel, ClearingStatus, Folder, Upload
+from fossology.obj import AccessLevel, ClearingStatus, Folder, Upload, versiontuple
 
 
 def test_upload_sha1(foss: Fossology, upload: Upload):
@@ -81,6 +81,8 @@ def test_list_upload_unknown_group(foss: Fossology):
 def test_get_uploads(
     foss: Fossology, upload: Upload, upload_folder: Folder, test_file_path: str
 ):
+    if versiontuple(foss.version) < versiontuple("1.5.1"):
+        pytest.skip("test is not supported for API version < 1.5.1")
     name = "UploadSubfolderTest"
     desc = "Created via the Fossology Python API"
     upload_subfolder = foss.create_folder(upload_folder, name, description=desc)
@@ -90,7 +92,10 @@ def test_get_uploads(
         description="Test upload in subdirectory",
         wait_time=5,
     )
-    assert len(foss.list_uploads()[0]) == 2
+    if versiontuple(foss.version) < versiontuple("1.5.1"):
+        assert len(foss.list_uploads()[0]) == 4
+    else:
+        assert len(foss.list_uploads()[0]) == 2
     assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 2
     assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 1
     assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
@@ -254,7 +259,10 @@ def test_upload_licenses(foss: Fossology, upload_with_jobs: Upload):
 
     # Specific agent "monk"
     licenses = foss.upload_licenses(upload_with_jobs, agent="monk")
-    assert len(licenses) == 22
+    if versiontuple(foss.version) < versiontuple("1.5.1"):
+        assert len(licenses) == 23
+    else:
+        assert len(licenses) == 22
 
     # Unknown group
     with pytest.raises(AuthorizationError) as excinfo:
