@@ -243,7 +243,7 @@ class Uploads:
             headers["groupName"] = group
 
         if file:
-            headers["uploadType"] = "server"
+            headers["uploadType"] = "file"
             with open(file, "rb") as fp:
                 files = {"fileInput": fp}
                 response = self.session.post(

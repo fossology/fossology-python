@@ -5,6 +5,10 @@ import json
 from enum import Enum
 
 
+def versiontuple(v):
+    return tuple(map(int, (v.split("."))))
+
+
 class AccessLevel(Enum):
     """Available access levels for uploads:
 
@@ -42,13 +46,13 @@ class SearchTypes(Enum):
 
     ALLFILES
     CONTAINERS
-    DIRECTORIES
+    DIRECTORY
 
     """
 
     ALLFILES = "allfiles"
     CONTAINERS = "containers"
-    DIRECTORIES = "directories"
+    DIRECTORY = "directory"
 
 
 class TokenScope(Enum):
@@ -124,6 +128,20 @@ class ObligationClass(Enum):
     WHITE = "white"
     YELLOW = "yellow"
     RED = "red"
+
+
+class MemberPerm(Enum):
+    """Group member permissions:
+
+    USER
+    ADMIN
+    ADVISOR
+
+    """
+
+    USER = 0
+    ADMIN = 1
+    ADVISOR = 2
 
 
 class Agents(object):
@@ -246,11 +264,11 @@ class User(object):
         id,
         name,
         description,
-        email,
-        accessLevel,
-        rootFolderId,
-        emailNotification,
-        agents=None,
+        email: str = None,
+        accessLevel: int = None,
+        rootFolderId: int = None,
+        emailNotification: str = None,
+        agents: dict = None,
         **kwargs,
     ):
         self.id = id
@@ -269,6 +287,38 @@ class User(object):
             f"access level {self.accessLevel} "
             f"and root folder {self.rootFolderId}"
         )
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class UserGroupMember(object):
+
+    """FOSSology group member.
+
+    Represents a member of a group.
+
+    :param user: the user data structure of the member
+    :param group_perm: the permission of the user in the group (0: User, 1: Admin, 2: Advisor)
+    :param kwargs: handle any other folder information provided by the fossology instance
+    :type user: User
+    :type group_perm: int
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self,
+        user: User,
+        group_perm: int,
+        **kwargs: dict,
+    ):
+        self.user = User.from_json(user)
+        self.group_perm = group_perm
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Member {self.user.name} ({self.user.id}) has permission {self.group_perm}."
 
     @classmethod
     def from_json(cls, json_dict):
@@ -931,6 +981,36 @@ class HealthInfo(object):
 
     def __str__(self):
         return f"FOSSology server status is: {self.status} (Scheduler: {self.scheduler.status} - DB: {self.db.status})"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class SearchResult(object):
+
+    """Search result.
+
+    Represents a search response from FOSSology API.
+
+    :param upload: upload where the searched file has been found
+    :param uploadTreeId: id of the upload tree
+    :param filename: filename of the tree item
+    :param kwargs: handle any other job information provided by the fossology instance
+    :type upload: Upload
+    :type uploadTreeId: int
+    :type filename: string
+    :type kwargs: key word argument
+    """
+
+    def __init__(self, upload, uploadTreeId, filename, **kwargs):
+        self.upload = Upload.from_json(upload)
+        self.uploadTreeId = uploadTreeId
+        self.filename = filename
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"File found in upload {self.upload.uploadname} ({self.uploadTreeId}): {self.filename}"
 
     @classmethod
     def from_json(cls, json_dict):

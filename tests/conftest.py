@@ -12,7 +12,16 @@ from click.testing import CliRunner
 
 import fossology
 from fossology.exceptions import AuthenticationError, FossologyApiError
-from fossology.obj import AccessLevel, Agents, Folder, JobStatus, TokenScope, Upload
+from fossology.obj import (
+    AccessLevel,
+    Agents,
+    Folder,
+    JobStatus,
+    TokenScope,
+    Upload,
+    User,
+    versiontuple,
+)
 
 logger = logging.getLogger("fossology")
 console = logging.StreamHandler()
@@ -194,11 +203,22 @@ def upload_with_jobs(
         access_level=AccessLevel.PUBLIC,
         wait_time=5,
     )
+    jobs_lookup(foss, upload)
     foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
     jobs_lookup(foss, upload)
     yield upload
     foss.delete_upload(upload)
     time.sleep(5)
+
+
+@pytest.fixture()
+def created_foss_user(foss: fossology.Fossology, foss_user: dict) -> User:
+    if versiontuple(foss.version) < versiontuple("1.5.1"):
+        pytest.skip(f"user creation is not supported by API version {foss.version}")
+    foss.create_user(foss_user)
+    for user in foss.list_users():
+        if user.name == foss_user["name"]:
+            return user
 
 
 # foss_cli specific
