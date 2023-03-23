@@ -32,6 +32,7 @@ See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/foss
    - 1.3.2 (Fossology 3.11.0)
    - 1.4.0 (Fossology 4.0.0)
    - 1.4.3 (Fossology 4.1.0)
+   - 1.5.1 (Fossology 4.2.0) - partially covered, see #52 for the list of missing supported API feature
 
 **NOTE**
 

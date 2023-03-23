@@ -27,8 +27,8 @@ jobs:
       - name: Build the documents
         run: poetry run sphinx-build -b html docs-source docs
 
-      - name: Publish the pages
-        uses: JamesIves/github-pages-deploy-action@4.1.0
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           branch: gh-pages
           folder: docs
