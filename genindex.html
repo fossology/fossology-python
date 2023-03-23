@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; fossology 2.0.0 documentation</title>
+    <title>Index &#8212; fossology 2.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -127,6 +127,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="obj.html#fossology.obj.AccessLevel">AccessLevel (class in fossology.obj)</a>
 </li>
+      <li><a href="groups.html#fossology.groups.Groups.add_group_member">add_group_member() (fossology.groups.Groups method)</a>
+</li>
       <li><a href="license.html#fossology.license.LicenseEndpoint.add_license">add_license() (fossology.license.LicenseEndpoint method)</a>
 </li>
       <li><a href="obj.html#fossology.obj.Agents">Agents (class in fossology.obj)</a>
@@ -173,8 +175,6 @@
 </li>
       <li><a href="uploads.html#fossology.uploads.Uploads.delete_upload">delete_upload() (fossology.uploads.Uploads method)</a>
 </li>
-      <li><a href="fossology.html#fossology.Fossology.delete_user">delete_user() (fossology.Fossology method)</a>
-</li>
       <li><a href="folders.html#fossology.folders.Folders.detail_folder">detail_folder() (fossology.folders.Folders method)</a>
 </li>
   </ul></td>
@@ -184,8 +184,6 @@
       <li><a href="license.html#fossology.license.LicenseEndpoint.detail_license">detail_license() (fossology.license.LicenseEndpoint method)</a>
 </li>
       <li><a href="uploads.html#fossology.uploads.Uploads.detail_upload">detail_upload() (fossology.uploads.Uploads method)</a>
-</li>
-      <li><a href="fossology.html#fossology.Fossology.detail_user">detail_user() (fossology.Fossology method)</a>
 </li>
       <li><a href="report.html#fossology.report.Report.download_report">download_report() (fossology.report.Report method)</a>
 </li>
@@ -204,8 +202,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="obj.html#fossology.obj.File">File (class in fossology.obj)</a>
-</li>
-      <li><a href="fossology.html#fossology.Fossology.filesearch">filesearch() (fossology.Fossology method)</a>
 </li>
       <li><a href="obj.html#fossology.obj.Findings">Findings (class in fossology.obj)</a>
 </li>
@@ -371,6 +367,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="groups.html#fossology.groups.Groups.list_group_members">list_group_members() (fossology.groups.Groups method)</a>
+</li>
       <li><a href="groups.html#fossology.groups.Groups.list_groups">list_groups() (fossology.groups.Groups method)</a>
 </li>
       <li><a href="jobs.html#fossology.jobs.Jobs.list_jobs">list_jobs() (fossology.jobs.Jobs method)</a>
@@ -381,14 +379,14 @@
 </li>
       <li><a href="uploads.html#fossology.uploads.list_uploads_parameters">list_uploads_parameters() (in module fossology.uploads)</a>
 </li>
-      <li><a href="fossology.html#fossology.Fossology.list_users">list_users() (fossology.Fossology method)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="obj.html#fossology.obj.MemberPerm">MemberPerm (class in fossology.obj)</a>
+</li>
       <li>
     module
 
@@ -460,7 +458,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="jobs.html#fossology.jobs.Jobs.schedule_jobs">schedule_jobs() (fossology.jobs.Jobs method)</a>
 </li>
-      <li><a href="fossology.html#fossology.Fossology.search">search() (fossology.Fossology method)</a>
+      <li><a href="obj.html#fossology.obj.SearchResult">SearchResult (class in fossology.obj)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -506,10 +504,10 @@
 </li>
       <li><a href="obj.html#fossology.obj.Upload">Upload (class in fossology.obj)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="uploads.html#fossology.uploads.Uploads.upload_file">upload_file() (fossology.uploads.Uploads method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="uploads.html#fossology.uploads.Uploads.upload_licenses">upload_licenses() (fossology.uploads.Uploads method)</a>
 </li>
       <li><a href="uploads.html#fossology.uploads.Uploads.upload_summary">upload_summary() (fossology.uploads.Uploads method)</a>
@@ -517,6 +515,8 @@
       <li><a href="uploads.html#fossology.uploads.Uploads">Uploads (class in fossology.uploads)</a>
 </li>
       <li><a href="obj.html#fossology.obj.User">User (class in fossology.obj)</a>
+</li>
+      <li><a href="obj.html#fossology.obj.UserGroupMember">UserGroupMember (class in fossology.obj)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -534,7 +534,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 

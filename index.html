@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Welcome to fossology’s documentation! &#8212; fossology 2.0.0 documentation</title>
+    <title>Welcome to fossology’s documentation! &#8212; fossology 2.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -104,7 +104,7 @@
             
   <section id="welcome-to-fossology-s-documentation">
 <h1>Welcome to fossology’s documentation!<a class="headerlink" href="#welcome-to-fossology-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference external" href="https://github.com/deveaud-m/fossology-python/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a> <a class="reference external" href="https://pypi.org/project/fossology"><img alt="PyPI Version" src="https://badge.fury.io/py/fossology.svg" /></a> <a class="reference external" href="https://www.python.org/doc/versions/"><img alt="Python Version" src="https://img.shields.io/badge/python-3.7%2C3.8%2C3.9-blue?logo=python" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22"><img alt="Static Checks" src="https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22API+Tests%22"><img alt="Fossology Tests" src="https://github.com/deveaud-m/fossology-python/workflows/API%20Tests/badge.svg" /></a> <a class="reference external" href="https://codecov.io/gh/fossology/fossology-python"><img alt="Coverage" src="https://codecov.io/gh/fossology/fossology-python/branch/master/graph/badge.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/deveaud-m/fossology-python/LICENSE.md"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a> <a class="reference external" href="https://pypi.org/project/fossology"><img alt="PyPI Version" src="https://badge.fury.io/py/fossology.svg" /></a> <a class="reference external" href="https://www.python.org/doc/versions/"><img alt="Python Version" src="https://img.shields.io/badge/python-3.7%2C3.8%2C3.9-blue?logo=python" /></a> <a class="reference external" href="https://pepy.tech/project/fossology"><img alt="Downloads" src="https://static.pepy.tech/badge/fossology" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22Static+Checks%22"><img alt="Static Checks" src="https://github.com/deveaud-m/fossology-python/workflows/Static%20Checks/badge.svg" /></a> <a class="reference external" href="https://github.com/deveaud-m/fossology-python/actions?query=workflow%3A%22API+Tests%22"><img alt="Fossology Tests" src="https://github.com/deveaud-m/fossology-python/workflows/API%20Tests/badge.svg" /></a> <a class="reference external" href="https://codecov.io/gh/fossology/fossology-python"><img alt="Coverage" src="https://codecov.io/gh/fossology/fossology-python/branch/master/graph/badge.svg" /></a></p>
 <p>A simple wrapper for the Fossology REST API.</p>
 <p>See <a class="reference external" href="https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml">the OpenAPI specification</a> used to implement this library.</p>
 <blockquote>
@@ -114,6 +114,7 @@
 <li><p>1.3.2 (Fossology 3.11.0)</p></li>
 <li><p>1.4.0 (Fossology 4.0.0)</p></li>
 <li><p>1.4.3 (Fossology 4.1.0)</p></li>
+<li><p>1.5.1 (Fossology 4.2.0) - partially covered, see #52 for the list of missing supported API feature</p></li>
 </ul>
 </div></blockquote>
 <p><strong>NOTE</strong></p>
@@ -134,7 +135,7 @@ e.g. 1.5.0 supports Fossology API 1.2.1 to 1.4.0.</p>
 <p>This project is available as <a class="reference external" href="https://pypi.org/project/fossology/">Python package on PyPi.org</a>.</p>
 <ul>
 <li><p>Install fossology and required dependencies:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install fossology requests
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>fossology<span class="w"> </span>requests
 </pre></div>
 </div>
 </li>
@@ -179,22 +180,22 @@ e.g. 1.5.0 supports Fossology API 1.2.1 to 1.4.0.</p>
 <ul>
 <li><p>To get a list of available commands, run:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli --help
-Usage: foss_cli <span class="o">[</span>OPTIONS<span class="o">]</span> COMMAND <span class="o">[</span>ARGS<span class="o">]</span>...
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>--help
+Usage:<span class="w"> </span>foss_cli<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 <li><p>Generate a configuration file:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli config
-Enter the URL to your Fossology server: e.g. http://fossology/repo
-Fossology URL: http://fossology/repo
-Enter Username and Password: e.g. fossy/fossy <span class="o">(</span><span class="k">in</span> the default environment<span class="o">)</span>
-Username: fossy
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>config
+Enter<span class="w"> </span>the<span class="w"> </span>URL<span class="w"> </span>to<span class="w"> </span>your<span class="w"> </span>Fossology<span class="w"> </span>server:<span class="w"> </span>e.g.<span class="w"> </span>http://fossology/repo
+Fossology<span class="w"> </span>URL:<span class="w"> </span>http://fossology/repo
+Enter<span class="w"> </span>Username<span class="w"> </span>and<span class="w"> </span>Password:<span class="w"> </span>e.g.<span class="w"> </span>fossy/fossy<span class="w"> </span><span class="o">(</span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>default<span class="w"> </span>environment<span class="o">)</span>
+Username:<span class="w"> </span>fossy
 Password:
-Enter a scope <span class="k">for</span> your Fossology token: either <span class="s1">&#39;read&#39;</span> or <span class="s1">&#39;write&#39;</span>
-Token scope: write
+Enter<span class="w"> </span>a<span class="w"> </span>scope<span class="w"> </span><span class="k">for</span><span class="w"> </span>your<span class="w"> </span>Fossology<span class="w"> </span>token:<span class="w"> </span>either<span class="w"> </span><span class="s1">&#39;read&#39;</span><span class="w"> </span>or<span class="w"> </span><span class="s1">&#39;write&#39;</span>
+Token<span class="w"> </span>scope:<span class="w"> </span>write
 </pre></div>
 </div>
 <p>This will get a token from Fossology server and store it within the local <code class="docutils literal notranslate"><span class="pre">.foss_cli.ini</span></code> file.</p>
@@ -204,7 +205,7 @@ Token scope: write
 </li>
 <li><p>Verbosity of all foss_cli commands could be increased using the <code class="docutils literal notranslate"><span class="pre">-v</span></code> verbosity option:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv <span class="o">[</span>COMMAND<span class="o">]</span>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>-vv<span class="w"> </span><span class="o">[</span>COMMAND<span class="o">]</span>
 </pre></div>
 </div>
 <p>This runs the given command with verbosity level 2 (all debug statements will be logged).</p>
@@ -213,49 +214,49 @@ Token scope: write
 </li>
 <li><p>To create a group:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv create_group FossGroup
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>-vv<span class="w"> </span>create_group<span class="w"> </span>FossGroup
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 <li><p>To create a a folder:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv create_folder FossFolder <span class="se">\</span>
-   --folder_group FossGroup <span class="se">\</span>
-   --folder_description <span class="s2">&quot;Description of FossFolder&quot;</span>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>-vv<span class="w"> </span>create_folder<span class="w"> </span>FossFolder<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--folder_group<span class="w"> </span>FossGroup<span class="w"> </span><span class="se">\</span>
+<span class="w">   </span>--folder_description<span class="w"> </span><span class="s2">&quot;Description of FossFolder&quot;</span>
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 <li><p>To upload a file:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv upload_file tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz <span class="se">\</span>
-      --folder_name FossFolder
-      --access_level public
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>-vv<span class="w"> </span>upload_file<span class="w"> </span>tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz<span class="w"> </span><span class="se">\</span>
+<span class="w">      </span>--folder_name<span class="w"> </span>FossFolder
+<span class="w">      </span>--access_level<span class="w"> </span>public
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 <li><p>To upload a source package to the server and initialize a scan workflow including report generation:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ foss_cli -vv start_workflow --help
-Usage: foss_cli start_workflow <span class="o">[</span>OPTIONS<span class="o">]</span> FILE_NAME
-The foss_cli start_workflow command.
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>-vv<span class="w"> </span>start_workflow<span class="w"> </span>--help
+Usage:<span class="w"> </span>foss_cli<span class="w"> </span>start_workflow<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>FILE_NAME
+The<span class="w"> </span>foss_cli<span class="w"> </span>start_workflow<span class="w"> </span>command.
 Options:
-      --folder_name TEXT            The name of the folder to upload to.
-      --file_description TEXT       The description of the upload.
-      --dry_run / --no_dry_run      Do not upload but show what would be <span class="k">done</span>.
-                                    Use -vv to see output.
-      --reuse_newest_upload / --no_reuse_newest_upload
-                                    Reuse newest upload <span class="k">if</span> available.
-      --reuse_newest_job / --no_reuse_newest_job
-                                    Reuse newest scheduled job <span class="k">for</span> the upload <span class="k">if</span>
-                                    available.
-      --report_format TEXT          The name of the reportformat. <span class="o">[</span>dep5,
-                                    spdx2,spdxtv,readmeoss,unifiedreport<span class="o">]</span>
-      --access_level TEXT           The access level of the
-                                    upload.<span class="o">[</span>private,protected,public<span class="o">]</span>
-      --help                        Show this message and exit.
+<span class="w">      </span>--folder_name<span class="w"> </span>TEXT<span class="w">            </span>The<span class="w"> </span>name<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>folder<span class="w"> </span>to<span class="w"> </span>upload<span class="w"> </span>to.
+<span class="w">      </span>--file_description<span class="w"> </span>TEXT<span class="w">       </span>The<span class="w"> </span>description<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>upload.
+<span class="w">      </span>--dry_run<span class="w"> </span>/<span class="w"> </span>--no_dry_run<span class="w">      </span>Do<span class="w"> </span>not<span class="w"> </span>upload<span class="w"> </span>but<span class="w"> </span>show<span class="w"> </span>what<span class="w"> </span>would<span class="w"> </span>be<span class="w"> </span><span class="k">done</span>.
+<span class="w">                                    </span>Use<span class="w"> </span>-vv<span class="w"> </span>to<span class="w"> </span>see<span class="w"> </span>output.
+<span class="w">      </span>--reuse_newest_upload<span class="w"> </span>/<span class="w"> </span>--no_reuse_newest_upload
+<span class="w">                                    </span>Reuse<span class="w"> </span>newest<span class="w"> </span>upload<span class="w"> </span><span class="k">if</span><span class="w"> </span>available.
+<span class="w">      </span>--reuse_newest_job<span class="w"> </span>/<span class="w"> </span>--no_reuse_newest_job
+<span class="w">                                    </span>Reuse<span class="w"> </span>newest<span class="w"> </span>scheduled<span class="w"> </span>job<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>upload<span class="w"> </span><span class="k">if</span>
+<span class="w">                                    </span>available.
+<span class="w">      </span>--report_format<span class="w"> </span>TEXT<span class="w">          </span>The<span class="w"> </span>name<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>reportformat.<span class="w"> </span><span class="o">[</span>dep5,
+<span class="w">                                    </span>spdx2,spdxtv,readmeoss,unifiedreport<span class="o">]</span>
+<span class="w">      </span>--access_level<span class="w"> </span>TEXT<span class="w">           </span>The<span class="w"> </span>access<span class="w"> </span>level<span class="w"> </span>of<span class="w"> </span>the
+<span class="w">                                    </span>upload.<span class="o">[</span>private,protected,public<span class="o">]</span>
+<span class="w">      </span>--help<span class="w">                        </span>Show<span class="w"> </span>this<span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span>exit.
 </pre></div>
 </div>
 </div></blockquote>
@@ -286,7 +287,7 @@ to the CLI, name your branch <code class="docutils literal notranslate"><span cl
 <h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p>You can build the PyPi package using <a class="reference external" href="https://poetry.eustace.io/">poetry</a>:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry build
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>build
 </pre></div>
 </div>
 </li>
@@ -297,12 +298,12 @@ on every merge to main branch and pushed to <strong>gh-pages</strong> branch. Th
 <a class="reference external" href="https://github.com/JamesIves/github-pages-deploy-action">JamesIves/github-pages-deploy-action</a>
 to deploy the static pages.</p>
 <p>To build it locally</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run sphinx-build -b html docs-source docs/
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs-source<span class="w"> </span>docs/
 </pre></div>
 </div>
 </li>
 <li><p>Cleanup builds:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>rm -r dist/ docs/
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>-r<span class="w"> </span>dist/<span class="w"> </span>docs/
 </pre></div>
 </div>
 </li>
@@ -311,8 +312,8 @@ to deploy the static pages.</p>
 <section id="tag">
 <h2>Tag<a class="headerlink" href="#tag" title="Permalink to this headline">¶</a></h2>
 <p>Each new release gets a new tag with important information about the changes added to the new release:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git tag -a vx.x.x -m <span class="s2">&quot;New major/minor/patch release x.x.x&quot;</span>
-git push origin vx.x.x
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>vx.x.x<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;New major/minor/patch release x.x.x&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>vx.x.x
 </pre></div>
 </div>
 <p>Add required information in the corresponding <a class="reference external" href="https://github.com/fossology/fossology-python/releases">release in the Github project</a>.</p>
@@ -322,16 +323,16 @@ git push origin vx.x.x
 <p>The testsuite available in this project expects a running Fossology instance under the hostname <strong>fossology</strong> with the default admin user “fossy”.</p>
 <ul>
 <li><p>Use the latest Fossology container from <a class="reference external" href="https://hub.docker.com/r/fossology/fossology">Docker hub</a>:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker pull fossology/fossology
-tar xJf tests/files/base-files_11.tar.xz -C /tmp
-docker run --mount <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/tmp&quot;</span>,dst<span class="o">=</span>/tmp,type<span class="o">=</span><span class="nb">bind</span> --name fossology -p <span class="m">80</span>:80 fossology/fossology
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>fossology/fossology
+tar<span class="w"> </span>xJf<span class="w"> </span>tests/files/base-files_11.tar.xz<span class="w"> </span>-C<span class="w"> </span>/tmp
+docker<span class="w"> </span>run<span class="w"> </span>--mount<span class="w"> </span><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/tmp&quot;</span>,dst<span class="o">=</span>/tmp,type<span class="o">=</span><span class="nb">bind</span><span class="w"> </span>--name<span class="w"> </span>fossology<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>:80<span class="w"> </span>fossology/fossology
 </pre></div>
 </div>
 </li>
 <li><p>Start the complete test suite or a specific test case (and generate coverage report):</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry run coverage run --source<span class="o">=</span>fossology -m pytest
-poetry run coverage report -m
-poetry run coverage html
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>run<span class="w"> </span>coverage<span class="w"> </span>run<span class="w"> </span>--source<span class="o">=</span>fossology<span class="w"> </span>-m<span class="w"> </span>pytest
+poetry<span class="w"> </span>run<span class="w"> </span>coverage<span class="w"> </span>report<span class="w"> </span>-m
+poetry<span class="w"> </span>run<span class="w"> </span>coverage<span class="w"> </span>html
 </pre></div>
 </div>
 </li>
@@ -353,7 +354,7 @@ poetry run coverage html
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/index.rst.txt"

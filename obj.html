@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Fossology objects &#8212; fossology 2.0.0 documentation</title>
+    <title>Fossology objects &#8212; fossology 2.1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -435,6 +435,15 @@ ALL</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.MemberPerm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">MemberPerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.MemberPerm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Group member permissions:</p>
+<p>USER
+ADMIN
+ADVISOR</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Obligation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Obligation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Obligation" title="Permalink to this definition">¶</a></dt>
 <dd><p>FOSSology license obligation.</p>
@@ -476,12 +485,29 @@ UNIFIEDREPORT</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.SearchResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">SearchResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uploadTreeId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.SearchResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search result.</p>
+<p>Represents a search response from FOSSology API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>upload</strong> (<a class="reference internal" href="#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – upload where the searched file has been found</p></li>
+<li><p><strong>uploadTreeId</strong> (<em>int</em>) – id of the upload tree</p></li>
+<li><p><strong>filename</strong> (<em>string</em>) – filename of the tree item</p></li>
+<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.SearchTypes">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">SearchTypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.SearchTypes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type of item that can be searched:</p>
 <p>ALLFILES
 CONTAINERS
-DIRECTORIES</p>
+DIRECTORY</p>
 </dd></dl>
 
 <dl class="py class">
@@ -552,7 +578,7 @@ DIRECTORIES</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.User">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accessLevel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootFolderId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emailNotification</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.User" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accessLevel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootFolderId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emailNotification</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.User" title="Permalink to this definition">¶</a></dt>
 <dd><p>FOSSology user.</p>
 <p>Represents the user currently authenticated against the FOSSology server.</p>
 <dl class="field-list simple">
@@ -572,6 +598,22 @@ DIRECTORIES</p>
 </dl>
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.UserGroupMember">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UserGroupMember</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fossology.obj.User" title="fossology.obj.User"><span class="pre">fossology.obj.User</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UserGroupMember" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology group member.</p>
+<p>Represents a member of a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> (<a class="reference internal" href="#fossology.obj.User" title="fossology.obj.User"><em>User</em></a>) – the user data structure of the member</p></li>
+<li><p><strong>group_perm</strong> (<em>int</em>) – the permission of the user in the group (0: User, 1: Admin, 2: Advisor)</p></li>
+<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -586,7 +628,7 @@ DIRECTORIES</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/obj.rst.txt"
