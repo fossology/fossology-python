@@ -1,9 +1,12 @@
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
+import mimetypes
+import os
 import secrets
 import time
 from datetime import date, timedelta
+from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
@@ -356,3 +359,49 @@ def test_list_uploads_500_error(foss: Fossology, foss_server: str, upload: Uploa
     )
     with pytest.raises(FossologyApiError):
         foss.list_uploads()
+
+
+def test_download_upload(foss: Fossology, upload: Upload):
+    if versiontuple(foss.version) < versiontuple("1.4.4"):
+        pytest.skip("test is not supported for API version < 1.4.4")
+    # Plain text
+    upload, upload_filename = foss.download_upload(upload.id)
+    download_path = Path.cwd()
+    with open(download_path / upload_filename, "wb") as upload_file:
+        upload_file.write(upload)
+
+    filetype = mimetypes.guess_type(download_path / upload_filename)
+    upload_stat = os.stat(download_path / upload_filename)
+    assert upload_stat.st_size > 0
+    assert filetype == ("application/x-tar", "xz")
+    Path(download_path / upload_filename).unlink()
+
+
+@responses.activate
+def test_download_upload_authorization_error(
+    foss_server: str, foss: Fossology, upload: Upload
+):
+    if versiontuple(foss.version) < versiontuple("1.4.4"):
+        pytest.skip("test is not supported for API version < 1.4.4")
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/download",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.download_upload(upload.id)
+    assert f"Upload {upload.id} is not accessible" in str(excinfo.value)
+
+
+@responses.activate
+def test_download_upload_error(foss_server: str, foss: Fossology, upload: Upload):
+    if versiontuple(foss.version) < versiontuple("1.4.4"):
+        pytest.skip("test is not supported for API version < 1.4.4")
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/download",
+        status=401,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.download_upload(upload.id)
+    assert f"Unable to download upload {upload.id}" in str(excinfo.value)
