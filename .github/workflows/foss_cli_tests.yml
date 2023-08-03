@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.10-slim
+      image: python:3.11-slim
       volumes:
         - /tmp:/tmp
 
@@ -36,7 +36,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install poetry
-          poetry install
+          poetry install  --with=dev
       - name: Install files in shared volume
         run: |
           tar xJf tests/files/base-files_11.tar.xz -C /tmp
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.10-slim
+      image: python:3.11-slim
       volumes:
         - /tmp:/tmp
 
@@ -75,7 +75,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install poetry
-          poetry install
+          poetry install  --with=dev
       - name: Install files in shared volume
         run: |
           tar xJf tests/files/base-files_11.tar.xz -C /tmp
