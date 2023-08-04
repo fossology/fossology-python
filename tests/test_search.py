@@ -17,7 +17,7 @@ from fossology.obj import SearchTypes, Upload, versiontuple
 
 # See: https://github.com/fossology/fossology/pull/2390
 @pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported"
+    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
 )
 def test_search_nogroup(foss: Fossology):
     with pytest.raises(AuthorizationError) as excinfo:
@@ -26,7 +26,7 @@ def test_search_nogroup(foss: Fossology):
 
 
 @pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported"
+    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
 )
 def test_search(foss: Fossology, upload: Upload):
     search_result = foss.search(searchType=SearchTypes.ALLFILES, filename="GPL%")
@@ -34,7 +34,7 @@ def test_search(foss: Fossology, upload: Upload):
 
 
 @pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported"
+    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
 )
 def test_search_nothing_found(foss: Fossology, upload: Upload):
     search_result = foss.search(
@@ -50,7 +50,7 @@ def test_search_nothing_found(foss: Fossology, upload: Upload):
 
 
 @pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported"
+    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
 )
 def test_search_directory(foss: Fossology, upload: Upload):
     search_result = foss.search(
@@ -61,7 +61,7 @@ def test_search_directory(foss: Fossology, upload: Upload):
 
 
 @pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported"
+    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
 )
 def test_search_upload(foss: Fossology, upload: Upload):
     search_result = foss.search(
@@ -73,7 +73,7 @@ def test_search_upload(foss: Fossology, upload: Upload):
 
 
 @pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported"
+    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
 )
 def test_search_upload_does_not_exist(foss: Fossology):
     # Before 1.0.17 Fossology was not able to limit search to a specific upload
@@ -97,7 +97,7 @@ def test_search_upload_does_not_exist(foss: Fossology):
 
 
 @pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported"
+    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
 )
 @responses.activate
 def test_search_error(foss_server: str, foss: Fossology):
