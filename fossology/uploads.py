@@ -4,6 +4,7 @@ import json
 import logging
 import re
 import time
+from typing import Tuple
 
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
@@ -635,4 +636,38 @@ class Uploads:
             description = (
                 f"Unable to {action} upload {upload.uploadname} to {folder.name}"
             )
+            raise FossologyApiError(description, response)
+
+    def download_upload(self, upload_id: int) -> Tuple[str, str]:
+        """Download an upload by its id
+
+        API Endpoint: GET /uploads/{id}/download
+
+        :param upload_id: the ID of the upload to be downloaded
+        :type upload: int
+        :return: the upload content and the upload name
+        :rtype: Tuple[str, str]
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the user can't access the upload
+        """
+        if fossology.versiontuple(self.version) < fossology.versiontuple("1.4.4"):
+            description = f"Endpoint GET /uploads/{upload_id}/download is not supported by your Fossology API version {self.version}"
+            raise FossologyUnsupported(description)
+
+        response = self.session.get(f"{self.api}/uploads/{upload_id}/download")
+
+        if response.status_code == 200:
+            content = response.headers["Content-Disposition"]
+            upload_filename_pattern = (
+                "(^attachment; filename=)(\"|')?([^\"|']*)(\"|'$)?"
+            )
+            upload_filename = re.match(upload_filename_pattern, content).group(3)
+            return response.content, upload_filename
+
+        elif response.status_code == 403:
+            description = f"Upload {upload_id} is not accessible"
+            raise AuthorizationError(description, response)
+
+        else:
+            description = f"Unable to download upload {upload_id}"
             raise FossologyApiError(description, response)
