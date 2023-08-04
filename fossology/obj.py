@@ -268,6 +268,7 @@ class User(object):
         accessLevel: int = None,
         rootFolderId: int = None,
         emailNotification: str = None,
+        default_group: str = None,
         agents: dict = None,
         **kwargs,
     ):
@@ -278,14 +279,16 @@ class User(object):
         self.accessLevel = accessLevel
         self.rootFolderId = rootFolderId
         self.emailNotification = emailNotification
+        self.default_group = default_group
         self.agents = agents
         self.additional_info = kwargs
 
     def __str__(self):
         return (
             f"User {self.description} ({self.id}), {self.email}, "
-            f"access level {self.accessLevel} "
-            f"and root folder {self.rootFolderId}"
+            f"access level {self.accessLevel}, "
+            f"root folder {self.rootFolderId}, "
+            f"default group {self.default_group}"
         )
 
     @classmethod
