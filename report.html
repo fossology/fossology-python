@@ -125,9 +125,9 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">Fossology</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span> <span class="o">=</span> <span class="n">Fossology</span><span class="p">(</span><span class="n">FOSS_URL</span><span class="p">,</span> <span class="n">FOSS_TOKEN</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span> 
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate a report for upload 1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">report_id</span> <span class="o">=</span> <span class="n">foss</span><span class="o">.</span><span class="n">generate_report</span><span class="p">(</span><span class="n">foss</span><span class="o">.</span><span class="n">detail_upload</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Wait up to 20 Minutes until the report is ready</span>
