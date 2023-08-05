@@ -4,8 +4,7 @@
 import logging
 from typing import List
 
-import fossology
-from fossology.exceptions import FossologyApiError, FossologyUnsupported
+from fossology.exceptions import FossologyApiError
 from fossology.obj import Group, MemberPerm, UserGroupMember
 
 logger = logging.getLogger(__name__)
@@ -15,20 +14,22 @@ logger.setLevel(logging.DEBUG)
 class Groups:
     """Class dedicated to all "groups" related endpoints"""
 
-    def list_groups(self) -> List:
+    def list_groups(self, deletable: bool = False) -> List[Group]:
         """Get the list of groups (accessible groups for user, all groups for admin)
+
+        If parameter deletable is True, the method will return only deletable groups.
 
         API Endpoint: GET /groups
 
+        :param deletable: wether to limit the scope only to deletable groups
+        :type deletable: bool (default: False)
         :return: a list of groups
         :rtype: list()
         :raises FossologyApiError: if the REST call failed
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.2.1"):
-            description = f"Endpoint /groups is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
-        response = self.session.get(f"{self.api}/groups")
+        endpoint = f"{self.api}/groups"
+        endpoint += "/deletable" if deletable else ""
+        response = self.session.get(endpoint)
         if response.status_code == 200:
             groups_list = []
             response_list = response.json()
@@ -37,10 +38,13 @@ class Groups:
                 groups_list.append(single_group)
             return groups_list
         else:
-            description = f"Unable to get a list of groups for {self.user.name}"
+            deletable = "deletable " if deletable else ""
+            description = (
+                f"Unable to get a list of {deletable}groups for {self.user.name}"
+            )
             raise FossologyApiError(description, response)
 
-    def list_group_members(self, group_id: int) -> List:
+    def list_group_members(self, group_id: int) -> List[UserGroupMember]:
         """Get the list of members for a given group (accessible groups for user, all groups for admin)
 
         API Endpoint: GET /groups/{id}/members
@@ -49,10 +53,6 @@ class Groups:
         :rtype: list()
         :raises FossologyApiError: if the REST call failed
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.5.0"):
-            description = f"Endpoint /groups/id/members is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         response = self.session.get(f"{self.api}/groups/{group_id}/members")
         if response.status_code == 200:
             members_list = []
@@ -74,18 +74,30 @@ class Groups:
         :type name: str
         :raises FossologyApiError: if the REST call failed
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.2.1"):
-            description = f"Endpoint /groups is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         headers = {"name": f"{name}"}
         response = self.session.post(f"{self.api}/groups", headers=headers)
 
         if response.status_code == 200:
             logger.info(f"Group '{name}' has been added")
-            return
         else:
             description = f"Group {name} already exists, failed to create group or no group name provided"
+            raise FossologyApiError(description, response)
+
+    def delete_group(self, group_id: int):
+        """Create a group
+
+        API Endpoint: DELETE /groups/{group_id}
+
+        :param group_id: the id of the group
+        :type group_id: int
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.delete(f"{self.api}/groups/{group_id}")
+
+        if response.status_code == 202:
+            logger.info(f"Group {group_id} will be deleted")
+        else:
+            description = f"Group {group_id} could not be deleted"
             raise FossologyApiError(description, response)
 
     def add_group_member(
@@ -103,10 +115,6 @@ class Groups:
         :type perm: MemberPerm
         :raises FossologyApiError: if the REST call failed
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.5.0"):
-            description = f"Endpoint /groups/id/user/id is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         data = dict()
         data["perm"] = perm.value
         response = self.session.post(
@@ -121,4 +129,29 @@ class Groups:
                 f"An error occurred while adding user {user_id} to group {group_id}"
             )
             raise FossologyApiError(description, response)
-        return
+
+    def delete_group_member(self, group_id: int, user_id: int):
+        """Delete a user from a group
+
+        API Endpoint: DELETE /groups/{group_id}/user/{user_id}
+
+        :param group_id: the id of the group
+        :param user_id: the id of the user
+        :type group_id: int
+        :type user_id: int
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.delete(f"{self.api}/groups/{group_id}/user/{user_id}")
+        if response.status_code == 200:
+            logger.info(f"User {user_id} will be removed from group {group_id}.")
+        elif response.status_code == 400:
+            description = f"Validation error while removing member {user_id} from group {group_id}."
+            raise FossologyApiError(description, response)
+        elif response.status_code == 404:
+            description = f"Member {user_id} or group {group_id} not found."
+            raise FossologyApiError(description, response)
+        else:
+            description = (
+                f"An error occurred while deleting user {user_id} from group {group_id}"
+            )
+            raise FossologyApiError(description, response)

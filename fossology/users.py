@@ -104,7 +104,7 @@ class Users:
         response = self.session.post(f"{self.api}/users", json=user_spec)
         if response.status_code == 201:
             logger.info(
-                f"User {user_spec['name']} was created, user list_users() to get more information."
+                f"User {user_spec['name']} was created, call list_users() to get more information."
             )
         elif response.status_code == 409:
             logger.info(f"User {user_spec['name']} already exists.")
