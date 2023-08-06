@@ -13,15 +13,21 @@ import pytest
 import responses
 
 from fossology import Fossology
-from fossology.exceptions import (
-    AuthorizationError,
-    FossologyApiError,
-    FossologyUnsupported,
-)
-from fossology.obj import AccessLevel, ClearingStatus, Folder, Upload, versiontuple
+from fossology.exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import AccessLevel, ClearingStatus, Folder, Permission, Upload
 
 
-def test_upload_sha1(foss: Fossology, upload: Upload):
+@pytest.fixture()
+def fake_hash():
+    return {
+        "sha1": secrets.token_hex(16),
+        "md5": secrets.token_hex(nbytes=16),
+        "sha256": secrets.token_hex(56),
+        "size": secrets.randbelow(512),
+    }
+
+
+def test_upload_sha1(upload: Upload):
     assert upload.uploadname == "base-files_11.tar.xz"
     assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
     assert str(upload) == (
@@ -84,8 +90,6 @@ def test_list_upload_unknown_group(foss: Fossology):
 def test_get_uploads(
     foss: Fossology, upload: Upload, upload_folder: Folder, test_file_path: str
 ):
-    if versiontuple(foss.version) < versiontuple("1.5.1"):
-        pytest.skip("test is not supported for API version < 1.5.1")
     name = "UploadSubfolderTest"
     desc = "Created via the Fossology Python API"
     upload_subfolder = foss.create_folder(upload_folder, name, description=desc)
@@ -95,10 +99,7 @@ def test_get_uploads(
         description="Test upload in subdirectory",
         wait_time=5,
     )
-    if versiontuple(foss.version) < versiontuple("1.5.1"):
-        assert len(foss.list_uploads()[0]) == 4
-    else:
-        assert len(foss.list_uploads()[0]) == 2
+    assert len(foss.list_uploads()[0]) == 2
     assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 2
     assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 1
     assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
@@ -144,14 +145,6 @@ def test_upload_error(foss: Fossology, foss_server: str, test_file_path: str):
     assert f"Upload {description} could not be performed" in str(excinfo.value)
 
 
-def test_move_upload_unsupported_version(foss: Fossology):
-    real_version = foss.version
-    foss.version = "1.3.9"
-    with pytest.raises(FossologyUnsupported):
-        foss.move_upload(Mock(), Mock(), "move")
-    foss.version = real_version
-
-
 def test_move_upload(foss: Fossology, upload: Upload, move_folder: Folder):
     foss.move_upload(upload, move_folder, "move")
     moved_upload = foss.detail_upload(upload.id)
@@ -183,14 +176,6 @@ def test_move_upload_error(foss: Fossology, foss_server: str, upload: Upload):
     )
     with pytest.raises(FossologyApiError):
         foss.move_upload(upload, Mock(), "move")
-
-
-def test_update_upload_unsupported_version(foss: Fossology):
-    real_version = foss.version
-    foss.version = "1.3.9"
-    with pytest.raises(FossologyUnsupported):
-        foss.update_upload(Mock())
-    foss.version = real_version
 
 
 def test_update_upload(foss: Fossology, upload: Upload):
@@ -262,10 +247,7 @@ def test_upload_licenses(foss: Fossology, upload_with_jobs: Upload):
 
     # Specific agent "monk"
     licenses = foss.upload_licenses(upload_with_jobs, agent="monk")
-    if versiontuple(foss.version) < versiontuple("1.5.1"):
-        assert len(licenses) == 23
-    else:
-        assert len(licenses) == 22
+    assert len(licenses) == 22
 
     # Unknown group
     with pytest.raises(AuthorizationError) as excinfo:
@@ -298,7 +280,7 @@ def test_upload_licenses_500_error(foss: Fossology, foss_server: str, upload: Up
         foss.upload_licenses(upload)
 
 
-def test_delete_unknown_upload_unknown_group(foss: Fossology):
+def test_delete_unknown_upload_unknown_group(foss: Fossology, fake_hash: dict):
     upload = Upload(
         foss.rootFolder,
         "Root Folder",
@@ -306,7 +288,7 @@ def test_delete_unknown_upload_unknown_group(foss: Fossology):
         "",
         "Non Upload",
         "2020-05-05",
-        hash={"sha1": None, "md5": None, "sha256": None, "size": None},
+        hash=fake_hash,
     )
     with pytest.raises(FossologyApiError):
         foss.delete_upload(upload)
@@ -362,13 +344,10 @@ def test_list_uploads_500_error(foss: Fossology, foss_server: str, upload: Uploa
 
 
 def test_download_upload(foss: Fossology, upload: Upload):
-    if versiontuple(foss.version) < versiontuple("1.4.4"):
-        pytest.skip("test is not supported for API version < 1.4.4")
-    # Plain text
-    upload, upload_filename = foss.download_upload(upload.id)
+    upload_content, upload_filename = foss.download_upload(upload)
     download_path = Path.cwd()
     with open(download_path / upload_filename, "wb") as upload_file:
-        upload_file.write(upload)
+        upload_file.write(upload_content)
 
     filetype = mimetypes.guess_type(download_path / upload_filename)
     upload_stat = os.stat(download_path / upload_filename)
@@ -381,27 +360,145 @@ def test_download_upload(foss: Fossology, upload: Upload):
 def test_download_upload_authorization_error(
     foss_server: str, foss: Fossology, upload: Upload
 ):
-    if versiontuple(foss.version) < versiontuple("1.4.4"):
-        pytest.skip("test is not supported for API version < 1.4.4")
     responses.add(
         responses.GET,
         f"{foss_server}/api/v1/uploads/{upload.id}/download",
         status=403,
     )
     with pytest.raises(AuthorizationError) as excinfo:
-        foss.download_upload(upload.id)
+        foss.download_upload(upload)
     assert f"Upload {upload.id} is not accessible" in str(excinfo.value)
 
 
 @responses.activate
 def test_download_upload_error(foss_server: str, foss: Fossology, upload: Upload):
-    if versiontuple(foss.version) < versiontuple("1.4.4"):
-        pytest.skip("test is not supported for API version < 1.4.4")
     responses.add(
         responses.GET,
         f"{foss_server}/api/v1/uploads/{upload.id}/download",
         status=401,
     )
     with pytest.raises(FossologyApiError) as excinfo:
-        foss.download_upload(upload.id)
+        foss.download_upload(upload)
     assert f"Unable to download upload {upload.id}" in str(excinfo.value)
+
+
+def test_change_upload_permissions(foss: Fossology, upload: Upload):
+    group_name = secrets.token_urlsafe(8)
+    foss.create_group(group_name)
+    for group in foss.list_groups():
+        if group.name == group_name:
+            break
+    foss.change_upload_permissions(
+        upload,
+        group=group,
+        new_permission=Permission.READ_WRITE,
+        public_permission=Permission.READ_ONLY,
+    )
+    permissions = foss.upload_permissions(upload)
+    assert permissions.publicPerm == Permission.READ_ONLY
+    permissions_results = list()
+    for permission in permissions.permGroups:
+        permissions_results.append(str(permission))
+    assert (
+        f"Group {group.name} ({group.id}) with {Permission.READ_WRITE.name} permission"
+    ) in permissions_results
+    # Cleanup
+    foss.delete_group(group.id)
+
+
+def test_get_upload_permissions_if_upload_does_not_exists_raise_api_error(
+    foss: Fossology, fake_hash: dict
+):
+    upload = Upload(
+        1,
+        "non-existing-folder",
+        secrets.randbelow(192),
+        "non-existing upload",
+        "none",
+        "2023-08-07",
+        hash=fake_hash,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.upload_permissions(upload)
+    assert f"Upload {upload.id} does not exists." in str(excinfo.value)
+
+
+@responses.activate
+def test_get_upload_permissions_if_api_returns_500_raises_fossology_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/perm-groups",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.upload_permissions(upload)
+    assert (
+        f"API error while getting permissions for upload {upload.uploadname}."
+        in str(excinfo.value.message)
+    )
+
+
+def test_change_upload_permissions_if_upload_does_not_exists_raise_api_error(
+    foss: Fossology, fake_hash: dict
+):
+    upload = Upload(
+        1,
+        "non-existing-folder",
+        secrets.randbelow(192),
+        "non-existing upload",
+        "none",
+        "2023-08-07",
+        hash=fake_hash,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.change_upload_permissions(upload)
+    assert f"Upload {upload.id} does not exists." in str(excinfo.value)
+
+
+@responses.activate
+def test_change_upload_permissions_if_api_returns_400_raises_fossology_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.PUT,
+        f"{foss_server}/api/v1/uploads/{upload.id}/permissions",
+        status=400,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.change_upload_permissions(upload)
+    assert f"Permissions for upload {upload.uploadname} not updated." in str(
+        excinfo.value.message
+    )
+
+
+@responses.activate
+def test_change_upload_permissions_if_api_returns_500_raises_fossology_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.PUT,
+        f"{foss_server}/api/v1/uploads/{upload.id}/permissions",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.change_upload_permissions(upload)
+    assert (
+        f"API error while updating permissions for upload {upload.uploadname}."
+        in str(excinfo.value.message)
+    )
+
+
+@responses.activate
+def test_change_upload_permissions_if_api_returns_503_raises_fossology_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.PUT,
+        f"{foss_server}/api/v1/uploads/{upload.id}/permissions",
+        status=503,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.change_upload_permissions(upload)
+    assert "Scheduler is not running." in str(excinfo.value.message)

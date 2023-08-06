@@ -144,6 +144,23 @@ class MemberPerm(Enum):
     ADVISOR = 2
 
 
+class Permission(Enum):
+    """Upload or group permissions:
+
+    NONE
+    READ_ONLY
+    READ_WRITE
+    CLEARING_ADMIN
+    ADMIN
+    """
+
+    NONE = "0"
+    READ_ONLY = "1"
+    READ_WRITE = "3"
+    CLEARING_ADMIN = "5"
+    ADMIN = "10"
+
+
 class Agents(object):
 
     """FOSSology agents.
@@ -423,6 +440,60 @@ class Group(object):
 
     def __str__(self):
         return f"Group {self.name} ({self.id})"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class PermGroups(object):
+    """GroupIds with their respective permissions for a upload
+
+    Represents the group permissions for a FOSSology upload.
+
+    :param perm: the permission
+    :param group_pk: the id of the group
+    :param group_name: the name of the group
+    :type perm: string
+    :type group_pk: str
+    :type group_name: str
+    """
+
+    def __init__(self, perm, group_pk, group_name):
+        self.perm = Permission(perm)
+        self.group_pk = group_pk
+        self.group_name = group_name
+
+    def __str__(self):
+        return f"Group {self.group_name} ({self.group_pk}) with {self.perm.name} permission"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class UploadPermGroups(object):
+    """Upload permissions
+
+    Represents the permissions for a FOSSology upload.
+
+    :param publicPerm: the public permission of the group
+    :param permGroups: array of permGroup objects for the upload
+    :param kwargs: handle any other folder information provided by the fossology instance
+    :type publicPerm: Permission
+    :type permGroups: array
+    :type kwargs: key word argument
+    """
+
+    def __init__(self, publicPerm, permGroups, **kwargs):
+        self.publicPerm = Permission(publicPerm)
+        self.permGroups = list()
+        for perm in permGroups:
+            self.permGroups.append(PermGroups.from_json(perm))
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Upload with {self.publicPerm.name} permission and permissions for groups {self.permGroups}"
 
     @classmethod
     def from_json(cls, json_dict):
