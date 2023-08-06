@@ -439,7 +439,7 @@ class Uploads:
         if group:
             headers["groupName"] = group
         response = self.session.delete(
-            f"{self.api}/uploads/{upload.id}", headers=headers
+            f"{self.api}/uploads/{upload.id}", headers=headers, timeout=5
         )
 
         if response.status_code == 202:
