@@ -146,8 +146,41 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fossology.groups.Groups.delete_group">
+<span class="sig-name descname"><span class="pre">delete_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.groups.Groups.delete_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a group</p>
+<p>API Endpoint: DELETE /groups/{group_id}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group_id</strong> (<em>int</em>) – the id of the group</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fossology.groups.Groups.delete_group_member">
+<span class="sig-name descname"><span class="pre">delete_group_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.groups.Groups.delete_group_member" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a user from a group</p>
+<p>API Endpoint: DELETE /groups/{group_id}/user/{user_id}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group_id</strong> (<em>int</em>) – the id of the group</p></li>
+<li><p><strong>user_id</strong> (<em>int</em>) – the id of the user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fossology.groups.Groups.list_group_members">
-<span class="sig-name descname"><span class="pre">list_group_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#fossology.groups.Groups.list_group_members" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_group_members</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="obj.html#fossology.obj.UserGroupMember" title="fossology.obj.UserGroupMember"><span class="pre">fossology.obj.UserGroupMember</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fossology.groups.Groups.list_group_members" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of members for a given group (accessible groups for user, all groups for admin)</p>
 <p>API Endpoint: GET /groups/{id}/members</p>
 <dl class="field-list simple">
@@ -165,18 +198,22 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.groups.Groups.list_groups">
-<span class="sig-name descname"><span class="pre">list_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#fossology.groups.Groups.list_groups" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deletable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="obj.html#fossology.obj.Group" title="fossology.obj.Group"><span class="pre">fossology.obj.Group</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fossology.groups.Groups.list_groups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of groups (accessible groups for user, all groups for admin)</p>
+<p>If parameter deletable is True, the method will return only deletable groups.</p>
 <p>API Endpoint: GET /groups</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a list of groups</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>deletable</strong> (<em>bool</em><em> (</em><em>default: False</em><em>)</em>) – wether to limit the scope only to deletable groups</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list()</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of groups</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list()</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
 </dd></dl>
