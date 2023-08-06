@@ -5,23 +5,14 @@ import logging
 import os
 import secrets
 import time
-from typing import Dict
+from typing import Dict, Generator
 
 import pytest
 from click.testing import CliRunner
 
 import fossology
 from fossology.exceptions import AuthenticationError, FossologyApiError
-from fossology.obj import (
-    AccessLevel,
-    Agents,
-    Folder,
-    JobStatus,
-    TokenScope,
-    Upload,
-    User,
-    versiontuple,
-)
+from fossology.obj import AccessLevel, Agents, JobStatus, TokenScope, Upload
 
 logger = logging.getLogger("fossology")
 console = logging.StreamHandler()
@@ -157,7 +148,7 @@ def test_file_path() -> str:
 
 
 @pytest.fixture(scope="session")
-def upload_folder(foss: fossology.Fossology) -> Folder:
+def upload_folder(foss: fossology.Fossology) -> Generator:
     name = "UploadFolderTest"
     desc = "Created via the Fossology Python API"
     folder = foss.create_folder(foss.rootFolder, name, description=desc)
@@ -166,7 +157,7 @@ def upload_folder(foss: fossology.Fossology) -> Folder:
 
 
 @pytest.fixture(scope="session")
-def move_folder(foss: fossology.Fossology) -> Folder:
+def move_folder(foss: fossology.Fossology) -> Generator:
     folder = foss.create_folder(
         foss.rootFolder, "MoveUploadTest", "Test move upload function"
     )
@@ -178,7 +169,7 @@ def move_folder(foss: fossology.Fossology) -> Folder:
 def upload(
     foss: fossology.Fossology,
     test_file_path: str,
-) -> Upload:
+) -> Generator:
     upload = foss.upload_file(
         foss.rootFolder,
         file=test_file_path,
@@ -195,7 +186,7 @@ def upload(
 @pytest.fixture(scope="session")
 def upload_with_jobs(
     foss: fossology.Fossology, test_file_path: str, foss_schedule_agents: dict
-) -> Upload:
+) -> Generator:
     upload = foss.upload_file(
         foss.rootFolder,
         file=test_file_path,
@@ -211,14 +202,13 @@ def upload_with_jobs(
     time.sleep(5)
 
 
-@pytest.fixture()
-def created_foss_user(foss: fossology.Fossology, foss_user: dict) -> User:
-    if versiontuple(foss.version) < versiontuple("1.5.1"):
-        pytest.skip(f"user creation is not supported by API version {foss.version}")
+@pytest.fixture(scope="session")
+def created_foss_user(foss: fossology.Fossology, foss_user: dict) -> Generator:
     foss.create_user(foss_user)
     for user in foss.list_users():
         if user.name == foss_user["name"]:
-            return user
+            yield user
+    foss.delete_user(user)
 
 
 # foss_cli specific
@@ -233,7 +223,7 @@ def click_test_file() -> str:
 
 
 @pytest.fixture(scope="session")
-def click_test_dict(foss_server) -> str:
+def click_test_dict(foss_server) -> dict:
     d = dict()
     d["IS_REQUEST_FOR_HELP"] = False
     d["IS_REQUEST_FOR_CONFIG"] = False
