@@ -32,7 +32,7 @@ def jobs_lookup(foss: fossology.Fossology, upload: Upload):
                 f"Waiting for job {job.name} with status {job.status} to complete (eta: {job.eta})"
             )
             job = foss.detail_job(job.id)
-            time.sleep(5)
+            time.sleep(10)
 
 
 @pytest.fixture(scope="session")
