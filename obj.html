@@ -474,6 +474,33 @@ RED</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.PermGroups">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">PermGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">perm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_pk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.PermGroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>GroupIds with their respective permissions for a upload</p>
+<p>Represents the group permissions for a FOSSology upload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>perm</strong> (<em>string</em>) – the permission</p></li>
+<li><p><strong>group_pk</strong> (<em>str</em>) – the id of the group</p></li>
+<li><p><strong>group_name</strong> (<em>str</em>) – the name of the group</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.Permission">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Permission" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload or group permissions:</p>
+<p>NONE
+READ_ONLY
+READ_WRITE
+CLEARING_ADMIN
+ADMIN</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.ReportFormat">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">ReportFormat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ReportFormat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Available report format:</p>
@@ -571,6 +598,22 @@ DIRECTORY</p>
 <li><p><strong>uploaddate</strong> (<em>string</em>) – the date of the upload</p></li>
 <li><p><strong>hash</strong> (<a class="reference internal" href="#fossology.obj.Hash" title="fossology.obj.Hash"><em>Hash</em></a>) – the hash data of the uploaded file</p></li>
 <li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other upload information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.UploadPermGroups">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UploadPermGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publicPerm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permGroups</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UploadPermGroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload permissions</p>
+<p>Represents the permissions for a FOSSology upload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>publicPerm</strong> (<a class="reference internal" href="#fossology.obj.Permission" title="fossology.obj.Permission"><em>Permission</em></a>) – the public permission of the group</p></li>
+<li><p><strong>permGroups</strong> (<em>array</em>) – array of permGroup objects for the upload</p></li>
+<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
 </ul>
 </dd>
 </dl>
