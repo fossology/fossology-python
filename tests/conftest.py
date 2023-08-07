@@ -108,6 +108,16 @@ def foss_user_agents() -> Dict:
     }
 
 
+@pytest.fixture()
+def fake_hash():
+    return {
+        "sha1": secrets.token_hex(16),
+        "md5": secrets.token_hex(nbytes=16),
+        "sha256": secrets.token_hex(56),
+        "size": secrets.randbelow(512),
+    }
+
+
 @pytest.fixture(scope="session")
 def foss_user(foss_user_agents) -> Dict:
     return {
