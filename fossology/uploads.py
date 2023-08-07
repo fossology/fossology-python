@@ -6,20 +6,19 @@ import re
 import time
 from typing import Tuple
 
+import requests
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
-import fossology
-from fossology.exceptions import (
-    AuthorizationError,
-    FossologyApiError,
-    FossologyUnsupported,
-)
+from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import (
     ClearingStatus,
     Folder,
+    Group,
     Licenses,
+    Permission,
     Summary,
     Upload,
+    UploadPermGroups,
     User,
     get_options,
 )
@@ -67,7 +66,7 @@ class Uploads:
     def detail_upload(
         self, upload_id: int, group: str = None, wait_time: int = 0
     ) -> Upload:
-        """Get detailled information about an upload
+        """Get detailed information about an upload
 
         API Endpoint: GET /uploads/{id}
 
@@ -319,7 +318,7 @@ class Uploads:
             raise FossologyApiError(description, response)
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
-    def upload_summary(self, upload, group=None):
+    def upload_summary(self, upload: Upload, group=None):
         """Get clearing information about an upload
 
         API Endpoint: GET /uploads/{id}/summary
@@ -358,7 +357,9 @@ class Uploads:
             raise FossologyApiError(description, response)
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
-    def upload_licenses(self, upload, group: str = None, agent=None, containers=False):
+    def upload_licenses(
+        self, upload: Upload, group: str = None, agent=None, containers=False
+    ):
         """Get clearing information about an upload
 
         API Endpoint: GET /uploads/{id}/licenses
@@ -566,10 +567,6 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group or folder
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.4.0"):
-            description = f"Endpoint PATCH /uploads is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         params = dict()
         headers = dict()
         if status:
@@ -614,10 +611,6 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the upload or folder
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.4.0"):
-            description = f"Endpoint PUT /uploads is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         headers = {"folderId": str(folder.id), "action": action}
         response = self.session.put(f"{self.api}/uploads/{upload.id}", headers=headers)
 
@@ -638,23 +631,19 @@ class Uploads:
             )
             raise FossologyApiError(description, response)
 
-    def download_upload(self, upload_id: int) -> Tuple[str, str]:
+    def download_upload(self, upload: Upload) -> Tuple[str, str]:
         """Download an upload by its id
 
         API Endpoint: GET /uploads/{id}/download
 
-        :param upload_id: the ID of the upload to be downloaded
-        :type upload: int
+        :param upload: the Upload to be downloaded
+        :type upload: Upload
         :return: the upload content and the upload name
         :rtype: Tuple[str, str]
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the upload
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.4.4"):
-            description = f"Endpoint GET /uploads/{upload_id}/download is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
-        response = self.session.get(f"{self.api}/uploads/{upload_id}/download")
+        response = self.session.get(f"{self.api}/uploads/{upload.id}/download")
 
         if response.status_code == 200:
             content = response.headers["Content-Disposition"]
@@ -665,9 +654,94 @@ class Uploads:
             return response.content, upload_filename
 
         elif response.status_code == 403:
-            description = f"Upload {upload_id} is not accessible"
+            description = f"Upload {upload.id} is not accessible"
             raise AuthorizationError(description, response)
 
         else:
-            description = f"Unable to download upload {upload_id}"
+            description = f"Unable to download upload {upload.id}"
+            raise FossologyApiError(description, response)
+
+    def change_upload_permissions(
+        self,
+        upload: Upload,
+        all_uploads: bool = False,
+        group: Group = None,
+        new_permission: Permission = None,
+        public_permission: Permission = None,
+    ):
+        """Change the permission of an upload
+
+        API Endpoint: PUT /uploads/{id}/permission
+
+        :param upload: the upload to update
+        :param group: the group you want to add or edit permission for this upload
+        :param new_permission: the permission for the selected group
+        :param public_permission: the public permission for this upload
+        :type upload: Upload
+        :type all_uploads: boolean (default: False)
+        :type group: Group (default: None)
+        :type new_permission: Permission (default: None)
+        :type public_permission: Permission (default: None)
+        :raises FossologyApiError: if the REST call failed
+        """
+        data = {
+            "folderId": upload.folderid,
+            "allUploadsPermission": all_uploads,
+            "groupId": group.id if group else 0,
+            "newPermission": new_permission.name.lower() if new_permission else "none",
+            "publicPermission": public_permission.name.lower()
+            if public_permission
+            else "none",
+        }
+        response: requests.Response = self.session.put(
+            f"{self.api}/uploads/{upload.id}/permissions", json=data
+        )
+
+        if response.status_code == 202:
+            logger.info(
+                f"Permissions for upload {upload.uploadname} have been updated."
+            )
+
+        elif response.status_code == 400:
+            description = f"Permissions for upload {upload.uploadname} not updated."
+            raise FossologyApiError(description, response)
+
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} does not exists."
+            raise FossologyApiError(description, response)
+
+        elif response.status_code == 503:
+            description = "Scheduler is not running."
+            raise FossologyApiError(description, response)
+
+        else:
+            description = (
+                f"API error while updating permissions for upload {upload.uploadname}."
+            )
+            raise FossologyApiError(description, response)
+
+    def upload_permissions(
+        self,
+        upload: Upload,
+    ):
+        """Get all the groups with their respective permissions for an upload
+
+        API Endpoint: GET /uploads/{id}/perm-groups
+
+        :param upload: the upload to get permission from
+        :type upload: Upload
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.get(f"{self.api}/uploads/{upload.id}/perm-groups")
+
+        if response.status_code == 200:
+            return UploadPermGroups.from_json(response.json())
+
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} does not exists."
+            raise FossologyApiError(description, response)
+        else:
+            description = (
+                f"API error while getting permissions for upload {upload.uploadname}."
+            )
             raise FossologyApiError(description, response)
