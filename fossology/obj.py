@@ -393,14 +393,15 @@ class Findings(object):
     :param kwargs: handle any other finding information provided by the fossology instance
     :type scanner: list
     :type conclusion: list
+    :type copyright: list
     :type kwargs: key word argument
     """
 
     def __init__(
         self,
-        scanner,
-        conclusion,
-        copyright=None,
+        scanner: list,
+        conclusion: list = None,
+        copyright: list = None,
         **kwargs,
     ):
         self.scanner = scanner
@@ -454,12 +455,12 @@ class PermGroups(object):
     :param perm: the permission
     :param group_pk: the id of the group
     :param group_name: the name of the group
-    :type perm: string
+    :type perm: str
     :type group_pk: str
     :type group_name: str
     """
 
-    def __init__(self, perm, group_pk, group_name):
+    def __init__(self, perm: str, group_pk: str, group_name: str):
         self.perm = Permission(perm)
         self.group_pk = group_pk
         self.group_name = group_name
@@ -480,12 +481,12 @@ class UploadPermGroups(object):
     :param publicPerm: the public permission of the group
     :param permGroups: array of permGroup objects for the upload
     :param kwargs: handle any other folder information provided by the fossology instance
-    :type publicPerm: Permission
+    :type publicPerm: str
     :type permGroups: array
     :type kwargs: key word argument
     """
 
-    def __init__(self, publicPerm, permGroups, **kwargs):
+    def __init__(self, publicPerm: str, permGroups: list, **kwargs):
         self.publicPerm = Permission(publicPerm)
         self.permGroups = list()
         for perm in permGroups:
@@ -601,44 +602,6 @@ class Obligation(object):
 
     def __str__(self):
         return f"Obligation {self.topic}, {self.type} ({self.id}) is classified {self.classification}"
-
-    @classmethod
-    def from_json(cls, json_dict):
-        return cls(**json_dict)
-
-
-class Licenses(object):
-
-    """FOSSology file license findings.
-
-    Represents a FOSSology licenses response.
-
-    :param filePath: the path of the file in the specified upload
-    :param findings: the license findings in that file
-    :param kwargs: handle any other license information provided by the fossology instance
-    :type filePath: string
-    :type findings: Findings
-    :type kwargs: key word argument
-    """
-
-    def __init__(
-        self,
-        filePath,
-        findings=None,
-        **kwargs,
-    ):
-        self.filepath = filePath
-        if findings:
-            self.findings = Findings.from_json(findings)
-        else:
-            self.findings = findings
-        self.additional_info = kwargs
-
-    def __str__(self):
-        if self.findings.conclusion:
-            return f"File {self.filepath} has {len(self.findings.conclusion)} concluded licenses"
-        else:
-            return f"File {self.filepath} doesn't have any concluded license yet"
 
     @classmethod
     def from_json(cls, json_dict):
@@ -784,6 +747,72 @@ class Upload(object):
                 f"Upload '{self.uploadname}' ({self.id}, {self.hash.size}B, {self.hash.sha1}) "
                 f"in folder {self.foldername} ({self.folderid})"
             )
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class UploadCopyrights(object):
+
+    """Copyright findings in a FOSSology upload
+
+    Represents copyright matches of a FOSSology upload.
+
+    :param copyright: the copyright
+    :param filePath: relative file path
+    :param kwargs: handle any other information provided by the FOSSology instance
+    :type copyright: str
+    :type filePath: list
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self,
+        copyright: str,
+        filePath: list[str],
+        **kwargs,
+    ):
+        self.copyright = copyright
+        self.filepath = list()
+        for path in filePath:
+            self.filepath.append(path)
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Copyright {self.copyright} was found in {len(self.filepath)} files."
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class UploadLicenses(object):
+
+    """FOSSology upload licenses.
+
+    Represents licenses and copyright matches of a FOSSology upload.
+
+    :param filePath: relative file path
+    :param findings: the licenses and copyrights findings
+    :param kwargs: handle any other information provided by the fossology instance
+    :type filePath: str
+    :type findings: Findings
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self,
+        filePath: str,
+        findings: dict,
+        **kwargs,
+    ):
+        self.filepath = filePath
+        self.findings = Findings.from_json(findings)
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"File {self.filepath} has {len(self.findings.conclusion)} license and {len(self.findings.copyright)}matches"
 
     @classmethod
     def from_json(cls, json_dict):

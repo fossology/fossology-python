@@ -4,7 +4,7 @@ import json
 import logging
 import re
 import time
-from typing import Tuple
+from typing import List, Optional, Tuple
 
 import requests
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
@@ -14,10 +14,11 @@ from fossology.obj import (
     ClearingStatus,
     Folder,
     Group,
-    Licenses,
     Permission,
     Summary,
     Upload,
+    UploadCopyrights,
+    UploadLicenses,
     UploadPermGroups,
     User,
     get_options,
@@ -358,38 +359,46 @@ class Uploads:
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
     def upload_licenses(
-        self, upload: Upload, group: str = None, agent=None, containers=False
-    ):
+        self,
+        upload: Upload,
+        group: str = None,
+        agent: List[str] = None,
+        containers: bool = False,
+        license: bool = True,
+        copyright: bool = False,
+    ) -> Optional[List[UploadLicenses]]:
         """Get clearing information about an upload
 
         API Endpoint: GET /uploads/{id}/licenses
 
-        The response does not generate Python objects yet, the plain JSON data is simply returned.
-
         :param upload: the upload to gather data from
+        :param group: the group name to chose while accessing the upload (default: None)
         :param agent: the license agents to use (e.g. "nomos,monk,ninka,ojo,reportImport", default: "nomos")
         :param containers: wether to show containers or not (default: False)
-        :param group: the group name to chose while accessing the upload (default: None)
+        :param license: wether to expose license matches (default: True)
+        :param copyright: wether to expose copyright matches (default: False)
         :type upload: Upload
+        :type group: string
         :type agent: string
         :type containers: boolean
-        :type group: string
-        :return: the list of licenses findings for the specified agent
-        :rtype: list of Licenses
+        :type license: boolean
+        :type copyright: boolean
+        :return: the list of UploadLicenses for the specified agent
+        :rtype: list of UploadLicenses
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
         """
-        headers = {}
-        params = {}
-        headers = {}
-        if group:
-            headers["groupName"] = group
+        params = {
+            "containers": containers,
+            "license": license,
+            "copyright": copyright,
+        }
         if agent:
             params["agent"] = agent
         else:
             params["agent"] = agent = "nomos"
-        if containers:
-            params["containers"] = "true"
+
+        headers = {}
         if group:
             headers["groupName"] = group
 
@@ -401,7 +410,7 @@ class Uploads:
             all_licenses = []
             scanned_files = response.json()
             for file_with_findings in scanned_files:
-                file_licenses = Licenses.from_json(file_with_findings)
+                file_licenses = UploadLicenses.from_json(file_with_findings)
                 all_licenses.append(file_licenses)
             return all_licenses
 
@@ -410,18 +419,52 @@ class Uploads:
             raise AuthorizationError(description, response)
 
         elif response.status_code == 412:
-            description = f"Unable to get licenses from {agent} for {upload.uploadname} (id={upload.id})"
+            description = f"The agent {agent} has not been scheduled for upload {upload.uploadname} (id={upload.id})"
             raise FossologyApiError(description, response)
 
         elif response.status_code == 503:
-            logger.debug(
-                f"Unpack agent for {upload.uploadname} (id={upload.id}) didn't start yet"
-            )
+            logger.debug("The ununpack agent or queried agents have not started yet.")
             time.sleep(3)
             raise TryAgain
 
         else:
-            description = f"No licenses for upload {upload.uploadname} (id={upload.id})"
+            description = f"API error while returning license findings for upload {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
+
+    @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
+    def upload_copyrights(
+        self,
+        upload: Upload,
+    ):
+        """Get copyright matches from an upload
+
+        API Endpoint: GET /uploads/{id}/copyrights
+
+        :param upload: the upload to gather data from
+        :type upload: Upload
+        :return: the list of copyrights findings
+        :rtype: list of Licenses
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.get(f"{self.api}/uploads/{upload.id}/copyrights")
+
+        if response.status_code == 200:
+            all_copyrights = []
+            for copyright in response.json():
+                all_copyrights.append(UploadCopyrights.from_json(copyright))
+            return all_copyrights
+
+        elif response.status_code == 412:
+            description = f"The agent has not been scheduled for upload {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
+
+        elif response.status_code == 503:
+            logger.debug("The ununpack agent or queried agents have not started yet.")
+            time.sleep(3)
+            raise TryAgain
+
+        else:
+            description = f"API error while returning copyright findings for upload {upload.uploadname} (id={upload.id})"
             raise FossologyApiError(description, response)
 
     def delete_upload(self, upload, group=None):
