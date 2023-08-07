@@ -229,7 +229,7 @@ REJECTED</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Findings">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Findings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scanner</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conclusion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copyright</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Findings" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Findings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scanner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conclusion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copyright</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Findings" title="Permalink to this definition">¶</a></dt>
 <dd><p>FOSSology license findings.</p>
 <p>Represents FOSSology license findings.</p>
 <dl class="field-list simple">
@@ -237,7 +237,7 @@ REJECTED</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>scanner</strong> (<em>list</em>) – the list of licenses found by the specified scanners</p></li>
 <li><p><strong>conclusion</strong> (<em>list</em>) – the concluded license by user of for a package</p></li>
-<li><p><strong>copyright</strong> – the copyrights found in the package</p></li>
+<li><p><strong>copyright</strong> (<em>list</em>) – the copyrights found in the package</p></li>
 <li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other finding information provided by the fossology instance</p></li>
 </ul>
 </dd>
@@ -419,22 +419,6 @@ ALL</p>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="fossology.obj.Licenses">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Licenses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filePath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Licenses" title="Permalink to this definition">¶</a></dt>
-<dd><p>FOSSology file license findings.</p>
-<p>Represents a FOSSology licenses response.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filePath</strong> (<em>string</em>) – the path of the file in the specified upload</p></li>
-<li><p><strong>findings</strong> (<a class="reference internal" href="#fossology.obj.Findings" title="fossology.obj.Findings"><em>Findings</em></a>) – the license findings in that file</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other license information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.MemberPerm">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">MemberPerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.MemberPerm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Group member permissions:</p>
@@ -475,13 +459,13 @@ RED</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.PermGroups">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">PermGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">perm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_pk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.PermGroups" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">PermGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_pk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.PermGroups" title="Permalink to this definition">¶</a></dt>
 <dd><p>GroupIds with their respective permissions for a upload</p>
 <p>Represents the group permissions for a FOSSology upload.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>perm</strong> (<em>string</em>) – the permission</p></li>
+<li><p><strong>perm</strong> (<em>str</em>) – the permission</p></li>
 <li><p><strong>group_pk</strong> (<em>str</em>) – the id of the group</p></li>
 <li><p><strong>group_name</strong> (<em>str</em>) – the name of the group</p></li>
 </ul>
@@ -604,14 +588,46 @@ DIRECTORY</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.UploadCopyrights">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UploadCopyrights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">copyright</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filePath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UploadCopyrights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copyright findings in a FOSSology upload</p>
+<p>Represents copyright matches of a FOSSology upload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>copyright</strong> (<em>str</em>) – the copyright</p></li>
+<li><p><strong>filePath</strong> (<em>list</em>) – relative file path</p></li>
+<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other information provided by the FOSSology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.UploadLicenses">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UploadLicenses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filePath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UploadLicenses" title="Permalink to this definition">¶</a></dt>
+<dd><p>FOSSology upload licenses.</p>
+<p>Represents licenses and copyright matches of a FOSSology upload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filePath</strong> (<em>str</em>) – relative file path</p></li>
+<li><p><strong>findings</strong> (<a class="reference internal" href="#fossology.obj.Findings" title="fossology.obj.Findings"><em>Findings</em></a>) – the licenses and copyrights findings</p></li>
+<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.UploadPermGroups">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UploadPermGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publicPerm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permGroups</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UploadPermGroups" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UploadPermGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publicPerm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permGroups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UploadPermGroups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upload permissions</p>
 <p>Represents the permissions for a FOSSology upload.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>publicPerm</strong> (<a class="reference internal" href="#fossology.obj.Permission" title="fossology.obj.Permission"><em>Permission</em></a>) – the public permission of the group</p></li>
+<li><p><strong>publicPerm</strong> (<em>str</em>) – the public permission of the group</p></li>
 <li><p><strong>permGroups</strong> (<em>array</em>) – array of permGroup objects for the upload</p></li>
 <li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
 </ul>
