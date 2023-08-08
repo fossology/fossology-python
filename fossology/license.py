@@ -1,10 +1,11 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import json
 import logging
 from json.decoder import JSONDecodeError
-from typing import List, Tuple
+from typing import Tuple
 from urllib.parse import quote
 
 import fossology
@@ -36,7 +37,7 @@ class LicenseEndpoint:
         page_size: int = 100,
         page: int = 1,
         all_pages: bool = False,
-    ) -> List[License]:
+    ) -> Tuple[list[License], int]:
         """Get all license from the DB
 
         API Endpoint: GET /license
@@ -94,8 +95,8 @@ class LicenseEndpoint:
         return license_list, x_total_pages
 
     def detail_license(
-        self, shortname, group=None
-    ) -> Tuple[int, License, List[Obligation]]:
+        self, shortname: str, group: int | None = None
+    ) -> Tuple[int, License, list[Obligation]]:
         """Get a license from the DB
 
         API Endpoint: GET /license/{shortname}
@@ -105,7 +106,7 @@ class LicenseEndpoint:
         :type name: str
         :type group: int
         :return: the license id, the license data and the associated obligations
-        :rtype: tuple(int, License, List[Obligation])
+        :rtype: tuple(int, License, list[Obligation])
         :raises FossologyApiError: if the REST call failed
         """
         if fossology.versiontuple(self.version) < fossology.versiontuple("1.3.0"):
@@ -170,7 +171,7 @@ class LicenseEndpoint:
 
     def update_license(
         self,
-        shortname,
+        shortname: str,
         fullname: str = "",
         text: str = "",
         url: str = "",
@@ -206,7 +207,6 @@ class LicenseEndpoint:
         )
         if response.status_code == 200:
             logger.info(f"License {shortname} has been updated")
-            return
         else:
             description = f"Unable to update license {shortname}"
             raise FossologyApiError(description, response)

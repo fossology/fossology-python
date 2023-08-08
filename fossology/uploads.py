@@ -1,16 +1,18 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 import json
 import logging
 import re
 import time
-from typing import List, Optional, Tuple
+from typing import Tuple
 
 import requests
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
 from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import (
+    AccessLevel,
     ClearingStatus,
     Folder,
     Group,
@@ -21,7 +23,6 @@ from fossology.obj import (
     UploadLicenses,
     UploadPermGroups,
     User,
-    get_options,
 )
 
 logger = logging.getLogger(__name__)
@@ -29,12 +30,12 @@ logger.setLevel(logging.DEBUG)
 
 
 def list_uploads_parameters(
-    folder: Folder,
+    folder: Folder | None = None,
     recursive: bool = True,
-    name: str = None,
-    status: ClearingStatus = None,
-    assignee: str = None,
-    since: str = None,
+    name: str | None = None,
+    status: ClearingStatus | None = None,
+    assignee: str | None = None,
+    since: str | None = None,
 ) -> dict:
     """Helper function to list of query parameters for GET /uploads endpoint"""
     date_pattern = re.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}")
@@ -65,7 +66,7 @@ class Uploads:
     # Retry until the unpack agent is finished
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(10))
     def detail_upload(
-        self, upload_id: int, group: str = None, wait_time: int = 0
+        self, upload_id: int, group: str | None = None, wait_time: int = 0
     ) -> Upload:
         """Get detailed information about an upload
 
@@ -124,18 +125,18 @@ class Uploads:
             description = f"Error while getting details for upload {upload_id}"
             raise FossologyApiError(description, response)
 
-    def upload_file(  # noqa: C901
+    def upload_file(
         self,
         folder: Folder,
-        file: str = None,
-        vcs: dict = None,
-        url: dict = None,
-        server: dict = None,
-        description: str = None,
-        access_level: str = None,
+        file: str | None = None,
+        vcs: dict | None = None,
+        url: dict | None = None,
+        server: dict | None = None,
+        description: str | None = None,
+        access_level: AccessLevel | None = None,
         apply_global: bool = False,
         ignore_scm: bool = False,
-        group: str = None,
+        group: str | None = None,
         wait_time: int = 0,
     ):
         """Upload a package to FOSSology
@@ -273,11 +274,11 @@ class Uploads:
         if file:
             source = f"{file}"
         elif vcs:
-            source = vcs.get("vcsName")
+            source = vcs.get("vcsName")  # type: ignore
         elif url:
-            source = url.get("name")
+            source = url.get("name")  # type: ignore
         elif server:
-            source = server.get("name")
+            source = server.get("name")  # type: ignore
 
         if response.status_code == 201:
             try:
@@ -361,12 +362,12 @@ class Uploads:
     def upload_licenses(
         self,
         upload: Upload,
-        group: str = None,
-        agent: List[str] = None,
+        group: str | None = None,
+        agent: str | None = None,
         containers: bool = False,
         license: bool = True,
         copyright: bool = False,
-    ) -> Optional[List[UploadLicenses]]:
+    ) -> list[UploadLicenses] | None:
         """Get clearing information about an upload
 
         API Endpoint: GET /uploads/{id}/licenses
@@ -394,9 +395,9 @@ class Uploads:
             "copyright": copyright,
         }
         if agent:
-            params["agent"] = agent
+            params["agent"] = agent  # type: ignore
         else:
-            params["agent"] = agent = "nomos"
+            params["agent"] = agent = "nomos"  # type: ignore
 
         headers = {}
         if group:
@@ -501,13 +502,13 @@ class Uploads:
 
     def list_uploads(
         self,
-        folder: int = None,
-        group: str = None,
+        folder: Folder | None = None,
+        group: str | None = None,
         recursive: bool = True,
-        name: str = None,
-        status: ClearingStatus = None,
-        assignee: str = None,
-        since: str = None,
+        name: str | None = None,
+        status: ClearingStatus | None = None,
+        assignee: str | None = None,
+        since: str | None = None,
         page_size=100,
         page=1,
         all_pages=False,
@@ -588,10 +589,10 @@ class Uploads:
     def update_upload(
         self,
         upload: Upload,
-        status: ClearingStatus = None,
+        status: ClearingStatus | None = None,
         comment: str = "",
-        assignee: User = None,
-        group: str = None,
+        assignee: User | None = None,
+        group: str | None = None,
     ):
         """Update an upload information
 
@@ -615,7 +616,7 @@ class Uploads:
         if status:
             params["status"] = status.value
         if assignee:
-            params["assignee"] = assignee.id
+            params["assignee"] = assignee.id  # type: ignore
         if group:
             headers["groupName"] = group
         response = self.session.patch(
@@ -690,10 +691,10 @@ class Uploads:
 
         if response.status_code == 200:
             content = response.headers["Content-Disposition"]
-            upload_filename_pattern = (
+            upload_filename_pattern: str = (
                 "(^attachment; filename=)(\"|')?([^\"|']*)(\"|'$)?"
             )
-            upload_filename = re.match(upload_filename_pattern, content).group(3)
+            upload_filename = re.match(upload_filename_pattern, content).group(3)  # type: ignore
             return response.content, upload_filename
 
         elif response.status_code == 403:
@@ -708,9 +709,9 @@ class Uploads:
         self,
         upload: Upload,
         all_uploads: bool = False,
-        group: Group = None,
-        new_permission: Permission = None,
-        public_permission: Permission = None,
+        group: Group | None = None,
+        new_permission: Permission | None = None,
+        public_permission: Permission | None = None,
     ):
         """Change the permission of an upload
 

@@ -1,10 +1,11 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import logging
 
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import Folder, get_options
+from fossology.obj import Folder
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -34,12 +35,12 @@ class Folders:
             description = f"Unable to get a list of folders for {self.user.name}"
             raise FossologyApiError(description, response)
 
-    def detail_folder(self, folder_id):
+    def detail_folder(self, folder_id: int):
         """Get details of folder.
 
         API Endpoint: GET /folders/{id}
 
-        :param id: the ID of the folder to be analysed
+        :param id: the ID of the folder to be analyzed
         :type id: int
         :return: the requested folder
         :rtype: Folder() object
@@ -47,17 +48,23 @@ class Folders:
         """
         response = self.session.get(f"{self.api}/folders/{folder_id}")
         if response.status_code == 200:
-            detailled_folder = Folder.from_json(response.json())
+            detailed_folder = Folder.from_json(response.json())
             for folder in self.folders:
                 if folder.id == folder_id:
                     self.folders.remove(folder)
-            self.folders.append(detailled_folder)
-            return detailled_folder
+            self.folders.append(detailed_folder)
+            return detailed_folder
         else:
             description = f"Error while getting details for folder {folder_id}"
             raise FossologyApiError(description, response)
 
-    def create_folder(self, parent, name, description=None, group=None):
+    def create_folder(
+        self,
+        parent: Folder,
+        name: str,
+        description: str | None = None,
+        group: str | None = None,
+    ):
         """Create a new (sub)folder
 
         The name of the new folder must be unique under the same parent.
@@ -76,7 +83,7 @@ class Folders:
         :return: the folder newly created (or already existing) - or None
         :rtype: Folder() object
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user is not allowed to write in the folder or access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {
             "parentFolder": f"{parent.id}",
@@ -109,13 +116,16 @@ class Folders:
             return self.detail_folder(response.json()["message"])
 
         elif response.status_code == 403:
-            description = f"Folder creation {get_options(group, parent)}not authorized"
+            description = f"Folder creation in folder {parent.id} not authorized"
             raise AuthorizationError(description, response)
+
         else:
             description = f"Unable to create folder {name} under {parent}"
             raise FossologyApiError(description, response)
 
-    def update_folder(self, folder, name=None, description=None):
+    def update_folder(
+        self, folder: Folder, name: str | None = None, description: str | None = None
+    ):
         """Update a folder's name or description
 
         The name of the new folder must be unique under the same parent.
@@ -146,7 +156,7 @@ class Folders:
             description = f"Unable to update folder {folder.id}"
             raise FossologyApiError(description, response)
 
-    def delete_folder(self, folder):
+    def delete_folder(self, folder: Folder):
         """Delete a folder
 
         API Endpoint: DELETE /folders/{id}
@@ -162,7 +172,7 @@ class Folders:
             description = f"Unable to delete folder {folder.id}"
             raise FossologyApiError(description, response)
 
-    def _put_folder(self, action, folder, parent):
+    def _put_folder(self, action: str, folder: Folder, parent: Folder):
         """Copy or move a folder
 
         Internal function meant to be called by move_folder() or copy_folder()
@@ -188,7 +198,7 @@ class Folders:
             description = f"Unable to {action} folder {folder.name} to {parent.name}"
             raise FossologyApiError(description, response)
 
-    def copy_folder(self, folder, parent):
+    def copy_folder(self, folder: Folder, parent: Folder):
         """Copy a folder
 
         :param folder: the Folder to be copied

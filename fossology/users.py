@@ -1,3 +1,4 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 import logging
@@ -12,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 class Users:
     """Class dedicated to all "users" related endpoints"""
 
-    def detail_user(self, user_id):
+    def detail_user(self, user_id: int):
         """Get details of Fossology user.
 
         API Endpoint: GET /users/{id}
