@@ -6,10 +6,6 @@ import json
 from enum import Enum
 
 
-def versiontuple(v):
-    return tuple(map(int, (v.split("."))))
-
-
 class AccessLevel(Enum):
     """Available access levels for uploads:
 

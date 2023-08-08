@@ -12,7 +12,7 @@ from fossology.folders import Folders
 from fossology.groups import Groups
 from fossology.jobs import Jobs
 from fossology.license import LicenseEndpoint
-from fossology.obj import Agents, ApiInfo, HealthInfo, TokenScope, User, versiontuple
+from fossology.obj import Agents, ApiInfo, HealthInfo, TokenScope, User
 from fossology.report import Report
 from fossology.search import Search
 from fossology.uploads import Uploads
@@ -110,10 +110,8 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report, Users, 
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         self.version = self.get_version()
-        if versiontuple(self.version) >= versiontuple("1.3.3"):
-            self.info = self.get_info()
-            self.health = self.get_health()
-
+        self.info = self.get_info()
+        self.health = self.get_health()
         self.user = self.get_self(name)
         self.name = self.user.name
         self.rootFolder = self.detail_folder(self.user.rootFolderId)
@@ -133,30 +131,18 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report, Users, 
         :raises FossologyApiError: if the REST call failed
         :raises AuthenticationError: if the user couldn't be found
         """
-        if versiontuple(self.version) >= versiontuple("1.2.3"):
-            response = self.session.get(f"{self.api}/users/self")
-            if response.status_code == 200:
-                user_agents = None
-                user_details = response.json()
-                if user_details.get("agents"):
-                    user_agents = Agents.from_json(user_details["agents"])
-                user = User.from_json(user_details)
-                user.agents = user_agents
-                return user
-            else:
-                description = "Error while getting details about authenticated user"
-                raise FossologyApiError(description, response)
+        response = self.session.get(f"{self.api}/users/self")
+        if response.status_code == 200:
+            user_agents = None
+            user_details = response.json()
+            if user_details.get("agents"):
+                user_agents = Agents.from_json(user_details["agents"])
+            user = User.from_json(user_details)
+            user.agents = user_agents
+            return user
         else:
-            if not name:
-                description = "You need to provide a username to create an API session"
-                raise AuthenticationError(description)
-            self.users = self.list_users()
-            for user in self.users:
-                if user.name == name:
-                    self.user = user
-                    return self.user
-            description = f"User {name} was not found on {self.host}"
-            raise AuthenticationError(description)
+            description = "Error while getting details about authenticated user"
+            raise FossologyApiError(description, response)
 
     def close(self):
         self.session.close()

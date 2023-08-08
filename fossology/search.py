@@ -99,10 +99,6 @@ class Search:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the search results
         """
-        if versiontuple(self.version) <= versiontuple("1.4.3"):
-            description = f"Endpoint /search is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         headers = search_headers(
             searchType,
             upload,
@@ -167,10 +163,6 @@ class Search:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the user can't access the group
         """
-        if versiontuple(self.version) <= versiontuple("1.0.16"):
-            description = f"Endpoint /filesearch is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         headers = {}
         if group:
             headers["groupName"] = group

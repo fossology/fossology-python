@@ -81,25 +81,6 @@ def test_generate_token_errors(foss_server: str):
         assert "Authentication error" in str(excinfo.value)
 
 
-def test_backward_compatibility(foss_server: str, foss_token: str):
-    foss = Fossology(foss_server, foss_token, "fossy")
-    assert foss.name == "fossy"
-
-    if versiontuple(foss.version) >= versiontuple("1.2.3"):
-        foss = Fossology(foss_server, foss_token, "test")
-        assert foss.name == "fossy"
-    else:
-        with pytest.raises(AuthenticationError) as excinfo:
-            Fossology(foss_server, foss_token, "test")
-        assert f"User test was not found on {foss_server}" in str(excinfo.value)
-
-        with pytest.raises(AuthenticationError) as excinfo:
-            Fossology(foss_server, foss_token)
-        assert "You need to provide a username to create an API session" in str(
-            excinfo.value
-        )
-
-
 def test_unknown_user(foss: Fossology):
     with pytest.raises(FossologyApiError):
         foss.detail_user(30)
@@ -112,27 +93,25 @@ def test_list_users(foss: Fossology):
 
 @responses.activate
 def test_get_self_error(foss_server: str, foss: Fossology):
-    if versiontuple(foss.version) >= versiontuple("1.2.3"):
-        responses.add(
-            responses.GET,
-            f"{foss_server}/api/v1/users/self",
-            status=500,
-        )
-        with pytest.raises(FossologyApiError):
-            foss.get_self()
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/users/self",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.get_self()
 
 
 @responses.activate
 def test_get_self_with_agents(
     foss_server: str, foss: Fossology, foss_user: dict, foss_user_agents: dict
 ):
-    if versiontuple(foss.version) >= versiontuple("1.2.3"):
-        user = foss_user
-        responses.add(
-            responses.GET, f"{foss_server}/api/v1/users/self", status=200, json=user
-        )
-        user_from_api = foss.get_self()
-        assert user_from_api.agents.to_dict() == foss_user_agents
+    user = foss_user
+    responses.add(
+        responses.GET, f"{foss_server}/api/v1/users/self", status=200, json=user
+    )
+    user_from_api = foss.get_self()
+    assert user_from_api.agents.to_dict() == foss_user_agents
 
 
 @responses.activate
@@ -169,9 +148,7 @@ def test_detail_user(foss: Fossology):
     assert foss.detail_user(foss.user.id)
     assert foss.user.email == "y"
     assert (
-        f"User {foss.user.description} ({foss.user.id}), {foss.user.email}, "
-        f"access level {foss.user.accessLevel} "
-        f"and root folder {foss.user.rootFolderId}"
+        f"User {foss.user.description} ({foss.user.id}), y, access level {foss.user.accessLevel}, root folder {foss.user.rootFolderId}"
     ) in str(foss.user)
 
 

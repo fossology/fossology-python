@@ -8,8 +8,7 @@ from json.decoder import JSONDecodeError
 from typing import Tuple
 from urllib.parse import quote
 
-import fossology
-from fossology.exceptions import FossologyApiError, FossologyUnsupported
+from fossology.exceptions import FossologyApiError
 from fossology.obj import License, LicenseType, Obligation
 
 logger = logging.getLogger(__name__)
@@ -56,10 +55,6 @@ class LicenseEndpoint:
         :rtype: List[License]
         :raises FossologyApiError: if the REST call failed
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.3.0"):
-            description = f"Endpoint /license is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         license_list = list()
         headers = {"limit": str(page_size)}
         if active:
@@ -109,13 +104,6 @@ class LicenseEndpoint:
         :rtype: tuple(int, License, list[Obligation])
         :raises FossologyApiError: if the REST call failed
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.3.0"):
-            description = (
-                f"Endpoint /license/{shortname} is not supported by your API version ",
-                f"{self.version}",
-            )
-            raise FossologyUnsupported(description)
-
         headers = dict()
         if group:
             headers["groupName"] = group

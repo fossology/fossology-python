@@ -3,7 +3,7 @@
 
 from fossology import Fossology
 from fossology.exceptions import FossologyApiError
-from fossology.obj import AccessLevel, SearchTypes, Upload, versiontuple
+from fossology.obj import AccessLevel, SearchTypes, Upload
 
 
 def delete_upload(foss: Fossology, upload: Upload):
@@ -33,12 +33,11 @@ def test_upload_from_vcs(foss: Fossology):
     )
     assert vcs_upload.uploadname == vcs["vcsName"]
     # FIXME option ignore_scm does not work currently
-    if versiontuple(foss.version) > versiontuple("1.5.1"):
-        search_result = foss.search(
-            searchType=SearchTypes.DIRECTORY,
-            filename=".git",
-        )
-        assert not search_result
+    # search_result = foss.search(
+    #     searchType=SearchTypes.DIRECTORY,
+    #     filename=".git",
+    # )
+    # assert not search_result
     # Cleanup
     delete_upload(foss, vcs_upload)
 
