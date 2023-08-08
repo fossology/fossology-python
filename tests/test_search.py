@@ -16,7 +16,7 @@ from fossology.obj import SearchTypes, Upload
     reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
 )
 def test_search_nogroup(foss: Fossology):
-    with pytest.raises(AuthorizationError) as excinfo:
+    with pytest.raises(FossologyApiError) as excinfo:
         foss.search(searchType=SearchTypes.ALLFILES, filename="GPL%", group="test")
     assert "Searching for group test not authorized" in str(excinfo.value)
 

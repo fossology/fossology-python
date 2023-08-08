@@ -39,7 +39,7 @@ class Report:
         :return: the report id
         :rtype: int
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {"uploadId": str(upload.id)}
         if report_format:
@@ -56,7 +56,7 @@ class Report:
             return report_id[0]  # type: ignore
 
         elif response.status_code == 403:
-            description = f"Generating report for upload {upload.id} {get_options(group)}not authorized"
+            description = f"Report generation for upload {upload.id} not authorized"
             raise AuthorizationError(description, response)
 
         elif response.status_code == 503:
@@ -106,7 +106,7 @@ class Report:
         :return: the report content and the report name
         :rtype: Tuple[str, str]
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         :raises TryAgain: if the report generation times out after 10 retries
         """
         headers = dict()
@@ -122,9 +122,7 @@ class Report:
             return response.content, report_name
 
         elif response.status_code == 403:
-            description = (
-                f"Getting report {report_id} {get_options(group)}not authorized"
-            )
+            description = f"Download of report {report_id} not authorized"
             raise AuthorizationError(description, response)
 
         elif response.status_code == 503:

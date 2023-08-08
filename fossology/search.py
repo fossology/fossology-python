@@ -3,13 +3,8 @@
 # SPDX-License-Identifier: MIT
 import logging
 
-from fossology import versiontuple
-from fossology.exceptions import (
-    AuthorizationError,
-    FossologyApiError,
-    FossologyUnsupported,
-)
-from fossology.obj import File, SearchResult, SearchTypes, Upload, get_options
+from fossology.exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import File, SearchResult, SearchTypes, Upload
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -97,7 +92,7 @@ class Search:
         :return: a tuple containing the list of search results and the total number of pages
         :rtype: tuple[list[SearchResult], int]
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the search results
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = search_headers(
             searchType,
@@ -161,7 +156,7 @@ class Search:
         :type group: string
         :rtype: JSON
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {}
         if group:
@@ -181,7 +176,9 @@ class Search:
             return all_files
 
         elif response.status_code == 403:
-            description = f"Searching {get_options(group)}not authorized"
+            description = (
+                "Not authorized to get a result with the given filesearch criteria"
+            )
             raise AuthorizationError(description, response)
 
         else:

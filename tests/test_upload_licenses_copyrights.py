@@ -33,13 +33,13 @@ def test_upload_licenses_and_copyrights(foss: Fossology, upload_with_jobs: Uploa
     assert len(licenses) == 47
 
 
-def test_upload_licenses_with_unknown_group_raises_fossology_api_error(
+def test_upload_licenses_with_unknown_group_raises_authorization_error(
     foss: Fossology, upload_with_jobs: Upload
 ):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.upload_licenses(upload_with_jobs, group="test")
     assert (
-        f"Getting license for upload {upload_with_jobs.id} for group test not authorized"
+        f"Getting licenses for upload {upload_with_jobs.id} is not authorized"
         in str(excinfo.value)
     )
 
@@ -88,6 +88,21 @@ def test_upload_licenses_500_error(foss: Fossology, foss_server: str, upload: Up
 def test_upload_copyrights(foss: Fossology, upload_with_jobs: Upload):
     copyrights = foss.upload_copyrights(upload_with_jobs)
     assert len(copyrights) == 79
+
+
+@responses.activate
+def test_upload_copyrights_403_error(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/copyrights",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.upload_copyrights(upload)
+    assert (
+        f"Getting copyrights for upload {upload.id} is not authorized"
+        in excinfo.value.message
+    )
 
 
 @responses.activate

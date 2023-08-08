@@ -10,7 +10,7 @@ import pytest
 import requests
 import responses
 
-from fossology import Fossology, fossology_token, versiontuple
+from fossology import Fossology, fossology_token
 from fossology.exceptions import AuthenticationError, FossologyApiError
 
 logger = logging.getLogger("fossology-tests")

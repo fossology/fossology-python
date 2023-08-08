@@ -96,7 +96,7 @@ class Uploads:
         :return: the upload data
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         :raises TryAgain: if the upload times out after 10 retries
         """
         headers = {}
@@ -109,7 +109,7 @@ class Uploads:
             return Upload.from_json(response.json())
 
         elif response.status_code == 403:
-            description = f"Getting details for upload {upload_id} {get_options(group)}not authorized"
+            description = f"Getting details for upload {upload_id} is not authorized"
             raise AuthorizationError(description, response)
 
         elif response.status_code == 503:
@@ -230,7 +230,7 @@ class Uploads:
         :return: the upload data
         :rtype: Upload
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {"folderId": str(folder.id)}
         if description:
@@ -301,9 +301,7 @@ class Uploads:
                 raise FossologyApiError(description, response)
 
         elif response.status_code == 403:
-            description = (
-                f"Upload of {source} {get_options(group, folder)}not authorized"
-            )
+            description = f"Upload {description} is not authorized"
             raise AuthorizationError(description, response)
 
         elif server and response.status_code == 500:
@@ -332,7 +330,7 @@ class Uploads:
         :return: the upload summary data
         :rtype: Summary
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {}
         if group:
@@ -345,7 +343,7 @@ class Uploads:
             return Summary.from_json(response.json())
 
         elif response.status_code == 403:
-            description = f"Getting summary of upload {upload.id} {get_options(group)}not authorized"
+            description = f"Getting summary of upload {upload.id} is not authorized"
             raise AuthorizationError(description, response)
 
         elif response.status_code == 503:
@@ -387,7 +385,7 @@ class Uploads:
         :return: the list of UploadLicenses for the specified agent
         :rtype: list of UploadLicenses
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         params = {
             "containers": containers,
@@ -416,7 +414,7 @@ class Uploads:
             return all_licenses
 
         elif response.status_code == 403:
-            description = f"Getting license for upload {upload.id} {get_options(group)}not authorized"
+            description = f"Getting licenses for upload {upload.id} is not authorized"
             raise AuthorizationError(description, response)
 
         elif response.status_code == 412:
@@ -446,6 +444,7 @@ class Uploads:
         :return: the list of copyrights findings
         :rtype: list of Licenses
         :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
         """
         response = self.session.get(f"{self.api}/uploads/{upload.id}/copyrights")
 
@@ -454,6 +453,10 @@ class Uploads:
             for copyright in response.json():
                 all_copyrights.append(UploadCopyrights.from_json(copyright))
             return all_copyrights
+
+        elif response.status_code == 403:
+            description = f"Getting copyrights for upload {upload.id} is not authorized"
+            raise AuthorizationError(description, response)
 
         elif response.status_code == 412:
             description = f"The agent has not been scheduled for upload {upload.uploadname} (id={upload.id})"
@@ -478,7 +481,7 @@ class Uploads:
         :type upload: Upload
         :type group: string
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {}
         if group:
@@ -491,9 +494,7 @@ class Uploads:
             logger.info(f"Upload {upload.id} has been scheduled for deletion")
 
         elif response.status_code == 403:
-            description = (
-                f"Deleting upload {upload.id} {get_options(group)}not authorized"
-            )
+            description = f"Not authorized to delete upload {upload.id}"
             raise AuthorizationError(description, response)
 
         else:
@@ -540,7 +541,7 @@ class Uploads:
         :return: a tuple containing the list of uploads and the total number of pages
         :rtype: Tuple(list of Upload, int)
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {"limit": str(page_size)}
         if group:
@@ -577,7 +578,7 @@ class Uploads:
                 page += 1
 
             elif response.status_code == 403:
-                description = f"Retrieving list of uploads {get_options(group, folder)}not authorized"
+                description = "Retrieving list of uploads is not authorized"
                 raise AuthorizationError(description, response)
 
             else:
@@ -609,7 +610,7 @@ class Uploads:
         :type comment: string
         :type group: string
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group or folder
+        :raises AuthorizationError: if the REST call is not authorized
         """
         params = dict()
         headers = dict()
@@ -627,18 +628,14 @@ class Uploads:
         )
 
         if response.status_code == 202:
-            logger.info(
-                f"Upload {upload.uploadname} has been updated with status {status.value}"
-            )
+            logger.info(f"Upload {upload.uploadname} has been updated")
 
         elif response.status_code == 403:
-            description = f"Updating upload {upload.id} not authorized"
+            description = f"Updating upload {upload.id} is not authorized"
             raise AuthorizationError(description, response)
 
         else:
-            description = (
-                f"Unable to update upload {upload.uploadname} with status {status}"
-            )
+            description = f"Unable to update upload {upload.uploadname}."
             raise FossologyApiError(description, response)
 
     def move_upload(self, upload: Upload, folder: Folder, action: str):
@@ -653,7 +650,7 @@ class Uploads:
         :type folder: Folder
         :type action: str
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the upload or folder
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {"folderId": str(folder.id), "action": action}
         response = self.session.put(f"{self.api}/uploads/{upload.id}", headers=headers)
@@ -664,9 +661,7 @@ class Uploads:
             )
 
         elif response.status_code == 403:
-            description = (
-                f"{action} upload {upload.id} {get_options(folder)}not authorized"
-            )
+            description = f"{action} upload {upload.id} is not authorized"
             raise AuthorizationError(description, response)
 
         else:
@@ -685,7 +680,7 @@ class Uploads:
         :return: the upload content and the upload name
         :rtype: Tuple[str, str]
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the upload
+        :raises AuthorizationError: if the REST call is not authorized
         """
         response = self.session.get(f"{self.api}/uploads/{upload.id}/download")
 
@@ -698,7 +693,7 @@ class Uploads:
             return response.content, upload_filename
 
         elif response.status_code == 403:
-            description = f"Upload {upload.id} is not accessible"
+            description = f"Not authorized to download upload {upload.id}"
             raise AuthorizationError(description, response)
 
         else:
@@ -727,6 +722,7 @@ class Uploads:
         :type new_permission: Permission (default: None)
         :type public_permission: Permission (default: None)
         :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
         """
         data = {
             "folderId": upload.folderid,
@@ -749,6 +745,12 @@ class Uploads:
         elif response.status_code == 400:
             description = f"Permissions for upload {upload.uploadname} not updated."
             raise FossologyApiError(description, response)
+
+        elif response.status_code == 403:
+            description = (
+                f"Updating permissions for upload {upload.id} is not authorized"
+            )
+            raise AuthorizationError(description, response)
 
         elif response.status_code == 404:
             description = f"Upload {upload.id} does not exists."
@@ -775,11 +777,18 @@ class Uploads:
         :param upload: the upload to get permission from
         :type upload: Upload
         :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
         """
         response = self.session.get(f"{self.api}/uploads/{upload.id}/perm-groups")
 
         if response.status_code == 200:
             return UploadPermGroups.from_json(response.json())
+
+        elif response.status_code == 403:
+            description = (
+                f"Getting permissions for upload {upload.id} is not authorized"
+            )
+            raise AuthorizationError(description, response)
 
         elif response.status_code == 404:
             description = f"Upload {upload.id} does not exists."

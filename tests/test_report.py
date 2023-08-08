@@ -17,9 +17,8 @@ from fossology.obj import ReportFormat, Upload
 def test_report_nogroup(foss: Fossology, upload: Upload):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.generate_report(upload, report_format=ReportFormat.SPDX2, group="test")
-    assert (
-        f"Generating report for upload {upload.id} for group test not authorized"
-        in str(excinfo.value)
+    assert f"Report generation for upload {upload.id} not authorized" in str(
+        excinfo.value
     )
 
 
@@ -27,9 +26,7 @@ def test_download_report_nogroup(foss: Fossology, upload: Upload):
     report_id = secrets.randbelow(1000)
     with pytest.raises(AuthorizationError) as excinfo:
         foss.download_report(report_id, group="test")
-        assert f"Getting report {report_id} for group test not authorized" in str(
-            excinfo.value
-        )
+    assert f"Download of report {report_id} not authorized" in str(excinfo.value)
 
 
 def test_generate_report(foss: Fossology, upload: Upload):

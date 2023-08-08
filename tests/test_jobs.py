@@ -22,7 +22,7 @@ def test_nogroup_jobs(foss: Fossology, upload: Upload, foss_schedule_agents: Dic
     # Create jobs for unknown group
     with pytest.raises(AuthorizationError) as excinfo:
         foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents, group="test")
-    assert "Scheduling job for group test not authorized" in str(excinfo.value)
+    assert "Scheduling job not authorized" in str(excinfo.value)
 
 
 def test_schedule_jobs(

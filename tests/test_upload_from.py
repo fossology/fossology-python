@@ -3,7 +3,7 @@
 
 from fossology import Fossology
 from fossology.exceptions import FossologyApiError
-from fossology.obj import AccessLevel, SearchTypes, Upload
+from fossology.obj import AccessLevel, Upload
 
 
 def delete_upload(foss: Fossology, upload: Upload):

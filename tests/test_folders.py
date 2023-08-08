@@ -25,9 +25,7 @@ def test_create_folder_nogroup(foss: Fossology):
     desc = "Created via the Fossology Python API"
     with pytest.raises(AuthorizationError) as excinfo:
         foss.create_folder(foss.rootFolder, name, description=desc, group="test")
-    assert "Folder creation for group test in folder 1 not authorized" in str(
-        excinfo.value
-    )
+    assert "Folder creation in folder 1 not authorized" in str(excinfo.value)
 
 
 def test_create_folder(foss: Fossology):
