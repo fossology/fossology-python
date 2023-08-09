@@ -33,6 +33,7 @@ requests = ">=2.31.0"
 tenacity = ">=8.2.2"
 click = "^8.1.6"
 poethepoet = "^0.21.1"
+types-requests = "^2.31.0.2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = ">=5.0.4"
