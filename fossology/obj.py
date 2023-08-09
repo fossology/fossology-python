@@ -1,12 +1,9 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import json
 from enum import Enum
-
-
-def versiontuple(v):
-    return tuple(map(int, (v.split("."))))
 
 
 class AccessLevel(Enum):
@@ -278,16 +275,16 @@ class User(object):
 
     def __init__(
         self,
-        id,
-        name,
-        description,
-        email: str = None,
-        accessLevel: int = None,
-        rootFolderId: int = None,
-        emailNotification: str = None,
-        default_group: str = None,
-        agents: dict = None,
-        **kwargs,
+        id: int,
+        name: str,
+        description: str,
+        email: str | None = None,
+        accessLevel: int | None = None,
+        rootFolderId: int | None = None,
+        emailNotification: str | None = None,
+        default_group: str | None = None,
+        agents: dict | None = None,
+        **kwargs: dict,
     ):
         self.id = id
         self.name = name
@@ -400,8 +397,8 @@ class Findings(object):
     def __init__(
         self,
         scanner: list,
-        conclusion: list = None,
-        copyright: list = None,
+        conclusion: list | None = None,
+        copyright: list | None = None,
         **kwargs,
     ):
         self.scanner = scanner
@@ -1118,12 +1115,3 @@ class SearchResult(object):
     @classmethod
     def from_json(cls, json_dict):
         return cls(**json_dict)
-
-
-def get_options(group: str = None, folder: Folder = None) -> str:
-    options = ""
-    if group:
-        options += f"for group {group} "
-    if folder:
-        options += f"in folder {folder.id} "
-    return options

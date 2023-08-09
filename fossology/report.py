@@ -1,3 +1,4 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
@@ -9,7 +10,7 @@ from typing import Tuple
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import ReportFormat, Upload, get_options
+from fossology.obj import ReportFormat, Upload
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -20,7 +21,10 @@ class Report:
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
     def generate_report(
-        self, upload: Upload, report_format: ReportFormat = None, group: str = None
+        self,
+        upload: Upload,
+        report_format: ReportFormat | None = None,
+        group: str | None = None,
     ):
         """Generate a report for a given upload
 
@@ -35,7 +39,7 @@ class Report:
         :return: the report id
         :rtype: int
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {"uploadId": str(upload.id)}
         if report_format:
@@ -49,10 +53,10 @@ class Report:
 
         if response.status_code == 201:
             report_id = re.search("[0-9]*$", response.json()["message"])
-            return report_id[0]
+            return report_id[0]  # type: ignore
 
         elif response.status_code == 403:
-            description = f"Generating report for upload {upload.id} {get_options(group)}not authorized"
+            description = f"Report generation for upload {upload.id} not authorized"
             raise AuthorizationError(description, response)
 
         elif response.status_code == 503:
@@ -67,7 +71,7 @@ class Report:
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(10))
     def download_report(
-        self, report_id: int, group: str = None, wait_time: int = 0
+        self, report_id: int, group: str | None = None, wait_time: int = 0
     ) -> Tuple[str, str]:
         """Download a report
 
@@ -102,7 +106,7 @@ class Report:
         :return: the report content and the report name
         :rtype: Tuple[str, str]
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         :raises TryAgain: if the report generation times out after 10 retries
         """
         headers = dict()
@@ -110,16 +114,17 @@ class Report:
             headers["groupName"] = group
 
         response = self.session.get(f"{self.api}/report/{report_id}", headers=headers)
+
         if response.status_code == 200:
             content = response.headers["Content-Disposition"]
             report_name_pattern = "(^attachment; filename=)(\"|')?([^\"|']*)(\"|'$)?"
-            report_name = re.match(report_name_pattern, content).group(3)
+            report_name = re.match(report_name_pattern, content).group(3)  # type: ignore
             return response.content, report_name
+
         elif response.status_code == 403:
-            description = (
-                f"Getting report {report_id} {get_options(group)}not authorized"
-            )
+            description = f"Download of report {report_id} not authorized"
             raise AuthorizationError(description, response)
+
         elif response.status_code == 503:
             if not wait_time:
                 wait_time = response.headers["Retry-After"]
@@ -128,6 +133,7 @@ class Report:
             )
             time.sleep(int(wait_time))
             raise TryAgain
+
         else:
             description = f"Download of report {report_id} failed"
             raise FossologyApiError(description, response)

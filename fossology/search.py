@@ -1,15 +1,10 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2023 Siemens AG
 # SPDX-License-Identifier: MIT
 import logging
-from typing import Dict, List
 
-from fossology import versiontuple
-from fossology.exceptions import (
-    AuthorizationError,
-    FossologyApiError,
-    FossologyUnsupported,
-)
-from fossology.obj import File, SearchResult, SearchTypes, Upload, get_options
+from fossology.exceptions import AuthorizationError, FossologyApiError
+from fossology.obj import File, SearchResult, SearchTypes, Upload
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -17,16 +12,16 @@ logger.setLevel(logging.DEBUG)
 
 def search_headers(
     searchType: SearchTypes = SearchTypes.ALLFILES,
-    upload: Upload = None,
-    filename: str = None,
-    tag: str = None,
-    filesizemin: int = None,
-    filesizemax: int = None,
-    license: str = None,
-    copyright: str = None,
-    group: str = None,
+    upload: Upload | None = None,
+    filename: str | None = None,
+    tag: str | None = None,
+    filesizemin: int | None = None,
+    filesizemax: int | None = None,
+    license: str | None = None,
+    copyright: str | None = None,
+    group: str | None = None,
     page_size: int = 100,
-) -> Dict:
+) -> dict:
     headers = {"searchType": searchType.value}
     if upload:
         headers["uploadId"] = str(upload.id)
@@ -35,9 +30,9 @@ def search_headers(
     if tag:
         headers["tag"] = tag
     if filesizemin:
-        headers["filesizemin"] = filesizemin
+        headers["filesizemin"] = filesizemin  # type: ignore
     if filesizemax:
-        headers["filesizemax"] = filesizemax
+        headers["filesizemax"] = filesizemax  # type: ignore
     if license:
         headers["license"] = license
     if copyright:
@@ -54,18 +49,18 @@ class Search:
     def search(
         self,
         searchType: SearchTypes = SearchTypes.ALLFILES,
-        upload: Upload = None,
-        filename: str = None,
-        tag: str = None,
-        filesizemin: int = None,
-        filesizemax: int = None,
-        license: str = None,
-        copyright: str = None,
-        group: str = None,
+        upload: Upload | None = None,
+        filename: str | None = None,
+        tag: str | None = None,
+        filesizemin: int | None = None,
+        filesizemax: int | None = None,
+        license: str | None = None,
+        copyright: str | None = None,
+        group: str | None = None,
         page_size: int = 100,
         page: int = 1,
         all_pages: bool = False,
-    ) -> tuple[list, int]:
+    ) -> tuple[list[SearchResult], int]:
         """Search for a specific file
 
         API Endpoint: GET /search
@@ -95,14 +90,10 @@ class Search:
         :type page: int
         :type all_pages: boolean
         :return: a tuple containing the list of search results and the total number of pages
-        :rtype: tuple[list of SearchResult, int]
+        :rtype: tuple[list[SearchResult], int]
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the search results
+        :raises AuthorizationError: if the REST call is not authorized
         """
-        if versiontuple(self.version) <= versiontuple("1.4.3"):
-            description = f"Endpoint /search is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         headers = search_headers(
             searchType,
             upload,
@@ -140,20 +131,17 @@ class Search:
                     return results_list, x_total_pages
                 page += 1
 
-            elif response.status_code == 403:
-                description = f"Searching {get_options(group)}not authorized"
-                raise AuthorizationError(description, response)
-
             else:
                 description = "Unable to get a result with the given search criteria"
                 raise FossologyApiError(description, response)
+
         logger.info(f"Retrieved all {x_total_pages} of search results")
         return results_list, x_total_pages
 
     def filesearch(
         self,
-        filelist: List = [],
-        group: str = None,
+        filelist: list | None = None,
+        group: str | None = None,
     ):
         """Search for files from hash sum
 
@@ -168,12 +156,8 @@ class Search:
         :type group: string
         :rtype: JSON
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
+        :raises AuthorizationError: if the REST call is not authorized
         """
-        if versiontuple(self.version) <= versiontuple("1.0.16"):
-            description = f"Endpoint /filesearch is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         headers = {}
         if group:
             headers["groupName"] = group
@@ -192,7 +176,9 @@ class Search:
             return all_files
 
         elif response.status_code == 403:
-            description = f"Searching {get_options(group)}not authorized"
+            description = (
+                "Not authorized to get a result with the given filesearch criteria"
+            )
             raise AuthorizationError(description, response)
 
         else:

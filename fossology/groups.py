@@ -1,8 +1,8 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import logging
-from typing import List
 
 from fossology.exceptions import FossologyApiError
 from fossology.obj import Group, MemberPerm, UserGroupMember
@@ -14,7 +14,7 @@ logger.setLevel(logging.DEBUG)
 class Groups:
     """Class dedicated to all "groups" related endpoints"""
 
-    def list_groups(self, deletable: bool = False) -> List[Group]:
+    def list_groups(self, deletable: bool = False) -> list[Group]:
         """Get the list of groups (accessible groups for user, all groups for admin)
 
         If parameter deletable is True, the method will return only deletable groups.
@@ -38,13 +38,10 @@ class Groups:
                 groups_list.append(single_group)
             return groups_list
         else:
-            deletable = "deletable " if deletable else ""
-            description = (
-                f"Unable to get a list of {deletable}groups for {self.user.name}"
-            )
+            description = f"Unable to get a list of {'deletable ' if deletable else ''}groups for {self.user.name}"
             raise FossologyApiError(description, response)
 
-    def list_group_members(self, group_id: int) -> List[UserGroupMember]:
+    def list_group_members(self, group_id: int) -> list[UserGroupMember]:
         """Get the list of members for a given group (accessible groups for user, all groups for admin)
 
         API Endpoint: GET /groups/{id}/members
@@ -65,7 +62,7 @@ class Groups:
             description = f"Unable to get a list of members for group {group_id}"
             raise FossologyApiError(description, response)
 
-    def create_group(self, name):
+    def create_group(self, name: str):
         """Create a group
 
         API Endpoint: POST /groups

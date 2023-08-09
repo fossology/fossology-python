@@ -25,7 +25,7 @@ from fossology.exceptions import (
     FossologyApiError,
     FossologyUnsupported,
 )
-from fossology.obj import AccessLevel, Folder, ReportFormat, TokenScope
+from fossology.obj import AccessLevel, Folder, ReportFormat, Summary, TokenScope
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter(
@@ -71,7 +71,7 @@ JOB_SPEC = {
 }
 
 
-def check_get_folder(ctx: dict, folder_name: str):
+def check_get_folder(ctx: click.Context, folder_name: str):
     """Get a Folder Instance based on the Folders name.
 
     :param ctx: click context
@@ -135,7 +135,7 @@ def check_get_access_level(level: str):
     sys.exit(1)
 
 
-def needs_later_initialization_of_foss_instance(ctx):
+def needs_later_initialization_of_foss_instance(ctx: click.Context):
     """Check if later on a Fossology Instance will be created.
 
     :param ctx: click context
@@ -152,7 +152,7 @@ def needs_later_initialization_of_foss_instance(ctx):
     return True
 
 
-def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
+def get_newest_upload_of_file(ctx: click.Context, filename: str, folder_name: str):
     """Given a  filename and folder_name return the newest upload if available.
 
     :param ctx: click Context
@@ -166,7 +166,7 @@ def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
     """
 
     foss = ctx.obj["FOSS"]
-    the_uploads, pages = foss.list_uploads(
+    the_uploads, _ = foss.list_uploads(
         folder=folder_name if folder_name else foss.rootFolder,
     )
     found = None
@@ -187,7 +187,7 @@ def get_newest_upload_of_file(ctx: dict, filename: str, folder_name: str):
         return None
 
 
-def init_foss(ctx: dict):
+def init_foss(ctx: click.Context):
     """Initialize a Fossology Instance and store it in the context.
 
     :param ctx: click Context
@@ -550,13 +550,13 @@ def create_group(ctx: click.core.Context, group_name: str):
 )
 @click.pass_context
 def upload_file(
-    ctx: click.core.Context,
+    ctx: click.Context,
     upload_file: str,
     folder_name: str,
     description: str,
     access_level: str,
     reuse_newest_upload: bool,
-    summary: bool,
+    summary: Summary,
 ):
     """The foss_cli upload_file command."""
 
@@ -822,4 +822,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))  # pragma: no cover
+    main()

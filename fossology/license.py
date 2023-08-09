@@ -1,14 +1,14 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import json
 import logging
 from json.decoder import JSONDecodeError
-from typing import List, Tuple
+from typing import Tuple
 from urllib.parse import quote
 
-import fossology
-from fossology.exceptions import FossologyApiError, FossologyUnsupported
+from fossology.exceptions import FossologyApiError
 from fossology.obj import License, LicenseType, Obligation
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ class LicenseEndpoint:
         page_size: int = 100,
         page: int = 1,
         all_pages: bool = False,
-    ) -> List[License]:
+    ) -> Tuple[list[License], int]:
         """Get all license from the DB
 
         API Endpoint: GET /license
@@ -55,10 +55,6 @@ class LicenseEndpoint:
         :rtype: List[License]
         :raises FossologyApiError: if the REST call failed
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.3.0"):
-            description = f"Endpoint /license is not supported by your Fossology API version {self.version}"
-            raise FossologyUnsupported(description)
-
         license_list = list()
         headers = {"limit": str(page_size)}
         if active:
@@ -94,8 +90,8 @@ class LicenseEndpoint:
         return license_list, x_total_pages
 
     def detail_license(
-        self, shortname, group=None
-    ) -> Tuple[int, License, List[Obligation]]:
+        self, shortname: str, group: int | None = None
+    ) -> Tuple[int, License, list[Obligation]]:
         """Get a license from the DB
 
         API Endpoint: GET /license/{shortname}
@@ -105,16 +101,9 @@ class LicenseEndpoint:
         :type name: str
         :type group: int
         :return: the license id, the license data and the associated obligations
-        :rtype: tuple(int, License, List[Obligation])
+        :rtype: tuple(int, License, list[Obligation])
         :raises FossologyApiError: if the REST call failed
         """
-        if fossology.versiontuple(self.version) < fossology.versiontuple("1.3.0"):
-            description = (
-                f"Endpoint /license/{shortname} is not supported by your API version ",
-                f"{self.version}",
-            )
-            raise FossologyUnsupported(description)
-
         headers = dict()
         if group:
             headers["groupName"] = group
@@ -170,7 +159,7 @@ class LicenseEndpoint:
 
     def update_license(
         self,
-        shortname,
+        shortname: str,
         fullname: str = "",
         text: str = "",
         url: str = "",
@@ -206,7 +195,6 @@ class LicenseEndpoint:
         )
         if response.status_code == 200:
             logger.info(f"License {shortname} has been updated")
-            return
         else:
             description = f"Unable to update license {shortname}"
             raise FossologyApiError(description, response)

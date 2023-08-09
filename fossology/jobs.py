@@ -1,3 +1,4 @@
+# mypy: disable-error-code="attr-defined"
 # Copyright 2019-2021 Siemens AG
 # SPDX-License-Identifier: MIT
 
@@ -7,7 +8,7 @@ import time
 from typing import Optional
 
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import Folder, Group, Job, Upload, get_options
+from fossology.obj import Folder, Job, Upload
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -121,7 +122,7 @@ class Jobs:
         folder: Folder,
         upload: Upload,
         spec: dict,
-        group: Group = None,
+        group: str | None = None,
         wait: bool = False,
         timeout: int = 10,
     ) -> Job:
@@ -177,7 +178,6 @@ class Jobs:
         :return: the job id
         :rtype: Job
         :raises FossologyApiError: if the REST call failed
-        :raises AuthorizationError: if the user can't access the group
         """
         headers = {
             "folderId": str(folder.id),
@@ -198,7 +198,7 @@ class Jobs:
             return detailled_job
 
         elif response.status_code == 403:
-            description = f"Scheduling job {get_options(group)}not authorized"
+            description = "Scheduling job not authorized"
             raise AuthorizationError(description, response)
 
         else:

@@ -36,9 +36,8 @@ def test_get_upload_unauthorized(foss: Fossology, upload: Upload):
             upload.id,
             group="test",
         )
-    assert (
-        f"Getting details for upload {upload.id} for group test not authorized"
-        in str(excinfo.value)
+    assert f"Getting details for upload {upload.id} is not authorized" in str(
+        excinfo.value
     )
 
 
@@ -64,7 +63,7 @@ def test_upload_nogroup(foss: Fossology, upload_folder: Folder, test_file_path: 
             group="test",
         )
     assert (
-        f"Upload of {test_file_path} for group test in folder {upload_folder.id} not authorized"
+        "Upload Test upload from github repository via python lib is not authorized"
         in str(excinfo.value)
     )
 
@@ -72,9 +71,7 @@ def test_upload_nogroup(foss: Fossology, upload_folder: Folder, test_file_path: 
 def test_list_upload_unknown_group(foss: Fossology):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.list_uploads(group="test")
-    assert "Retrieving list of uploads for group test not authorized" in str(
-        excinfo.value
-    )
+    assert "Retrieving list of uploads is not authorized" in str(excinfo.value)
 
 
 def test_get_uploads(
@@ -153,7 +150,7 @@ def test_copy_upload(foss: Fossology, upload: Upload):
 
 def test_move_upload_to_non_existing_folder(foss: Fossology, upload: Upload):
     non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
-    with pytest.raises(AuthorizationError):
+    with pytest.raises(FossologyApiError):
         foss.move_upload(upload, non_folder, "move")
 
 
@@ -178,7 +175,7 @@ def test_update_upload(foss: Fossology, upload: Upload):
 def test_update_upload_with_unknown_group_raises_error(foss: Fossology, upload: Upload):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.update_upload(upload, group="test")
-    assert f"Updating upload {upload.id} not authorized" in str(excinfo.value)
+    assert f"Updating upload {upload.id} is not authorized" in str(excinfo.value)
 
 
 @responses.activate
@@ -218,9 +215,8 @@ def test_upload_summary_with_unknown_group_raises_authorization_error(
 ):
     with pytest.raises(AuthorizationError) as excinfo:
         foss.upload_summary(upload, group="test")
-    assert (
-        f"Getting summary of upload {upload.id} for group test not authorized"
-        in str(excinfo.value)
+    assert f"Getting summary of upload {upload.id} is not authorized" in str(
+        excinfo.value
     )
 
 
@@ -239,9 +235,7 @@ def test_delete_unknown_upload_unknown_group(foss: Fossology, fake_hash: dict):
 
     with pytest.raises(AuthorizationError) as excinfo:
         foss.delete_upload(upload, group="test")
-    assert f"Deleting upload {upload.id} for group test not authorized" in str(
-        excinfo.value
-    )
+    assert f"Not authorized to delete upload {upload.id}" in str(excinfo.value)
 
 
 def test_paginated_list_uploads(foss: Fossology, upload: Upload, test_file_path: str):
@@ -311,7 +305,7 @@ def test_download_upload_authorization_error(
     )
     with pytest.raises(AuthorizationError) as excinfo:
         foss.download_upload(upload)
-    assert f"Upload {upload.id} is not accessible" in str(excinfo.value)
+    assert f"Not authorized to download upload {upload.id}" in str(excinfo.value)
 
 
 @responses.activate

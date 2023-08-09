@@ -4,7 +4,7 @@ import pytest
 import responses
 
 from fossology import Fossology
-from fossology.exceptions import FossologyApiError
+from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import Permission, Upload
 
 
@@ -50,6 +50,22 @@ def test_get_upload_permissions_if_upload_does_not_exists_raise_api_error(
 
 
 @responses.activate
+def test_get_upload_permissions_if_api_returns_403_raises_authorization_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/perm-groups",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.upload_permissions(upload)
+    assert f"Getting permissions for upload {upload.id} is not authorized" in str(
+        excinfo.value.message
+    )
+
+
+@responses.activate
 def test_get_upload_permissions_if_api_returns_500_raises_fossology_error(
     foss: Fossology, foss_server: str, upload: Upload
 ):
@@ -80,7 +96,7 @@ def test_change_upload_permissions_if_upload_does_not_exists_raise_api_error(
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.change_upload_permissions(upload)
-    assert f"Upload {upload.id} does not exists." in str(excinfo.value)
+    assert f"Upload {upload.id} does not exists" in str(excinfo.value)
 
 
 @responses.activate
@@ -95,6 +111,22 @@ def test_change_upload_permissions_if_api_returns_400_raises_fossology_error(
     with pytest.raises(FossologyApiError) as excinfo:
         foss.change_upload_permissions(upload)
     assert f"Permissions for upload {upload.uploadname} not updated." in str(
+        excinfo.value.message
+    )
+
+
+@responses.activate
+def test_change_upload_permissions_if_api_returns_403_raises_authorization_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.PUT,
+        f"{foss_server}/api/v1/uploads/{upload.id}/permissions",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.change_upload_permissions(upload)
+    assert f"Updating permissions for upload {upload.id} is not authorized" in str(
         excinfo.value.message
     )
 
