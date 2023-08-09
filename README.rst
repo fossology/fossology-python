@@ -26,19 +26,11 @@ A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
-   Compatible API versions:
+Current release is compatible with **Fossology version 4.2.1** - API version 1.4.3.
 
-   - 1.2.1 (Fossology 3.10.0)
-   - 1.3.2 (Fossology 3.11.0)
-   - 1.4.0 (Fossology 4.0.0)
-   - 1.4.3 (Fossology 4.1.0)
-   - 1.5.1 (Fossology 4.2.0) - partially covered, see #52 for the list of missing supported API feature
+   `See release notes <https://github.com/fossology/fossology-python/releases>`_ for all details.
 
-**NOTE**
-
-   Version 2.0.0 of `fossology-python` only supports Fossology API version 1.4.3 onwards because of a breaking change in
-   the version format returned by the API. Other earlier version of the wrapper support a wider range of API versions,
-   e.g. 1.5.0 supports Fossology API 1.2.1 to 1.4.0.
+   The list of unsupported API features is documented in `issue #52 <https://github.com/fossology/fossology-python/issues/52>`_.
 
 Documentation
 =============

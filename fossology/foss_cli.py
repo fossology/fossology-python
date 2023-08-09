@@ -1,3 +1,6 @@
+# Copyright 2019 Siemens AG
+# SPDX-License-Identifier: MIT
+
 __doc__ = """
         The foss_cli cmdline interface uses the provided REST-API to communicate
         with the Fossology Server.
@@ -20,11 +23,7 @@ from logging.handlers import RotatingFileHandler
 import click
 
 from fossology import Fossology, fossology_token
-from fossology.exceptions import (
-    AuthenticationError,
-    FossologyApiError,
-    FossologyUnsupported,
-)
+from fossology.exceptions import FossologyApiError, FossologyUnsupported
 from fossology.obj import AccessLevel, Folder, ReportFormat, Summary, TokenScope
 
 logger = logging.getLogger(__name__)
@@ -46,7 +45,6 @@ JOB_SPEC = {
         "copyright_email_author": True,
         "ecc": True,
         "keyword": True,
-        "monk": True,
         "mime": True,
         "monk": True,
         "nomos": True,
@@ -219,14 +217,7 @@ def init_foss(ctx: click.Context):
                 "No Token provided. Either provide FOSS_TOKEN in environment or use the -t option."
             )
             raise e
-    try:
-        foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])  # using new API
-    except AuthenticationError:  # API version < 1.2.3 requires a username
-        foss = Fossology(
-            ctx.obj["SERVER"],
-            ctx.obj["TOKEN"],
-            name=ctx.obj["USERNAME"],
-        )
+    foss = Fossology(ctx.obj["SERVER"], ctx.obj["TOKEN"])  # using new API
     ctx.obj["FOSS"] = foss
     ctx.obj["USER"] = foss.user.name
     logger.debug(f"Logged in as user {foss.user.name}")
@@ -323,7 +314,7 @@ def cli(
         logger.debug("Started in debug mode")
         if foss_needs_initialization:
             logger.debug(
-                f"Using API: {pprint.pformat(foss.api)} version {pprint.pformat(foss.version)}"
+                f"Using API: {pprint.pformat(foss.api)} version {pprint.pformat(foss.info.version)}"
             )
             logger.debug(
                 f"Running as user {pprint.pformat(foss.user.name)} on {pprint.pformat(foss.host)}"

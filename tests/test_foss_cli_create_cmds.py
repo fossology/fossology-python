@@ -1,3 +1,6 @@
+# Copyright 2022 Siemens AG
+# SPDX-License-Identifier: MIT
+
 __doc__ = """Test 'create_*' sub commands of foss_cli"""
 
 import time

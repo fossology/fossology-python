@@ -1,3 +1,6 @@
+# Copyright 2022 Siemens AG
+# SPDX-License-Identifier: MIT
+
 __doc__ = """Test the "workflow" sub commands of foss_cli"""
 import configparser
 import os

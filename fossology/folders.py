@@ -1,5 +1,5 @@
 # mypy: disable-error-code="attr-defined"
-# Copyright 2019-2021 Siemens AG
+# Copyright 2019 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import logging
@@ -99,7 +99,7 @@ class Folders:
             logger.info(
                 f"Folder '{name}' already exists under the folder {parent.name} ({parent.id})"
             )
-            # Foldernames with similar letter but different cases
+            # Folder names with similar letter but different cases
             # are not allowed in Fossology, compare with lower case
             existing_folder = [
                 folder

@@ -65,8 +65,7 @@ Login to the Fossology Server
  Create the Fossology Instance.
 
 
->>> # The username is only needed for Fossology API version < 1.2.3
->>> foss = Fossology(FOSSOLOGY_SERVER, token, name=os.environ["FOSSOLOGY_USER"])
+>>> foss = Fossology(FOSSOLOGY_SERVER, token)
 >>> print(f"Logged in as user {foss.user.name}")
 Logged in as user fossy
 

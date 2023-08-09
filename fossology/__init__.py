@@ -1,8 +1,7 @@
-# Copyright 2019-2021 Siemens AG
+# Copyright 2019 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import logging
-import re
 from datetime import date, timedelta
 
 import requests
@@ -68,7 +67,7 @@ def fossology_token(
         response = requests.post(url + "/api/v1/tokens", data=data)
         if response.status_code == 201:
             token = response.json()["Authorization"]
-            return re.sub("Bearer ", "", token)
+            return token.replace("Bearer ", "")
         elif response.status_code == 404:
             description = "Authentication error"
             raise AuthenticationError(description, response)
@@ -88,14 +87,12 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report, Users, 
     :Example:
 
     >>> from fossology import Fossology
-    >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username) # doctest: +SKIP
+    >>> foss = Fossology(FOSS_URL, FOSS_TOKEN) # doctest: +SKIP
 
     :param url: URL of the Fossology instance
     :param token: The API token generated using the Fossology UI
-    :param name: The name of the token owner (deprecated since API version 1.2.3)
     :type url: str
     :type token: str
-    :type name: str (deprecated since API version 1.2.3)
     :raises FossologyApiError: if a REST call failed
     :raises AuthenticationError: if the user couldn't be authenticated
     """
@@ -109,19 +106,18 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report, Users, 
         self.api = f"{self.host}/api/v1"
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
-        self.version = self.get_version()
         self.info = self.get_info()
         self.health = self.get_health()
-        self.user = self.get_self(name)
+        self.user = self.get_self()
         self.name = self.user.name
         self.rootFolder = self.detail_folder(self.user.rootFolderId)
         self.folders = self.list_folders()
 
         logger.info(
-            f"Authenticated as {self.user.name} against {self.host} using API version {self.version}"
+            f"Authenticated as {self.user.name} against {self.host} using API version {self.info.version}"
         )
 
-    def get_self(self, name=None):
+    def get_self(self):
         """Perform the first API request and populate user variables
 
         API Endpoint: GET /users/self
@@ -146,22 +142,6 @@ class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report, Users, 
 
     def close(self):
         self.session.close()
-
-    def get_version(self):
-        """Get API version from the server
-
-        API endpoint: GET /version (deprecated since API version 1.3.3)
-
-        :return: the API version string
-        :rtype: string
-        :raises FossologyApiError: if the REST call failed
-        """
-        response = self.session.get(f"{self.api}/version")
-        if response.status_code == 200:
-            return response.json()["version"]
-        else:
-            description = "Error while getting API version"
-            raise FossologyApiError(description, response)
 
     def get_info(self) -> ApiInfo:
         """Get info from the server

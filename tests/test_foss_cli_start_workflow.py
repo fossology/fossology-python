@@ -1,3 +1,6 @@
+# Copyright 2022 Siemens AG
+# SPDX-License-Identifier: MIT
+
 from pathlib import PurePath
 
 from fossology import foss_cli

@@ -1,4 +1,4 @@
-# Copyright 2019-2021 Siemens AG
+# Copyright 2019 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import mimetypes
