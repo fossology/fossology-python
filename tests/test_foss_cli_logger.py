@@ -1,3 +1,6 @@
+# Copyright 2022 Siemens AG
+# SPDX-License-Identifier: MIT
+
 __doc__ = """Test the logging of the foss_cli
            foss_cli distinguishes the verbosity levels 0,1,2
            defined in foss_cli.py

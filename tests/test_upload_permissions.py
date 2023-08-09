@@ -1,3 +1,6 @@
+# Copyright 2023 Siemens AG
+# SPDX-License-Identifier: MIT
+
 import secrets
 
 import pytest

@@ -1,3 +1,6 @@
+# Copyright 2022 Siemens AG
+# SPDX-License-Identifier: MIT
+
 __doc__ = """Test the "help" text of the different sub commands of foss_cli"""
 
 from fossology import foss_cli
