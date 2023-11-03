@@ -3,159 +3,9 @@
 # SPDX-License-Identifier: MIT
 
 import json
-from enum import Enum
+from typing import Iterable
 
-
-class AccessLevel(Enum):
-    """Available access levels for uploads:
-
-    PRIVATE
-    PROTECTED
-    PUBLIC
-
-    """
-
-    PRIVATE = "private"
-    PROTECTED = "protected"
-    PUBLIC = "public"
-
-
-class ReportFormat(Enum):
-    """Available report format:
-
-    DEP5
-    SPDX2
-    SPDX2TV
-    READMEOSS
-    UNIFIEDREPORT
-
-    """
-
-    DEP5 = "dep5"
-    SPDX2 = "spdx2"
-    SPDX2TV = "spdx2tv"
-    READMEOSS = "readmeoss"
-    UNIFIEDREPORT = "unifiedreport"
-
-
-class SearchTypes(Enum):
-    """Type of item that can be searched:
-
-    ALLFILES
-    CONTAINERS
-    DIRECTORY
-
-    """
-
-    ALLFILES = "allfiles"
-    CONTAINERS = "containers"
-    DIRECTORY = "directory"
-
-
-class TokenScope(Enum):
-    """Scope for API tokens:
-
-    READ: Read only access, limited only to "GET" calls
-
-    WRITE: Read/Write access, required for calls other than "GET"
-
-    """
-
-    READ = "read"
-    WRITE = "write"
-
-
-class ClearingStatus(Enum):
-    """Clearing statuses:
-
-    OPEN
-    INPROGRESS
-    CLOSED
-    REJECTED
-
-    """
-
-    OPEN = "Open"
-    INPROGRESS = "InProgress"
-    CLOSED = "Closed"
-    REJECTED = "Rejected"
-
-
-class JobStatus(Enum):
-    """Job statuses:
-
-    COMPLETED
-    FAILED
-    QUEUED
-    PROCESSING
-
-    """
-
-    COMPLETED = "Completed"
-    FAILED = "Failed"
-    QUEUED = "Queued"
-    PROCESSING = "Processing"
-
-
-class LicenseType(Enum):
-    """License types:
-
-    CANDIDATE
-    MAIN
-    ALL
-
-    """
-
-    CANDIDATE = "candidate"
-    MAIN = "main"
-    ALL = "all"
-
-
-class ObligationClass(Enum):
-    """Classification of an obligation:
-
-    GREEN
-    WHITE
-    YELLOW
-    RED
-
-    """
-
-    GREEN = "green"
-    WHITE = "white"
-    YELLOW = "yellow"
-    RED = "red"
-
-
-class MemberPerm(Enum):
-    """Group member permissions:
-
-    USER
-    ADMIN
-    ADVISOR
-
-    """
-
-    USER = 0
-    ADMIN = 1
-    ADVISOR = 2
-
-
-class Permission(Enum):
-    """Upload or group permissions:
-
-    NONE
-    READ_ONLY
-    READ_WRITE
-    CLEARING_ADMIN
-    ADMIN
-    """
-
-    NONE = "0"
-    READ_ONLY = "1"
-    READ_WRITE = "3"
-    CLEARING_ADMIN = "5"
-    ADMIN = "10"
+from fossology.enums import ClearingScope, ClearingType, Permission
 
 
 class Agents(object):
@@ -1111,6 +961,137 @@ class SearchResult(object):
 
     def __str__(self):
         return f"File found in upload {self.upload.uploadname} ({self.uploadTreeId}): {self.filename}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class GetClearingHistory(object):
+
+    """Clearing history.
+
+    Represents the clearing history of a specified item.
+
+    :param date: date of the clearing history
+    :param username: username of the user who created the decision
+    :param scope: scope of the clearing
+    :param type: type of the clearing
+    :param addedLicenses: list of license shortnames added to the decision
+    :param removedLicenses: list of license shortnames removed to the decision
+    :param kwargs: handle any other job information provided by the fossology instance
+    :type date: string
+    :type username: string
+    :type scope: str
+    :type type: str
+    :type addedLicenses: List[str]
+    :type removedLicenses: List[str]
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self,
+        date: str,
+        username: str,
+        scope: str,
+        type: str,
+        addedLicenses: Iterable[str],
+        removedLicenses: Iterable[str],
+        **kwargs,
+    ):
+        self.date = date
+        self.username = username
+        self.scope = ClearingScope(scope)
+        self.type = ClearingType(type)
+        self.addedLicenses = addedLicenses
+        self.removedLicenses = removedLicenses
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"{self.username} changed clearing history at {self.date} in {self.scope} (type: {self.type})"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class GetBulkHistory(object):
+
+    """Bulk history.
+
+    Represents the bulk history of a specified item.
+
+    :param bulkId: the bulk id
+    :param clearingEventId: the event id associated with the bulk
+    :param text: scan reference text
+    :param matched: whether matched or not
+    :param tried: whether tried or not
+    :param addedLicenses: list of license shortnames added to the scan
+    :param removedLicenses: list of license shortnames removed to the scan
+    :param kwargs: handle any other job information provided by the fossology instance
+    :type bulkId: int
+    :type clearingEventId: int
+    :type text: str
+    :type matched: bool
+    :type tried: bool
+    :type addedLicenses: List[str]
+    :type removedLicenses: List[str]
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self,
+        bulkId: int,
+        clearingEventId: int,
+        text: str,
+        matched: bool,
+        tried: bool,
+        addedLicenses: Iterable[str],
+        removedLicenses: Iterable[str],
+        **kwargs,
+    ):
+        self.bulkId = bulkId
+        self.clearingEventId = clearingEventId
+        self.text = text
+        self.matched = matched
+        self.tried = tried
+        self.addedLicenses = addedLicenses
+        self.removedLicenses = removedLicenses
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Bulk Id {self.bulkId} associated with {self.clearingEventId} | Search for {self.text}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class GetPrevNextItem(object):
+    """PrevNext item for the clearing history.
+
+    Represents the prev-next item list for the clearing history.
+
+    :param prevItemId: id of the previous item
+    :param nextItemId: id of the next item
+    :param kwargs: handle any other job information provided by the fossology instance
+    :type prevItemId: int
+    :type nextItemId: int
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self,
+        prevItemId: int,
+        nextItemId: int,
+        **kwargs,
+    ):
+        self.prevItemId = prevItemId
+        self.nextItemId = nextItemId
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Prev: {self.prevItemId} | Next: {self.nextItemId}"
 
     @classmethod
     def from_json(cls, json_dict):

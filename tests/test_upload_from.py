@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 from fossology import Fossology
+from fossology.enums import AccessLevel
 from fossology.exceptions import FossologyApiError
-from fossology.obj import AccessLevel, Upload
+from fossology.obj import Upload
 
 
 def delete_upload(foss: Fossology, upload: Upload):

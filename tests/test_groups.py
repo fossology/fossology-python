@@ -8,8 +8,9 @@ import pytest
 import responses
 
 import fossology
+from fossology.enums import MemberPerm
 from fossology.exceptions import FossologyApiError
-from fossology.obj import MemberPerm, User
+from fossology.obj import User
 
 
 # Helper functions

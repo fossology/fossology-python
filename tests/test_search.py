@@ -7,8 +7,9 @@ import pytest
 import responses
 
 from fossology import Fossology
+from fossology.enums import SearchTypes
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import SearchTypes, Upload
+from fossology.obj import Upload
 
 
 # See: https://github.com/fossology/fossology/pull/2390

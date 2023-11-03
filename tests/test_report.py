@@ -10,8 +10,9 @@ import pytest
 import responses
 
 from fossology import Fossology
+from fossology.enums import ReportFormat
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import ReportFormat, Upload
+from fossology.obj import Upload
 
 
 def test_report_nogroup(foss: Fossology, upload: Upload):

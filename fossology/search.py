@@ -3,8 +3,9 @@
 # SPDX-License-Identifier: MIT
 import logging
 
+from fossology.enums import SearchTypes
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import File, SearchResult, SearchTypes, Upload
+from fossology.obj import File, SearchResult, Upload
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -118,12 +119,10 @@ class Search:
             response = self.session.get(f"{self.api}/search", headers=headers)
 
             if response.status_code == 200:
-                print(f"Got {len(response.json())} search results")
                 for result in response.json():
                     results_list.append(SearchResult.from_json(result))
 
                 x_total_pages = int(response.headers.get("X-TOTAL-PAGES", 0))
-                print(f"Total number of pages: {x_total_pages}")
                 if not all_pages or x_total_pages == 0:
                     logger.info(
                         f"Retrieved page {page} of uploads, {x_total_pages} pages are in total available"

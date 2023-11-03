@@ -4,8 +4,9 @@
 
 import logging
 
+from fossology.enums import MemberPerm
 from fossology.exceptions import FossologyApiError
-from fossology.obj import Group, MemberPerm, UserGroupMember
+from fossology.obj import Group, UserGroupMember
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

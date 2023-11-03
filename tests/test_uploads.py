@@ -13,8 +13,9 @@ import pytest
 import responses
 
 from fossology import Fossology
+from fossology.enums import AccessLevel, ClearingStatus
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import AccessLevel, ClearingStatus, Folder, Upload
+from fossology.obj import Folder, Upload
 
 
 def test_upload_sha1(upload: Upload):

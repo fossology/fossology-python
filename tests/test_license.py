@@ -7,8 +7,9 @@ import pytest
 import responses
 
 import fossology
+from fossology.enums import LicenseType, ObligationClass
 from fossology.exceptions import FossologyApiError
-from fossology.obj import License, LicenseType, Obligation, ObligationClass
+from fossology.obj import License, Obligation
 
 shortname = "GPL-2.0+"
 
@@ -50,7 +51,7 @@ def test_detail_license_not_found(foss: fossology.Fossology):
 def test_detail_license(foss: fossology.Fossology):
     detail_license = foss.detail_license(shortname, group="fossy")
     assert detail_license
-    assert type(detail_license) == License
+    assert isinstance(detail_license, License)
 
 
 @responses.activate
@@ -154,7 +155,7 @@ def test_patch_license_and_get_by_shortname(
 
 def test_license_to_json(test_license: License):
     json_license = test_license.to_json()
-    assert type(json_license) == str
+    assert isinstance(json_license, str)
 
 
 def test_obligation_object():
