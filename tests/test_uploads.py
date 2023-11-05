@@ -87,9 +87,9 @@ def test_get_uploads(
         description="Test upload in subdirectory",
         wait_time=5,
     )
-    assert len(foss.list_uploads()[0]) == 2
-    assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 2
-    assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 1
+    assert len(foss.list_uploads()[0]) == 3
+    assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 3
+    assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 2
     assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
     foss.delete_folder(upload_subfolder)
 

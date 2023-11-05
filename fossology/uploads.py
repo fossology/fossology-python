@@ -257,13 +257,13 @@ class Uploads:
             data = dict
             if vcs:
                 headers["uploadType"] = "vcs"
-                data = {"location": vcs}
+                data = {"location": vcs}  # type: ignore
             elif url:
                 headers["uploadType"] = "url"
-                data = {"location": url}
+                data = {"location": url}  # type: ignore
             elif server:
                 headers["uploadType"] = "server"
-                data = {"location": server}
+                data = {"location": server}  # type: ignore
             headers["Content-Type"] = "application/json"
             response = self.session.post(
                 f"{self.api}/uploads", data=json.dumps(data), headers=headers
