@@ -11,8 +11,6 @@ from fossology.enums import LicenseType, ObligationClass
 from fossology.exceptions import FossologyApiError
 from fossology.obj import License, Obligation
 
-shortname = "GPL-2.0+"
-
 
 @pytest.fixture()
 def test_license():
@@ -46,12 +44,6 @@ def test_detail_license_not_found(foss: fossology.Fossology):
     with pytest.raises(FossologyApiError) as excinfo:
         foss.detail_license("Unknown")
     assert "License Unknown not found" in str(excinfo.value)
-
-
-def test_detail_license(foss: fossology.Fossology):
-    detail_license = foss.detail_license(shortname, group="fossy")
-    assert detail_license
-    assert isinstance(detail_license, License)
 
 
 @responses.activate

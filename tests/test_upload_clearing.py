@@ -10,12 +10,14 @@ from fossology.exceptions import FossologyApiError
 from fossology.obj import Upload
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_get_clearing_history(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     history = foss.get_clearing_history(upload_with_jobs, files[0].uploadTreeId)
     assert not history
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_get_clearing_history_with_unknown_item_raises_api_error(
     foss: Fossology, upload_with_jobs: Upload
 ):
@@ -24,6 +26,7 @@ def test_upload_get_clearing_history_with_unknown_item_raises_api_error(
     assert f"Upload {upload_with_jobs.id} or item 1 not found" in str(excinfo.value)
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 @responses.activate
 def test_upload_get_clearing_history_500_error(
     foss: Fossology, foss_server: str, upload_with_jobs: Upload
@@ -41,12 +44,14 @@ def test_upload_get_clearing_history_500_error(
     )
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_get_bulk_history(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     history = foss.get_bulk_history(upload_with_jobs, files[0].uploadTreeId)
     assert not history
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_get_bulk_history_with_unknown_item_raises_api_error(
     foss: Fossology, upload_with_jobs: Upload
 ):
@@ -55,6 +60,7 @@ def test_upload_get_bulk_history_with_unknown_item_raises_api_error(
     assert f"Upload {upload_with_jobs.id} or item 1 not found" in str(excinfo.value)
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 @responses.activate
 def test_upload_get_bulk_history_500_error(
     foss: Fossology, foss_server: str, upload_with_jobs: Upload
@@ -72,6 +78,7 @@ def test_upload_get_bulk_history_500_error(
     )
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_schedule_bulk_scan(
     foss: Fossology, upload_with_jobs: Upload, foss_bulk_scan_spec: dict
 ):
@@ -85,6 +92,7 @@ def test_upload_schedule_bulk_scan(
     assert history[0].addedLicenses == ["MIT"]
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_schedule_bulk_scan_with_unknown_item_raises_api_error(
     foss: Fossology, upload_with_jobs: Upload, foss_bulk_scan_spec: dict
 ):
@@ -93,6 +101,7 @@ def test_schedule_bulk_scan_with_unknown_item_raises_api_error(
     assert f"Upload {upload_with_jobs.id} or item 1 not found" in str(excinfo.value)
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 @responses.activate
 def test_schedule_bulk_scan_500_error(
     foss: Fossology,
@@ -113,12 +122,14 @@ def test_schedule_bulk_scan_500_error(
     )
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_get_prev_next(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     prev_next = foss.get_prev_next(upload_with_jobs, files[0].uploadTreeId)
     assert prev_next
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_get_prev_next_with_licenses(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     prev_next = foss.get_prev_next(
@@ -127,6 +138,7 @@ def test_upload_get_prev_next_with_licenses(foss: Fossology, upload_with_jobs: U
     assert prev_next
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_get_prev_next_no_clearing(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     prev_next = foss.get_prev_next(
@@ -135,6 +147,7 @@ def test_upload_get_prev_next_no_clearing(foss: Fossology, upload_with_jobs: Upl
     assert prev_next
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 def test_upload_get_prev_next_with_unknown_item_raises_api_error(
     foss: Fossology, upload_with_jobs: Upload
 ):
@@ -143,6 +156,7 @@ def test_upload_get_prev_next_with_unknown_item_raises_api_error(
     assert f"Upload {upload_with_jobs.id} or item 1 not found" in str(excinfo.value)
 
 
+@pytest.mark.skip(reason="Not yet released, waiting for API version 1.6.0")
 @responses.activate
 def test_upload_get_prev_next_500_error(
     foss: Fossology, foss_server: str, upload_with_jobs: Upload

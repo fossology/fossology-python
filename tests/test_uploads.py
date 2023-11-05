@@ -151,7 +151,7 @@ def test_copy_upload(foss: Fossology, upload: Upload):
 
 def test_move_upload_to_non_existing_folder(foss: Fossology, upload: Upload):
     non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
-    with pytest.raises(FossologyApiError):
+    with pytest.raises(AuthorizationError):
         foss.move_upload(upload, non_folder, "move")
 
 
