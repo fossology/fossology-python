@@ -10,7 +10,7 @@ on:
 
 jobs:
   test-latest:
-    name: Integration Tests (latest Fossology - 4.2.1)
+    name: Integration Tests (latest Fossology - 4.3.0)
     runs-on: ubuntu-latest
 
     container:
@@ -20,7 +20,7 @@ jobs:
 
     services:
       fossology:
-        image: fossology/fossology:4.2.1
+        image: fossology/fossology:4.3.0
         ports:
           - 8081:80
         volumes:
@@ -44,10 +44,8 @@ jobs:
         run: nmap fossology -p 80
       - name: Run tests
         run: |
-          export API_LATEST=true
           poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
-        continue-on-error: true
       - name: upload codecoverage results only if we are on the repository fossology/fossology-python 
         if: ${{ github.repository == 'fossology/fossology-python' }}
         run: poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}

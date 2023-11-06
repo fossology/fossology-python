@@ -10,11 +10,13 @@ from typing import Tuple
 import requests
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
+from fossology.enums import AccessLevel, ClearingStatus, PrevNextSelection
 from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import (
-    AccessLevel,
-    ClearingStatus,
     Folder,
+    GetBulkHistory,
+    GetClearingHistory,
+    GetPrevNextItem,
     Group,
     Permission,
     Summary,
@@ -150,7 +152,7 @@ class Uploads:
         :Example for a file upload:
 
         >>> from fossology import Fossology
-        >>> from fossology.obj import AccessLevel
+        >>> from fossology.enums import AccessLevel
         >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username) # doctest: +SKIP
         >>> my_upload = foss.upload_file(
         ...        foss.rootFolder,
@@ -252,18 +254,19 @@ class Uploads:
                     f"{self.api}/uploads", files=files, headers=headers
                 )
         elif vcs or url or server:
+            data = dict
             if vcs:
                 headers["uploadType"] = "vcs"
-                data = json.dumps(vcs)
+                data = {"location": vcs}  # type: ignore
             elif url:
                 headers["uploadType"] = "url"
-                data = json.dumps(url)
+                data = {"location": url}  # type: ignore
             elif server:
                 headers["uploadType"] = "server"
-                data = json.dumps(server)
+                data = {"location": server}  # type: ignore
             headers["Content-Type"] = "application/json"
             response = self.session.post(
-                f"{self.api}/uploads", data=data, headers=headers
+                f"{self.api}/uploads", data=json.dumps(data), headers=headers
             )
         else:
             logger.info(
@@ -303,15 +306,6 @@ class Uploads:
         elif response.status_code == 403:
             description = f"Upload {description} is not authorized"
             raise AuthorizationError(description, response)
-
-        elif server and response.status_code == 500:
-            description = (
-                f"Upload {description} could not be performed; "
-                f"did you add a prefix for '{server['path']}' in Fossology config "
-                f"variable 'Admin->Customize->Whitelist for serverupload'? "
-                f"Has fossy user read access to {server['path']}?"
-            )
-            raise FossologyApiError(description, response)
 
         else:
             description = f"Upload {description} could not be performed"
@@ -797,4 +791,171 @@ class Uploads:
             description = (
                 f"API error while getting permissions for upload {upload.uploadname}."
             )
+            raise FossologyApiError(description, response)
+
+    def get_clearing_history(
+        self,
+        upload: Upload,
+        item_id: int,
+    ) -> list[GetClearingHistory]:
+        """Get the clearing history for a specific upload item
+
+        API Endpoint: GET /uploads/{id}/item/{itemId}/clearing-history
+
+        :param upload: the upload to get items from
+        :param item_id: the id of the item with clearing decision
+        :type upload: Upload
+        :type item_id: int,
+        :return: the clearing history for the specified item
+        :rtype: List[GetClearingHistory]
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        response = self.session.get(
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/clearing-history"
+        )
+
+        if response.status_code == 200:
+            clearing_history = []
+            for action in response.json():
+                clearing_history.append(GetClearingHistory.from_json(action))
+            return clearing_history
+
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} or item {item_id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"API error while getting clearing history for item {item_id} from upload {upload.uploadname}."
+            raise FossologyApiError(description, response)
+
+    def get_prev_next(
+        self, upload: Upload, item_id: int, selection: PrevNextSelection | None = None
+    ) -> GetPrevNextItem:
+        """Get the index of the previous and the next time for an upload
+
+        API Endpoint: GET /uploads/{id}/item/{itemId}/prev-next
+
+        :param upload: the upload to get items from
+        :param item_id: the id of the item with clearing decision
+        :param selection: tell Fossology server how to select prev-next item
+        :type upload: Upload
+        :type item_id: int
+        :type selection: str
+        :return: list of items for the clearing history
+        :rtype: List[GetPrevNextItem]
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        params = {}
+        if selection:
+            params["selection"] = selection
+
+        response = self.session.get(
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/prev-next", params=params
+        )
+
+        if response.status_code == 200:
+            return GetPrevNextItem.from_json(response.json())
+
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} or item {item_id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"API error while getting prev-next items for {item_id} from upload {upload.uploadname}."
+            raise FossologyApiError(description, response)
+
+    def get_bulk_history(
+        self,
+        upload: Upload,
+        item_id: int,
+    ) -> list[GetBulkHistory]:
+        """Get the bulk history for a specific upload item
+
+        API Endpoint: GET /uploads/{id}/item/{itemId}/bulk-history
+
+        :param upload: the upload to get items from
+        :param item_id: the id of the item with clearing decision
+        :type upload: Upload
+        :type item_id: int
+        :return: list of data from the bulk history
+        :rtype: List[GetBulkHistory]
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        response = self.session.get(
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/bulk-history"
+        )
+
+        if response.status_code == 200:
+            bulk_history = []
+            for item in response.json():
+                bulk_history.append(GetBulkHistory.from_json(item))
+            return bulk_history
+
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} or item {item_id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"API error while getting bulk history for {item_id} from upload {upload.uploadname}."
+            raise FossologyApiError(description, response)
+
+    def schedule_bulk_scan(
+        self,
+        upload: Upload,
+        item_id: int,
+        spec: dict,
+    ):
+        """Schedule a bulk scan for a specific upload item
+
+        API Endpoint: POST /uploads/{id}/item/{itemId}/bulk-scan
+
+        Bulk scan specifications `spec` are added to the request body,
+        following options are available:
+
+        >>> bulk_scan_spec = {
+        ...     "bulkActions": [
+        ...         {
+        ...             "licenseShortName": 'MIT',
+        ...             "licenseText": 'License text',
+        ...             "acknowledgement": 'Acknowledgment text',
+        ...             "comment": 'Comment text',
+        ...             "licenseAction": 'ADD', # or 'REMOVE'
+        ...         }
+        ...     ],
+        ...     "refText": 'Reference Text',
+        ...     "bulkScope": 'folder', # or upload
+        ...     "forceDecision": 'false',
+        ...     "ignoreIrre": 'false',
+        ...     "delimiters": 'DEFAULT',
+        ...     "scanOnlyFindings": 'true',
+        ... }
+
+        :param upload: the upload for the bulk scan
+        :param item_id: the id of the item for the bulk scan
+        :param spec: bulk scan specification
+        :type upload: Upload
+        :type item_id: int
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        headers = {"Content-Type": "application/json"}
+        response = self.session.post(
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/bulk-scan",
+            headers=headers,
+            data=json.dumps(spec),
+        )
+        if response.status_code == 201:
+            logger.info(
+                f"Bulk scan scheduled for upload {upload.uploadname}, item {item_id}"
+            )
+        elif response.status_code == 400:
+            description = (
+                f"Bad bulk scan request for upload {upload.id}, item {item_id}"
+            )
+            raise FossologyApiError(description, response)
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} or item {item_id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"API error while scheduling bulk scan for item {item_id} from upload {upload.uploadname}."
             raise FossologyApiError(description, response)

@@ -8,8 +8,9 @@ from json.decoder import JSONDecodeError
 from typing import Tuple
 from urllib.parse import quote
 
+from fossology.enums import LicenseType
 from fossology.exceptions import FossologyApiError
-from fossology.obj import License, LicenseType, Obligation
+from fossology.obj import License, Obligation
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

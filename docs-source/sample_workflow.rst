@@ -23,7 +23,8 @@ Needed imports and Variables
 >>> from getpass import getpass
 >>> import requests
 >>> from fossology import Fossology, fossology_token
->>> from fossology.obj import Group, AccessLevel, TokenScope
+>>> from fossology.obj import Group
+>>> from fossology.enums import AccessLevel, TokenScope
 >>> from fossology.exceptions  import FossologyApiError
 >>> FOSSOLOGY_SERVER = "http://fossology/repo"
 >>> os.environ["FOSSOLOGY_USER"] = "fossy"

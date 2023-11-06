@@ -11,8 +11,9 @@ import pytest
 from click.testing import CliRunner
 
 import fossology
+from fossology.enums import AccessLevel, JobStatus, TokenScope
 from fossology.exceptions import AuthenticationError, FossologyApiError
-from fossology.obj import AccessLevel, Agents, JobStatus, TokenScope, Upload
+from fossology.obj import Agents, Upload
 
 logger = logging.getLogger("fossology")
 console = logging.StreamHandler()
@@ -55,6 +56,27 @@ def foss_agents() -> Agents:
         True,
         **additional_agent,
     )
+
+
+@pytest.fixture(scope="session")
+def foss_bulk_scan_spec() -> Dict:
+    return {
+        "bulkActions": [
+            {
+                "licenseShortName": "MIT",
+                "licenseText": "",
+                "acknowledgement": "",
+                "comment": "",
+                "licenseAction": "ADD",
+            }
+        ],
+        "refText": "Reference Text",
+        "bulkScope": "upload",
+        "forceDecision": "false",
+        "ignoreIrre": "false",
+        "delimiters": "DEFAULT",
+        "scanOnlyFindings": "true",
+    }
 
 
 @pytest.fixture(scope="session")

@@ -6,12 +6,13 @@ from datetime import date, timedelta
 
 import requests
 
+from fossology.enums import TokenScope
 from fossology.exceptions import AuthenticationError, FossologyApiError
 from fossology.folders import Folders
 from fossology.groups import Groups
 from fossology.jobs import Jobs
 from fossology.license import LicenseEndpoint
-from fossology.obj import Agents, ApiInfo, HealthInfo, TokenScope, User
+from fossology.obj import Agents, ApiInfo, HealthInfo, User
 from fossology.report import Report
 from fossology.search import Search
 from fossology.uploads import Uploads

@@ -9,8 +9,9 @@ import pytest
 import responses
 
 from fossology import Fossology
+from fossology.enums import JobStatus
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import JobStatus, Upload
+from fossology.obj import Upload
 
 
 def test_unpack_jobs(foss: Fossology, upload: Upload):

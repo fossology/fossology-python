@@ -87,8 +87,9 @@ def test_unknown_user(foss: Fossology):
 
 
 def test_list_users(foss: Fossology):
+    # Fixture created_foss_user creates a new user for the test session
     users = foss.list_users()
-    assert len(users) == 1
+    assert len(users) == 2
 
 
 @responses.activate
@@ -161,11 +162,3 @@ def test_delete_user(foss_server: str, foss: Fossology):
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_user(user)
     assert f"Error while deleting user {user.name} ({user.id})" in str(excinfo.value)
-
-
-@responses.activate
-def test_noversion(foss_server: str, foss: Fossology):
-    responses.add(responses.GET, f"{foss_server}/api/v1/version", status=404)
-    with pytest.raises(FossologyApiError) as excinfo:
-        foss.get_version()
-    assert "Error while getting API version" in str(excinfo.value)

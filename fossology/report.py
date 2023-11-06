@@ -9,8 +9,9 @@ from typing import Tuple
 
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
+from fossology.enums import ReportFormat
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import ReportFormat, Upload
+from fossology.obj import Upload
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

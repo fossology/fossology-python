@@ -11,7 +11,7 @@ from fossology.exceptions import FossologyApiError
 def test_get_info(foss: Fossology):
     assert foss.info.name == "FOSSology API"
     assert foss.info.license.name == "GPL-2.0-only"
-    assert foss.info.fossology.version
+    assert foss.info.version
 
 
 @responses.activate

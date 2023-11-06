@@ -13,8 +13,9 @@ import pytest
 import responses
 
 from fossology import Fossology
+from fossology.enums import AccessLevel, ClearingStatus
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import AccessLevel, ClearingStatus, Folder, Upload
+from fossology.obj import Folder, Upload
 
 
 def test_upload_sha1(upload: Upload):
@@ -86,9 +87,9 @@ def test_get_uploads(
         description="Test upload in subdirectory",
         wait_time=5,
     )
-    assert len(foss.list_uploads()[0]) == 2
-    assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 2
-    assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 1
+    assert len(foss.list_uploads()[0]) == 3
+    assert len(foss.list_uploads(folder=foss.rootFolder)[0]) == 3
+    assert len(foss.list_uploads(folder=foss.rootFolder, recursive=False)[0]) == 2
     assert len(foss.list_uploads(folder=upload_subfolder)[0]) == 1
     foss.delete_folder(upload_subfolder)
 
@@ -150,7 +151,7 @@ def test_copy_upload(foss: Fossology, upload: Upload):
 
 def test_move_upload_to_non_existing_folder(foss: Fossology, upload: Upload):
     non_folder = Folder(secrets.randbelow(1000), "Non folder", "", foss.rootFolder)
-    with pytest.raises(FossologyApiError):
+    with pytest.raises(AuthorizationError):
         foss.move_upload(upload, non_folder, "move")
 
 

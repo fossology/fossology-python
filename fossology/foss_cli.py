@@ -23,8 +23,9 @@ from logging.handlers import RotatingFileHandler
 import click
 
 from fossology import Fossology, fossology_token
+from fossology.enums import AccessLevel, ReportFormat, TokenScope
 from fossology.exceptions import FossologyApiError, FossologyUnsupported
-from fossology.obj import AccessLevel, Folder, ReportFormat, Summary, TokenScope
+from fossology.obj import Folder, Summary
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter(
