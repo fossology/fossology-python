@@ -10,6 +10,7 @@ from fossology.enums import TokenScope
 from fossology.exceptions import AuthenticationError, FossologyApiError
 from fossology.folders import Folders
 from fossology.groups import Groups
+from fossology.items import Items
 from fossology.jobs import Jobs
 from fossology.license import LicenseEndpoint
 from fossology.obj import Agents, ApiInfo, HealthInfo, User
@@ -79,7 +80,9 @@ def fossology_token(
         exit(f"Server {url} does not seem to be running or is unreachable: {error}")
 
 
-class Fossology(Folders, Groups, LicenseEndpoint, Uploads, Jobs, Report, Users, Search):
+class Fossology(
+    Folders, Groups, Items, LicenseEndpoint, Uploads, Jobs, Report, Users, Search
+):
 
     """Main Fossology API class
 
