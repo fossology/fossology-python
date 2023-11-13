@@ -12,29 +12,19 @@ from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import Upload
 
 
-# See: https://github.com/fossology/fossology/pull/2390
-@pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
-)
 def test_search_nogroup(foss: Fossology):
     with pytest.raises(FossologyApiError) as excinfo:
         foss.search(searchType=SearchTypes.ALLFILES, filename="GPL%", group="test")
-    assert "Searching for group test not authorized" in str(excinfo.value)
+    assert "Unable to get a result with the given search criteria" in str(excinfo.value)
 
 
-@pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
-)
 def test_search(foss: Fossology, upload: Upload):
-    search_result = foss.search(searchType=SearchTypes.ALLFILES, filename="GPL%")
+    search_result, _ = foss.search(searchType=SearchTypes.ALLFILES, filename="GPL%")
     assert search_result
 
 
-@pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
-)
 def test_search_nothing_found(foss: Fossology, upload: Upload):
-    search_result = foss.search(
+    search_result, _ = foss.search(
         searchType=SearchTypes.ALLFILES,
         filename="test%",
         tag="test",
@@ -46,22 +36,16 @@ def test_search_nothing_found(foss: Fossology, upload: Upload):
     assert search_result == []
 
 
-@pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
-)
 def test_search_directory(foss: Fossology, upload: Upload):
-    search_result = foss.search(
-        searchType=SearchTypes.DIRECTORIES,
+    search_result, _ = foss.search(
+        searchType=SearchTypes.DIRECTORY,
         filename="share",
     )
-    assert search_result
+    assert not search_result
 
 
-@pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
-)
 def test_search_upload(foss: Fossology, upload: Upload):
-    search_result = foss.search(
+    search_result, _ = foss.search(
         searchType=SearchTypes.ALLFILES,
         upload=upload,
         filename="share",
@@ -69,9 +53,6 @@ def test_search_upload(foss: Fossology, upload: Upload):
     assert search_result
 
 
-@pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
-)
 def test_search_upload_does_not_exist(foss: Fossology):
     hash = {"sha1": "", "md5": "", "sha256": "", "size": ""}
     fake_upload = Upload(
@@ -83,7 +64,7 @@ def test_search_upload_does_not_exist(foss: Fossology):
         "2020-12-30",
         hash=hash,
     )
-    search_result = foss.search(
+    search_result, _ = foss.search(
         searchType=SearchTypes.ALLFILES,
         upload=fake_upload,
         filename="share",
@@ -91,9 +72,6 @@ def test_search_upload_does_not_exist(foss: Fossology):
     assert not search_result
 
 
-@pytest.mark.skip(
-    reason="current Fossology version has a bug, /search is not supported, fixed in 4.3.0"
-)
 @responses.activate
 def test_search_error(foss_server: str, foss: Fossology):
     responses.add(responses.GET, f"{foss_server}/api/v1/search", status=404)

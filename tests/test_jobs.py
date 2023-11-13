@@ -33,7 +33,7 @@ def test_schedule_jobs(
     assert job.name == upload_with_jobs.uploadname
 
     jobs, _ = foss.list_jobs(upload=upload_with_jobs)
-    assert len(jobs) == 3
+    assert len(jobs) == 4
 
     job = foss.detail_job(jobs[1].id, wait=True, timeout=30)
     assert job.status == JobStatus.COMPLETED.value
@@ -102,16 +102,16 @@ def test_paginated_list_jobs(foss: Fossology, upload_with_jobs: Upload):
     jobs, total_pages = foss.list_jobs(
         upload=upload_with_jobs, page_size=1, all_pages=True
     )
-    assert len(jobs) == 3
-    assert total_pages == 3
+    assert len(jobs) == 4
+    assert total_pages == 4
 
     jobs, total_pages = foss.list_jobs(upload=upload_with_jobs, page_size=1, page=1)
     assert len(jobs) == 1
-    assert total_pages == 3
+    assert total_pages == 4
 
     jobs, total_pages = foss.list_jobs(upload=upload_with_jobs, page_size=1, page=2)
     assert len(jobs) == 1
-    assert total_pages == 3
+    assert total_pages == 4
 
     jobs, total_pages = foss.list_jobs(upload=upload_with_jobs, page_size=2, page=1)
     assert len(jobs) == 2
