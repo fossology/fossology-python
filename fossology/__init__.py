@@ -107,7 +107,7 @@ class Fossology(
         self.users = list()
         self.folders = list()
 
-        self.api = f"{self.host}/api/v1"
+        self.api = f"{self.host}/api/v2"
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         self.info = self.get_info()

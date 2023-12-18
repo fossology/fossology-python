@@ -58,7 +58,7 @@ def test_get_upload_permissions_if_api_returns_403_raises_authorization_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/perm-groups",
+        f"{foss_server}/api/v2/uploads/{upload.id}/perm-groups",
         status=403,
     )
     with pytest.raises(AuthorizationError) as excinfo:
@@ -74,7 +74,7 @@ def test_get_upload_permissions_if_api_returns_500_raises_fossology_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/perm-groups",
+        f"{foss_server}/api/v2/uploads/{upload.id}/perm-groups",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -108,7 +108,7 @@ def test_change_upload_permissions_if_api_returns_400_raises_fossology_error(
 ):
     responses.add(
         responses.PUT,
-        f"{foss_server}/api/v1/uploads/{upload.id}/permissions",
+        f"{foss_server}/api/v2/uploads/{upload.id}/permissions",
         status=400,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -124,7 +124,7 @@ def test_change_upload_permissions_if_api_returns_403_raises_authorization_error
 ):
     responses.add(
         responses.PUT,
-        f"{foss_server}/api/v1/uploads/{upload.id}/permissions",
+        f"{foss_server}/api/v2/uploads/{upload.id}/permissions",
         status=403,
     )
     with pytest.raises(AuthorizationError) as excinfo:
@@ -140,7 +140,7 @@ def test_change_upload_permissions_if_api_returns_500_raises_fossology_error(
 ):
     responses.add(
         responses.PUT,
-        f"{foss_server}/api/v1/uploads/{upload.id}/permissions",
+        f"{foss_server}/api/v2/uploads/{upload.id}/permissions",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -157,7 +157,7 @@ def test_change_upload_permissions_if_api_returns_503_raises_fossology_error(
 ):
     responses.add(
         responses.PUT,
-        f"{foss_server}/api/v1/uploads/{upload.id}/permissions",
+        f"{foss_server}/api/v2/uploads/{upload.id}/permissions",
         status=503,
     )
     with pytest.raises(FossologyApiError) as excinfo:
