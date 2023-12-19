@@ -47,7 +47,7 @@ def test_get_upload_error(foss: Fossology, foss_server: str):
     upload_id = 100
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload_id}",
+        f"{foss_server}/api/v2/uploads/{upload_id}",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -120,7 +120,7 @@ def test_empty_upload(foss: Fossology):
 def test_upload_error(foss: Fossology, foss_server: str, test_file_path: str):
     responses.add(
         responses.POST,
-        f"{foss_server}/api/v1/uploads",
+        f"{foss_server}/api/v2/uploads",
         status=500,
     )
     description = "Test upload API error"
@@ -159,7 +159,7 @@ def test_move_upload_to_non_existing_folder(foss: Fossology, upload: Upload):
 def test_move_upload_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.PUT,
-        f"{foss_server}/api/v1/uploads/{upload.id}",
+        f"{foss_server}/api/v2/uploads/{upload.id}",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -183,7 +183,7 @@ def test_update_upload_with_unknown_group_raises_error(foss: Fossology, upload: 
 def test_update_upload_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.PATCH,
-        f"{foss_server}/api/v1/uploads/{upload.id}",
+        f"{foss_server}/api/v2/uploads/{upload.id}",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -204,7 +204,7 @@ def test_upload_summary(foss: Fossology, upload: Upload):
 def test_upload_summary_500_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/summary",
+        f"{foss_server}/api/v2/uploads/{upload.id}/summary",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -275,7 +275,7 @@ def test_paginated_list_uploads(foss: Fossology, upload: Upload, test_file_path:
 def test_list_uploads_500_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads",
+        f"{foss_server}/api/v2/uploads",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -301,7 +301,7 @@ def test_download_upload_authorization_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/download",
+        f"{foss_server}/api/v2/uploads/{upload.id}/download",
         status=403,
     )
     with pytest.raises(AuthorizationError) as excinfo:
@@ -313,7 +313,7 @@ def test_download_upload_authorization_error(
 def test_download_upload_error(foss_server: str, foss: Fossology, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/download",
+        f"{foss_server}/api/v2/uploads/{upload.id}/download",
         status=401,
     )
     with pytest.raises(FossologyApiError) as excinfo:

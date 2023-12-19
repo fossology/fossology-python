@@ -530,6 +530,50 @@ class File(object):
         return cls(**json_dict)
 
 
+class FileInfo(object):
+
+    """FOSSology file info response.
+
+    Represents a FOSSology file info response.
+
+    :param view_info: view info of the file
+    :param meta_info: meta info of the file
+    :param package_info: package info of the file
+    :param tag_info: tag info of the file
+    :param reuse_info: reuse info of the file
+    :param kwargs: handle any other license information provided by the fossology instance
+    :type view_info: Object
+    :type meta_info: Object
+    :type package_info: Object
+    :type tag_info: Object
+    :type reuse_info: Object
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self,
+        view_info,
+        meta_info,
+        package_info,
+        tag_info,
+        reuse_info,
+        **kwargs,
+    ):
+        self.view_info = view_info
+        self.meta_info = meta_info
+        self.package_info = package_info
+        self.tag_info = tag_info
+        self.reuse_info = reuse_info
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"File view {self.view_info}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 class Upload(object):
 
     """FOSSology upload.

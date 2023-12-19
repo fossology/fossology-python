@@ -13,12 +13,12 @@ from fossology.obj import Upload
 def test_upload_licenses(foss: Fossology, upload_with_jobs: Upload):
     # Default agent "nomos"
     licenses = foss.upload_licenses(upload_with_jobs)
-    assert len(licenses) == 56
+    assert len(licenses) == 50
 
 
 def test_upload_licenses_with_containers(foss: Fossology, upload_with_jobs: Upload):
     licenses = foss.upload_licenses(upload_with_jobs, containers=True)
-    assert len(licenses) == 56
+    assert len(licenses) == 50
 
 
 def test_upload_licenses_agent_ojo(foss: Fossology, upload_with_jobs: Upload):
@@ -33,7 +33,7 @@ def test_upload_licenses_agent_monk(foss: Fossology, upload_with_jobs: Upload):
 
 def test_upload_licenses_and_copyrights(foss: Fossology, upload_with_jobs: Upload):
     licenses = foss.upload_licenses(upload_with_jobs, copyright=True)
-    assert len(licenses) == 56
+    assert len(licenses) == 50
 
 
 def test_upload_licenses_with_unknown_group_raises_authorization_error(
@@ -51,7 +51,7 @@ def test_upload_licenses_with_unknown_group_raises_authorization_error(
 def test_upload_licenses_412_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/licenses",
+        f"{foss_server}/api/v2/uploads/{upload.id}/licenses",
         status=412,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -66,7 +66,7 @@ def test_upload_licenses_412_error(foss: Fossology, foss_server: str, upload: Up
 def test_upload_licenses_503_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/licenses",
+        f"{foss_server}/api/v2/uploads/{upload.id}/licenses",
         status=503,
     )
     with pytest.raises(RetryError):
@@ -77,7 +77,7 @@ def test_upload_licenses_503_error(foss: Fossology, foss_server: str, upload: Up
 def test_upload_licenses_500_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/licenses",
+        f"{foss_server}/api/v2/uploads/{upload.id}/licenses",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -97,7 +97,7 @@ def test_upload_copyrights(foss: Fossology, upload_with_jobs: Upload):
 def test_upload_copyrights_403_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/copyrights",
+        f"{foss_server}/api/v2/uploads/{upload.id}/copyrights",
         status=403,
     )
     with pytest.raises(AuthorizationError) as excinfo:
@@ -112,7 +112,7 @@ def test_upload_copyrights_403_error(foss: Fossology, foss_server: str, upload: 
 def test_upload_copyrights_412_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/copyrights",
+        f"{foss_server}/api/v2/uploads/{upload.id}/copyrights",
         status=412,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -127,7 +127,7 @@ def test_upload_copyrights_412_error(foss: Fossology, foss_server: str, upload: 
 def test_upload_copyrights_503_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/copyrights",
+        f"{foss_server}/api/v2/uploads/{upload.id}/copyrights",
         status=503,
     )
     with pytest.raises(RetryError):
@@ -138,7 +138,7 @@ def test_upload_copyrights_503_error(foss: Fossology, foss_server: str, upload: 
 def test_upload_copyrights_500_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v1/uploads/{upload.id}/copyrights",
+        f"{foss_server}/api/v2/uploads/{upload.id}/copyrights",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:

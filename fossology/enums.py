@@ -195,3 +195,14 @@ class PrevNextSelection(Enum):
 
     WITHLICENSES = "withLicenses"
     NOCLEARING = "noClearing"
+
+
+class CopyrightStatus(Enum):
+    """Status of the copyrights:
+
+    ACTIVE
+    INACTIVE
+    """
+
+    ACTIVE = "active"
+    INACTIVE = "inactive"
