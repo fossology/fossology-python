@@ -26,7 +26,7 @@ A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
-Current release is compatible with **Fossology version 4.2.1** - API version 1.4.3.
+Current release is compatible with **Fossology version 4.4.0-rc1** - API version 2.0.0 (not all endpoints are supported)
 
    `See release notes <https://github.com/fossology/fossology-python/releases>`_ for all details.
 
