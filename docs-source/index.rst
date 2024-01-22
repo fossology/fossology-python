@@ -10,11 +10,14 @@ Welcome to fossology's documentation!
    fossology
    folders
    groups
+   items
    license
    uploads
    jobs
    report
+   users
    obj
+   enums
    exceptions
    logging
    sample_workflow
