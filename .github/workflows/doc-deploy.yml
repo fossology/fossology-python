@@ -3,7 +3,7 @@ name: Publish Document Pages
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   doc-deploy:
