@@ -23,7 +23,8 @@ Needed imports and Variables
 >>> from getpass import getpass
 >>> import requests
 >>> from fossology import Fossology, fossology_token
->>> from fossology.obj import Group, AccessLevel, TokenScope
+>>> from fossology.obj import Group
+>>> from fossology.enums import AccessLevel, TokenScope
 >>> from fossology.exceptions  import FossologyApiError
 >>> FOSSOLOGY_SERVER = "http://fossology/repo"
 >>> os.environ["FOSSOLOGY_USER"] = "fossy"
@@ -65,8 +66,7 @@ Login to the Fossology Server
  Create the Fossology Instance.
 
 
->>> # The username is only needed for Fossology API version < 1.2.3
->>> foss = Fossology(FOSSOLOGY_SERVER, token, name=os.environ["FOSSOLOGY_USER"])
+>>> foss = Fossology(FOSSOLOGY_SERVER, token)
 >>> print(f"Logged in as user {foss.user.name}")
 Logged in as user fossy
 

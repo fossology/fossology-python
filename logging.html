@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Logging &#8212; fossology 2.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>Logging &#8212; fossology 3.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=28c8e701" />
+    <script src="_static/documentation_options.js?v=dd1205ac"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Sample Workflow" href="sample_workflow.html" />
@@ -49,11 +47,14 @@
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="groups.html">Fossology Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="items.html">Fossology Items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">Fossology License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Fossology Users</a></li>
 <li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">Fossology Enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sample_workflow.html">Sample Workflow</a></li>
@@ -87,7 +88,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -105,7 +106,7 @@
           <div class="body" role="main">
             
   <section id="logging">
-<h1>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h1>
+<h1>Logging<a class="headerlink" href="#logging" title="Link to this heading">¶</a></h1>
 <p>This module uses the standard Python logging module to generate meaningful logs.</p>
 <p>To retrieve the logs, use this snippet:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;fossology&quot;</span><span class="p">)</span>
@@ -131,7 +132,7 @@ configuration options.</p>
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

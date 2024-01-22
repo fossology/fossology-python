@@ -1,18 +1,16 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Fossology Folders &#8212; fossology 2.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>Fossology Folders &#8212; fossology 3.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=28c8e701" />
+    <script src="_static/documentation_options.js?v=dd1205ac"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fossology Groups" href="groups.html" />
@@ -47,13 +45,19 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Folders</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Folders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.folders.Folders"><code class="docutils literal notranslate"><span class="pre">Folders</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="groups.html">Fossology Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="items.html">Fossology Items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">Fossology License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Fossology Users</a></li>
 <li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">Fossology Enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sample_workflow.html">Sample Workflow</a></li>
@@ -87,7 +91,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -105,30 +109,30 @@
           <div class="body" role="main">
             
   <section id="fossology-folders">
-<h1>Fossology Folders<a class="headerlink" href="#fossology-folders" title="Permalink to this headline">¶</a></h1>
+<h1>Fossology Folders<a class="headerlink" href="#fossology-folders" title="Link to this heading">¶</a></h1>
 <p>Methods used to access “folders/” endpoints.</p>
-<span class="target" id="module-fossology.folders"></span><dl class="py class">
+<dl class="py class" id="module-fossology.folders">
 <dt class="sig sig-object py" id="fossology.folders.Folders">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.folders.</span></span><span class="sig-name descname"><span class="pre">Folders</span></span><a class="headerlink" href="#fossology.folders.Folders" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.folders.</span></span><span class="sig-name descname"><span class="pre">Folders</span></span><a class="headerlink" href="#fossology.folders.Folders" title="Link to this definition">¶</a></dt>
 <dd><p>Class dedicated to all “folders” related endpoints</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.folders.Folders.copy_folder">
-<span class="sig-name descname"><span class="pre">copy_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.copy_folder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">copy_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><span class="pre">Folder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><span class="pre">Folder</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.copy_folder" title="Link to this definition">¶</a></dt>
 <dd><p>Copy a folder</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a><em>(</em><em>) </em><em>object</em>) – the Folder to be copied</p></li>
 <li><p><strong>parent</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a><em>(</em><em>) </em><em>object</em>) – the new parent folder</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the updated folder</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder">Folder</a>() object</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -136,13 +140,13 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.folders.Folders.create_folder">
-<span class="sig-name descname"><span class="pre">create_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.create_folder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">create_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><span class="pre">Folder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.create_folder" title="Link to this definition">¶</a></dt>
 <dd><p>Create a new (sub)folder</p>
 <p>The name of the new folder must be unique under the same parent.
 Folder names are case insensitive.</p>
 <p>API Endpoint: POST /folders/{id}</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>parent</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a><em>(</em><em>) </em><em>object</em>) – the parent folder</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – the name of the folder</p></li>
@@ -150,16 +154,16 @@ Folder names are case insensitive.</p>
 <li><p><strong>group</strong> (<em>string</em>) – the name of the group chosen to create the folder (default: None)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the folder newly created (or already existing) - or None</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder">Folder</a>() object</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
-<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user is not allowed to write in the folder or access the group</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the REST call is not authorized</p></li>
 </ul>
 </dd>
 </dl>
@@ -167,14 +171,14 @@ Folder names are case insensitive.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.folders.Folders.delete_folder">
-<span class="sig-name descname"><span class="pre">delete_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.delete_folder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">delete_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><span class="pre">Folder</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.delete_folder" title="Link to this definition">¶</a></dt>
 <dd><p>Delete a folder</p>
 <p>API Endpoint: DELETE /folders/{id}</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a><em>(</em><em>) </em><em>object</em>) – the Folder to be deleted</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -182,20 +186,20 @@ Folder names are case insensitive.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.folders.Folders.detail_folder">
-<span class="sig-name descname"><span class="pre">detail_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.detail_folder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">detail_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.detail_folder" title="Link to this definition">¶</a></dt>
 <dd><p>Get details of folder.</p>
 <p>API Endpoint: GET /folders/{id}</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – the ID of the folder to be analysed</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – the ID of the folder to be analyzed</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the requested folder</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder">Folder</a>() object</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -203,17 +207,17 @@ Folder names are case insensitive.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.folders.Folders.list_folders">
-<span class="sig-name descname"><span class="pre">list_folders</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.list_folders" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_folders</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.list_folders" title="Link to this definition">¶</a></dt>
 <dd><p>List all folders accessible to the authenticated user</p>
 <p>API Endpoint: GET /folders</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>a list of folders</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list()</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -221,22 +225,22 @@ Folder names are case insensitive.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.folders.Folders.move_folder">
-<span class="sig-name descname"><span class="pre">move_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.move_folder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">move_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.move_folder" title="Link to this definition">¶</a></dt>
 <dd><p>Move a folder</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a><em>(</em><em>) </em><em>object</em>) – the Folder to be moved</p></li>
 <li><p><strong>parent</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a><em>(</em><em>) </em><em>object</em>) – the new parent folder</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the updated folder - or None if the REST call failed</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder">Folder</a>() object</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -244,24 +248,24 @@ Folder names are case insensitive.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.folders.Folders.update_folder">
-<span class="sig-name descname"><span class="pre">update_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.update_folder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">update_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><span class="pre">Folder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.update_folder" title="Link to this definition">¶</a></dt>
 <dd><p>Update a folder’s name or description</p>
 <p>The name of the new folder must be unique under the same parent.</p>
 <p>API Endpoint: PATCH /folders/{id}</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – the new name of the folder (optional)</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – the new description for the folder (optional)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the updated folder</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder">Folder</a>() object</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -282,7 +286,7 @@ Folder names are case insensitive.</p>
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

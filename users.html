@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fossology Users &#8212; fossology 3.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=28c8e701" />
+    <script src="_static/documentation_options.js?v=dd1205ac"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Fossology objects" href="obj.html" />
+    <link rel="prev" title="Fossology Report" href="report.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">fossology</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=fossology&repo=fossology-python&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
+<li class="toctree-l1"><a class="reference internal" href="groups.html">Fossology Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="items.html">Fossology Items</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Fossology License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Users</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.users.Users"><code class="docutils literal notranslate"><span class="pre">Users</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">Fossology Enums</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sample_workflow.html">Sample Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="foss_cli.html">Foss CLI</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/fossology/">Package on PyPi</a></li>
+    
+    <li class="toctree-l1"><a href="http://github.com/fossology/fossology-python/">Source on Github</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="report.html" title="previous chapter">Fossology Report</a></li>
+      <li>Next: <a href="obj.html" title="next chapter">Fossology objects</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="fossology-users">
+<h1>Fossology Users<a class="headerlink" href="#fossology-users" title="Link to this heading">¶</a></h1>
+<p>Methods used to access “users/” endpoints.</p>
+<dl class="py class" id="module-fossology.users">
+<dt class="sig sig-object py" id="fossology.users.Users">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.users.</span></span><span class="sig-name descname"><span class="pre">Users</span></span><a class="headerlink" href="#fossology.users.Users" title="Link to this definition">¶</a></dt>
+<dd><p>Class dedicated to all “users” related endpoints</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fossology.users.Users.create_user">
+<span class="sig-name descname"><span class="pre">create_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.users.Users.create_user" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new Fossology user</p>
+<p>API Endpoint: POST /users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">user_spec</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;New User&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A brand new user&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;new.user@fossology.com&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;accessLevel&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;rootFolderId&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;emailNotification&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;defaultGroup&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;agents&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;bucket&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;copyright_email_author&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;ecc&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;keyword&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;mime&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;monk&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;nomos&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;ojo&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;package&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;reso&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;heritage&quot;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="gp">... </span>    <span class="p">},</span>
+<span class="gp">... </span>    <span class="s2">&quot;defaultBucketpool&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;user_pass&quot;</span><span class="p">:</span> <span class="s2">&quot;$PASSWORD&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;defaultVisibility&quot;</span><span class="p">:</span> <span class="s2">&quot;public&quot;</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foss</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">user_spec</span><span class="p">)</span>  
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>user_spec</strong> (<em>dict</em>) – the user creation data</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fossology.users.Users.delete_user">
+<span class="sig-name descname"><span class="pre">delete_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.users.Users.delete_user" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a Fossology user.</p>
+<p>API Endpoint: DELETE /users/{id}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>user</strong> (<a class="reference internal" href="obj.html#fossology.obj.User" title="fossology.obj.User"><em>User</em></a>) – the user to be deleted</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fossology.users.Users.detail_user">
+<span class="sig-name descname"><span class="pre">detail_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.users.Users.detail_user" title="Link to this definition">¶</a></dt>
+<dd><p>Get details of Fossology user.</p>
+<p>API Endpoint: GET /users/{id}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – the ID of the user</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the requested user’s details</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.User" title="fossology.obj.User">User</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fossology.users.Users.list_users">
+<span class="sig-name descname"><span class="pre">list_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.users.Users.list_users" title="Link to this definition">¶</a></dt>
+<dd><p>List all users from the Fossology instance</p>
+<p>API Endpoint: GET /users</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the list of users</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of <a class="reference internal" href="obj.html#fossology.obj.User" title="fossology.obj.User">User</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2021, Siemens AG.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/users.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

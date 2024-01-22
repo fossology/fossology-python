@@ -1,21 +1,19 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Fossology Report &#8212; fossology 2.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>Fossology Report &#8212; fossology 3.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=28c8e701" />
+    <script src="_static/documentation_options.js?v=dd1205ac"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Fossology objects" href="obj.html" />
+    <link rel="next" title="Fossology Users" href="users.html" />
     <link rel="prev" title="Fossology Jobs" href="jobs.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -49,11 +47,17 @@
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="groups.html">Fossology Groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="items.html">Fossology Items</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">Fossology License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Report</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Report</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.report.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Fossology Users</a></li>
 <li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">Fossology Enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sample_workflow.html">Sample Workflow</a></li>
@@ -74,7 +78,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="jobs.html" title="previous chapter">Fossology Jobs</a></li>
-      <li>Next: <a href="obj.html" title="next chapter">Fossology objects</a></li>
+      <li>Next: <a href="users.html" title="next chapter">Fossology Users</a></li>
   </ul></li>
 </ul>
 </div>
@@ -87,7 +91,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -105,15 +109,15 @@
           <div class="body" role="main">
             
   <section id="fossology-report">
-<h1>Fossology Report<a class="headerlink" href="#fossology-report" title="Permalink to this headline">¶</a></h1>
+<h1>Fossology Report<a class="headerlink" href="#fossology-report" title="Link to this heading">¶</a></h1>
 <p>Methods used to access “report/” endpoints.</p>
-<span class="target" id="module-fossology.report"></span><dl class="py class">
+<dl class="py class" id="module-fossology.report">
 <dt class="sig sig-object py" id="fossology.report.Report">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.report.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><a class="headerlink" href="#fossology.report.Report" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.report.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><a class="headerlink" href="#fossology.report.Report" title="Link to this definition">¶</a></dt>
 <dd><p>Class dedicated to all “report” related endpoints</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.report.Report.download_report">
-<span class="sig-name descname"><span class="pre">download_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fossology.report.Report.download_report" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">download_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wait_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fossology.report.Report.download_report" title="Link to this definition">¶</a></dt>
 <dd><p>Download a report</p>
 <p>API Endpoint: GET /report/{id}</p>
 <p>Get report for a given upload. If the report is not ready wait another <code class="docutils literal notranslate"><span class="pre">wait_time</span></code> seconds or look at
@@ -121,7 +125,7 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 <p>If <code class="docutils literal notranslate"><span class="pre">wait_time</span></code> is 0, the time interval specified by the <code class="docutils literal notranslate"><span class="pre">Retry-After</span></code> header is used.</p>
 <p>The function stops trying after <strong>10 attempts</strong>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Example</dt>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">Fossology</span>
@@ -137,23 +141,23 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>report_id</strong> (<em>int</em>) – the id of the generated report</p></li>
 <li><p><strong>group</strong> (<em>string</em>) – the group name to choose while downloading a specific report (default: None)</p></li>
 <li><p><strong>wait_time</strong> (<em>int</em>) – use a customized upload wait time instead of Retry-After (in seconds, default: 0)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the report content and the report name</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[str, str]</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
-<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the REST call is not authorized</p></li>
 <li><p><strong>TryAgain</strong> – if the report generation times out after 10 retries</p></li>
 </ul>
 </dd>
@@ -162,27 +166,27 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.report.Report.generate_report">
-<span class="sig-name descname"><span class="pre">generate_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><span class="pre">fossology.obj.Upload</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.ReportFormat" title="fossology.obj.ReportFormat"><span class="pre">fossology.obj.ReportFormat</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.generate_report" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">generate_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><span class="pre">Upload</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">report_format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="enums.html#fossology.enums.ReportFormat" title="fossology.enums.ReportFormat"><span class="pre">ReportFormat</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.report.Report.generate_report" title="Link to this definition">¶</a></dt>
 <dd><p>Generate a report for a given upload</p>
 <p>API Endpoint: GET /report</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>upload</strong> (<a class="reference internal" href="obj.html#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – the upload which report will be generated</p></li>
-<li><p><strong>format</strong> (<a class="reference internal" href="obj.html#fossology.obj.ReportFormat" title="fossology.obj.ReportFormat"><em>ReportFormat</em></a>) – the report format (default: ReportFormat.READMEOSS)</p></li>
+<li><p><strong>format</strong> (<a class="reference internal" href="enums.html#fossology.enums.ReportFormat" title="fossology.enums.ReportFormat"><em>ReportFormat</em></a>) – the report format (default: ReportFormat.READMEOSS)</p></li>
 <li><p><strong>group</strong> (<em>string</em>) – the group name to choose while generating the report (default: None)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the report id</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p></li>
-<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the user can’t access the group</p></li>
+<li><p><a class="reference internal" href="exceptions.html#fossology.exceptions.AuthorizationError" title="fossology.exceptions.AuthorizationError"><strong>AuthorizationError</strong></a> – if the REST call is not authorized</p></li>
 </ul>
 </dd>
 </dl>
@@ -203,7 +207,7 @@ the <code class="docutils literal notranslate"><span class="pre">Retry-After</sp
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

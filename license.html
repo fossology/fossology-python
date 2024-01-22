@@ -1,22 +1,20 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Fossology License &#8212; fossology 2.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
+    <title>Fossology License &#8212; fossology 3.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=28c8e701" />
+    <script src="_static/documentation_options.js?v=dd1205ac"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Fossology Uploads" href="uploads.html" />
-    <link rel="prev" title="Fossology Groups" href="groups.html" />
+    <link rel="prev" title="Fossology Items" href="items.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -49,11 +47,17 @@
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="folders.html">Fossology Folders</a></li>
 <li class="toctree-l1"><a class="reference internal" href="groups.html">Fossology Groups</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="items.html">Fossology Items</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology License</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.license.LicenseEndpoint"><code class="docutils literal notranslate"><span class="pre">LicenseEndpoint</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="uploads.html">Fossology Uploads</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jobs.html">Fossology Jobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Fossology Users</a></li>
 <li class="toctree-l1"><a class="reference internal" href="obj.html">Fossology objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enums.html">Fossology Enums</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exceptions.html">Fossology exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sample_workflow.html">Sample Workflow</a></li>
@@ -73,7 +77,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="groups.html" title="previous chapter">Fossology Groups</a></li>
+      <li>Previous: <a href="items.html" title="previous chapter">Fossology Items</a></li>
       <li>Next: <a href="uploads.html" title="next chapter">Fossology Uploads</a></li>
   </ul></li>
 </ul>
@@ -87,7 +91,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -105,15 +109,15 @@
           <div class="body" role="main">
             
   <section id="fossology-license">
-<h1>Fossology License<a class="headerlink" href="#fossology-license" title="Permalink to this headline">¶</a></h1>
+<h1>Fossology License<a class="headerlink" href="#fossology-license" title="Link to this heading">¶</a></h1>
 <p>Methods used to access “license/” endpoints.</p>
-<span class="target" id="module-fossology.license"></span><dl class="py class">
+<dl class="py class" id="module-fossology.license">
 <dt class="sig sig-object py" id="fossology.license.LicenseEndpoint">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.license.</span></span><span class="sig-name descname"><span class="pre">LicenseEndpoint</span></span><a class="headerlink" href="#fossology.license.LicenseEndpoint" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.license.</span></span><span class="sig-name descname"><span class="pre">LicenseEndpoint</span></span><a class="headerlink" href="#fossology.license.LicenseEndpoint" title="Link to this definition">¶</a></dt>
 <dd><p>Class dedicated to all “license” related endpoints</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.license.LicenseEndpoint.add_license">
-<span class="sig-name descname"><span class="pre">add_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License"><span class="pre">fossology.obj.License</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.license.LicenseEndpoint.add_license" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">license</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License"><span class="pre">License</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">merge_request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.license.LicenseEndpoint.add_license" title="Link to this definition">¶</a></dt>
 <dd><p>Add a new license to the DB</p>
 <p>API Endpoint: POST /license</p>
 <p>License data are added to the request body, here is an example:</p>
@@ -129,13 +133,13 @@
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>license</strong> (<a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License"><em>License</em></a>) – the license data</p></li>
 <li><p><strong>merge_request</strong> (<em>bool</em>) – open a merge request for the license candidate? (default: False)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -143,23 +147,23 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.license.LicenseEndpoint.detail_license">
-<span class="sig-name descname"><span class="pre">detail_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shortname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License"><span class="pre">fossology.obj.License</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="obj.html#fossology.obj.Obligation" title="fossology.obj.Obligation"><span class="pre">fossology.obj.Obligation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fossology.license.LicenseEndpoint.detail_license" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">detail_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shortname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License"><span class="pre">License</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="obj.html#fossology.obj.Obligation" title="fossology.obj.Obligation"><span class="pre">Obligation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fossology.license.LicenseEndpoint.detail_license" title="Link to this definition">¶</a></dt>
 <dd><p>Get a license from the DB</p>
 <p>API Endpoint: GET /license/{shortname}</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>shortname</strong> – Short name of the license</p></li>
 <li><p><strong>group</strong> (<em>int</em>) – the group this license belongs to (default: None)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the license id, the license data and the associated obligations</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple(int, <a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License">License</a>, List[<a class="reference internal" href="obj.html#fossology.obj.Obligation" title="fossology.obj.Obligation">Obligation</a>])</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(int, <a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License">License</a>, list[<a class="reference internal" href="obj.html#fossology.obj.Obligation" title="fossology.obj.Obligation">Obligation</a>])</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -167,26 +171,26 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.license.LicenseEndpoint.list_licenses">
-<span class="sig-name descname"><span class="pre">list_licenses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.LicenseType" title="fossology.obj.LicenseType"><span class="pre">fossology.obj.LicenseType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LicenseType.ALL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_pages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License"><span class="pre">fossology.obj.License</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fossology.license.LicenseEndpoint.list_licenses" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">list_licenses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="enums.html#fossology.enums.LicenseType" title="fossology.enums.LicenseType"><span class="pre">LicenseType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LicenseType.ALL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_pages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License"><span class="pre">License</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fossology.license.LicenseEndpoint.list_licenses" title="Link to this definition">¶</a></dt>
 <dd><p>Get all license from the DB</p>
 <p>API Endpoint: GET /license</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>active</strong> (<em>bool</em>) – list only active licenses (default: False)</p></li>
-<li><p><strong>kind</strong> (<a class="reference internal" href="obj.html#fossology.obj.LicenseType" title="fossology.obj.LicenseType"><em>LicenseType</em></a>) – list only licenses from type LicenseType  (default: LicenseType.ALL)</p></li>
+<li><p><strong>kind</strong> (<a class="reference internal" href="enums.html#fossology.enums.LicenseType" title="fossology.enums.LicenseType"><em>LicenseType</em></a>) – list only licenses from type LicenseType  (default: LicenseType.ALL)</p></li>
 <li><p><strong>page_size</strong> (<em>int</em>) – the maximum number of results per page (default: 100)</p></li>
 <li><p><strong>page</strong> (<em>int</em>) – the number of pages to be retrieved (default: 1)</p></li>
 <li><p><strong>all_pages</strong> (<em>boolean</em>) – get all licenses (default: False)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a list of licenses</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List[<a class="reference internal" href="obj.html#fossology.obj.License" title="fossology.obj.License">License</a>]</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -194,11 +198,11 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.license.LicenseEndpoint.update_license">
-<span class="sig-name descname"><span class="pre">update_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shortname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fullname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">risk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.license.LicenseEndpoint.update_license" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">update_license</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shortname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fullname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">risk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.license.LicenseEndpoint.update_license" title="Link to this definition">¶</a></dt>
 <dd><p>Update a license</p>
 <p>API Endpoint: PATCH /license/{shortname}</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>shortName</strong> (<em>str</em>) – the short name of the license to be updated</p></li>
 <li><p><strong>fullName</strong> (<em>str</em>) – the new fullName of the license (optional)</p></li>
@@ -207,7 +211,7 @@
 <li><p><strong>risk</strong> (<em>int</em>) – the new risk of the license (default: 2)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
 </dd>
 </dl>
@@ -228,7 +232,7 @@
       &copy;2021, Siemens AG.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
