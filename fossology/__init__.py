@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import logging
+import sys
 from datetime import date, timedelta
 
 import requests
@@ -77,7 +78,7 @@ def fossology_token(
             description = "Error while generating new token"
             raise FossologyApiError(description, response)
     except requests.exceptions.ConnectionError as error:
-        exit(f"Server {url} does not seem to be running or is unreachable: {error}")
+        sys.exit(f"Server {url} does not seem to be running or is unreachable: {error}")
 
 
 class Fossology(
