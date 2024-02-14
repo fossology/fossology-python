@@ -59,9 +59,9 @@ Using the API
    .. code:: python
 
       from fossology import fossology_token
-      from fossology.obj import TokenScope
+      from fossology.enum import TokenScope
 
-      FOSSOLOGY_SERVER = "https://fossology.example.com/"
+      FOSSOLOGY_SERVER = "https://fossology.example.com/repo" # Note the absense of the trailing slash, otherwise the token generation will fail
       FOSSOLOGY_USER = "fossy"
       FOSSOLOGY_PASSWORD = "fossy"
       TOKEN_NAME = "fossy_token"
