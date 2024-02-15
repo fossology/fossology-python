@@ -47,16 +47,11 @@ def test_generate_token_too_long(foss_server: str):
 
 
 @responses.activate
-def test_generate_token_errors(foss_server: str):
+def test_generate_token_if_receiving_connection_error_exits(foss_server: str):
     responses.add(
         responses.POST,
         f"{foss_server}/api/v1/tokens",
-        body=requests.exceptions.ConnectionError(),
-    )
-    responses.add(
-        responses.POST,
-        f"{foss_server}/api/v1/tokens",
-        status=404,
+        body=requests.exceptions.ConnectionError("Test Exception"),
     )
     with pytest.raises(SystemExit) as excinfo:
         fossology_token(
@@ -66,10 +61,21 @@ def test_generate_token_errors(foss_server: str):
             secrets.token_urlsafe(8),
             token_expire=str(date.today() - timedelta(days=1)),
         )
-        assert (
-            f"Server {foss_server} does not seem to be running or is unreachable"
-            in str(excinfo.value)
-        )
+    assert (
+        f"Server {foss_server} does not seem to be running or is unreachable: Test Exception"
+        in str(excinfo.value)
+    )
+
+
+@responses.activate
+def test_generate_token_if_receiving_authentication_error_raises_api_error_(
+    foss_server: str,
+):
+    responses.add(
+        responses.POST,
+        f"{foss_server}/api/v1/tokens",
+        status=404,
+    )
     with pytest.raises(AuthenticationError) as excinfo:
         fossology_token(
             foss_server,
