@@ -136,9 +136,9 @@
 <ul>
 <li><p>Get a REST API token either from the Fossology server under <strong>``User-&gt;Edit user account``</strong> or generate a token using the method available in this library:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">fossology_token</span>
-<span class="kn">from</span> <span class="nn">fossology.obj</span> <span class="kn">import</span> <span class="n">TokenScope</span>
+<span class="kn">from</span> <span class="nn">fossology.enum</span> <span class="kn">import</span> <span class="n">TokenScope</span>
 
-<span class="n">FOSSOLOGY_SERVER</span> <span class="o">=</span> <span class="s2">&quot;https://fossology.example.com/&quot;</span>
+<span class="n">FOSSOLOGY_SERVER</span> <span class="o">=</span> <span class="s2">&quot;https://fossology.example.com/repo&quot;</span> <span class="c1"># Note the absense of the trailing slash, otherwise the token generation will fail</span>
 <span class="n">FOSSOLOGY_USER</span> <span class="o">=</span> <span class="s2">&quot;fossy&quot;</span>
 <span class="n">FOSSOLOGY_PASSWORD</span> <span class="o">=</span> <span class="s2">&quot;fossy&quot;</span>
 <span class="n">TOKEN_NAME</span> <span class="o">=</span> <span class="s2">&quot;fossy_token&quot;</span>
