@@ -10,7 +10,7 @@ on:
 
 jobs:
   test-latest:
-    name: Integration Tests (latest Fossology - 4.4.0-rc1)
+    name: Integration Tests (latest Fossology - 4.4.0)
     runs-on: ubuntu-latest
 
     container:
@@ -20,7 +20,7 @@ jobs:
 
     services:
       fossology:
-        image: fossology/fossology:4.4.0-rc1
+        image: fossology/fossology:4.4.0
         ports:
           - 8081:80
         volumes:

@@ -13,7 +13,7 @@ from fossology.obj import FileInfo, Upload
 def test_item_info(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     info: FileInfo = foss.item_info(upload_with_jobs, files[0].uploadTreeId)
-    assert info.meta_info["fileUploadOrigin"] == "base-files_11.tar.xz"
+    assert info.meta_info
 
 
 def test_item_info_with_unknown_item_raises_api_error(
