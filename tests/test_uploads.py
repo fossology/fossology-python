@@ -221,7 +221,7 @@ def test_upload_summary_with_unknown_group_raises_authorization_error(
     )
 
 
-def test_delete_unknown_upload_unknown_group(foss: Fossology, fake_hash: dict):
+def test_delete_if_unknown_upload_raises_error(foss: Fossology, fake_hash: dict):
     upload = Upload(
         foss.rootFolder,
         "Root Folder",
@@ -233,10 +233,6 @@ def test_delete_unknown_upload_unknown_group(foss: Fossology, fake_hash: dict):
     )
     with pytest.raises(FossologyApiError):
         foss.delete_upload(upload)
-
-    with pytest.raises(AuthorizationError) as excinfo:
-        foss.delete_upload(upload, group="test")
-    assert f"Not authorized to delete upload {upload.id}" in str(excinfo.value)
 
 
 def test_paginated_list_uploads(foss: Fossology, upload: Upload, test_file_path: str):

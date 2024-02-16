@@ -22,6 +22,7 @@ class AuthenticationError(Error):
             self.message = f"{description}: {message} ({response.status_code})"
         else:
             self.message = description
+        super().__init__(self.message)
 
 
 class AuthorizationError(Error):
@@ -33,6 +34,7 @@ class AuthorizationError(Error):
         except JSONDecodeError:
             message = response.text
         self.message = f"{description}: {message} ({response.status_code})"
+        super().__init__(self.message)
 
 
 class FossologyApiError(Error):
@@ -44,6 +46,7 @@ class FossologyApiError(Error):
         except JSONDecodeError:
             message = response.text
         self.message = f"{description}: {message} ({response.status_code})"
+        super().__init__(self.message)
 
 
 class FossologyUnsupported(Error):
@@ -51,3 +54,4 @@ class FossologyUnsupported(Error):
 
     def __init__(self, description):
         self.message = description
+        super().__init__(self.message)
