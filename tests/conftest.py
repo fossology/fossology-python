@@ -164,7 +164,22 @@ def foss_token(foss_server: str) -> str:
 @pytest.fixture(scope="session")
 def foss(foss_server: str, foss_token: str, foss_agents: Agents) -> fossology.Fossology:
     try:
-        foss = fossology.Fossology(foss_server, foss_token, "fossy")
+        foss = fossology.Fossology(foss_server, foss_token)
+    except (FossologyApiError, AuthenticationError) as error:
+        exit(error.message)
+
+    # Configure all license agents besides 'ojo'
+    foss.user.agents = foss_agents
+    yield foss
+    foss.close()
+
+
+@pytest.fixture(scope="session")
+def foss_v1(
+    foss_server: str, foss_token: str, foss_agents: Agents
+) -> fossology.Fossology:
+    try:
+        foss = fossology.Fossology(foss_server, foss_token, version="v1")
     except (FossologyApiError, AuthenticationError) as error:
         exit(error.message)
 
@@ -212,6 +227,24 @@ def upload(
     jobs_lookup(foss, upload)
     yield upload
     foss.delete_upload(upload)
+    time.sleep(5)
+
+
+@pytest.fixture(scope="function")
+def upload_v1(
+    foss_v1: fossology.Fossology,
+    test_file_path: str,
+) -> Generator:
+    upload = foss_v1.upload_file(
+        foss_v1.rootFolder,
+        file=test_file_path,
+        description="Test upload via fossology-python lib",
+        access_level=AccessLevel.PUBLIC,
+        wait_time=5,
+    )
+    jobs_lookup(foss_v1, upload)
+    yield upload
+    foss_v1.delete_upload(upload)
     time.sleep(5)
 
 

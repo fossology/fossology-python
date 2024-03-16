@@ -571,6 +571,13 @@ class FileInfo(object):
 
     @classmethod
     def from_json(cls, json_dict):
+        for key in ("viewInfo", "metaInfo", "packageInfo", "tagInfo", "reuseInfo"):
+            try:
+                json_dict[key.replace("I", "_i")] = json_dict[key]
+                del json_dict[key]
+            except KeyError:
+                pass
+
         return cls(**json_dict)
 
 
@@ -586,6 +593,9 @@ class Upload(object):
     :param description: further information about the upload
     :param uploadname: the name of the upload (default: the name of the upload file)
     :param uploaddate: the date of the upload
+    :param assignee: the user who is assigned to the upload
+    :param assigneeDate: the date of the assignment
+    :param closingDate: the date of the closing
     :param hash: the hash data of the uploaded file
     :param kwargs: handle any other upload information provided by the fossology instance
     :type folderid: int
@@ -594,6 +604,9 @@ class Upload(object):
     :type description: string
     :type uploadname: string
     :type uploaddate: string
+    :type assignee: string
+    :type assigneeDate: string
+    :type closingDate: string
     :type hash: Hash
     :type kwargs: key word argument
     """
@@ -606,8 +619,9 @@ class Upload(object):
         description,
         uploadname,
         uploaddate,
-        filesize=None,
-        filesha1=None,
+        assignee=None,
+        assigneeDate=None,
+        closingDate=None,
         hash=None,
         **kwargs,
     ):
@@ -617,30 +631,26 @@ class Upload(object):
         self.description = description
         self.uploadname = uploadname
         self.uploaddate = uploaddate
-        if filesize and filesha1:
-            self.filesize = filesize
-            self.filesha1 = filesha1
-            self.hash = None
-        else:
-            self.filesize = None
-            self.filesha1 = None
-            self.hash = Hash.from_json(hash)
+        self.assignee = (assignee,)
+        self.assigneeDate = (assigneeDate,)
+        self.closeDate = (closingDate,)
+        self.hash = Hash.from_json(hash)
         self.additional_info = kwargs
 
     def __str__(self):
-        if self.filesize:
-            return (
-                f"Upload '{self.uploadname}' ({self.id}, {self.filesize}B, {self.filesha1}) "
-                f"in folder {self.foldername} ({self.folderid})"
-            )
-        else:
-            return (
-                f"Upload '{self.uploadname}' ({self.id}, {self.hash.size}B, {self.hash.sha1}) "
-                f"in folder {self.foldername} ({self.folderid})"
-            )
+        return (
+            f"Upload '{self.uploadname}' ({self.id}, {self.hash.size}B, {self.hash.sha1}) "
+            f"in folder {self.foldername} ({self.folderid})"
+        )
 
     @classmethod
     def from_json(cls, json_dict):
+        for key in ("folderId", "folderName", "uploadName", "uploadDate"):
+            try:
+                json_dict[key.lower()] = json_dict[key]
+                del json_dict[key]
+            except KeyError:
+                pass
         return cls(**json_dict)
 
 

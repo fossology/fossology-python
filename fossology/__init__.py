@@ -25,7 +25,13 @@ logger.setLevel(logging.DEBUG)
 
 
 def fossology_token(
-    url, username, password, token_name, token_scope=TokenScope.READ, token_expire=None
+    url,
+    username,
+    password,
+    token_name,
+    token_scope=TokenScope.READ,
+    token_expire=None,
+    version="v2",
 ):
     """Generate an API token using username/password
 
@@ -35,7 +41,7 @@ def fossology_token(
 
     >>> from fossology import fossology_token # doctest: +SKIP
     >>> from fossology.obj import TokenScope # doctest: +SKIP
-    >>> token = fossology_token("https://fossology.example.com", "Me", "MyPassword", "MyToken") # doctest: +SKIP
+    >>> token = fossology_token("https://fossology.example.com/repo", "Me", "MyPassword", "MyToken", version="v2") # doctest: +SKIP
 
 
     :param url: the URL of the Fossology server
@@ -44,30 +50,46 @@ def fossology_token(
     :param name: the name of the token
     :param scope: the scope of the token (default: TokenScope.READ)
     :param expire: the expire date of the token, e.g. 2019-12-25 (default: max. 30 days)
+    :param version: the version of the API to use (default: "v2")
     :type url: string
     :type username: string
     :type password: string
     :type name: string
     :type scope: TokenScope
     :type expire: string
+    :type version: string
     :return: the new token
     :rtype: string
     :raises AuthenticationError: if the username or password is incorrect
     :raises FossologyApiError: if another error occurs
     """
-    data = {
-        "username": username,
-        "password": password,
-        "token_name": token_name,
-        "token_scope": token_scope.value,
-    }
+    if version == "v2":
+        data = {
+            "username": username,
+            "password": password,
+            "tokenName": token_name,
+            "tokenScope": token_scope.value,
+        }
+    else:
+        data = {
+            "username": username,
+            "password": password,
+            "token_name": token_name,
+            "token_scope": token_scope.value,
+        }
     if token_expire:
-        data["token_expire"] = token_expire
+        if version == "v2":
+            data["tokenExpire"] = token_expire
+        else:
+            data["token_expire"] = token_expire
     else:
         now = date.today()
-        data["token_expire"] = str(now + timedelta(days=30))
+        if version == "v2":
+            data["tokenExpire"] = str(now + timedelta(days=30))
+        else:
+            data["token_expire"] = str(now + timedelta(days=30))
     try:
-        response = requests.post(url + "/api/v1/tokens", data=data)
+        response = requests.post(url + "/api/" + version + "/tokens", data=data)
         if response.status_code == 201:
             token = response.json()["Authorization"]
             return token.replace("Bearer ", "")
@@ -96,19 +118,20 @@ class Fossology(
 
     :param url: URL of the Fossology instance
     :param token: The API token generated using the Fossology UI
+    :param version: the version of the API to use (default: "v2")
     :type url: str
     :type token: str
+    :type version: str
     :raises FossologyApiError: if a REST call failed
     :raises AuthenticationError: if the user couldn't be authenticated
     """
 
-    def __init__(self, url, token, name=None):
+    def __init__(self, url, token, version="v2"):
         self.host = url
         self.token = token
         self.users = list()
         self.folders = list()
-
-        self.api = f"{self.host}/api/v2"
+        self.api = f"{self.host}/api/{version}"
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         self.info = self.get_info()
