@@ -50,7 +50,7 @@ def test_generate_token_too_long(foss_server: str):
 def test_generate_token_if_receiving_connection_error_exits(foss_server: str):
     responses.add(
         responses.POST,
-        f"{foss_server}/api/v1/tokens",
+        f"{foss_server}/api/v2/tokens",
         body=requests.exceptions.ConnectionError("Test Exception"),
     )
     with pytest.raises(SystemExit) as excinfo:
@@ -73,7 +73,7 @@ def test_generate_token_if_receiving_authentication_error_raises_api_error_(
 ):
     responses.add(
         responses.POST,
-        f"{foss_server}/api/v1/tokens",
+        f"{foss_server}/api/v2/tokens",
         status=404,
     )
     with pytest.raises(AuthenticationError) as excinfo:

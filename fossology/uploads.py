@@ -35,6 +35,8 @@ def list_uploads_parameters(
     status: ClearingStatus | None = None,
     assignee: str | None = None,
     since: str | None = None,
+    group: str | None = None,
+    limit: str | None = None,
 ) -> dict:
     """Helper function to list of query parameters for GET /uploads endpoint"""
     date_pattern = re.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}")
@@ -56,6 +58,10 @@ def list_uploads_parameters(
             )
         else:
             params["since"] = since
+    if group:
+        params["groupName"] = group
+    if limit:
+        params["limit"] = limit
     return params
 
 
@@ -285,16 +291,10 @@ class Uploads:
                 upload = self.detail_upload(
                     response.json()["message"], group, wait_time
                 )
-                if upload.filesize:
-                    logger.info(
-                        f"Upload {upload.uploadname} ({upload.filesize}) "
-                        f"has been uploaded on {upload.uploaddate}"
-                    )
-                else:
-                    logger.info(
-                        f"Upload {upload.uploadname} ({upload.hash.size}) "
-                        f"has been uploaded on {upload.uploaddate}"
-                    )
+                logger.info(
+                    f"Upload {upload.uploadname} ({upload.hash.size}) "
+                    f"has been uploaded on {upload.uploaddate}"
+                )
                 return upload
             except TryAgain:
                 description = f"Upload of {source} failed"
@@ -391,6 +391,7 @@ class Uploads:
         headers = {}
         if group:
             headers["groupName"] = group
+            params["groupName"] = group  # type: ignore
 
         response = self.session.get(
             f"{self.api}/uploads/{upload.id}/licenses", params=params, headers=headers
@@ -545,6 +546,8 @@ class Uploads:
             status=status,
             assignee=assignee,
             since=since,
+            group=group,
+            limit=page_size,
         )
         uploads_list = list()
         if all_pages:
@@ -554,6 +557,7 @@ class Uploads:
             x_total_pages = page
         while page <= x_total_pages:
             headers["page"] = str(page)
+            params["page"] = str(page)
             response = self.session.get(
                 f"{self.api}/uploads", headers=headers, params=params
             )
@@ -643,8 +647,10 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the REST call is not authorized
         """
-        headers = {"folderId": str(folder.id), "action": action}
-        response = self.session.put(f"{self.api}/uploads/{upload.id}", headers=headers)
+        params = {"folderId": str(folder.id), "action": action}
+        response = self.session.put(
+            f"{self.api}/uploads/{upload.id}", headers=params, params=params
+        )
 
         if response.status_code == 202:
             logger.info(
@@ -771,7 +777,7 @@ class Uploads:
         :raises AuthorizationError: if the REST call is not authorized
         """
         response = self.session.get(f"{self.api}/uploads/{upload.id}/perm-groups")
-
+        print(response.request.url)
         if response.status_code == 200:
             return UploadPermGroups.from_json(response.json())
 

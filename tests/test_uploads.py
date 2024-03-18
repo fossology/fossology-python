@@ -7,7 +7,6 @@ import secrets
 import time
 from datetime import date, timedelta
 from pathlib import Path
-from unittest.mock import Mock
 
 import pytest
 import responses
@@ -28,6 +27,19 @@ def test_upload_sha1(upload: Upload):
     assert str(upload.hash) == (
         f"File SHA1: {upload.hash.sha1} MD5 {upload.hash.md5} "
         f"SH256 {upload.hash.sha256} Size {upload.hash.size}B"
+    )
+
+
+def test_upload_v1(upload_v1: Upload):
+    assert upload_v1.uploadname == "base-files_11.tar.xz"
+    assert upload_v1.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+    assert str(upload_v1) == (
+        f"Upload '{upload_v1.uploadname}' ({upload_v1.id}, {upload_v1.hash.size}B, {upload_v1.hash.sha1}) "
+        f"in folder {upload_v1.foldername} ({upload_v1.folderid})"
+    )
+    assert str(upload_v1.hash) == (
+        f"File SHA1: {upload_v1.hash.sha1} MD5 {upload_v1.hash.md5} "
+        f"SH256 {upload_v1.hash.sha256} Size {upload_v1.hash.size}B"
     )
 
 
@@ -157,13 +169,14 @@ def test_move_upload_to_non_existing_folder(foss: Fossology, upload: Upload):
 
 @responses.activate
 def test_move_upload_error(foss: Fossology, foss_server: str, upload: Upload):
+    folder = Folder(secrets.randbelow(1000), "Folder", "", foss.rootFolder)
     responses.add(
         responses.PUT,
         f"{foss_server}/api/v2/uploads/{upload.id}",
         status=500,
     )
     with pytest.raises(FossologyApiError):
-        foss.move_upload(upload, Mock(), "move")
+        foss.move_upload(upload, folder, "move")
 
 
 def test_update_upload(foss: Fossology, upload: Upload):
