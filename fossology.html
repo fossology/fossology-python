@@ -116,7 +116,7 @@
 get user relevant information.</p>
 <dl class="py class" id="module-fossology">
 <dt class="sig sig-object py" id="fossology.Fossology">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.</span></span><span class="sig-name descname"><span class="pre">Fossology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.</span></span><span class="sig-name descname"><span class="pre">Fossology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'v2'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.Fossology" title="Link to this definition">¶</a></dt>
 <dd><p>Main Fossology API class</p>
 <p>Authentication against a running Fossology instance is performed using an API token.</p>
 <dl class="field-list simple">
@@ -132,6 +132,7 @@ get user relevant information.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> (<em>str</em>) – URL of the Fossology instance</p></li>
 <li><p><strong>token</strong> (<em>str</em>) – The API token generated using the Fossology UI</p></li>
+<li><p><strong>version</strong> (<em>str</em>) – the version of the API to use (default: “v2”)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -202,7 +203,7 @@ get user relevant information.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fossology.fossology_token">
-<span class="sig-prename descclassname"><span class="pre">fossology.</span></span><span class="sig-name descname"><span class="pre">fossology_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">TokenScope.READ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_expire</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.fossology_token" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fossology.</span></span><span class="sig-name descname"><span class="pre">fossology_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">TokenScope.READ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_expire</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'v2'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.fossology_token" title="Link to this definition">¶</a></dt>
 <dd><p>Generate an API token using username/password</p>
 <p>API endpoint: POST /tokens</p>
 <dl class="field-list simple">
@@ -211,7 +212,7 @@ get user relevant information.</p>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology</span> <span class="kn">import</span> <span class="n">fossology_token</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fossology.obj</span> <span class="kn">import</span> <span class="n">TokenScope</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">token</span> <span class="o">=</span> <span class="n">fossology_token</span><span class="p">(</span><span class="s2">&quot;https://fossology.example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;Me&quot;</span><span class="p">,</span> <span class="s2">&quot;MyPassword&quot;</span><span class="p">,</span> <span class="s2">&quot;MyToken&quot;</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">token</span> <span class="o">=</span> <span class="n">fossology_token</span><span class="p">(</span><span class="s2">&quot;https://fossology.example.com/repo&quot;</span><span class="p">,</span> <span class="s2">&quot;Me&quot;</span><span class="p">,</span> <span class="s2">&quot;MyPassword&quot;</span><span class="p">,</span> <span class="s2">&quot;MyToken&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;v2&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -223,6 +224,7 @@ get user relevant information.</p>
 <li><p><strong>name</strong> (<em>string</em>) – the name of the token</p></li>
 <li><p><strong>scope</strong> (<a class="reference internal" href="enums.html#fossology.enums.TokenScope" title="fossology.enums.TokenScope"><em>TokenScope</em></a>) – the scope of the token (default: TokenScope.READ)</p></li>
 <li><p><strong>expire</strong> (<em>string</em>) – the expire date of the token, e.g. 2019-12-25 (default: max. 30 days)</p></li>
+<li><p><strong>version</strong> (<em>string</em>) – the version of the API to use (default: “v2”)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
