@@ -26,11 +26,13 @@ A simple wrapper for the Fossology REST API.
 
 See `the OpenAPI specification <https://raw.githubusercontent.com/fossology/fossology/master/src/www/ui/api/documentation/openapi.yaml>`_ used to implement this library.
 
-Current release is compatible with **Fossology version 4.4.0** - API version 2.0.0 (not all endpoints are supported)
+Current release is compatible with **Fossology version 4.4.0-rc2** - API version 2.0.0 (not all endpoints are supported)
 
    `See release notes <https://github.com/fossology/fossology-python/releases>`_ for all details.
 
    If you miss an API Endpoint, please open a new issue or contribute a pull request.
+
+   API v1 is supported too, it needs to be specified explicitly.
 
 Documentation
 =============
@@ -61,17 +63,19 @@ Using the API
       from fossology import fossology_token
       from fossology.enum import TokenScope
 
-      FOSSOLOGY_SERVER = "https://fossology.example.com/repo" # Note the absense of the trailing slash, otherwise the token generation will fail
+      FOSSOLOGY_SERVER = "https://fossology.example.com/repo" # Note the absence of the trailing slash, otherwise the token generation will fail
       FOSSOLOGY_USER = "fossy"
       FOSSOLOGY_PASSWORD = "fossy"
       TOKEN_NAME = "fossy_token"
 
+      # By default version v2 of the token generation API will be used
       token = fossology_token(
             FOSSOLOGY_SERVER,
             FOSSOLOGY_USER,
             FOSSOLOGY_PASSWORD,
             TOKEN_NAME,
             TokenScope.WRITE
+            version="v2"
       )
 
 -  Start using the API:
@@ -80,8 +84,8 @@ Using the API
 
       from fossology import Fossology
 
-      # Starting from API version 1.2.3, the `FOSSOLOGY_USER` option is not needed anymore
-      foss = Fossology(FOSSOLOGY_SERVER, token, FOSSOLOGY_USER)
+      # By default version v2 of the API will be used
+      foss = Fossology(FOSSOLOGY_SERVER, token, FOSSOLOGY_USER, version="v2")
       print(f"Logged in as user {foss.user.name}")
 
 

@@ -41,7 +41,7 @@ def test_get_upload_permissions_if_upload_does_not_exists_raise_api_error(
     upload = Upload(
         1,
         "non-existing-folder",
-        secrets.randbelow(192),
+        secrets.randbelow(1092),
         "non-existing upload",
         "none",
         "2023-08-07",
