@@ -777,7 +777,6 @@ class Uploads:
         :raises AuthorizationError: if the REST call is not authorized
         """
         response = self.session.get(f"{self.api}/uploads/{upload.id}/perm-groups")
-        print(response.request.url)
         if response.status_code == 200:
             return UploadPermGroups.from_json(response.json())
 
