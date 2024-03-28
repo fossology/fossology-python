@@ -16,9 +16,9 @@ def test_item_info(foss: Fossology, upload_with_jobs: Upload):
     assert info.meta_info
 
 
-def test_item_info_v1(foss_v1: Fossology, upload_with_jobs: Upload):
-    files, _ = foss_v1.search(license="BSD")
-    info: FileInfo = foss_v1.item_info(upload_with_jobs, files[0].uploadTreeId)
+def test_item_info_v2(foss_v2: Fossology, upload_with_jobs: Upload):
+    files, _ = foss_v2.search(license="BSD")
+    info: FileInfo = foss_v2.item_info(upload_with_jobs, files[0].uploadTreeId)
     assert info.meta_info
 
 

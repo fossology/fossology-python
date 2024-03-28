@@ -156,7 +156,7 @@ class Uploads:
 
         >>> from fossology import Fossology
         >>> from fossology.enums import AccessLevel
-        >>> foss = Fossology(FOSS_URL, FOSS_TOKEN, username) # doctest: +SKIP
+        >>> foss = Fossology(FOSS_URL, FOSS_TOKEN) # doctest: +SKIP
         >>> my_upload = foss.upload_file(
         ...        foss.rootFolder,
         ...        file="my-package.zip",
@@ -237,39 +237,53 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the REST call is not authorized
         """
-        headers = {"folderId": str(folder.id)}
-        if description:
-            headers["uploadDescription"] = description
-        if access_level:
-            headers["public"] = access_level.value
-        if apply_global:
-            headers["applyGlobal"] = "true"
-        if ignore_scm:
-            headers["ignoreScm"] = "true"
-        if group:
+        data = {
+            "folderId": str(folder.id),
+            "uploadDescription": description,
+            "public": access_level.value
+            if access_level
+            else AccessLevel.PROTECTED.value,
+            "applyGlobal": apply_global,
+            "ignoreScm": ignore_scm,
+            "uploadType": "file",
+        }
+
+        headers = {}
+        if "v1" in self.api:
+            headers = {
+                k: str(v).lower() if isinstance(v, bool) else v for k, v in data.items()
+            }  # Needed for API v1.x
             headers["groupName"] = group
+            endpoint = f"{self.api}/uploads"
+        else:
+            if group:
+                endpoint = f"{self.api}/uploads?groupName={group}"
+            else:
+                endpoint = f"{self.api}/uploads"
 
         if file:
-            headers["uploadType"] = "file"
+            data["uploadType"] = headers["uploadType"] = "file"
             with open(file, "rb") as fp:
                 files = {"fileInput": fp}
                 response = self.session.post(
-                    f"{self.api}/uploads", files=files, headers=headers
+                    endpoint, files=files, headers=headers, data=data
                 )
         elif vcs or url or server:
-            data = dict
             if vcs:
-                headers["uploadType"] = "vcs"
-                data = {"location": vcs}  # type: ignore
+                data["location"] = vcs
+                print(data)
+                data["uploadType"] = headers["uploadType"] = "vcs"
             elif url:
-                headers["uploadType"] = "url"
-                data = {"location": url}  # type: ignore
+                data["location"] = url
+                data["uploadType"] = headers["uploadType"] = "url"
             elif server:
-                headers["uploadType"] = "server"
-                data = {"location": server}  # type: ignore
+                data["location"] = server
+                data["uploadType"] = headers["uploadType"] = "server"
             headers["Content-Type"] = "application/json"
             response = self.session.post(
-                f"{self.api}/uploads", data=json.dumps(data), headers=headers
+                endpoint,
+                data=json.dumps(data),
+                headers=headers,
             )
         else:
             logger.info(

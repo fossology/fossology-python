@@ -31,7 +31,7 @@ def fossology_token(
     token_name,
     token_scope=TokenScope.READ,
     token_expire=None,
-    version="v2",
+    version="v1",
 ):
     """Generate an API token using username/password
 
@@ -41,7 +41,7 @@ def fossology_token(
 
     >>> from fossology import fossology_token # doctest: +SKIP
     >>> from fossology.obj import TokenScope # doctest: +SKIP
-    >>> token = fossology_token("https://fossology.example.com/repo", "Me", "MyPassword", "MyToken", version="v2") # doctest: +SKIP
+    >>> token = fossology_token("https://fossology.example.com/repo", "Me", "MyPassword", "MyToken", version="v1") # doctest: +SKIP
 
 
     :param url: the URL of the Fossology server
@@ -50,7 +50,7 @@ def fossology_token(
     :param name: the name of the token
     :param scope: the scope of the token (default: TokenScope.READ)
     :param expire: the expire date of the token, e.g. 2019-12-25 (default: max. 30 days)
-    :param version: the version of the API to use (default: "v2")
+    :param version: the version of the API to use (default: "v1")
     :type url: string
     :type username: string
     :type password: string
@@ -118,7 +118,7 @@ class Fossology(
 
     :param url: URL of the Fossology instance
     :param token: The API token generated using the Fossology UI
-    :param version: the version of the API to use (default: "v2")
+    :param version: the version of the API to use (default: "v1")
     :type url: str
     :type token: str
     :type version: str
@@ -126,7 +126,7 @@ class Fossology(
     :raises AuthenticationError: if the user couldn't be authenticated
     """
 
-    def __init__(self, url, token, version="v2"):
+    def __init__(self, url, token, version="v1"):
         self.host = url
         self.token = token
         self.users = list()

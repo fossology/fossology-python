@@ -30,16 +30,29 @@ def test_upload_sha1(upload: Upload):
     )
 
 
-def test_upload_v1(upload_v1: Upload):
-    assert upload_v1.uploadname == "base-files_11.tar.xz"
-    assert upload_v1.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
-    assert str(upload_v1) == (
-        f"Upload '{upload_v1.uploadname}' ({upload_v1.id}, {upload_v1.hash.size}B, {upload_v1.hash.sha1}) "
-        f"in folder {upload_v1.foldername} ({upload_v1.folderid})"
+def test_upload(upload: Upload):
+    assert upload.uploadname == "base-files_11.tar.xz"
+    assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+    assert str(upload) == (
+        f"Upload '{upload.uploadname}' ({upload.id}, {upload.hash.size}B, {upload.hash.sha1}) "
+        f"in folder {upload.foldername} ({upload.folderid})"
     )
-    assert str(upload_v1.hash) == (
-        f"File SHA1: {upload_v1.hash.sha1} MD5 {upload_v1.hash.md5} "
-        f"SH256 {upload_v1.hash.sha256} Size {upload_v1.hash.size}B"
+    assert str(upload.hash) == (
+        f"File SHA1: {upload.hash.sha1} MD5 {upload.hash.md5} "
+        f"SH256 {upload.hash.sha256} Size {upload.hash.size}B"
+    )
+
+
+def test_upload_v2(upload_v2: Upload):
+    assert upload_v2.uploadname == "base-files_11.tar.xz"
+    assert upload_v2.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+    assert str(upload_v2) == (
+        f"Upload '{upload_v2.uploadname}' ({upload_v2.id}, {upload_v2.hash.size}B, {upload_v2.hash.sha1}) "
+        f"in folder {upload_v2.foldername} ({upload_v2.folderid})"
+    )
+    assert str(upload_v2.hash) == (
+        f"File SHA1: {upload_v2.hash.sha1} MD5 {upload_v2.hash.md5} "
+        f"SH256 {upload_v2.hash.sha256} Size {upload_v2.hash.size}B"
     )
 
 
@@ -59,7 +72,7 @@ def test_get_upload_error(foss: Fossology, foss_server: str):
     upload_id = 100
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload_id}",
+        f"{foss_server}/api/v1/uploads/{upload_id}",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -132,7 +145,7 @@ def test_empty_upload(foss: Fossology):
 def test_upload_error(foss: Fossology, foss_server: str, test_file_path: str):
     responses.add(
         responses.POST,
-        f"{foss_server}/api/v2/uploads",
+        f"{foss_server}/api/v1/uploads",
         status=500,
     )
     description = "Test upload API error"
@@ -172,7 +185,7 @@ def test_move_upload_error(foss: Fossology, foss_server: str, upload: Upload):
     folder = Folder(secrets.randbelow(1000), "Folder", "", foss.rootFolder)
     responses.add(
         responses.PUT,
-        f"{foss_server}/api/v2/uploads/{upload.id}",
+        f"{foss_server}/api/v1/uploads/{upload.id}",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -196,7 +209,7 @@ def test_update_upload_with_unknown_group_raises_error(foss: Fossology, upload: 
 def test_update_upload_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.PATCH,
-        f"{foss_server}/api/v2/uploads/{upload.id}",
+        f"{foss_server}/api/v1/uploads/{upload.id}",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -217,7 +230,7 @@ def test_upload_summary(foss: Fossology, upload: Upload):
 def test_upload_summary_500_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload.id}/summary",
+        f"{foss_server}/api/v1/uploads/{upload.id}/summary",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -284,7 +297,7 @@ def test_paginated_list_uploads(foss: Fossology, upload: Upload, test_file_path:
 def test_list_uploads_500_error(foss: Fossology, foss_server: str, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads",
+        f"{foss_server}/api/v1/uploads",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -310,7 +323,7 @@ def test_download_upload_authorization_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload.id}/download",
+        f"{foss_server}/api/v1/uploads/{upload.id}/download",
         status=403,
     )
     with pytest.raises(AuthorizationError) as excinfo:
@@ -322,7 +335,7 @@ def test_download_upload_authorization_error(
 def test_download_upload_error(foss_server: str, foss: Fossology, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload.id}/download",
+        f"{foss_server}/api/v1/uploads/{upload.id}/download",
         status=401,
     )
     with pytest.raises(FossologyApiError) as excinfo:
