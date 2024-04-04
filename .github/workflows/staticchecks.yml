@@ -28,11 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install --with=dev
-      - name: Check format with black
-        run: poetry run poe format
-      - name: Lint with flake8
-        run: poetry run poe style
-      - name: Sort imports with isort
-        run: poetry run poe imports
+      - name: Lint using ruff
+        run: poetry run ruff check
       - name: Check types with mypy
         run: poetry run poe types

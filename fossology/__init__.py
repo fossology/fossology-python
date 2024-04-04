@@ -106,7 +106,6 @@ def fossology_token(
 class Fossology(
     Folders, Groups, Items, LicenseEndpoint, Uploads, Jobs, Report, Users, Search
 ):
-
     """Main Fossology API class
 
     Authentication against a running Fossology instance is performed using an API token.

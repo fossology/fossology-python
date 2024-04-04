@@ -9,7 +9,6 @@ from fossology.enums import ClearingScope, ClearingType, Permission
 
 
 class Agents(object):
-
     """FOSSology agents.
 
     Represents the agents currently configured for a given user.
@@ -98,7 +97,6 @@ class Agents(object):
 
 
 class User(object):
-
     """FOSSology user.
 
     Represents the user currently authenticated against the FOSSology server.
@@ -161,7 +159,6 @@ class User(object):
 
 
 class UserGroupMember(object):
-
     """FOSSology group member.
 
     Represents a member of a group.
@@ -193,7 +190,6 @@ class UserGroupMember(object):
 
 
 class Folder(object):
-
     """FOSSology folder.
 
     Represents a FOSSology folder.
@@ -229,7 +225,6 @@ class Folder(object):
 
 
 class Findings(object):
-
     """FOSSology license findings.
 
     Represents FOSSology license findings.
@@ -268,7 +263,6 @@ class Findings(object):
 
 
 class Group(object):
-
     """FOSSology group.
 
     Represents a FOSSology group.
@@ -349,7 +343,6 @@ class UploadPermGroups(object):
 
 
 class License(object):
-
     """FOSSology license.
 
     Represents a FOSSology license.
@@ -417,7 +410,6 @@ class License(object):
 
 
 class Obligation(object):
-
     """FOSSology license obligation.
 
     Represents a FOSSology license obligation.
@@ -456,7 +448,6 @@ class Obligation(object):
 
 
 class Hash(object):
-
     """FOSSology hash.
 
     Represents a FOSSology file hash values.
@@ -496,7 +487,6 @@ class Hash(object):
 
 
 class File(object):
-
     """FOSSology file response from filesearch.
 
     Represents a FOSSology filesearch response.
@@ -531,7 +521,6 @@ class File(object):
 
 
 class FileInfo(object):
-
     """FOSSology file info response.
 
     Represents a FOSSology file info response.
@@ -582,7 +571,6 @@ class FileInfo(object):
 
 
 class Upload(object):
-
     """FOSSology upload.
 
     Represents a FOSSology upload.
@@ -655,7 +643,6 @@ class Upload(object):
 
 
 class UploadCopyrights(object):
-
     """Copyright findings in a FOSSology upload
 
     Represents copyright matches of a FOSSology upload.
@@ -689,7 +676,6 @@ class UploadCopyrights(object):
 
 
 class UploadLicenses(object):
-
     """FOSSology upload licenses.
 
     Represents licenses and copyright matches of a FOSSology upload.
@@ -721,7 +707,6 @@ class UploadLicenses(object):
 
 
 class Summary(object):
-
     """FOSSology upload summary.
 
     Represents a FOSSology upload summary.
@@ -792,7 +777,6 @@ class Summary(object):
 
 
 class Job(object):
-
     """FOSSology job.
 
     Represents a FOSSology job.
@@ -842,7 +826,6 @@ class Job(object):
 
 
 class ApiLicense(object):
-
     """FOSSology API License.
 
     :param name: name of the API license
@@ -864,7 +847,6 @@ class ApiLicense(object):
 
 
 class FossologyServer(object):
-
     """FOSSology server info.
 
     :param version: version of the FOSSology server (e.g. 4.0.0)
@@ -895,7 +877,6 @@ class FossologyServer(object):
 
 
 class ApiInfo(object):
-
     """FOSSology API info.
 
     Represents the info endpoint of FOSSology API.
@@ -946,7 +927,6 @@ class ApiInfo(object):
 
 
 class Status(object):
-
     """FOSSology server status
 
     Represent the status of FOSSology sub-systems
@@ -964,7 +944,6 @@ class Status(object):
 
 
 class HealthInfo(object):
-
     """FOSSology server health info.
 
     Represents the health endpoint of FOSSology API.
@@ -992,7 +971,6 @@ class HealthInfo(object):
 
 
 class SearchResult(object):
-
     """Search result.
 
     Represents a search response from FOSSology API.
@@ -1022,7 +1000,6 @@ class SearchResult(object):
 
 
 class GetClearingHistory(object):
-
     """Clearing history.
 
     Represents the clearing history of a specified item.
@@ -1070,7 +1047,6 @@ class GetClearingHistory(object):
 
 
 class GetBulkHistory(object):
-
     """Bulk history.
 
     Represents the bulk history of a specified item.
