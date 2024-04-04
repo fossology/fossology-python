@@ -43,6 +43,44 @@ def test_upload(upload: Upload):
     )
 
 
+def test_upload_for_group(foss: Fossology, test_file_path: str):
+    foss.create_group("upload_access")
+    groups = foss.list_groups()
+    group_access = [group for group in groups if group.name == "upload_access"][0]
+    upload = foss.upload_file(
+        foss.rootFolder,
+        file=test_file_path,
+        description="Test upload via fossology-python lib",
+        access_level=AccessLevel.PUBLIC,
+        group="upload_access",
+        wait_time=5,
+    )
+    assert upload.uploadname == "base-files_11.tar.xz"
+    uploads = foss.list_uploads(group="upload_access")
+    assert uploads[0][0].uploadname == "base-files_11.tar.xz"
+    foss.delete_upload(upload)
+    foss.delete_group(group_access.id)
+
+
+def test_upload_for_group_v2(foss_v2: Fossology, test_file_path: str):
+    foss_v2.create_group("upload_access")
+    groups = foss_v2.list_groups()
+    group_access = [group for group in groups if group.name == "upload_access"][0]
+    upload = foss_v2.upload_file(
+        foss_v2.rootFolder,
+        file=test_file_path,
+        description="Test upload via fossology-python lib",
+        access_level=AccessLevel.PUBLIC,
+        group="upload_access",
+        wait_time=5,
+    )
+    assert upload.uploadname == "base-files_11.tar.xz"
+    uploads = foss_v2.list_uploads(group="upload_access")
+    assert uploads[0][0].uploadname == "base-files_11.tar.xz"
+    foss_v2.delete_upload(upload)
+    foss_v2.delete_group(group_access.id)
+
+
 def test_upload_v2(upload_v2: Upload):
     assert upload_v2.uploadname == "base-files_11.tar.xz"
     assert upload_v2.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
