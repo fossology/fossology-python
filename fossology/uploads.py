@@ -237,7 +237,7 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the REST call is not authorized
         """
-        data = {
+        data: dict = {
             "folderId": str(folder.id),
             "uploadDescription": description,
             "public": access_level.value
@@ -270,14 +270,13 @@ class Uploads:
                 )
         elif vcs or url or server:
             if vcs:
-                data["location"] = vcs
-                print(data)
+                data["location"] = vcs  # type: ignore
                 data["uploadType"] = headers["uploadType"] = "vcs"
             elif url:
-                data["location"] = url
+                data["location"] = url  # type: ignore
                 data["uploadType"] = headers["uploadType"] = "url"
             elif server:
-                data["location"] = server
+                data["location"] = server  # type: ignore
                 data["uploadType"] = headers["uploadType"] = "server"
             headers["Content-Type"] = "application/json"
             response = self.session.post(
