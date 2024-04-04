@@ -61,7 +61,7 @@ def test_detail_job_wait_completed(
 
 @responses.activate
 def test_schedule_job_error(foss_server: str, foss: Fossology, upload: Upload):
-    responses.add(responses.POST, f"{foss_server}/api/v2/jobs", status=404)
+    responses.add(responses.POST, f"{foss_server}/api/v1/jobs", status=404)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.schedule_jobs(foss.rootFolder, upload, {})
     assert f"Scheduling jobs for upload {upload.uploadname} failed" in str(
@@ -71,7 +71,7 @@ def test_schedule_job_error(foss_server: str, foss: Fossology, upload: Upload):
 
 @responses.activate
 def test_list_jobs_error(foss_server: str, foss: Fossology):
-    responses.add(responses.GET, f"{foss_server}/api/v2/jobs", status=404)
+    responses.add(responses.GET, f"{foss_server}/api/v1/jobs", status=404)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.list_jobs()
     assert "Unable to retrieve the list of jobs from page 1" in str(excinfo.value)
@@ -79,7 +79,7 @@ def test_list_jobs_error(foss_server: str, foss: Fossology):
 
 @responses.activate
 def test_list_all_jobs_access_denied(foss_server: str, foss: Fossology):
-    responses.add(responses.GET, f"{foss_server}/api/v2/jobs/all", status=403)
+    responses.add(responses.GET, f"{foss_server}/api/v1/jobs/all", status=403)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.list_jobs(all=True)
     assert "Access denied to /jobs/all endpoint" in str(excinfo.value)
@@ -88,8 +88,8 @@ def test_list_all_jobs_access_denied(foss_server: str, foss: Fossology):
 @responses.activate
 def test_detail_job_error(foss_server: str, foss: Fossology):
     job_id = secrets.randbelow(1000)
-    responses.add(responses.GET, f"{foss_server}/api/v2/jobs/{job_id}", status=404)
-    responses.add(responses.GET, f"{foss_server}/api/v2/jobs/{job_id}", status=404)
+    responses.add(responses.GET, f"{foss_server}/api/v1/jobs/{job_id}", status=404)
+    responses.add(responses.GET, f"{foss_server}/api/v1/jobs/{job_id}", status=404)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.detail_job(job_id, wait=True)
     assert f"Error while getting details for job {job_id}" in str(excinfo.value)

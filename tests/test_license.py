@@ -34,7 +34,7 @@ def test_another_license():
 
 @responses.activate
 def test_detail_license_error(foss_server: str, foss: fossology.Fossology):
-    responses.add(responses.GET, f"{foss_server}/api/v2/license/Blah", status=500)
+    responses.add(responses.GET, f"{foss_server}/api/v1/license/Blah", status=500)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.detail_license("Blah")
     assert "Error while getting license Blah" in str(excinfo.value)
@@ -48,7 +48,7 @@ def test_detail_license_not_found(foss: fossology.Fossology):
 
 @responses.activate
 def test_list_licenses_error(foss_server: str, foss: fossology.Fossology):
-    responses.add(responses.GET, f"{foss_server}/api/v2/license", status=500)
+    responses.add(responses.GET, f"{foss_server}/api/v1/license", status=500)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.list_licenses()
     assert "Unable to retrieve the list of licenses from page 1" in str(excinfo.value)
@@ -76,7 +76,7 @@ def test_get_all_candidate_licenses(foss: fossology.Fossology):
 def test_add_license_error(
     foss_server: str, foss: fossology.Fossology, test_license: License
 ):
-    responses.add(responses.POST, f"{foss_server}/api/v2/license", status=500)
+    responses.add(responses.POST, f"{foss_server}/api/v1/license", status=500)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.add_license(test_license)
     assert f"Error while adding new license {test_license.shortName}" in str(
@@ -93,7 +93,7 @@ def test_add_license_already_exists(
 ):
     mocked_logger = MagicMock()
     monkeypatch.setattr("fossology.license.logger", mocked_logger)
-    responses.add(responses.POST, f"{foss_server}/api/v2/license", status=409)
+    responses.add(responses.POST, f"{foss_server}/api/v1/license", status=409)
     foss.add_license(test_license)
     mocked_logger.info.assert_called_once()
 
@@ -125,7 +125,7 @@ def test_patch_license_error(
     foss_server: str, foss: fossology.Fossology, test_license: License
 ):
     responses.add(
-        responses.PATCH, f"{foss_server}/api/v2/license/License-1.0", status=500
+        responses.PATCH, f"{foss_server}/api/v1/license/License-1.0", status=500
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.update_license(test_license.shortName)

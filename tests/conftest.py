@@ -175,11 +175,11 @@ def foss(foss_server: str, foss_token: str, foss_agents: Agents) -> fossology.Fo
 
 
 @pytest.fixture(scope="session")
-def foss_v1(
+def foss_v2(
     foss_server: str, foss_token: str, foss_agents: Agents
 ) -> fossology.Fossology:
     try:
-        foss = fossology.Fossology(foss_server, foss_token, version="v1")
+        foss = fossology.Fossology(foss_server, foss_token, version="v2")
     except (FossologyApiError, AuthenticationError) as error:
         exit(error.message)
 
@@ -231,20 +231,20 @@ def upload(
 
 
 @pytest.fixture(scope="function")
-def upload_v1(
-    foss_v1: fossology.Fossology,
+def upload_v2(
+    foss_v2: fossology.Fossology,
     test_file_path: str,
 ) -> Generator:
-    upload = foss_v1.upload_file(
-        foss_v1.rootFolder,
+    upload = foss_v2.upload_file(
+        foss_v2.rootFolder,
         file=test_file_path,
         description="Test upload via fossology-python lib",
         access_level=AccessLevel.PUBLIC,
         wait_time=5,
     )
-    jobs_lookup(foss_v1, upload)
+    jobs_lookup(foss_v2, upload)
     yield upload
-    foss_v1.delete_upload(upload)
+    foss_v2.delete_upload(upload)
     time.sleep(5)
 
 

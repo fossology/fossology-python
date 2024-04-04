@@ -50,7 +50,7 @@ def test_generate_token_too_long(foss_server: str):
 def test_generate_token_if_receiving_connection_error_exits(foss_server: str):
     responses.add(
         responses.POST,
-        f"{foss_server}/api/v2/tokens",
+        f"{foss_server}/api/v1/tokens",
         body=requests.exceptions.ConnectionError("Test Exception"),
     )
     with pytest.raises(SystemExit) as excinfo:
@@ -73,7 +73,7 @@ def test_generate_token_if_receiving_authentication_error_raises_api_error_(
 ):
     responses.add(
         responses.POST,
-        f"{foss_server}/api/v2/tokens",
+        f"{foss_server}/api/v1/tokens",
         status=404,
     )
     with pytest.raises(AuthenticationError) as excinfo:
@@ -104,7 +104,7 @@ def test_list_users(foss: Fossology):
 def test_get_self_error(foss_server: str, foss: Fossology):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/users/self",
+        f"{foss_server}/api/v1/users/self",
         status=500,
     )
     with pytest.raises(FossologyApiError):
@@ -117,7 +117,7 @@ def test_get_self_with_agents(
 ):
     user = foss_user
     responses.add(
-        responses.GET, f"{foss_server}/api/v2/users/self", status=200, json=user
+        responses.GET, f"{foss_server}/api/v1/users/self", status=200, json=user
     )
     user_from_api = foss.get_self()
     assert user_from_api.agents.to_dict() == foss_user_agents
@@ -129,7 +129,7 @@ def test_detail_user_with_agents(
 ):
     user = foss_user
     responses.add(
-        responses.GET, f"{foss_server}/api/v2/users/{user['id']}", status=200, json=user
+        responses.GET, f"{foss_server}/api/v1/users/{user['id']}", status=200, json=user
     )
     user_from_api = foss.detail_user(user["id"])
     assert user_from_api.agents.to_dict() == foss_user_agents
@@ -140,14 +140,14 @@ def test_list_users_with_agents(
     foss_server: str, foss: Fossology, foss_user: dict, foss_user_agents: dict
 ):
     users = [foss_user]
-    responses.add(responses.GET, f"{foss_server}/api/v2/users", status=200, json=users)
+    responses.add(responses.GET, f"{foss_server}/api/v1/users", status=200, json=users)
     users_from_api = foss.list_users()
     assert users_from_api[0].agents.to_dict() == foss_user_agents
 
 
 @responses.activate
 def test_list_users_error(foss_server: str, foss: Fossology):
-    responses.add(responses.GET, f"{foss_server}/api/v2/users", status=404)
+    responses.add(responses.GET, f"{foss_server}/api/v1/users", status=404)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.list_users()
     assert f"Unable to get a list of users from {foss_server}" in str(excinfo.value)
@@ -164,8 +164,8 @@ def test_detail_user(foss: Fossology):
 @responses.activate
 def test_delete_user(foss_server: str, foss: Fossology):
     user = Mock(name="Test User", id=secrets.randbelow(1000))
-    responses.add(responses.DELETE, f"{foss_server}/api/v2/users/{user.id}", status=202)
-    responses.add(responses.DELETE, f"{foss_server}/api/v2/users/{user.id}", status=404)
+    responses.add(responses.DELETE, f"{foss_server}/api/v1/users/{user.id}", status=202)
+    responses.add(responses.DELETE, f"{foss_server}/api/v1/users/{user.id}", status=404)
     assert not foss.delete_user(user)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_user(user)

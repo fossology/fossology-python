@@ -33,7 +33,7 @@ def verify_user_group_membership(
 # Test functions
 @responses.activate
 def test_list_groups_error(foss_server: str, foss: fossology.Fossology):
-    responses.add(responses.GET, f"{foss_server}/api/v2/groups", status=500)
+    responses.add(responses.GET, f"{foss_server}/api/v1/groups", status=500)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.list_groups()
     assert f"Unable to get a list of groups for {foss.user.name}" in str(excinfo.value)
@@ -41,7 +41,7 @@ def test_list_groups_error(foss_server: str, foss: fossology.Fossology):
 
 @responses.activate
 def test_list_group_members_error(foss_server: str, foss: fossology.Fossology):
-    responses.add(responses.GET, f"{foss_server}/api/v2/groups/42/members", status=500)
+    responses.add(responses.GET, f"{foss_server}/api/v1/groups/42/members", status=500)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.list_group_members(42)
     assert "Unable to get a list of members for group 42" in str(excinfo.value)
@@ -52,7 +52,7 @@ def test_delete_group_member_validation_error(
     foss_server: str, foss: fossology.Fossology
 ):
     responses.add(
-        responses.DELETE, f"{foss_server}/api/v2/groups/42/user/42", status=400
+        responses.DELETE, f"{foss_server}/api/v1/groups/42/user/42", status=400
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_group_member(42, 42)
@@ -64,7 +64,7 @@ def test_delete_group_member_validation_error(
 @responses.activate
 def test_delete_group_member_error(foss_server: str, foss: fossology.Fossology):
     responses.add(
-        responses.DELETE, f"{foss_server}/api/v2/groups/42/user/42", status=500
+        responses.DELETE, f"{foss_server}/api/v1/groups/42/user/42", status=500
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_group_member(42, 42)
@@ -77,7 +77,7 @@ def test_delete_group_member_error(foss_server: str, foss: fossology.Fossology):
 def test_delete_group_error(foss_server: str, foss: fossology.Fossology):
     group_id = secrets.randbelow(10)
     responses.add(
-        responses.DELETE, f"{foss_server}/api/v2/groups/{group_id}", status=500
+        responses.DELETE, f"{foss_server}/api/v1/groups/{group_id}", status=500
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_group(group_id)

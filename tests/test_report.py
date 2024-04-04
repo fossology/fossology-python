@@ -51,11 +51,11 @@ def test_generate_report(foss: Fossology, upload: Upload):
 def test_report_error(foss_server: str, foss: Fossology, upload: Upload):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/report",
+        f"{foss_server}/api/v1/report",
         status=503,
         headers={"Retry-After": "1"},
     )
-    responses.add(responses.GET, f"{foss_server}/api/v2/report", status=404)
+    responses.add(responses.GET, f"{foss_server}/api/v1/report", status=404)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.generate_report(upload)
     assert f"Report generation for upload {upload.uploadname} failed" in str(
@@ -68,7 +68,7 @@ def test_download_report_error(foss_server: str, foss: Fossology):
     report_id = secrets.randbelow(1000)
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/report/{report_id}",
+        f"{foss_server}/api/v1/report/{report_id}",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -81,7 +81,7 @@ def test_download_report_filename_without_quotes(foss_server: str, foss: Fossolo
     report_id = "1"
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/report/{report_id}",
+        f"{foss_server}/api/v1/report/{report_id}",
         status=200,
         headers={"Content-Disposition": "attachment; filename=Report_FileName.docx"},
     )
@@ -94,7 +94,7 @@ def test_download_report_filename_with_quotes(foss_server: str, foss: Fossology)
     report_id = "1"
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/report/{report_id}",
+        f"{foss_server}/api/v1/report/{report_id}",
         status=200,
         headers={"Content-Disposition": 'attachment; filename="Report_FileName.docx"'},
     )
@@ -107,7 +107,7 @@ def test_download_report_filename_with_single_quotes(foss_server: str, foss: Fos
     report_id = "1"
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/report/{report_id}",
+        f"{foss_server}/api/v1/report/{report_id}",
         status=200,
         headers={"Content-Disposition": "attachment; filename='Report_FileName.docx'"},
     )

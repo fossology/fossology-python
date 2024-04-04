@@ -16,9 +16,9 @@ def test_item_info(foss: Fossology, upload_with_jobs: Upload):
     assert info.meta_info
 
 
-def test_item_info_v1(foss_v1: Fossology, upload_with_jobs: Upload):
-    files, _ = foss_v1.search(license="BSD")
-    info: FileInfo = foss_v1.item_info(upload_with_jobs, files[0].uploadTreeId)
+def test_item_info_v2(foss_v2: Fossology, upload_with_jobs: Upload):
+    files, _ = foss_v2.search(license="BSD")
+    info: FileInfo = foss_v2.item_info(upload_with_jobs, files[0].uploadTreeId)
     assert info.meta_info
 
 
@@ -36,7 +36,7 @@ def test_item_info_500_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload_with_jobs.id}/item/1/info",
+        f"{foss_server}/api/v1/uploads/{upload_with_jobs.id}/item/1/info",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -69,7 +69,7 @@ def test_item_copyrights_500_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload_with_jobs.id}/item/1/totalcopyrights",
+        f"{foss_server}/api/v1/uploads/{upload_with_jobs.id}/item/1/totalcopyrights",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -100,7 +100,7 @@ def test_upload_get_clearing_history_500_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload_with_jobs.id}/item/1/clearing-history",
+        f"{foss_server}/api/v1/uploads/{upload_with_jobs.id}/item/1/clearing-history",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -131,7 +131,7 @@ def test_upload_get_bulk_history_500_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload_with_jobs.id}/item/1/clearing-history",
+        f"{foss_server}/api/v1/uploads/{upload_with_jobs.id}/item/1/clearing-history",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -172,7 +172,7 @@ def test_schedule_bulk_scan_500_error(
 ):
     responses.add(
         responses.POST,
-        f"{foss_server}/api/v2/uploads/{upload_with_jobs.id}/item/1/bulk-scan",
+        f"{foss_server}/api/v1/uploads/{upload_with_jobs.id}/item/1/bulk-scan",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
@@ -219,7 +219,7 @@ def test_upload_get_prev_next_500_error(
 ):
     responses.add(
         responses.GET,
-        f"{foss_server}/api/v2/uploads/{upload_with_jobs.id}/item/1/prev-next",
+        f"{foss_server}/api/v1/uploads/{upload_with_jobs.id}/item/1/prev-next",
         status=500,
     )
     with pytest.raises(FossologyApiError) as excinfo:
