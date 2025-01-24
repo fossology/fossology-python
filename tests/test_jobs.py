@@ -59,6 +59,19 @@ def test_detail_job_wait_completed(
     mocked_logger.debug.assert_called_once_with((f"Job {job.id} has completed"))
 
 
+def test_jobs_history(
+    foss: Fossology, upload_with_jobs: Upload, foss_schedule_agents: Dict
+):
+    job = foss.schedule_jobs(foss.rootFolder, upload_with_jobs, foss_schedule_agents)
+    assert job.name == upload_with_jobs.uploadname
+
+    jobs = foss.jobs_history(upload=upload_with_jobs)
+    assert len(jobs) == 3
+    assert jobs[0].jobQueue[0].jobQueueType == "reuser"
+    assert jobs[1].jobQueue[0].jobQueueType == "nomos"
+    assert jobs[2].jobQueue[0].jobQueueType == "ununpack"
+
+
 @responses.activate
 def test_schedule_job_error(foss_server: str, foss: Fossology, upload: Upload):
     responses.add(responses.POST, f"{foss_server}/api/v1/jobs", status=404)
@@ -96,6 +109,19 @@ def test_detail_job_error(foss_server: str, foss: Fossology):
     with pytest.raises(FossologyApiError) as excinfo:
         foss.detail_job(job_id)
     assert f"Error while getting details for job {job_id}" in str(excinfo.value)
+
+
+@responses.activate
+def test_jobs_history_error(foss_server: str, foss: Fossology, fake_hash: str):
+    upload = Upload(secrets.randbelow(1000), "test", secrets.randbelow(1000), "Test upload", "Test name", "24.01.25", hash=fake_hash)
+    responses.add(responses.GET, f"{foss_server}/api/v1/jobs/history", status=403)
+    responses.add(responses.GET, f"{foss_server}/api/v1/jobs/history", status=500)
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.jobs_history(upload)
+    assert f"Upload {upload.id} is not accessible or does not exists" in str(excinfo.value)
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.jobs_history(upload)
+    assert f"Error while getting jobs history for upload {upload.id}" in str(excinfo.value)
 
 
 def test_paginated_list_jobs(foss: Fossology, upload_with_jobs: Upload):

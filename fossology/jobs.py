@@ -8,7 +8,7 @@ import time
 from typing import Optional
 
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import Folder, Job, Upload
+from fossology.obj import Folder, Job, ShowJob, Upload
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -115,6 +115,31 @@ class Jobs:
             return Job.from_json(response.json())
         else:
             description = f"Error while getting details for job {job_id}"
+            raise FossologyApiError(description, response)
+
+    def jobs_history(self, upload: Upload) -> list[Job]:
+        """Return jobs for the given upload id
+
+        API Endpoint: GET /jobs/history
+
+        :param upload_id: the id of the upload
+        :type upload_id: int
+        :return: the list of all the jobs scheduled for the upload
+        :rtype: list of ShowJob
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.get(f"{self.api}/jobs/history?upload={upload.id}")
+        jobs_list = list()
+        if response.status_code == 200:
+            logger.debug(f"Got jobs for upload {upload.id}")
+            for job in response.json():
+                jobs_list.append(ShowJob.from_json(job))
+            return jobs_list
+        elif response.status_code in [403, 404]:
+            description = f"Upload {upload.id} is not accessible or does not exists"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"Error while getting jobs history for upload {upload.id}"
             raise FossologyApiError(description, response)
 
     def schedule_jobs(
