@@ -70,10 +70,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.Hash"><code class="docutils literal notranslate"><span class="pre">Hash</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.HealthInfo"><code class="docutils literal notranslate"><span class="pre">HealthInfo</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.Job"><code class="docutils literal notranslate"><span class="pre">Job</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.obj.JobDownload"><code class="docutils literal notranslate"><span class="pre">JobDownload</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.obj.JobQueue"><code class="docutils literal notranslate"><span class="pre">JobQueue</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.License"><code class="docutils literal notranslate"><span class="pre">License</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.Obligation"><code class="docutils literal notranslate"><span class="pre">Obligation</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.PermGroups"><code class="docutils literal notranslate"><span class="pre">PermGroups</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.SearchResult"><code class="docutils literal notranslate"><span class="pre">SearchResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.obj.ShowJob"><code class="docutils literal notranslate"><span class="pre">ShowJob</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.Status"><code class="docutils literal notranslate"><span class="pre">Status</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.Summary"><code class="docutils literal notranslate"><span class="pre">Summary</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.Upload"><code class="docutils literal notranslate"><span class="pre">Upload</span></code></a></li>
@@ -440,6 +443,49 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.JobDownload">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">JobDownload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">link</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.JobDownload" title="Link to this definition">¶</a></dt>
+<dd><p>FOSSology job download</p>
+<p>Represents a FOSSology job download.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>string</em>) – text for download link</p></li>
+<li><p><strong>link</strong> (<em>string</em>) – link to download the report</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – handle any other job download information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.JobQueue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">JobQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobQueueId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobQueueType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itemsProcessed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itemsPerSec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canDoActions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isInProgress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isReady</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fossology.obj.JobDownload" title="fossology.obj.JobDownload"><span class="pre">JobDownload</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.JobQueue" title="Link to this definition">¶</a></dt>
+<dd><p>FOSSology job queue.</p>
+<p>Represents a FOSSology job queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jobQueueId</strong> (<em>int</em>) – job queue ID</p></li>
+<li><p><strong>jobQueueType</strong> (<em>string</em>) – job queue type (agent name)</p></li>
+<li><p><strong>startTime</strong> (<em>string</em>) – job queue start time</p></li>
+<li><p><strong>endTime</strong> (<em>string</em>) – job queue end time</p></li>
+<li><p><strong>status</strong> (<em>string</em>) – job queue complemention status</p></li>
+<li><p><strong>itemsProcessed</strong> (<em>int</em>) – number of items processes</p></li>
+<li><p><strong>log</strong> (<em>string</em>) – location of the log file (if it exists)</p></li>
+<li><p><strong>dependencies</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – list of dependent job queue ids</p></li>
+<li><p><strong>itemsPerSec</strong> (<em>float</em>) – number of items processed per second</p></li>
+<li><p><strong>canDoActions</strong> (<em>bool</em>) – job can accept new actions like pause and cancel</p></li>
+<li><p><strong>isInProgress</strong> (<em>bool</em>) – checks if the job queue is still in progress</p></li>
+<li><p><strong>isReady</strong> (<em>bool</em>) – is the job ready</p></li>
+<li><p><strong>download</strong> (<a class="reference internal" href="#fossology.obj.JobDownload" title="fossology.obj.JobDownload"><em>JobDownload</em></a>) – report download information</p></li>
+<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job queue information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.License">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">License</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shortName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fullName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">risk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isCandidate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.License" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology license.</p>
@@ -535,6 +581,23 @@
 <li><p><strong>uploadTreeId</strong> (<em>int</em>) – id of the upload tree</p></li>
 <li><p><strong>filename</strong> (<em>string</em>) – filename of the tree item</p></li>
 <li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job information provided by the fossology instance</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.ShowJob">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">ShowJob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobQueue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fossology.obj.JobQueue" title="fossology.obj.JobQueue"><span class="pre">JobQueue</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uploadId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ShowJob" title="Link to this definition">¶</a></dt>
+<dd><p>FOSSology job</p>
+<p>Represents the history of all the jobs and the job queue info</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jobId</strong> (<em>int</em>) – job ID</p></li>
+<li><p><strong>jobName</strong> (<em>string</em>) – job name (generally upload name)</p></li>
+<li><p><strong>jobQueue</strong> (<em>list</em><em> of </em><a class="reference internal" href="#fossology.obj.JobQueue" title="fossology.obj.JobQueue"><em>JobQueue</em></a>) – jobs queued for the current job</p></li>
+<li><p><strong>uploadId</strong> (<em>int</em>) – upload ID to which the job belongs to</p></li>
 </ul>
 </dd>
 </dl>
