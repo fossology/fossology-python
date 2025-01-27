@@ -816,7 +816,7 @@ class Job(object):
 
     def __str__(self):
         return (
-            f"Job '{self.name}' ({self.id}) queued on {self.queueDate}"
+            f"Job '{self.name}' ({self.id}) queued on {self.queueDate} "
             f"(Status: {self.status} ETA: {self.eta})"
         )
 
@@ -920,7 +920,7 @@ class JobQueue(object):
 
     def __str__(self):
         return (
-            f"Job '{self.jobQueueType}' ({self.id}) queued on {self.startTime} processed {self.itemsProcessed} items"
+            f"Job '{self.jobQueueType}' ({self.id}) queued on {self.startTime} processed {self.itemsProcessed} items "
             f"(Status: {self.status} EndTime: {self.endTime})"
         )
 

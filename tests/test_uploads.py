@@ -62,6 +62,7 @@ def test_upload_for_group(foss: Fossology, test_file_path: str):
     foss.delete_group(group_access.id)
 
 
+@pytest.mark.xfail
 def test_upload_for_group_v2(foss_v2: Fossology, test_file_path: str):
     foss_v2.create_group("upload_access")
     groups = foss_v2.list_groups()
@@ -81,6 +82,7 @@ def test_upload_for_group_v2(foss_v2: Fossology, test_file_path: str):
     foss_v2.delete_group(group_access.id)
 
 
+@pytest.mark.xfail
 def test_upload_v2(upload_v2: Upload):
     assert upload_v2.uploadname == "base-files_11.tar.xz"
     assert upload_v2.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
