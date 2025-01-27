@@ -816,9 +816,150 @@ class Job(object):
 
     def __str__(self):
         return (
-            f"Job '{self.name}' ({self.id}) queued on {self.queueDate} "
+            f"Job '{self.name}' ({self.id}) queued on {self.queueDate}"
             f"(Status: {self.status} ETA: {self.eta})"
         )
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class JobDownload(object):
+    """FOSSology job download
+
+    Represents a FOSSology job download.
+
+    :param text: text for download link
+    :param link: link to download the report
+    :param kwargs: handle any other job download information provided by the fossology instance
+    :type text: string
+    :type link: string
+    :type kwargs: dict
+    """
+
+    def __init__(self, text: str, link: str, **kwargs):
+        self.text = text
+        self.link = link
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Job output {self.text} can be downloaded here: {self.link}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class JobQueue(object):
+    """FOSSology job queue.
+
+    Represents a FOSSology job queue.
+
+    :param jobQueueId: job queue ID
+    :param jobQueueType: job queue type (agent name)
+    :param startTime: job queue start time
+    :param endTime: job queue end time
+    :param status: job queue complemention status
+    :param itemsProcessed: number of items processes
+    :param log: location of the log file (if it exists)
+    :param dependencies: list of dependent job queue ids
+    :param itemsPerSec: number of items processed per second
+    :param canDoActions: job can accept new actions like pause and cancel
+    :param isInProgress: checks if the job queue is still in progress
+    :param isReady: is the job ready
+    :param download: report download information
+    :param kwargs: handle any other job queue information provided by the fossology instance
+    :type jobQueueId: int
+    :type jobQueueType: string
+    :type startTime: string
+    :type endTime: string
+    :type status: string
+    :type itemsProcessed: int
+    :type log: string
+    :type dependencies: list(int)
+    :type itemsPerSec: float
+    :type canDoActions: bool
+    :type isInProgress: bool
+    :type isReady: bool
+    :type download: JobDownload
+    :type kwargs: key word argument
+    """
+
+    def __init__(
+        self,
+        jobQueueId: int,
+        jobQueueType: str,
+        startTime: str,
+        endTime: str,
+        status: str,
+        itemsProcessed: int,
+        log: str,
+        dependencies: list[int],
+        itemsPerSec: int,
+        canDoActions: bool,
+        isInProgress: bool,
+        isReady: bool,
+        download: JobDownload,
+        **kwargs,
+    ):
+        self.id = jobQueueId
+        self.jobQueueType = jobQueueType
+        self.startTime = startTime
+        self.endTime = endTime
+        self.status = status
+        self.itemsProcessed = itemsProcessed
+        self.log = log
+        self.dependencies = dependencies
+        self.itemsPerSec = itemsPerSec
+        self.canDoActions = canDoActions
+        self.isInProgress = isInProgress
+        self.isReady = isReady
+        self.download = JobDownload.from_json(download) if download else None
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return (
+            f"Job '{self.jobQueueType}' ({self.id}) queued on {self.startTime} processed {self.itemsProcessed} items"
+            f"(Status: {self.status} EndTime: {self.endTime})"
+        )
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class ShowJob(object):
+    """FOSSology job
+
+    Represents the history of all the jobs and the job queue info
+
+    :param jobId: job ID
+    :param jobName: job name (generally upload name)
+    :param jobQueue: jobs queued for the current job
+    :param uploadId: upload ID to which the job belongs to
+    :type jobId: int
+    :type jobName: string
+    :type jobQueue: list of JobQueue
+    :type uploadId: int
+    """
+
+    def __init__(
+        self,
+        jobId: int,
+        jobName: str,
+        jobQueue: list[JobQueue],
+        uploadId: int,
+    ):
+        self.id = jobId
+        self.jobName = jobName
+        self.jobQueue = list()
+        for job in jobQueue:
+            self.jobQueue.append(JobQueue.from_json(job))
+        self.uploadId = uploadId
+
+    def __str__(self):
+        return f"Job {self.jobName} ({self.id}) for upload {self.uploadId} with {len(self.jobQueue)} jobs in the queue"
 
     @classmethod
     def from_json(cls, json_dict):
