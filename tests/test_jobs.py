@@ -66,10 +66,12 @@ def test_jobs_history(
     assert job.name == upload_with_jobs.uploadname
 
     jobs = foss.jobs_history(upload=upload_with_jobs)
-    assert len(jobs) == 3
-    assert jobs[0].jobQueue[0].jobQueueType == "reuser"
-    assert jobs[1].jobQueue[0].jobQueueType == "nomos"
-    assert jobs[2].jobQueue[0].jobQueueType == "ununpack"
+    assert len(jobs) == 5
+    assert jobs[0].jobQueue[0].jobQueueType in ["nomos", "reuser"]
+    assert jobs[1].jobQueue[0].jobQueueType in ["nomos", "reuser"]
+    assert jobs[2].jobQueue[0].jobQueueType == "monkbulk"
+    assert jobs[3].jobQueue[0].jobQueueType == "nomos"
+    assert jobs[4].jobQueue[0].jobQueueType == "ununpack"
 
 
 @responses.activate
@@ -128,17 +130,17 @@ def test_paginated_list_jobs(foss: Fossology, upload_with_jobs: Upload):
     jobs, total_pages = foss.list_jobs(
         upload=upload_with_jobs, page_size=1, all_pages=True
     )
-    assert len(jobs) == 4
-    assert total_pages == 4
+    assert len(jobs) == 5
+    assert total_pages == 5
 
     jobs, total_pages = foss.list_jobs(upload=upload_with_jobs, page_size=1, page=1)
     assert len(jobs) == 1
-    assert total_pages == 4
+    assert total_pages == 5
 
     jobs, total_pages = foss.list_jobs(upload=upload_with_jobs, page_size=1, page=2)
     assert len(jobs) == 1
-    assert total_pages == 4
+    assert total_pages == 5
 
     jobs, total_pages = foss.list_jobs(upload=upload_with_jobs, page_size=2, page=1)
     assert len(jobs) == 2
-    assert total_pages == 2
+    assert total_pages == 3

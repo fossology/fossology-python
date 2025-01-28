@@ -11,8 +11,8 @@ jobs:
     strategy:
       matrix:
         container:
-        - 'python:3.10-slim'
         - 'python:3.11-slim'
+        - 'python:3.12-slim'
 
     container: ${{ matrix.container }}
 

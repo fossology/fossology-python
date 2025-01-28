@@ -20,7 +20,7 @@ jobs:
 
     services:
       fossology:
-        image: fossology/fossology:latest
+        image: fossology/fossology:4.4.0
         ports:
           - 8081:80
         volumes:
