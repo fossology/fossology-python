@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: release
 
-    container: python:3.12-slim
-
     permissions:
       id-token: write
       contents: write
@@ -39,18 +37,12 @@ jobs:
         # Adjust tag with desired version if applicable.
         uses: python-semantic-release/python-semantic-release@v9.17.0
         with:
+          build: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
           git_committer_name: "github-actions"
           git_committer_email: "actions@users.noreply.github.com"
-
-      - name: Install | Install python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install poetry
-          poetry install
-      - name: Build | Build package
-        run: |
-          poetry build
+        run:
+          ls -la
 
       - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
