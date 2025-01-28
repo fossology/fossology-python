@@ -44,7 +44,6 @@ jobs:
         
       - name: Debug | Show current directory  
         run:
-          pwd
           ls -la
 
       - name: Publish | Upload package to PyPI
