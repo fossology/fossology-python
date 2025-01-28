@@ -227,7 +227,7 @@ Build
      rm -r dist/ docs/
 
 Tag
-----
+---
 
 Each new release gets a new tag with important information about the changes added to the new release:
 
@@ -238,6 +238,14 @@ Each new release gets a new tag with important information about the changes add
 
 Add required information in the corresponding `release in the Github project <https://github.com/fossology/fossology-python/releases>`_.
 
+Publish
+-------
+
+Publish the newest release to PyPi (visit https://pypi.org/manage/account/#api-tokens to get the token):
+
+.. code:: shell
+
+   poetry publish --build --username __token__ --password $PYPI_TOKEN
 
 Test
 ----
