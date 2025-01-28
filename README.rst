@@ -6,7 +6,7 @@
 .. |PyPI Version| image:: https://badge.fury.io/py/fossology.svg
    :target: https://pypi.org/project/fossology
 
-.. |Python Version| image:: https://img.shields.io/badge/python-3.7%2C3.8%2C3.9-blue?logo=python
+.. |Python Version| image:: https://img.shields.io/badge/python-3.11%2C3.12-blue?logo=python
    :target: https://www.python.org/doc/versions/
 
 .. |Downloads| image:: https://static.pepy.tech/badge/fossology
