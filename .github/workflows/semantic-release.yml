@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: release
 
+    container: python:3.12-slim
+
     permissions:
       id-token: write
       contents: write
@@ -40,12 +42,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           git_committer_name: "github-actions"
           git_committer_email: "actions@users.noreply.github.com"
-      
-      - name: Install | Install host and python dependencies
+
+      - name: Install | Install python dependencies
         run: |
-          apt-get -qq update
-          apt-get install -qq gcc git
-          rm -rf /var/lib/apt/lists/*
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
