@@ -1,9 +1,6 @@
 name: CLI Tests
 
 on: 
-  push:
-    paths:
-      - '**cli**'
   pull_request:
     paths:
       - '**cli**'

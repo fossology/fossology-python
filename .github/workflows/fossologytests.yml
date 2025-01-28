@@ -4,9 +4,6 @@ on:
   pull_request:
     paths-ignore:
       - '**cli**'
-  push:
-    branches:
-      - master
 
 jobs:
   test-latest:
