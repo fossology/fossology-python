@@ -26,6 +26,7 @@ class ReportFormat(Enum):
     SPDX2TV
     READMEOSS
     UNIFIEDREPORT
+    CLIXML
 
     """
 
@@ -34,6 +35,7 @@ class ReportFormat(Enum):
     SPDX2TV = "spdx2tv"
     READMEOSS = "readmeoss"
     UNIFIEDREPORT = "unifiedreport"
+    CLIXML = "clixml"
 
 
 class SearchTypes(Enum):
