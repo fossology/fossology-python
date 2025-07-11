@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to fossology’s documentation! &#8212; fossology 3.2.1 documentation</title>
+    <title>Welcome to fossology’s documentation! &#8212; fossology 3.3.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=f6a572b4" />
-    <script src="_static/documentation_options.js?v=eb155f5e"></script>
+    <script src="_static/documentation_options.js?v=9ac01507"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -311,6 +311,13 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
 </pre></div>
 </div>
 <p>Add required information in the corresponding <a class="reference external" href="https://github.com/fossology/fossology-python/releases">release in the Github project</a>.</p>
+</section>
+<section id="publish">
+<h2>Publish<a class="headerlink" href="#publish" title="Link to this heading">¶</a></h2>
+<p>Publish the newest release to PyPi (visit <a class="reference external" href="https://pypi.org/manage/account/#api-tokens">https://pypi.org/manage/account/#api-tokens</a> to get the token):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>poetry<span class="w"> </span>publish<span class="w"> </span>--build<span class="w"> </span>--username<span class="w"> </span>__token__<span class="w"> </span>--password<span class="w"> </span><span class="nv">$PYPI_TOKEN</span>
+</pre></div>
+</div>
 </section>
 <section id="test">
 <h2>Test<a class="headerlink" href="#test" title="Link to this heading">¶</a></h2>
