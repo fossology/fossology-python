@@ -1,5 +1,69 @@
 # CHANGELOG
 
+<!-- version list -->
+
+## v3.3.1 (2025-07-11)
+
+### Bug Fixes
+
+- Update test suite to match behavior of FOSSology 4.4.0
+  ([`fb366e6`](https://github.com/fossology/fossology-python/commit/fb366e64ccea6ff1d105640796c25594eae82250))
+
+- **reportformat**: Add clixml report format
+  ([`d28aeca`](https://github.com/fossology/fossology-python/commit/d28aeca115b114d87f13e76cf0f2afd3fb448e5e))
+
+### Chores
+
+- Add build step before publish step
+  ([`8a3adf3`](https://github.com/fossology/fossology-python/commit/8a3adf3290030ab469278a825c115383a67e3a4e))
+
+- Install host deps and poetry before building the package
+  ([`922e221`](https://github.com/fossology/fossology-python/commit/922e2217d0ca95a486645bf457ab24c1dccc8d0f))
+
+- List current directory to understand the current action
+  ([`372df49`](https://github.com/fossology/fossology-python/commit/372df49c7bdc48590fe218582906abd27ef7310d))
+
+- List current directory to understand the current action (in a dedicated action
+  ([`78a2881`](https://github.com/fossology/fossology-python/commit/78a288126c59b0aeed6ef79d5291ceba0f805062))
+
+- List current directory to understand the current action (in a dedicated action
+  ([`aec019d`](https://github.com/fossology/fossology-python/commit/aec019d13cb2989628e67f7a1ffac03536c295ea))
+
+- Manually update version number in docs and pyproject.toml
+  ([`73fff90`](https://github.com/fossology/fossology-python/commit/73fff90bb29f46eb6ea6dce5f1aced2b1017bb6f))
+
+- Run in Python container
+  ([`4f552a1`](https://github.com/fossology/fossology-python/commit/4f552a18da01956bffc5ab24ff75f66d11aab642))
+
+- Update all dependencies
+  ([`5f740b8`](https://github.com/fossology/fossology-python/commit/5f740b8283633dbbb91199a403ec534048198252))
+
+- Update supported python versions, add semantic release action
+  ([`0730530`](https://github.com/fossology/fossology-python/commit/0730530b8b340e4e4d3bcc802e14c9eaaa9fcad1))
+
+- Update to next patch release
+  ([`dcc000d`](https://github.com/fossology/fossology-python/commit/dcc000d5b5e9aaedce19dd456d1d11f6b619b66d))
+
+- Update workflows triggers, add PyPi project variable
+  ([`2bb2945`](https://github.com/fossology/fossology-python/commit/2bb29458b8cda854ec4d646a8011753758cffe7b))
+
+- **deps**: Bump requests from 2.32.3 to 2.32.4
+  ([`d643485`](https://github.com/fossology/fossology-python/commit/d643485326735ebb3aa8c7c8e0890b7c59acb95b))
+
+- **deps**: Bump urllib3 from 2.3.0 to 2.5.0
+  ([`1ef86ed`](https://github.com/fossology/fossology-python/commit/1ef86ed75fef0ecc9ddf303501fbcd942d26f7f2))
+
+- **deps-dev**: Bump jinja2 from 3.1.5 to 3.1.6
+  ([`439a543`](https://github.com/fossology/fossology-python/commit/439a54379cb087e915e9ec17bbd09b43ea2ea0cc))
+
+- **deps-dev**: Bump tornado from 6.4.2 to 6.5.1
+  ([`1265eb9`](https://github.com/fossology/fossology-python/commit/1265eb97b0541c42e864bf98800e0b56a53de2b1))
+
+### Features
+
+- Support jobs/history endpoint
+  ([`e347226`](https://github.com/fossology/fossology-python/commit/e3472269e957bd8d5a5ecfe39d17ae1275084d87))
+
 
 ## v3.3.0 (2025-01-28)
 
