@@ -2,6 +2,22 @@
 
 <!-- version list -->
 
+## v3.3.2 (2025-08-04)
+
+### Bug Fixes
+
+- Remove semantic release dependency
+  ([`cbb4978`](https://github.com/fossology/fossology-python/commit/cbb4978faec3801fa79f76b95feb8e7ccc05e144))
+
+### Chores
+
+- Add semantic release and update lock file
+  ([`0ddf0ed`](https://github.com/fossology/fossology-python/commit/0ddf0ed2502fd851f70b53e1b4770a05f92073f0))
+
+- Update to latest PSR version and try to improve automation
+  ([`da8ba86`](https://github.com/fossology/fossology-python/commit/da8ba868cffe50aca881af54643bf321d45b87d2))
+
+
 ## v3.3.1 (2025-07-11)
 
 ### Bug Fixes
