@@ -1,7 +1,7 @@
 |License| |PyPI Version| |Python Version| |Downloads| |Static Checks| |Fossology Tests| |Coverage|
 
 .. |License| image:: https://img.shields.io/badge/license-MIT-blue.svg
-   :target: https://github.com/deveaud-m/fossology-python/LICENSE.md
+   :target: https://github.com/fossology/fossology-python/blob/main/LICENSE.md
 
 .. |PyPI Version| image:: https://badge.fury.io/py/fossology.svg
    :target: https://pypi.org/project/fossology
