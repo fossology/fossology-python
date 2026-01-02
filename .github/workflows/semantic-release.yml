@@ -8,11 +8,18 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    concurrency: release
 
+    # ✅ Improved concurrency: ensure only one release runs at a time
+    concurrency:
+      group: semantic-release
+      cancel-in-progress: false
+
+    # ✅ Expanded permissions: required for many semantic-release operations
     permissions:
       id-token: write
       contents: write
+      issues: write
+      pull-requests: write
 
     environment:
       name: pypi
@@ -34,7 +41,6 @@ jobs:
 
       - name: Action | Semantic Version Release
         id: release
-        # Adjust tag with desired version if applicable.
         uses: python-semantic-release/python-semantic-release@v10.2.0
         with:
           build: true
@@ -42,7 +48,7 @@ jobs:
           git_committer_name: "github-actions"
           git_committer_email: "actions@users.noreply.github.com"
           changelog: "true"
-        
+
       - name: Publish | Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         if: steps.release.outputs.released == 'true'
