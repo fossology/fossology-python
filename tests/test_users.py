@@ -172,7 +172,6 @@ def test_list_users_v2(foss_server: str, foss_user: dict, foss_user_agents: dict
     assert users_from_api[0].agents.to_dict() == foss_user_agents
 
 
-
 @responses.activate
 def test_get_self_error(foss_server: str, foss: Fossology):
     responses.add(
