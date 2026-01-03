@@ -112,7 +112,7 @@ def test_list_users_v2(foss_server: str, foss_user: dict, foss_user_agents: dict
     base = foss_server.rstrip("/")
 
     health_info = {
-        "status": {"status": "OK"},
+        "status": "OK",
         "scheduler": {"status": "OK"},
         "db": {"status": "OK"},
     }
