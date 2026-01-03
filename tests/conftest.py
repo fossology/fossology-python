@@ -159,29 +159,52 @@ def foss_token(foss_server: str) -> str:
     )
 
 
+# ✅ NEW FIXTURE: API VERSION CONTROL (DEFAULT v1, CAN BE CHANGED VIA ENV)
 @pytest.fixture(scope="session")
-def foss(foss_server: str, foss_token: str, foss_agents: Agents) -> fossology.Fossology:
+def foss_api_version() -> str:
+    """
+    Controls API version globally.
+    Default = v1
+    Override by:
+      set FOSS_API_VERSION=v2
+    """
+    return os.getenv("FOSS_API_VERSION", "v1")
+
+
+# ✅ NEW FIXTURE: SINGLE CLIENT FOR BOTH v1 & v2
+@pytest.fixture(scope="session")
+def foss_client(
+    foss_server: str,
+    foss_token: str,
+    foss_agents: Agents,
+    foss_api_version: str,
+) -> Generator[fossology.Fossology, None, None]:
     try:
-        foss = fossology.Fossology(foss_server, foss_token)
+        foss = fossology.Fossology(foss_server, foss_token, version=foss_api_version)
     except (FossologyApiError, AuthenticationError) as error:
         exit(error.message)
 
-    # Configure all license agents besides 'ojo'
     foss.user.agents = foss_agents
     yield foss
     foss.close()
 
 
+# ✅ KEEP OLD FIXTURE NAME (BACKWARD COMPAT)
+@pytest.fixture(scope="session")
+def foss(foss_client: fossology.Fossology):
+    return foss_client
+
+
+# ✅ OPTIONAL: STILL PROVIDE foss_v2 IF YOU WANT DIRECTLY
 @pytest.fixture(scope="session")
 def foss_v2(
     foss_server: str, foss_token: str, foss_agents: Agents
-) -> fossology.Fossology:
+) -> Generator[fossology.Fossology, None, None]:
     try:
         foss = fossology.Fossology(foss_server, foss_token, version="v2")
     except (FossologyApiError, AuthenticationError) as error:
         exit(error.message)
 
-    # Configure all license agents besides 'ojo'
     foss.user.agents = foss_agents
     yield foss
     foss.close()
@@ -225,24 +248,6 @@ def upload(
     jobs_lookup(foss, upload)
     yield upload
     foss.delete_upload(upload)
-    time.sleep(5)
-
-
-@pytest.fixture(scope="function")
-def upload_v2(
-    foss_v2: fossology.Fossology,
-    test_file_path: str,
-) -> Generator:
-    upload = foss_v2.upload_file(
-        foss_v2.rootFolder,
-        file=test_file_path,
-        description="Test upload via fossology-python lib",
-        access_level=AccessLevel.PUBLIC,
-        wait_time=5,
-    )
-    jobs_lookup(foss_v2, upload)
-    yield upload
-    foss_v2.delete_upload(upload)
     time.sleep(5)
 
 
