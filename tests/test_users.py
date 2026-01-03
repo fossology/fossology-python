@@ -95,7 +95,6 @@ def test_unknown_user(foss: Fossology):
 def test_list_users(foss: Fossology):
     users = foss.list_users()
     assert len(users) == 2
-
 @responses.activate
 def test_list_users_v2(foss_server: str, foss_user: dict, foss_user_agents: dict):
     """
