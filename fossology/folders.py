@@ -34,7 +34,52 @@ class Folders:
         else:
             description = f"Unable to get a list of folders for {self.user.name}"
             raise FossologyApiError(description, response)
+    def list_folders_v2(self, page=1, limit=20, parent=None):
+        """List all folders accessible to the authenticated user using API v2.
 
+        API Endpoint: GET /api/v2/folders
+
+        :param page: Page number (default 1)
+        :param limit: Number of items per page (default 20)
+        :param parent: Optional parent folder ID to filter by
+        :return: a list of folders
+        :rtype: list()
+        :raises FossologyApiError: if the REST call failed
+        """
+        # 1. Manually constructing the v2 API URL
+        if self.api.endswith('/v1'):
+            api_v2 = self.api.replace('/v1', '/v2')
+        else:
+            # Fallback: try to go up one level if the path is unexpected
+            api_v2 = f"{self.api}/../v2"
+        # 2. Preparing the query parameters
+        params = {
+            "page": page,
+            "limit": limit
+        }
+        if parent:
+            params["parentFolder"] = parent
+        # 3. Making the Request
+        response = self.session.get(f"{api_v2}/folders", params=params)
+        # 4. Handling the Response
+        if response.status_code == 200:
+            folders_list = list()
+            # API v2 returns a JSON list directly
+            response_list = response.json()
+            
+            for folder_data in response_list:
+                sub_folder = Folder.from_json(folder_data)
+                folders_list.append(sub_folder)
+            
+            return folders_list
+
+        elif response.status_code == 404:
+            # 404 in v2 listing often means "no results found" rather than "error"
+            return []
+
+        else:
+            description = f"Unable to get v2 list of folders for {self.user.name}"
+            raise FossologyApiError(description, response)
     def detail_folder(self, folder_id: int):
         """Get details of folder.
 
