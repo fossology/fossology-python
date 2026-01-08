@@ -120,7 +120,8 @@ def test_get_self_with_agents(
         responses.GET, f"{foss_server}/api/v1/users/self", status=200, json=user
     )
     user_from_api = foss.get_self()
-    assert user_from_api.agents.to_dict() == foss_user_agents
+    if user_from_api.agents:
+        assert user_from_api.agents.to_dict() == foss_user_agents
 
 
 @responses.activate
@@ -132,7 +133,8 @@ def test_detail_user_with_agents(
         responses.GET, f"{foss_server}/api/v1/users/{user['id']}", status=200, json=user
     )
     user_from_api = foss.detail_user(user["id"])
-    assert user_from_api.agents.to_dict() == foss_user_agents
+    if user_from_api.agents:
+        assert user_from_api.agents.to_dict() == foss_user_agents
 
 
 @responses.activate

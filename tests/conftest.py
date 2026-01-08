@@ -160,7 +160,7 @@ def foss_token(foss_server: str) -> str:
 
 
 @pytest.fixture(scope="session")
-def foss(foss_server: str, foss_token: str, foss_agents: Agents) -> fossology.Fossology:
+def foss(foss_server: str, foss_token: str, foss_agents: Agents):
     try:
         foss = fossology.Fossology(foss_server, foss_token)
     except (FossologyApiError, AuthenticationError) as error:
@@ -173,9 +173,7 @@ def foss(foss_server: str, foss_token: str, foss_agents: Agents) -> fossology.Fo
 
 
 @pytest.fixture(scope="session")
-def foss_v2(
-    foss_server: str, foss_token: str, foss_agents: Agents
-) -> fossology.Fossology:
+def foss_v2(foss_server: str, foss_token: str, foss_agents: Agents):
     try:
         foss = fossology.Fossology(foss_server, foss_token, version="v2")
     except (FossologyApiError, AuthenticationError) as error:
@@ -222,7 +220,8 @@ def upload(
         access_level=AccessLevel.PUBLIC,
         wait_time=5,
     )
-    jobs_lookup(foss, upload)
+    if upload:
+        jobs_lookup(foss, upload)
     yield upload
     foss.delete_upload(upload)
     time.sleep(5)
@@ -240,7 +239,8 @@ def upload_v2(
         access_level=AccessLevel.PUBLIC,
         wait_time=5,
     )
-    jobs_lookup(foss_v2, upload)
+    if upload:
+        jobs_lookup(foss_v2, upload)
     yield upload
     foss_v2.delete_upload(upload)
     time.sleep(5)
@@ -257,9 +257,10 @@ def upload_with_jobs(
         access_level=AccessLevel.PUBLIC,
         wait_time=5,
     )
-    jobs_lookup(foss, upload)
-    foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
-    jobs_lookup(foss, upload)
+    if upload:
+        jobs_lookup(foss, upload)
+        foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
+        jobs_lookup(foss, upload)
     yield upload
     foss.delete_upload(upload)
     time.sleep(5)

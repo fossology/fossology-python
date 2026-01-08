@@ -13,27 +13,27 @@ from fossology.obj import Upload
 def test_upload_licenses(foss: Fossology, upload_with_jobs: Upload):
     # Default agent "nomos"
     licenses = foss.upload_licenses(upload_with_jobs)
-    assert len(licenses) == 50
+    assert len(licenses) == 50  # type: ignore
 
 
 def test_upload_licenses_with_containers(foss: Fossology, upload_with_jobs: Upload):
     licenses = foss.upload_licenses(upload_with_jobs, containers=True)
-    assert len(licenses) == 50
+    assert len(licenses) == 50  # type: ignore
 
 
 def test_upload_licenses_agent_ojo(foss: Fossology, upload_with_jobs: Upload):
     licenses = foss.upload_licenses(upload_with_jobs, agent="ojo")
-    assert len(licenses) == 9
+    assert len(licenses) == 9  # type: ignore
 
 
 def test_upload_licenses_agent_monk(foss: Fossology, upload_with_jobs: Upload):
     licenses = foss.upload_licenses(upload_with_jobs, agent="monk")
-    assert len(licenses) == 22
+    assert len(licenses) == 22  # type: ignore
 
 
 def test_upload_licenses_and_copyrights(foss: Fossology, upload_with_jobs: Upload):
     licenses = foss.upload_licenses(upload_with_jobs, copyright=True)
-    assert len(licenses) == 50
+    assert len(licenses) == 50  # type: ignore
 
 
 def test_upload_licenses_with_unknown_group_raises_authorization_error(

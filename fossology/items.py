@@ -38,8 +38,8 @@ class Items:
         :rtype: FileInfo
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(
-            f"{self.api}/uploads/{upload.id}/item/{item_id}/info"
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/info"  # type: ignore
         )
 
         if response.status_code == 200:
@@ -71,8 +71,8 @@ class Items:
         :rtype: int
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(
-            f"{self.api}/uploads/{upload.id}/item/{item_id}/totalcopyrights?status={status.value}"
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/totalcopyrights?status={status.value}"  # type: ignore
         )
 
         if response.status_code == 200:
@@ -103,8 +103,8 @@ class Items:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the REST call is not authorized
         """
-        response = self.session.get(
-            f"{self.api}/uploads/{upload.id}/item/{item_id}/clearing-history"
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/clearing-history"  # type: ignore
         )
 
         if response.status_code == 200:
@@ -142,8 +142,9 @@ class Items:
         if selection:
             params["selection"] = selection
 
-        response = self.session.get(
-            f"{self.api}/uploads/{upload.id}/item/{item_id}/prev-next", params=params
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/prev-next",  # type: ignore
+            params=params,  # type: ignore
         )
 
         if response.status_code == 200:
@@ -174,8 +175,8 @@ class Items:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the REST call is not authorized
         """
-        response = self.session.get(
-            f"{self.api}/uploads/{upload.id}/item/{item_id}/bulk-history"
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/bulk-history"  # type: ignore
         )
 
         if response.status_code == 200:
@@ -231,8 +232,8 @@ class Items:
         :raises AuthorizationError: if the REST call is not authorized
         """
         headers = {"Content-Type": "application/json"}
-        response = self.session.post(
-            f"{self.api}/uploads/{upload.id}/item/{item_id}/bulk-scan",
+        response = self.session.post(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/bulk-scan",  # type: ignore
             headers=headers,
             data=json.dumps(spec),
         )

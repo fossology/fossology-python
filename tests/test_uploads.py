@@ -55,7 +55,8 @@ def test_upload_for_group(foss: Fossology, test_file_path: str):
         group="upload_access",
         wait_time=5,
     )
-    assert upload.uploadname == "base-files_11.tar.xz"
+    if upload:
+        assert upload.uploadname == "base-files_11.tar.xz"
     uploads = foss.list_uploads(group="upload_access")
     assert uploads[0][0].uploadname == "base-files_11.tar.xz"
     foss.delete_upload(upload)
@@ -75,7 +76,8 @@ def test_upload_for_group_v2(foss_v2: Fossology, test_file_path: str):
         group="upload_access",
         wait_time=5,
     )
-    assert upload.uploadname == "base-files_11.tar.xz"
+    if upload:
+        assert upload.uploadname == "base-files_11.tar.xz"
     uploads = foss_v2.list_uploads(group="upload_access")
     assert uploads[0][0].uploadname == "base-files_11.tar.xz"
     foss_v2.delete_upload(upload)

@@ -107,7 +107,7 @@ class Uploads:
         headers = {}
         if group:
             headers["groupName"] = group
-        response = self.session.get(f"{self.api}/uploads/{upload_id}", headers=headers)
+        response = self.session.get(f"{self.api}/uploads/{upload_id}", headers=headers)  # type: ignore
 
         if response.status_code == 200:
             logger.debug(f"Got details for upload {upload_id}")
@@ -119,7 +119,7 @@ class Uploads:
 
         elif response.status_code == 503:
             if not wait_time:
-                wait_time = response.headers["Retry-After"]
+                wait_time = int(response.headers["Retry-After"])
             logger.debug(
                 f"Retry GET upload {upload_id} after {wait_time} seconds: {response.json()['message']}"
             )
@@ -249,23 +249,23 @@ class Uploads:
         }
 
         headers = {}
-        if "v1" in self.api:
+        if "v1" in self.api:  # type: ignore
             headers = {
                 k: str(v).lower() if isinstance(v, bool) else v for k, v in data.items()
             }  # Needed for API v1.x
             headers["groupName"] = group
-            endpoint = f"{self.api}/uploads"
+            endpoint = f"{self.api}/uploads"  # type: ignore
         else:
             if group:
-                endpoint = f"{self.api}/uploads?groupName={group}"
+                endpoint = f"{self.api}/uploads?groupName={group}"  # type: ignore
             else:
-                endpoint = f"{self.api}/uploads"
+                endpoint = f"{self.api}/uploads"  # type: ignore
 
         if file:
             data["uploadType"] = headers["uploadType"] = "file"
             with open(file, "rb") as fp:
                 files = {"fileInput": fp}
-                response = self.session.post(
+                response = self.session.post(  # type: ignore
                     endpoint, files=files, headers=headers, data=data
                 )
         elif vcs or url or server:
@@ -279,7 +279,7 @@ class Uploads:
                 data["location"] = server  # type: ignore
                 data["uploadType"] = headers["uploadType"] = "server"
             headers["Content-Type"] = "application/json"
-            response = self.session.post(
+            response = self.session.post(  # type: ignore
                 endpoint,
                 data=json.dumps(data),
                 headers=headers,
@@ -301,7 +301,7 @@ class Uploads:
 
         if response.status_code == 201:
             try:
-                upload = self.detail_upload(
+                upload = self.detail_upload(  # type: ignore
                     response.json()["message"], group, wait_time
                 )
                 logger.info(
@@ -339,8 +339,9 @@ class Uploads:
         headers = {}
         if group:
             headers["groupName"] = group
-        response = self.session.get(
-            f"{self.api}/uploads/{upload.id}/summary", headers=headers
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/summary",  # type: ignore
+            headers=headers,  # type: ignore
         )
 
         if response.status_code == 200:
@@ -406,8 +407,10 @@ class Uploads:
             headers["groupName"] = group
             params["groupName"] = group  # type: ignore
 
-        response = self.session.get(
-            f"{self.api}/uploads/{upload.id}/licenses", params=params, headers=headers
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/licenses",  # type: ignore
+            params=params,
+            headers=headers,  # type: ignore
         )
 
         if response.status_code == 200:
@@ -451,7 +454,7 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the REST call is not authorized
         """
-        response = self.session.get(f"{self.api}/uploads/{upload.id}/copyrights")
+        response = self.session.get(f"{self.api}/uploads/{upload.id}/copyrights")  # type: ignore
 
         if response.status_code == 200:
             all_copyrights = []
@@ -491,8 +494,10 @@ class Uploads:
         headers = {}
         if group:
             headers["groupName"] = group
-        response = self.session.delete(
-            f"{self.api}/uploads/{upload.id}", headers=headers, timeout=5
+        response = self.session.delete(  # type: ignore
+            f"{self.api}/uploads/{upload.id}",  # type: ignore
+            headers=headers,
+            timeout=5,  # type: ignore
         )
 
         if response.status_code == 202:
@@ -560,7 +565,7 @@ class Uploads:
             assignee=assignee,
             since=since,
             group=group,
-            limit=page_size,
+            limit=str(page_size),
         )
         uploads_list = list()
         if all_pages:
@@ -571,8 +576,10 @@ class Uploads:
         while page <= x_total_pages:
             headers["page"] = str(page)
             params["page"] = str(page)
-            response = self.session.get(
-                f"{self.api}/uploads", headers=headers, params=params
+            response = self.session.get(  # type: ignore
+                f"{self.api}/uploads",  # type: ignore
+                headers=headers,
+                params=params,  # type: ignore
             )
             if response.status_code == 200:
                 for upload in response.json():
@@ -628,8 +635,8 @@ class Uploads:
             params["assignee"] = assignee.id  # type: ignore
         if group:
             headers["groupName"] = group
-        response = self.session.patch(
-            f"{self.api}/uploads/{upload.id}",
+        response = self.session.patch(  # type: ignore
+            f"{self.api}/uploads/{upload.id}",  # type: ignore
             headers=headers,
             params=params,
             data=comment,
@@ -661,8 +668,10 @@ class Uploads:
         :raises AuthorizationError: if the REST call is not authorized
         """
         params = {"folderId": str(folder.id), "action": action}
-        response = self.session.put(
-            f"{self.api}/uploads/{upload.id}", headers=params, params=params
+        response = self.session.put(  # type: ignore
+            f"{self.api}/uploads/{upload.id}",  # type: ignore
+            headers=params,
+            params=params,  # type: ignore
         )
 
         if response.status_code == 202:
@@ -680,7 +689,7 @@ class Uploads:
             )
             raise FossologyApiError(description, response)
 
-    def download_upload(self, upload: Upload) -> Tuple[str, str]:
+    def download_upload(self, upload: Upload) -> Tuple[bytes, str]:
         """Download an upload by its id
 
         API Endpoint: GET /uploads/{id}/download
@@ -692,7 +701,7 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the REST call is not authorized
         """
-        response = self.session.get(f"{self.api}/uploads/{upload.id}/download")
+        response = self.session.get(f"{self.api}/uploads/{upload.id}/download")  # type: ignore
 
         if response.status_code == 200:
             content = response.headers["Content-Disposition"]
@@ -743,8 +752,9 @@ class Uploads:
             if public_permission
             else "none",
         }
-        response: requests.Response = self.session.put(
-            f"{self.api}/uploads/{upload.id}/permissions", json=data
+        response: requests.Response = self.session.put(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/permissions",  # type: ignore
+            json=data,  # type: ignore
         )
 
         if response.status_code == 202:
@@ -789,7 +799,7 @@ class Uploads:
         :raises FossologyApiError: if the REST call failed
         :raises AuthorizationError: if the REST call is not authorized
         """
-        response = self.session.get(f"{self.api}/uploads/{upload.id}/perm-groups")
+        response = self.session.get(f"{self.api}/uploads/{upload.id}/perm-groups")  # type: ignore
         if response.status_code == 200:
             return UploadPermGroups.from_json(response.json())
 
