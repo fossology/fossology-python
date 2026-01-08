@@ -9,12 +9,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
-    # ✅ Improved concurrency: ensure only one release runs at a time
     concurrency:
       group: semantic-release
       cancel-in-progress: false
 
-    # ✅ Expanded permissions: required for many semantic-release operations
     permissions:
       id-token: write
       contents: write
