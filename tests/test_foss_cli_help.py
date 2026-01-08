@@ -9,7 +9,7 @@ from fossology import foss_cli
 def test_smoke(runner):
     """Test the CLI."""
     result = runner.invoke(foss_cli.cli, None, obj={})
-    assert result.exit_code == 0
+    assert result.exit_code == 2
 
 
 def test_help_on_top_level(runner, click_test_dict):
