@@ -25,8 +25,11 @@ exclude = ["tests/"]
 addopts = "--doctest-glob='*.rst' --doctest-modules"
 
 [tool.semantic_release]
-version_toml = ["pyproject.toml:project.version"]
-changelog_file = "CHANGELOG.md"
+version_source = "tag"
+version_files = [
+  "pyproject.toml:version",
+  "docs-source/conf.py:release"
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
