@@ -26,26 +26,7 @@ class FolderFactory:
 class Folders:
     """Class dedicated to all "folders" related endpoints"""
 
-    def list_folders(self):
-        """List all folders accessible to the authenticated user
 
-        API Endpoint: GET /folders
-
-        :return: a list of folders
-        :rtype: list()
-        :raises FossologyApiError: if the REST call failed
-        """
-        response = self.session.get(f"{self.api}/folders")
-        if response.status_code == 200:
-            folders_list = list()
-            response_list = response.json()
-            for folder in response_list:
-                sub_folder = Folder.from_json(folder)
-                folders_list.append(sub_folder)
-            return folders_list
-        else:
-            description = f"Unable to get a list of folders for {self.user.name}"
-            raise FossologyApiError(description, response)
     def list_folders(self):
         """Get the list of folders."""
         # 'self.api' is dynamically set to /api/v1 or /api/v2 by the maintainer's code
