@@ -26,6 +26,7 @@ class Users:
         """
         response = self.session.get(f"{self.api}/users/{user_id}")  # type: ignore
         if response.status_code == 200:
+            user_agents = None
             user_details = response.json()
             if user_details.get("agents"):
                 user_agents = Agents.from_json(user_details["agents"])
