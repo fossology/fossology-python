@@ -13,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 class Users:
     """Class dedicated to all "users" related endpoints"""
 
-    def detail_user(self, user_id: int):
+    def detail_user(self, user_id):
         """Get details of Fossology user.
 
         API Endpoint: GET /users/{id}
@@ -24,14 +24,15 @@ class Users:
         :rtype: User
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(f"{self.api}/users/{user_id}")
+        response = self.session.get(f"{self.api}/users/{user_id}")  # type: ignore
         if response.status_code == 200:
             user_agents = None
             user_details = response.json()
             if user_details.get("agents"):
                 user_agents = Agents.from_json(user_details["agents"])
             user = User.from_json(user_details)
-            user.agents = user_agents
+            if user_agents:
+                user.agents = user_agents
             return user
         else:
             description = f"Error while getting details for user {user_id}"
@@ -46,7 +47,7 @@ class Users:
         :rtype: list of User
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(f"{self.api}/users")
+        response = self.session.get(f"{self.api}/users")  # type: ignore
         if response.status_code == 200:
             users_list = list()
             for user in response.json():
@@ -60,10 +61,10 @@ class Users:
                     users_list.append(foss_user)
             return users_list
         else:
-            description = f"Unable to get a list of users from {self.host}"
+            description = f"Unable to get a list of users from {self.host}"  # type: ignore
             raise FossologyApiError(description, response)
 
-    def create_user(self, user_spec: dict):
+    def create_user(self, user_spec):
         """Create a new Fossology user
 
         API Endpoint: POST /users
@@ -102,7 +103,7 @@ class Users:
         :type user_spec: dict
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.post(f"{self.api}/users", json=user_spec)
+        response = self.session.post(f"{self.api}/users", json=user_spec)  # type: ignore
         if response.status_code == 201:
             logger.info(
                 f"User {user_spec['name']} was created, call list_users() to get more information."
@@ -122,7 +123,7 @@ class Users:
         :type user: User
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.delete(f"{self.api}/users/{user.id}")
+        response = self.session.delete(f"{self.api}/users/{user.id}")  # type: ignore
 
         if response.status_code == 202:
             return

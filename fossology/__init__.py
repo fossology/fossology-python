@@ -130,14 +130,16 @@ class Fossology(
         self.token = token
         self.users = list()
         self.folders = list()
+        self.version = version
         self.api = f"{self.host}/api/{version}"
         self.session = requests.Session()
         self.session.headers.update({"Authorization": f"Bearer {self.token}"})
         self.info = self.get_info()
         self.health = self.get_health()
-        self.user = self.get_self()
+        self.user: User = self.get_self()
         self.name = self.user.name
-        self.rootFolder = self.detail_folder(self.user.rootFolderId)
+        if self.user.rootFolderId is not None:
+            self.rootFolder = self.detail_folder(self.user.rootFolderId)
         self.folders = self.list_folders()
 
         logger.info(
@@ -186,7 +188,7 @@ class Fossology(
             description = "Error while getting API info"
             raise FossologyApiError(description, response)
 
-    def get_health(self) -> ApiInfo:
+    def get_health(self) -> HealthInfo:
         """Get health from the server
 
         API endpoint: GET /health

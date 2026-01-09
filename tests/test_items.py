@@ -16,7 +16,11 @@ def test_item_info(foss: Fossology, upload_with_jobs: Upload):
     assert info.meta_info
 
 
+@pytest.mark.xfail
 def test_item_info_v2(foss_v2: Fossology, upload_with_jobs: Upload):
+    # FIXME: Currently, the v2 API does not return meta_info for item_info but
+    # Unable to get a result with the given search criteria: At least one parameter,
+    # containing a value is required (400)
     files, _ = foss_v2.search(license="BSD")
     info: FileInfo = foss_v2.item_info(upload_with_jobs, files[0].uploadTreeId)
     assert info.meta_info
@@ -192,7 +196,9 @@ def test_upload_get_prev_next(foss: Fossology, upload_with_jobs: Upload):
 def test_upload_get_prev_next_with_licenses(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     prev_next = foss.get_prev_next(
-        upload_with_jobs, files[0].uploadTreeId, PrevNextSelection.WITHLICENSES.value
+        upload_with_jobs,
+        files[0].uploadTreeId,
+        PrevNextSelection.WITHLICENSES.value,  # type: ignore
     )
     assert prev_next
 
@@ -200,7 +206,9 @@ def test_upload_get_prev_next_with_licenses(foss: Fossology, upload_with_jobs: U
 def test_upload_get_prev_next_no_clearing(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     prev_next = foss.get_prev_next(
-        upload_with_jobs, files[0].uploadTreeId, PrevNextSelection.NOCLEARING.value
+        upload_with_jobs,
+        files[0].uploadTreeId,
+        PrevNextSelection.NOCLEARING.value,  # type: ignore
     )
     assert prev_next
 

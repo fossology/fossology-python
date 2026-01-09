@@ -3,6 +3,8 @@
 
 from pathlib import PurePath
 
+import pytest
+
 from fossology import foss_cli
 
 
@@ -112,7 +114,13 @@ def test_start_workflow_reuse_newest_job(
     assert "Report downloaded" in result.output
     assert "Report written to file: " in result.output
     assert result.exit_code == 0
-    # cleanup
+
+
+@pytest.fixture(scope="module", autouse=True)
+def cleanup_module(runner, click_test_file, click_test_dict):
+    # Setup code (if any)
+    yield
+    # Teardown code: this runs after all tests in the module
     result = runner.invoke(
         foss_cli.cli,
         [
@@ -120,7 +128,7 @@ def test_start_workflow_reuse_newest_job(
             "delete_upload",
             click_test_file,
         ],
-        obj=d,
+        obj=click_test_dict,
         catch_exceptions=False,
     )
     assert result.exit_code == 0

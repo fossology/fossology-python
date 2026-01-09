@@ -131,7 +131,7 @@ class User(object):
         rootFolderId: int | None = None,
         emailNotification: str | None = None,
         default_group: str | None = None,
-        agents: dict | None = None,
+        agents: Agents | None = None,
         **kwargs: dict,
     ):
         self.id = id
@@ -252,9 +252,10 @@ class Findings(object):
         self.additional_info = kwargs
 
     def __str__(self):
+        len_copyright = len(self.copyright) if self.copyright else 0
         return (
             f"Licenses found by scanners: {self.scanner}, concluded licenses: {self.conclusion}, "
-            f"{len(self.copyright)} copyrights"
+            f"{len_copyright} copyrights"
         )
 
     @classmethod
@@ -699,7 +700,11 @@ class UploadLicenses(object):
         self.additional_info = kwargs
 
     def __str__(self):
-        return f"File {self.filepath} has {len(self.findings.conclusion)} license and {len(self.findings.copyright)}matches"
+        len_conclusion = (
+            len(self.findings.conclusion) if self.findings.conclusion else 0
+        )
+        len_copyright = len(self.findings.copyright) if self.findings.copyright else 0
+        return f"File {self.filepath} has {len_conclusion} license and {len_copyright} copyrights found."
 
     @classmethod
     def from_json(cls, json_dict):

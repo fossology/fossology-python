@@ -776,7 +776,13 @@ def start_workflow(  # noqa: C901
     logger.debug(f"job  {job.id}  is in state {job.status} ")
     if job.status == "Processing":
         logger.fatal(
-            f"job  {job.id}  is still in state {job.status}: Please try again later with --reuse_newest_upload --reuse_newest_job "
+            f"job  {job.id} is still in state {job.status}: Please try again later with --reuse_newest_upload --reuse_newest_job "
+        )
+        ctx.exit(1)
+
+    if job.status == "Failed":
+        logger.fatal(
+            f"job {job.id} is {job.status}: Please try again later with --reuse_newest_upload --reuse_newest_job"
         )
         ctx.exit(1)
 

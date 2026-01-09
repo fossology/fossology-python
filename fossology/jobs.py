@@ -51,7 +51,7 @@ class Jobs:
             params["upload"] = upload.id
 
         jobs_list = list()
-        jobs_endpoint = f"{self.api}/jobs"
+        jobs_endpoint = f"{self.api}/jobs"  # type: ignore
         if all:
             jobs_endpoint += "/all"
         if all_pages:
@@ -61,7 +61,7 @@ class Jobs:
             x_total_pages = page
         while page <= x_total_pages:
             headers["page"] = str(page)
-            response = self.session.get(jobs_endpoint, params=params, headers=headers)
+            response = self.session.get(jobs_endpoint, params=params, headers=headers)  # type: ignore
             if response.status_code == 200:
                 for job in response.json():
                     jobs_list.append(Job.from_json(job))
@@ -96,7 +96,7 @@ class Jobs:
         :rtype: Job
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(f"{self.api}/jobs/{job_id}")
+        response = self.session.get(f"{self.api}/jobs/{job_id}")  # type: ignore
         if wait:
             if response.status_code == 200:
                 job = Job.from_json(response.json())
@@ -108,7 +108,7 @@ class Jobs:
                 raise FossologyApiError(description, response)
             logger.debug(f"Waiting for job {job_id} to complete")
             time.sleep(timeout)
-            response = self.session.get(f"{self.api}/jobs/{job_id}")
+            response = self.session.get(f"{self.api}/jobs/{job_id}")  # type: ignore
 
         if response.status_code == 200:
             logger.debug(f"Got details for job {job_id}")
@@ -128,7 +128,7 @@ class Jobs:
         :rtype: list of ShowJob
         :raises FossologyApiError: if the REST call failed
         """
-        response = self.session.get(f"{self.api}/jobs/history?upload={upload.id}")
+        response = self.session.get(f"{self.api}/jobs/history?upload={upload.id}")  # type: ignore
         jobs_list = list()
         if response.status_code == 200:
             logger.debug(f"Got jobs for upload {upload.id}")
@@ -212,8 +212,10 @@ class Jobs:
         if group:
             headers["groupName"] = group
 
-        response = self.session.post(
-            f"{self.api}/jobs", headers=headers, data=json.dumps(spec)
+        response = self.session.post(  # type: ignore
+            f"{self.api}/jobs",  # type: ignore
+            headers=headers,
+            data=json.dumps(spec),  # type: ignore
         )
 
         if response.status_code == 201:

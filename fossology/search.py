@@ -116,7 +116,7 @@ class Search:
             x_total_pages = page
         while page <= x_total_pages:
             headers["page"] = str(page)
-            response = self.session.get(f"{self.api}/search", headers=headers)
+            response = self.session.get(f"{self.api}/search", headers=headers)  # type: ignore
 
             if response.status_code == 200:
                 for result in response.json():
@@ -161,8 +161,10 @@ class Search:
         if group:
             headers["groupName"] = group
 
-        response = self.session.post(
-            f"{self.api}/filesearch", headers=headers, json=filelist
+        response = self.session.post(  # type: ignore
+            f"{self.api}/filesearch",
+            headers=headers,
+            json=filelist,  # type: ignore
         )
 
         if response.status_code == 200:

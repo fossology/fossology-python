@@ -115,15 +115,27 @@ def test_detail_job_error(foss_server: str, foss: Fossology):
 
 @responses.activate
 def test_jobs_history_error(foss_server: str, foss: Fossology, fake_hash: str):
-    upload = Upload(secrets.randbelow(1000), "test", secrets.randbelow(1000), "Test upload", "Test name", "24.01.25", hash=fake_hash)
+    upload = Upload(
+        secrets.randbelow(1000),
+        "test",
+        secrets.randbelow(1000),
+        "Test upload",
+        "Test name",
+        "24.01.25",
+        hash=fake_hash,
+    )
     responses.add(responses.GET, f"{foss_server}/api/v1/jobs/history", status=403)
     responses.add(responses.GET, f"{foss_server}/api/v1/jobs/history", status=500)
     with pytest.raises(FossologyApiError) as excinfo:
         foss.jobs_history(upload)
-    assert f"Upload {upload.id} is not accessible or does not exists" in str(excinfo.value)
+    assert f"Upload {upload.id} is not accessible or does not exists" in str(
+        excinfo.value
+    )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.jobs_history(upload)
-    assert f"Error while getting jobs history for upload {upload.id}" in str(excinfo.value)
+    assert f"Error while getting jobs history for upload {upload.id}" in str(
+        excinfo.value
+    )
 
 
 def test_paginated_list_jobs(foss: Fossology, upload_with_jobs: Upload):
