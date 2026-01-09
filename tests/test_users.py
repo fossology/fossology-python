@@ -31,7 +31,7 @@ def test_generate_token_wrong_date(foss_server: str):
             secrets.token_urlsafe(8),
             token_expire=str(date.today() - timedelta(days=1)),
         )
-        assert "Error while generating new token" in str(excinfo.value)
+    assert "Error while generating new token" in str(excinfo.value)
 
 
 def test_generate_token_too_long(foss_server: str):
@@ -43,7 +43,7 @@ def test_generate_token_too_long(foss_server: str):
             secrets.token_urlsafe(41),
             token_expire=str(date.today() + timedelta(days=1)),
         )
-        assert "Error while generating new token" in str(excinfo.value)
+    assert "Error while generating new token" in str(excinfo.value)
 
 
 @responses.activate
@@ -84,7 +84,7 @@ def test_generate_token_if_receiving_authentication_error_raises_api_error_(
             secrets.token_urlsafe(8),
             token_expire=str(date.today() + timedelta(days=1)),
         )
-        assert "Authentication error" in str(excinfo.value)
+    assert "Authentication error" in str(excinfo.value)
 
 
 def test_unknown_user(foss: Fossology):
@@ -93,11 +93,83 @@ def test_unknown_user(foss: Fossology):
 
 
 def test_list_users(foss: Fossology):
-    # Fixture created_foss_user creates a new user for the test session
-    # If the whole test suite runs, a second user is created
-    # Running this test only will result in 1 user
     users = foss.list_users()
     assert len(users) == 2
+@responses.activate
+def test_list_users_v2(foss_server: str, foss_user: dict, foss_user_agents: dict):
+    """
+    API v2 support test:
+    Fossology(version="v2") triggers multiple calls during __init__.
+    We must mock everything it touches:
+      GET /api/v2/health
+      GET /api/v2/info
+      GET /api/v2/users/self
+      GET /api/v2/folders
+      GET /api/v2/folders/{rootFolderId}
+    And then the actual call under test:
+      GET /api/v2/users
+    """
+    base = foss_server.rstrip("/")
+
+    health_info = {
+        "status": "OK",
+        "scheduler": {"status": "OK"},
+        "db": {"status": "OK"},
+    }
+
+    api_info = {
+        "name": "FOSSology API",
+        "description": "Mocked API info for tests",
+        "version": "v2",
+        "security": ["api_key"],
+        "contact": "fossology@example.com",
+        "license": {"name": "MIT", "url": "https://opensource.org/licenses/MIT"},
+        "fossology": {
+            "version": "4.4.0",
+            "branchName": "main",
+            "commitHash": "deadbeef",
+            "commitDate": "2025-01-01T00:00:00Z",
+            "buildDate": "2025-01-02T00:00:00Z",
+        },
+    }
+
+    root_id = foss_user.get("rootFolderId", 1)
+
+    folder_info = {
+        "id": root_id,
+        "name": "Root",
+        "description": "Root folder",
+        "parent": 0,
+    }
+
+    responses.add(responses.GET, f"{base}/api/v2/health", status=200, json=health_info)
+    responses.add(responses.GET, f"{base}/api/v2/info", status=200, json=api_info)
+    responses.add(responses.GET, f"{base}/api/v2/users/self", status=200, json=foss_user)
+
+    # ✅ Needed: init calls the folders collection endpoint
+    responses.add(
+        responses.GET,
+        f"{base}/api/v2/folders",
+        status=200,
+        json=[folder_info],
+    )
+
+    # Some versions also call the single folder endpoint
+    responses.add(
+        responses.GET,
+        f"{base}/api/v2/folders/{root_id}",
+        status=200,
+        json=folder_info,
+    )
+
+    responses.add(responses.GET, f"{base}/api/v2/users", status=200, json=[foss_user])
+
+    foss = Fossology(foss_server, "test-token", version="v2")
+
+    users_from_api = foss.list_users()
+
+    assert len(users_from_api) == 1
+    assert users_from_api[0].agents.to_dict() == foss_user_agents
 
 
 @responses.activate
@@ -115,9 +187,8 @@ def test_get_self_error(foss_server: str, foss: Fossology):
 def test_get_self_with_agents(
     foss_server: str, foss: Fossology, foss_user: dict, foss_user_agents: dict
 ):
-    user = foss_user
     responses.add(
-        responses.GET, f"{foss_server}/api/v1/users/self", status=200, json=user
+        responses.GET, f"{foss_server}/api/v1/users/self", status=200, json=foss_user
     )
     user_from_api = foss.get_self()
     assert user_from_api.agents.to_dict() == foss_user_agents
@@ -127,11 +198,13 @@ def test_get_self_with_agents(
 def test_detail_user_with_agents(
     foss_server: str, foss: Fossology, foss_user: dict, foss_user_agents: dict
 ):
-    user = foss_user
     responses.add(
-        responses.GET, f"{foss_server}/api/v1/users/{user['id']}", status=200, json=user
+        responses.GET,
+        f"{foss_server}/api/v1/users/{foss_user['id']}",
+        status=200,
+        json=foss_user,
     )
-    user_from_api = foss.detail_user(user["id"])
+    user_from_api = foss.detail_user(foss_user["id"])
     assert user_from_api.agents.to_dict() == foss_user_agents
 
 
@@ -139,8 +212,12 @@ def test_detail_user_with_agents(
 def test_list_users_with_agents(
     foss_server: str, foss: Fossology, foss_user: dict, foss_user_agents: dict
 ):
-    users = [foss_user]
-    responses.add(responses.GET, f"{foss_server}/api/v1/users", status=200, json=users)
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/users",
+        status=200,
+        json=[foss_user],
+    )
     users_from_api = foss.list_users()
     assert users_from_api[0].agents.to_dict() == foss_user_agents
 
