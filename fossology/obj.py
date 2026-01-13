@@ -221,8 +221,21 @@ class Folder(object):
 
     @classmethod
     def from_json(cls, json_dict):
-        """Standard V1 parser (Restore this!)."""
-        return cls(**json_dict)
+        """    Create a Folder object from V2 API JSON data."""
+
+        parent = None
+        
+        #API V2 returns parent as a object
+        if isinstance(json_dict.get("parent"),dict):
+            parent = json_dict["parent"].get("id")
+        elif "parentID" in json_dict:
+            parent = json_dict.get("parentID")
+        return cls(
+            id=json_dict.get("id"),
+        name=json_dict.get("name"),
+        description=json_dict.get("description"),
+        parent=parent,
+        )
 
     @classmethod
     def from_json_v2(cls, json_dict):
