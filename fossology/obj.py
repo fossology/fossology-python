@@ -250,7 +250,7 @@ class Folder(object):
             description=json_dict.get("description"),
             # Check 'parent' first, fallback to 'parentId' if V2 changes keys
             parent=json_dict.get("parent") or json_dict.get("parentId"),
-            **json_dict
+            
         )
 
 class Findings(object):

@@ -112,8 +112,7 @@ class Folders:
             logger.info(
                 f"Folder '{name}' already exists under the folder {parent.name} ({parent.id})"
             )
-            # Folder names with similar letter but different cases
-            # are not allowed in Fossology, compare with lower case
+            self.folders = self.list_folders()
             existing_folder = [
                 folder
                 for folder in self.folders
@@ -206,6 +205,8 @@ class Folders:
         response = self.session.put(f"{self.api}/folders/{folder.id}", headers=headers)
         if response.status_code == 202:
             logger.info(f"Folder {folder.name} has been {action}d to {parent.name}")
+            if action == "move":
+                folder.parent = parent.id
             return self.detail_folder(folder.id)
         else:
             description = f"Unable to {action} folder {folder.name} to {parent.name}"
