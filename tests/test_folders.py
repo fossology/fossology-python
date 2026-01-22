@@ -15,6 +15,8 @@ from fossology.obj import Folder
 @responses.activate
 def test_list_folders_error(foss_server: str, foss: Fossology):
     responses.add(responses.GET, f"{foss_server}/api/v1/folders", status=404)
+    responses.add(responses.GET, f"{foss_server}/api/v2/folders", status=404)
+
     with pytest.raises(FossologyApiError) as excinfo:
         foss.list_folders()
     assert f"Unable to get a list of folders for {foss.user.name}" in str(excinfo.value)
@@ -70,6 +72,8 @@ def test_create_folder_returns_200_but_folder_does_not_exists(
     foss_server: str, foss: Fossology
 ):
     responses.add(responses.POST, f"{foss_server}/api/v1/folders", status=200)
+    responses.add(responses.POST, f"{foss_server}/api/v2/folders", status=200)
+
     with pytest.raises(FossologyApiError) as excinfo:
         foss.create_folder(foss.rootFolder, "NoFolder")
     assert (
@@ -82,6 +86,8 @@ def test_create_folder_returns_200_but_folder_does_not_exists(
 def test_create_folder_error(foss_server: str, foss: Fossology):
     parent = Folder(secrets.randbelow(1000), "NonFolder", "", foss.rootFolder)
     responses.add(responses.POST, f"{foss_server}/api/v1/folders", status=404)
+    responses.add(responses.POST, f"{foss_server}/api/v2/folders", status=404)
+
     with pytest.raises(FossologyApiError) as excinfo:
         foss.create_folder(parent, "TestFolderNoParent")
     assert "Unable to create folder TestFolderNoParent" in str(excinfo.value)
@@ -107,6 +113,9 @@ def test_update_folder_error(foss_server: str, foss: Fossology):
     folder = Folder(secrets.randbelow(1000), "Folder", "", foss.rootFolder)
     responses.add(
         responses.PATCH, f"{foss_server}/api/v1/folders/{folder.id}", status=404
+    )
+    responses.add(
+    responses.PATCH, f"{foss_server}/api/v2/folders/{folder.id}", status=404
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.update_folder(folder)
@@ -154,6 +163,9 @@ def test_put_folder_error(foss_server: str, foss: Fossology):
     responses.add(
         responses.PUT, f"{foss_server}/api/v1/folders/{folder.id}", status=404
     )
+    responses.add(
+    responses.PUT, f"{foss_server}/api/v2/folders/{folder.id}", status=404
+    )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.move_folder(folder, foss.rootFolder)
     assert f"Unable to move folder {folder.name} to {foss.rootFolder.name}" in str(
@@ -179,6 +191,9 @@ def test_delete_folder_error(foss_server: str, foss: Fossology):
     folder = Folder(secrets.randbelow(1000), "Folder", "", foss.rootFolder)
     responses.add(
         responses.DELETE, f"{foss_server}/api/v1/folders/{folder.id}", status=404
+    )
+    responses.add(
+    responses.DELETE, f"{foss_server}/api/v2/folders/{folder.id}", status=404
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_folder(folder)
