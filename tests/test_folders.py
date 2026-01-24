@@ -74,6 +74,9 @@ def test_create_folder_returns_200_but_folder_does_not_exists(
     responses.add(responses.POST, f"{foss_server}/api/v1/folders", status=200)
     responses.add(responses.POST, f"{foss_server}/api/v2/folders", status=200)
 
+    responses.add(responses.GET, f"{foss_server}/api/v1/folders", status=404)
+    responses.add(responses.GET, f"{foss_server}/api/v2/folders", status=404)
+
     with pytest.raises(FossologyApiError) as excinfo:
         foss.create_folder(foss.rootFolder, "NoFolder")
     assert (

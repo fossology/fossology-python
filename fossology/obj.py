@@ -188,7 +188,6 @@ class UserGroupMember(object):
     def from_json(cls, json_dict):
         return cls(**json_dict)
 
-
 class Folder(object):
     """FOSSology folder.
 
@@ -198,12 +197,6 @@ class Folder(object):
     :param name: the name of the folder
     :param description: further information about the folder
     :param parent: the ID of the parent folder
-    :param kwargs: handle any other folder information provided by the fossology instance
-    :type id: int
-    :type name: string
-    :type description: string
-    :type parent: int
-    :type kwargs: key word argument
     """
 
     def __init__(self, id, name, description, parent, **kwargs):
@@ -221,38 +214,28 @@ class Folder(object):
 
     @classmethod
     def from_json(cls, json_dict):
-        """    Create a Folder object from V2 API JSON data."""
-
         parent = None
-        
-        #API V2 returns parent as a object
-        if isinstance(json_dict.get("parent"),dict):
+
+    # API v2: parent is an object
+        if isinstance(json_dict.get("parent"), dict):
             parent = json_dict["parent"].get("id")
+
+    # API v1: parentID is an int
         elif "parentID" in json_dict:
             parent = json_dict.get("parentID")
+
+    # Fallback (some endpoints use parentId)
+        else:
+            parent = json_dict.get("parentId")
+
         return cls(
-            id=json_dict.get("id"),
+
+        id=json_dict.get("id"),
         name=json_dict.get("name"),
         description=json_dict.get("description"),
         parent=parent,
-        )
-
-    @classmethod
-    def from_json_v2(cls, json_dict):
-        """
-        Create a Folder object from V2 API JSON data.
-        """
-        # We manually map the keys to ensure safety.
-        # This fixes the bug where 'parent' might be missing or named 'parentId'.
-        return cls(
-            id=json_dict.get("id"),
-            name=json_dict.get("name"),
-            description=json_dict.get("description"),
-            # Check 'parent' first, fallback to 'parentId' if V2 changes keys
-            parent=json_dict.get("parent") or json_dict.get("parentId"),
-            
-        )
-
+    )
+    
 class Findings(object):
     """FOSSology license findings.
 

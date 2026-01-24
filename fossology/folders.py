@@ -116,7 +116,8 @@ class Folders:
             existing_folder = [
                 folder
                 for folder in self.folders
-                if folder.name.lower() == name.lower() and folder.parent == parent.id
+                if folder.name.lower() == name.lower() and (folder.parent == parent.id or folder.parent is None)
+
             ]
             if existing_folder:
                 return existing_folder[0]
@@ -205,9 +206,9 @@ class Folders:
         response = self.session.put(f"{self.api}/folders/{folder.id}", headers=headers)
         if response.status_code == 202:
             logger.info(f"Folder {folder.name} has been {action}d to {parent.name}")
-            if action == "move":
-                folder.parent = parent.id
-            return self.detail_folder(folder.id)
+            self.folders = self.list_folders()
+            return next(f for f in self.folders if f.id == folder.id)
+
         else:
             description = f"Unable to {action} folder {folder.name} to {parent.name}"
             raise FossologyApiError(description, response)
