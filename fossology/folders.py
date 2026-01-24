@@ -10,31 +10,44 @@ from fossology.obj import Folder
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-
+class FolderFactory:
+    """
+    Factory to create Folder objects based on API version.
+    This helps us avoid duplicating the main logic loop.
+    """
+    @staticmethod
+    def from_json(version, data):
+        # If the user selected V2 when starting the tool
+        if version == "v2":
+            return Folder.from_json_v2(data)
+        
+        # Default to V1 behavior
+        return Folder.from_json(data)
 class Folders:
     """Class dedicated to all "folders" related endpoints"""
 
+
     def list_folders(self):
-        """List all folders accessible to the authenticated user
-
-        API Endpoint: GET /folders
-
-        :return: a list of folders
-        :rtype: list()
-        :raises FossologyApiError: if the REST call failed
-        """
+        """Get the list of folders."""
+        # 'self.api' is dynamically set to /api/v1 or /api/v2 by the maintainer's code
+        # We just add the endpoint name
         response = self.session.get(f"{self.api}/folders")
+
         if response.status_code == 200:
-            folders_list = list()
+            folders_list = []
             response_list = response.json()
-            for folder in response_list:
-                sub_folder = Folder.from_json(folder)
+            
+            # Here is the magic: We iterate through the raw JSON list
+            for folder_data in response_list:
+                # We ask the Factory to convert raw JSON into a Python Object
+                # It automatically checks 'self.version' to decide how to do it
+                sub_folder = FolderFactory.from_json(self.version, folder_data)
                 folders_list.append(sub_folder)
+            
             return folders_list
         else:
             description = f"Unable to get a list of folders for {self.user.name}"
             raise FossologyApiError(description, response)
-
     def detail_folder(self, folder_id: int):
         """Get details of folder.
 
@@ -99,12 +112,12 @@ class Folders:
             logger.info(
                 f"Folder '{name}' already exists under the folder {parent.name} ({parent.id})"
             )
-            # Folder names with similar letter but different cases
-            # are not allowed in Fossology, compare with lower case
+            self.folders = self.list_folders()
             existing_folder = [
                 folder
                 for folder in self.folders
-                if folder.name.lower() == name.lower() and folder.parent == parent.id
+                if folder.name.lower() == name.lower() and (folder.parent == parent.id or folder.parent is None)
+
             ]
             if existing_folder:
                 return existing_folder[0]
@@ -193,7 +206,9 @@ class Folders:
         response = self.session.put(f"{self.api}/folders/{folder.id}", headers=headers)
         if response.status_code == 202:
             logger.info(f"Folder {folder.name} has been {action}d to {parent.name}")
-            return self.detail_folder(folder.id)
+            self.folders = self.list_folders()
+            return next(f for f in self.folders if f.id == folder.id)
+
         else:
             description = f"Unable to {action} folder {folder.name} to {parent.name}"
             raise FossologyApiError(description, response)

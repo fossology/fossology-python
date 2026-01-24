@@ -188,7 +188,6 @@ class UserGroupMember(object):
     def from_json(cls, json_dict):
         return cls(**json_dict)
 
-
 class Folder(object):
     """FOSSology folder.
 
@@ -198,12 +197,6 @@ class Folder(object):
     :param name: the name of the folder
     :param description: further information about the folder
     :param parent: the ID of the parent folder
-    :param kwargs: handle any other folder information provided by the fossology instance
-    :type id: int
-    :type name: string
-    :type description: string
-    :type parent: int
-    :type kwargs: key word argument
     """
 
     def __init__(self, id, name, description, parent, **kwargs):
@@ -221,9 +214,28 @@ class Folder(object):
 
     @classmethod
     def from_json(cls, json_dict):
-        return cls(**json_dict)
+        parent = None
 
+    # API v2: parent is an object
+        if isinstance(json_dict.get("parent"), dict):
+            parent = json_dict["parent"].get("id")
 
+    # API v1: parentID is an int
+        elif "parentID" in json_dict:
+            parent = json_dict.get("parentID")
+
+    # Fallback (some endpoints use parentId)
+        else:
+            parent = json_dict.get("parentId")
+
+        return cls(
+
+        id=json_dict.get("id"),
+        name=json_dict.get("name"),
+        description=json_dict.get("description"),
+        parent=parent,
+    )
+    
 class Findings(object):
     """FOSSology license findings.
 
