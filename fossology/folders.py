@@ -10,6 +10,7 @@ from fossology.obj import Folder
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+
 class FolderFactory:
     """
     Factory to create Folder objects based on API version.
@@ -23,23 +24,29 @@ class FolderFactory:
         
         # Default to V1 behavior
         return Folder.from_json(data)
+
+
 class Folders:
     """Class dedicated to all "folders" related endpoints"""
 
-
     def list_folders(self):
-        """Get the list of folders."""
-        # 'self.api' is dynamically set to /api/v1 or /api/v2 by the maintainer's code
-        # We just add the endpoint name
+        """Get the list of folders.
+        
+        API Endpoint: GET /folders
+        
+        :return: list of folders
+        :rtype: list of Folder objects
+        :raises FossologyApiError: if the REST call failed
+        """
         response = self.session.get(f"{self.api}/folders")
 
         if response.status_code == 200:
             folders_list = []
             response_list = response.json()
             
-            # Here is the magic: We iterate through the raw JSON list
+            # Iterate through the raw JSON list
             for folder_data in response_list:
-                # We ask the Factory to convert raw JSON into a Python Object
+                # Ask the Factory to convert raw JSON into a Python Object
                 # It automatically checks 'self.version' to decide how to do it
                 sub_folder = FolderFactory.from_json(self.version, folder_data)
                 folders_list.append(sub_folder)
@@ -48,20 +55,22 @@ class Folders:
         else:
             description = f"Unable to get a list of folders for {self.user.name}"
             raise FossologyApiError(description, response)
+
     def detail_folder(self, folder_id: int):
         """Get details of folder.
 
         API Endpoint: GET /folders/{id}
 
-        :param id: the ID of the folder to be analyzed
-        :type id: int
+        :param folder_id: the ID of the folder to be analyzed
+        :type folder_id: int
         :return: the requested folder
         :rtype: Folder() object
         :raises FossologyApiError: if the REST call failed
         """
         response = self.session.get(f"{self.api}/folders/{folder_id}")
         if response.status_code == 200:
-            detailed_folder = Folder.from_json(response.json())
+            # Use factory to ensure version consistency
+            detailed_folder = FolderFactory.from_json(self.version, response.json())
             for folder in self.folders:
                 if folder.id == folder_id:
                     self.folders.remove(folder)
@@ -117,7 +126,6 @@ class Folders:
                 folder
                 for folder in self.folders
                 if folder.name.lower() == name.lower() and (folder.parent == parent.id or folder.parent is None)
-
             ]
             if existing_folder:
                 return existing_folder[0]
@@ -145,8 +153,10 @@ class Folders:
 
         API Endpoint: PATCH /folders/{id}
 
+        :param folder: the folder to update
         :param name: the new name of the folder (optional)
         :param description: the new description for the folder (optional)
+        :type folder: Folder
         :type name: str
         :type description: str
         :return: the updated folder
@@ -208,7 +218,6 @@ class Folders:
             logger.info(f"Folder {folder.name} has been {action}d to {parent.name}")
             self.folders = self.list_folders()
             return next(f for f in self.folders if f.id == folder.id)
-
         else:
             description = f"Unable to {action} folder {folder.name} to {parent.name}"
             raise FossologyApiError(description, response)
