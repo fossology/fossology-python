@@ -12,17 +12,12 @@ logger.setLevel(logging.DEBUG)
 
 
 class FolderFactory:
-    """
-    Factory to create Folder objects based on API version.
-    This helps us avoid duplicating the main logic loop.
-    """
+    """Factory to create Folder objects based on API version."""
+
     @staticmethod
     def from_json(version, data):
-        # If the user selected V2 when starting the tool
         if version == "v2":
             return Folder.from_json_v2(data)
-        
-        # Default to V1 behavior
         return Folder.from_json(data)
 
 
@@ -31,9 +26,9 @@ class Folders:
 
     def list_folders(self):
         """Get the list of folders.
-        
+
         API Endpoint: GET /folders
-        
+
         :return: list of folders
         :rtype: list of Folder objects
         :raises FossologyApiError: if the REST call failed
@@ -42,15 +37,9 @@ class Folders:
 
         if response.status_code == 200:
             folders_list = []
-            response_list = response.json()
-            
-            # Iterate through the raw JSON list
-            for folder_data in response_list:
-                # Ask the Factory to convert raw JSON into a Python Object
-                # It automatically checks 'self.version' to decide how to do it
+            for folder_data in response.json():
                 sub_folder = FolderFactory.from_json(self.version, folder_data)
                 folders_list.append(sub_folder)
-            
             return folders_list
         else:
             description = f"Unable to get a list of folders for {self.user.name}"
@@ -69,7 +58,6 @@ class Folders:
         """
         response = self.session.get(f"{self.api}/folders/{folder_id}")
         if response.status_code == 200:
-            # Use factory to ensure version consistency
             detailed_folder = FolderFactory.from_json(self.version, response.json())
             for folder in self.folders:
                 if folder.id == folder_id:
@@ -121,11 +109,15 @@ class Folders:
             logger.info(
                 f"Folder '{name}' already exists under the folder {parent.name} ({parent.id})"
             )
-            self.folders = self.list_folders()
+            try:
+                self.folders = self.list_folders()
+            except FossologyApiError:
+                self.folders = []
             existing_folder = [
                 folder
                 for folder in self.folders
-                if folder.name.lower() == name.lower() and (folder.parent == parent.id or folder.parent is None)
+                if folder.name.lower() == name.lower()
+                and (folder.parent == parent.id or folder.parent is None)
             ]
             if existing_folder:
                 return existing_folder[0]
@@ -149,8 +141,6 @@ class Folders:
     ):
         """Update a folder's name or description
 
-        The name of the new folder must be unique under the same parent.
-
         API Endpoint: PATCH /folders/{id}
 
         :param folder: the folder to update
@@ -168,9 +158,8 @@ class Folders:
             headers["name"] = name
         if description:
             headers["description"] = description
-        folders_api_path = f"{self.api}/folders/{folder.id}"
 
-        response = self.session.patch(folders_api_path, headers=headers)
+        response = self.session.patch(f"{self.api}/folders/{folder.id}", headers=headers)
         if response.status_code == 200:
             folder = self.detail_folder(folder.id)
             logger.info(f"{folder} has been updated")
@@ -198,12 +187,9 @@ class Folders:
     def _put_folder(self, action: str, folder: Folder, parent: Folder):
         """Copy or move a folder
 
-        Internal function meant to be called by move_folder() or copy_folder()
-
         API Endpoint: PUT /folders/{id}
 
         :param action: "move" or "copy"
-        :param action: string
         :param folder: the Folder to be moved or copied
         :type folder: Folder() object
         :param parent: the new parent folder
@@ -242,7 +228,7 @@ class Folders:
         :type folder: Folder() object
         :param parent: the new parent folder
         :type parent: Folder() object
-        :return: the updated folder - or None if the REST call failed
+        :return: the updated folder
         :rtype: Folder() object
         :raises FossologyApiError: if the REST call failed
         """

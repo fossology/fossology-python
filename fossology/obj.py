@@ -189,66 +189,69 @@ class UserGroupMember(object):
             return cls(**json_dict)
 
 class Folder(object):
-        """FOSSology folder.
+    """FOSSology folder.
 
-        Represents a FOSSology folder.
+    Represents a FOSSology folder.
 
-        :param id: the ID of the folder
-        :param name: the name of the folder
-        :param description: further information about the folder
-        :param parent: the ID of the parent folder
-        """
+    :param id: the ID of the folder
+    :param name: the name of the folder
+    :param description: further information about the folder
+    :param parent: the ID of the parent folder
+    """
 
-        def __init__(self, id, name, description, parent, **kwargs):
-            self.id = id
-            self.name = name
-            self.description = description
-            self.parent = parent
-            self.additional_info = kwargs
+    def __init__(self, id, name, description, parent, **kwargs):
+        self.id = id
+        self.name = name
+        self.description = description
+        self.parent = parent
+        self.additional_info = kwargs
 
-        def __str__(self):
-            return (
-                f"{self.name} ({self.id}), '{self.description}', "
-                f"parent folder id = {self.parent}"
-            )
+    def __str__(self):
+        return (
+            f"{self.name} ({self.id}), '{self.description}', "
+            f"parent folder id = {self.parent}"
+        )
 
-        @classmethod
-        def from_json(cls, json_dict):
-            """Parse folder from API v1 response"""
-            parent = None
+    def __eq__(self, other):
+        if isinstance(other, Folder):
+            return self.id == other.id
+        return False
 
-            # API v1: parentID is an int
-            if "parentID" in json_dict:
-                parent = json_dict.get("parentID")
-            # Fallback (some endpoints use parentId)
-            else:
-                parent = json_dict.get("parentId")
+    @classmethod
+    def from_json(cls, json_dict):
+        """Parse folder from API v1 response"""
+        parent = None
 
-            return cls(
-                id=json_dict.get("id"),
-                name=json_dict.get("name"),
-                description=json_dict.get("description"),
-                parent=parent,
-            )
-        
-        @classmethod
-        def from_json_v2(cls, json_dict):
-            """Parse folder from API v2 response"""
-            parent = None
-            
-            # API v2: parent is an object with an id field
-            if isinstance(json_dict.get("parent"), dict):
-                parent = json_dict["parent"].get("id")
-            # Fallback if parent is directly an int
-            elif json_dict.get("parent") is not None:
-                parent = json_dict.get("parent")
-                
-            return cls(
-                id=json_dict.get("id"),
-                name=json_dict.get("name"),
-                description=json_dict.get("description"),
-                parent=parent,
-            )
+        if "parentID" in json_dict:
+            parent = json_dict.get("parentID")
+        elif "parentId" in json_dict:
+            parent = json_dict.get("parentId")
+        elif "parent" in json_dict and not isinstance(json_dict.get("parent"), dict):
+            parent = json_dict.get("parent")
+
+        return cls(
+            id=json_dict.get("id"),
+            name=json_dict.get("name"),
+            description=json_dict.get("description"),
+            parent=parent,
+        )
+
+    @classmethod
+    def from_json_v2(cls, json_dict):
+        """Parse folder from API v2 response"""
+        parent = None
+
+        if isinstance(json_dict.get("parent"), dict):
+            parent = json_dict["parent"].get("id")
+        elif json_dict.get("parent") is not None:
+            parent = json_dict.get("parent")
+
+        return cls(
+            id=json_dict.get("id"),
+            name=json_dict.get("name"),
+            description=json_dict.get("description"),
+            parent=parent,
+        )
         
 class Findings(object):
         """FOSSology license findings.
