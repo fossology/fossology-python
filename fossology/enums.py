@@ -27,6 +27,9 @@ class ReportFormat(Enum):
     READMEOSS
     UNIFIEDREPORT
     CLIXML
+    SPDX3JSON
+    SPDX3RDF
+    SPDX3JSONLD
 
     """
 
@@ -36,6 +39,9 @@ class ReportFormat(Enum):
     READMEOSS = "readmeoss"
     UNIFIEDREPORT = "unifiedreport"
     CLIXML = "clixml"
+    SPDX3JSON = "spdx3json"
+    SPDX3RDF = "spdx3rdf"
+    SPDX3JSONLD = "spdx3jsonld"
 
 
 class SearchTypes(Enum):

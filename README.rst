@@ -170,7 +170,8 @@ Fossology Python also offers a command line interface to simplify interactions w
                                           Reuse newest scheduled job for the upload if
                                           available.
             --report_format TEXT          The name of the reportformat. [dep5,
-                                          spdx2,spdxtv,readmeoss,unifiedreport]
+                                          spdx2,spdxtv,readmeoss,unifiedreport,
+                                          clixml,spdx3json,spdx3rdf,spdx3jsonld]
             --access_level TEXT           The access level of the
                                           upload.[private,protected,public]
             --help                        Show this message and exit.
