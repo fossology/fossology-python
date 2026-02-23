@@ -27,10 +27,11 @@ addopts = "--doctest-glob='*.rst' --doctest-modules"
 [tool.semantic_release]
 build = "true"
 build_command = "pip install poetry && poetry build"
-version_source = "tag"
-version_files = [
-  "pyproject.toml:version",
-  "docs-source/conf.py:release"
+version_source = "commit"
+version_toml = [
+    # "file:variable:[format_type]"
+    "pyproject.toml:tool.poetry.version",  # Implied Default: Number format
+    "docs/conf.py:version:nf",  # Number format
 ]
 
 [tool.poetry.dependencies]
