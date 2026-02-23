@@ -687,7 +687,7 @@ def delete_upload(
     "--report_format",
     default="unifiedreport",
     show_default=True,
-    help="The name of the reportformat (dep5, spdx2, spdxtv, readmeoss, unifiedreport)",
+    help="The name of the reportformat (dep5, spdx2, spdxtv, readmeoss, unifiedreport, clixml, spdx3json, spdx3rdf, spdx3jsonld)",
 )
 @click.option(
     "--access_level",
