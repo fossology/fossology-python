@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v3.5.0 (2026-02-23)
+
+### Chores
+
+- Update version numbers to latest semantic release
+  ([`844e441`](https://github.com/fossology/fossology-python/commit/844e4416ccd9906dcc3d8f922f1ca512265ddd8f))
+
+### Features
+
+- Add support for spdx3 report
+  ([`4ead07b`](https://github.com/fossology/fossology-python/commit/4ead07b7ba2d8677ecebd705cca73bda4622022c))
+
+
 ## v3.4.0 (2026-02-23)
 
 ### Bug Fixes
