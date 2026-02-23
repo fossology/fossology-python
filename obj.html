@@ -162,120 +162,36 @@
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="fossology.obj.Agents.to_dict">
-<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents.to_dict" title="Link to this definition">¶</a></dt>
-<dd><p>Get a directory with the agent configuration</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the agents configured for the current user</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fossology.obj.Agents.to_json">
-<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents.to_json" title="Link to this definition">¶</a></dt>
-<dd><p>Get a JSON object with the agent configuration</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the agents configured for the current user</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>JSON</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.ApiInfo">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">ApiInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contact</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">license</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fossology</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ApiInfo" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology API info.</p>
-<p>Represents the info endpoint of FOSSology API.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>string</em>) – the name of the API service</p></li>
-<li><p><strong>description</strong> (<em>string</em>) – additional information</p></li>
-<li><p><strong>version</strong> (<em>string</em>) – current API version</p></li>
-<li><p><strong>security</strong> (<em>list</em>) – security methods allowed</p></li>
-<li><p><strong>contact</strong> (<em>string</em>) – email contact from the API documentation</p></li>
-<li><p><strong>license</strong> (<em>ApiLicense object</em>) – licensing of the API</p></li>
-<li><p><strong>fossology</strong> (<em>FossologyServer object</em>) – information about FOSSology server</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.ApiLicense">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">ApiLicense</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ApiLicense" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology API License.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>string</em>) – name of the API license</p></li>
-<li><p><strong>url</strong> (<em>string</em>) – link to the license text</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.File">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">File</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findings</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.File" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology file response from filesearch.</p>
-<p>Represents a FOSSology filesearch response.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>hash</strong> (<a class="reference internal" href="#fossology.obj.Hash" title="fossology.obj.Hash"><em>Hash</em></a>) – the hash information of the file</p></li>
-<li><p><strong>findings</strong> (<a class="reference internal" href="#fossology.obj.Findings" title="fossology.obj.Findings"><em>Findings</em></a>) – the license findings in that file</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other license information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.FileInfo">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">FileInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reuse_info</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.FileInfo" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology file info response.</p>
-<p>Represents a FOSSology file info response.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>view_info</strong> (<em>Object</em>) – view info of the file</p></li>
-<li><p><strong>meta_info</strong> (<em>Object</em>) – meta info of the file</p></li>
-<li><p><strong>package_info</strong> (<em>Object</em>) – package info of the file</p></li>
-<li><p><strong>tag_info</strong> (<em>Object</em>) – tag info of the file</p></li>
-<li><p><strong>reuse_info</strong> (<em>Object</em>) – reuse info of the file</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other license information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Findings">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Findings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scanner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conclusion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copyright</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Findings" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology license findings.</p>
-<p>Represents FOSSology license findings.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>scanner</strong> (<em>list</em>) – the list of licenses found by the specified scanners</p></li>
-<li><p><strong>conclusion</strong> (<em>list</em>) – the concluded license by user of for a package</p></li>
-<li><p><strong>copyright</strong> (<em>list</em>) – the copyrights found in the package</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other finding information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -286,468 +202,163 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the folder</p></li>
-<li><p><strong>name</strong> (<em>string</em>) – the name of the folder</p></li>
-<li><p><strong>description</strong> (<em>string</em>) – further information about the folder</p></li>
-<li><p><strong>parent</strong> (<em>int</em>) – the ID of the parent folder</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
+<li><p><strong>id</strong> – the ID of the folder</p></li>
+<li><p><strong>name</strong> – the name of the folder</p></li>
+<li><p><strong>description</strong> – further information about the folder</p></li>
+<li><p><strong>parent</strong> – the ID of the parent folder</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fossology.obj.Folder.from_json">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Folder.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Parse folder from API v1 response</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fossology.obj.Folder.from_json_v2">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Folder.from_json_v2" title="Link to this definition">¶</a></dt>
+<dd><p>Parse folder from API v2 response</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.FossologyServer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">FossologyServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branchName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commitHash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commitDate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buildDate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.FossologyServer" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology server info.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>version</strong> (<em>string</em>) – version of the FOSSology server (e.g. 4.0.0)</p></li>
-<li><p><strong>branchName</strong> (<em>string</em>) – branch deployed on the FOSSology server</p></li>
-<li><p><strong>commitHash</strong> (<em>string</em>) – hash of commit deployed on the FOSSology server</p></li>
-<li><p><strong>commitDate</strong> (<em>string</em>) – date of commit deployed on the FOSSology server in ISO8601 format</p></li>
-<li><p><strong>buildDate</strong> (<em>string</em>) – date on which packages were built in ISO8601 format</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.GetBulkHistory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">GetBulkHistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulkId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearingEventId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matched</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tried</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addedLicenses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removedLicenses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.GetBulkHistory" title="Link to this definition">¶</a></dt>
 <dd><p>Bulk history.</p>
-<p>Represents the bulk history of a specified item.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>bulkId</strong> (<em>int</em>) – the bulk id</p></li>
-<li><p><strong>clearingEventId</strong> (<em>int</em>) – the event id associated with the bulk</p></li>
-<li><p><strong>text</strong> (<em>str</em>) – scan reference text</p></li>
-<li><p><strong>matched</strong> (<em>bool</em>) – whether matched or not</p></li>
-<li><p><strong>tried</strong> (<em>bool</em>) – whether tried or not</p></li>
-<li><p><strong>addedLicenses</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – list of license shortnames added to the scan</p></li>
-<li><p><strong>removedLicenses</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – list of license shortnames removed to the scan</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.GetClearingHistory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">GetClearingHistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addedLicenses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removedLicenses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.GetClearingHistory" title="Link to this definition">¶</a></dt>
 <dd><p>Clearing history.</p>
-<p>Represents the clearing history of a specified item.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>date</strong> (<em>string</em>) – date of the clearing history</p></li>
-<li><p><strong>username</strong> (<em>string</em>) – username of the user who created the decision</p></li>
-<li><p><strong>scope</strong> (<em>str</em>) – scope of the clearing</p></li>
-<li><p><strong>type</strong> (<em>str</em>) – type of the clearing</p></li>
-<li><p><strong>addedLicenses</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – list of license shortnames added to the decision</p></li>
-<li><p><strong>removedLicenses</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – list of license shortnames removed to the decision</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.GetPrevNextItem">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">GetPrevNextItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prevItemId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nextItemId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.GetPrevNextItem" title="Link to this definition">¶</a></dt>
 <dd><p>PrevNext item for the clearing history.</p>
-<p>Represents the prev-next item list for the clearing history.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>prevItemId</strong> (<em>int</em>) – id of the previous item</p></li>
-<li><p><strong>nextItemId</strong> (<em>int</em>) – id of the next item</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Group">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Group" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology group.</p>
-<p>Represents a FOSSology group.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the group</p></li>
-<li><p><strong>name</strong> (<em>string</em>) – the name of the group</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Hash">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sha1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">md5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Hash" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology hash.</p>
-<p>Represents a FOSSology file hash values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sha1</strong> (<em>string</em>) – the SHA1 hash sum of the file</p></li>
-<li><p><strong>md5</strong> (<em>string</em>) – the MDA check sum of the file</p></li>
-<li><p><strong>sha256</strong> (<em>string</em>) – the SHA256 hash sum of the file</p></li>
-<li><p><strong>size</strong> (<em>int</em>) – the size of the file in bytes</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other hash information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.HealthInfo">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">HealthInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.HealthInfo" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology server health info.</p>
-<p>Represents the health endpoint of FOSSology API.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>status</strong> (<em>string</em>) – the overall status of the API service (OK, WARN, ERROR)</p></li>
-<li><p><strong>scheduler</strong> (<em>Status object</em>) – the status of the FOSSology scheduler</p></li>
-<li><p><strong>db</strong> (<em>Status object</em>) – the status of the FOSSology DB</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Job">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queueDate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uploadId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Job" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology job.</p>
-<p>Represents a FOSSology job.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the job</p></li>
-<li><p><strong>name</strong> (<em>string</em>) – the name of the job</p></li>
-<li><p><strong>queueDate</strong> (<em>string</em>) – the start date of the job</p></li>
-<li><p><strong>uploadId</strong> (<em>int</em>) – the ID of the upload</p></li>
-<li><p><strong>userId</strong> (<em>int</em>) – the ID of the user wo started the job</p></li>
-<li><p><strong>groupId</strong> (<em>int</em>) – the ID of the job’s group</p></li>
-<li><p><strong>eta</strong> (<em>string</em>) – the estimated termination time</p></li>
-<li><p><strong>status</strong> (<em>string</em>) – the status of the job</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.JobDownload">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">JobDownload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">link</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.JobDownload" title="Link to this definition">¶</a></dt>
-<dd><p>FOSSology job download</p>
-<p>Represents a FOSSology job download.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<em>string</em>) – text for download link</p></li>
-<li><p><strong>link</strong> (<em>string</em>) – link to download the report</p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – handle any other job download information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>FOSSology job download.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.JobQueue">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">JobQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobQueueId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobQueueType</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itemsProcessed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">itemsPerSec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canDoActions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isInProgress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isReady</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fossology.obj.JobDownload" title="fossology.obj.JobDownload"><span class="pre">JobDownload</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.JobQueue" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology job queue.</p>
-<p>Represents a FOSSology job queue.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>jobQueueId</strong> (<em>int</em>) – job queue ID</p></li>
-<li><p><strong>jobQueueType</strong> (<em>string</em>) – job queue type (agent name)</p></li>
-<li><p><strong>startTime</strong> (<em>string</em>) – job queue start time</p></li>
-<li><p><strong>endTime</strong> (<em>string</em>) – job queue end time</p></li>
-<li><p><strong>status</strong> (<em>string</em>) – job queue complemention status</p></li>
-<li><p><strong>itemsProcessed</strong> (<em>int</em>) – number of items processes</p></li>
-<li><p><strong>log</strong> (<em>string</em>) – location of the log file (if it exists)</p></li>
-<li><p><strong>dependencies</strong> (<em>list</em><em>(</em><em>int</em><em>)</em>) – list of dependent job queue ids</p></li>
-<li><p><strong>itemsPerSec</strong> (<em>float</em>) – number of items processed per second</p></li>
-<li><p><strong>canDoActions</strong> (<em>bool</em>) – job can accept new actions like pause and cancel</p></li>
-<li><p><strong>isInProgress</strong> (<em>bool</em>) – checks if the job queue is still in progress</p></li>
-<li><p><strong>isReady</strong> (<em>bool</em>) – is the job ready</p></li>
-<li><p><strong>download</strong> (<a class="reference internal" href="#fossology.obj.JobDownload" title="fossology.obj.JobDownload"><em>JobDownload</em></a>) – report download information</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job queue information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.License">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">License</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shortName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fullName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">risk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isCandidate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.License" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology license.</p>
-<p>Represents a FOSSology license.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>shortName</strong> (<em>string</em>) – the short name of the license</p></li>
-<li><p><strong>fullName</strong> (<em>string</em>) – the full name of the license</p></li>
-<li><p><strong>text</strong> (<em>string</em>) – the text of the license</p></li>
-<li><p><strong>url</strong> (<em>string</em>) – URL of the license text</p></li>
-<li><p><strong>risk</strong> (<em>int</em>) – the risk level of the license</p></li>
-<li><p><strong>isCandidate</strong> (<em>bool</em>) – is the license a candidate?</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="fossology.obj.License.to_dict">
-<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.License.to_dict" title="Link to this definition">¶</a></dt>
-<dd><p>Get a directory with the license data</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the license data</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fossology.obj.License.to_json">
-<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#fossology.obj.License.to_json" title="Link to this definition">¶</a></dt>
-<dd><p>Get a JSON object with the license data</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>the license data</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>JSON</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Obligation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Obligation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classification</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Obligation" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology license obligation.</p>
-<p>Represents a FOSSology license obligation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the obligation</p></li>
-<li><p><strong>topic</strong> (<em>string</em>) – the topic of the obligation</p></li>
-<li><p><strong>type</strong> (<em>string</em>) – the type of the obligation</p></li>
-<li><p><strong>text</strong> (<em>string</em>) – the text of the obligation</p></li>
-<li><p><strong>classification</strong> (<em>string</em>) – level of attention it should raise in the clearing process</p></li>
-<li><p><strong>comment</strong> (<em>string</em>) – comment for the obligation</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.PermGroups">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">PermGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_pk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.PermGroups" title="Link to this definition">¶</a></dt>
-<dd><p>GroupIds with their respective permissions for a upload</p>
-<p>Represents the group permissions for a FOSSology upload.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>perm</strong> (<em>str</em>) – the permission</p></li>
-<li><p><strong>group_pk</strong> (<em>str</em>) – the id of the group</p></li>
-<li><p><strong>group_name</strong> (<em>str</em>) – the name of the group</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>GroupIds with their respective permissions for a upload.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.SearchResult">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">SearchResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uploadTreeId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.SearchResult" title="Link to this definition">¶</a></dt>
 <dd><p>Search result.</p>
-<p>Represents a search response from FOSSology API.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>upload</strong> (<a class="reference internal" href="#fossology.obj.Upload" title="fossology.obj.Upload"><em>Upload</em></a>) – upload where the searched file has been found</p></li>
-<li><p><strong>uploadTreeId</strong> (<em>int</em>) – id of the upload tree</p></li>
-<li><p><strong>filename</strong> (<em>string</em>) – filename of the tree item</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other job information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.ShowJob">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">ShowJob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobQueue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fossology.obj.JobQueue" title="fossology.obj.JobQueue"><span class="pre">JobQueue</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uploadId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.ShowJob" title="Link to this definition">¶</a></dt>
-<dd><p>FOSSology job</p>
-<p>Represents the history of all the jobs and the job queue info</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>jobId</strong> (<em>int</em>) – job ID</p></li>
-<li><p><strong>jobName</strong> (<em>string</em>) – job name (generally upload name)</p></li>
-<li><p><strong>jobQueue</strong> (<em>list</em><em> of </em><a class="reference internal" href="#fossology.obj.JobQueue" title="fossology.obj.JobQueue"><em>JobQueue</em></a>) – jobs queued for the current job</p></li>
-<li><p><strong>uploadId</strong> (<em>int</em>) – upload ID to which the job belongs to</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>FOSSology job.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Status">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Status" title="Link to this definition">¶</a></dt>
-<dd><p>FOSSology server status</p>
-<p>Represent the status of FOSSology sub-systems</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>status</strong> (<em>string</em>) – the status of the sub-system (OK, ERROR)</p>
-</dd>
-</dl>
+<dd><p>FOSSology server status.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Summary">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uploadName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mainLicense</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniqueLicenses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalLicenses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uniqueConcludedLicenses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalConcludedLicenses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filesToBeCleared</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filesCleared</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clearingStatus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copyrightCount</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Summary" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology upload summary.</p>
-<p>Represents a FOSSology upload summary.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the upload</p></li>
-<li><p><strong>uploadName</strong> (<em>string</em>) – the name of the upload</p></li>
-<li><p><strong>mainLicense</strong> (<em>string</em>) – the main upload license</p></li>
-<li><p><strong>uniqueLicenses</strong> (<em>int</em>) – the number of unique licenses</p></li>
-<li><p><strong>totalLicenses</strong> (<em>int</em>) – the total number of licenses</p></li>
-<li><p><strong>uniqueConcludedLicenses</strong> (<em>int</em>) – the number of unique concluded licenses</p></li>
-<li><p><strong>totalConcludedLicenses</strong> (<em>int</em>) – the total number of concluded licenses</p></li>
-<li><p><strong>filesToBeCleared</strong> (<em>int</em>) – the number of remaining files to be cleared</p></li>
-<li><p><strong>filesCleared</strong> (<em>int</em>) – the number of files already cleared</p></li>
-<li><p><strong>clearingStatus</strong> (<em>string</em>) – the clearing status</p></li>
-<li><p><strong>copyrightCount</strong> (<em>int</em>) – the number of copyrights found</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other summary information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Upload">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folderid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">foldername</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uploadname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uploaddate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assignee</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assigneeDate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closingDate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Upload" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology upload.</p>
-<p>Represents a FOSSology upload.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>folderid</strong> (<em>int</em>) – the ID of the upload folder</p></li>
-<li><p><strong>foldername</strong> (<em>string</em>) – the name of the upload folder</p></li>
-<li><p><strong>id</strong> (<em>int</em>) – the ID of the upload</p></li>
-<li><p><strong>description</strong> (<em>string</em>) – further information about the upload</p></li>
-<li><p><strong>uploadname</strong> (<em>string</em>) – the name of the upload (default: the name of the upload file)</p></li>
-<li><p><strong>uploaddate</strong> (<em>string</em>) – the date of the upload</p></li>
-<li><p><strong>assignee</strong> (<em>string</em>) – the user who is assigned to the upload</p></li>
-<li><p><strong>assigneeDate</strong> (<em>string</em>) – the date of the assignment</p></li>
-<li><p><strong>closingDate</strong> (<em>string</em>) – the date of the closing</p></li>
-<li><p><strong>hash</strong> (<a class="reference internal" href="#fossology.obj.Hash" title="fossology.obj.Hash"><em>Hash</em></a>) – the hash data of the uploaded file</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other upload information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.UploadCopyrights">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UploadCopyrights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">copyright</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filePath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UploadCopyrights" title="Link to this definition">¶</a></dt>
-<dd><p>Copyright findings in a FOSSology upload</p>
-<p>Represents copyright matches of a FOSSology upload.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>copyright</strong> (<em>str</em>) – the copyright</p></li>
-<li><p><strong>filePath</strong> (<em>list</em>) – relative file path</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other information provided by the FOSSology instance</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Copyright findings in a FOSSology upload.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.UploadLicenses">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UploadLicenses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filePath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">findings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UploadLicenses" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology upload licenses.</p>
-<p>Represents licenses and copyright matches of a FOSSology upload.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filePath</strong> (<em>str</em>) – relative file path</p></li>
-<li><p><strong>findings</strong> (<a class="reference internal" href="#fossology.obj.Findings" title="fossology.obj.Findings"><em>Findings</em></a>) – the licenses and copyrights findings</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.UploadPermGroups">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UploadPermGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publicPerm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permGroups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UploadPermGroups" title="Link to this definition">¶</a></dt>
-<dd><p>Upload permissions</p>
-<p>Represents the permissions for a FOSSology upload.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>publicPerm</strong> (<em>str</em>) – the public permission of the group</p></li>
-<li><p><strong>permGroups</strong> (<em>array</em>) – array of permGroup objects for the upload</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Upload permissions.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.User">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">accessLevel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rootFolderId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emailNotification</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agents</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fossology.obj.Agents" title="fossology.obj.Agents"><span class="pre">Agents</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.User" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology user.</p>
-<p>Represents the user currently authenticated against the FOSSology server.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>id</strong> (<em>int</em>) – the user ID</p></li>
-<li><p><strong>name</strong> (<em>string</em>) – the user name</p></li>
-<li><p><strong>description</strong> (<em>string</em>) – further information about the user</p></li>
-<li><p><strong>email</strong> (<em>string</em>) – the user’s email</p></li>
-<li><p><strong>accessLevel</strong> (<em>string</em>) – TBD</p></li>
-<li><p><strong>rootFolderId</strong> (<em>int</em>) – the ID of the user’s root folder</p></li>
-<li><p><strong>emailNotification</strong> (<em>boolean</em>) – are email notifications configured for that user?</p></li>
-<li><p><strong>agents</strong> (<a class="reference internal" href="#fossology.obj.Agents" title="fossology.obj.Agents"><em>Agents</em></a>) – the default agent configuration for the user</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other user information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.UserGroupMember">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">UserGroupMember</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#fossology.obj.User" title="fossology.obj.User"><span class="pre">User</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.UserGroupMember" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology group member.</p>
-<p>Represents a member of a group.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>user</strong> (<a class="reference internal" href="#fossology.obj.User" title="fossology.obj.User"><em>User</em></a>) – the user data structure of the member</p></li>
-<li><p><strong>group_perm</strong> (<em>int</em>) – the permission of the user in the group (0: User, 1: Admin, 2: Advisor)</p></li>
-<li><p><strong>kwargs</strong> (<em>key word argument</em>) – handle any other folder information provided by the fossology instance</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

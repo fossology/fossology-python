@@ -57,6 +57,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="fossology.html">Fossology</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology Folders</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.folders.FolderFactory"><code class="docutils literal notranslate"><span class="pre">FolderFactory</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.folders.Folders"><code class="docutils literal notranslate"><span class="pre">Folders</span></code></a></li>
 </ul>
 </li>
@@ -113,6 +114,12 @@
 <h1>Fossology Folders<a class="headerlink" href="#fossology-folders" title="Link to this heading">¶</a></h1>
 <p>Methods used to access “folders/” endpoints.</p>
 <dl class="py class" id="module-fossology.folders">
+<dt class="sig sig-object py" id="fossology.folders.FolderFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.folders.</span></span><span class="sig-name descname"><span class="pre">FolderFactory</span></span><a class="headerlink" href="#fossology.folders.FolderFactory" title="Link to this definition">¶</a></dt>
+<dd><p>Factory to create Folder objects based on API version.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fossology.folders.Folders">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.folders.</span></span><span class="sig-name descname"><span class="pre">Folders</span></span><a class="headerlink" href="#fossology.folders.Folders" title="Link to this definition">¶</a></dt>
 <dd><p>Class dedicated to all “folders” related endpoints</p>
@@ -192,7 +199,7 @@ Folder names are case insensitive.</p>
 <p>API Endpoint: GET /folders/{id}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – the ID of the folder to be analyzed</p>
+<dd class="field-odd"><p><strong>folder_id</strong> (<em>int</em>) – the ID of the folder to be analyzed</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>the requested folder</p>
@@ -209,14 +216,14 @@ Folder names are case insensitive.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.folders.Folders.list_folders">
 <span class="sig-name descname"><span class="pre">list_folders</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.list_folders" title="Link to this definition">¶</a></dt>
-<dd><p>List all folders accessible to the authenticated user</p>
+<dd><p>Get the list of folders.</p>
 <p>API Endpoint: GET /folders</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a list of folders</p>
+<dd class="field-odd"><p>list of folders</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>list()</p>
+<dd class="field-even"><p>list of Folder objects</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
@@ -236,7 +243,7 @@ Folder names are case insensitive.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>the updated folder - or None if the REST call failed</p>
+<dd class="field-even"><p>the updated folder</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder">Folder</a>() object</p>
@@ -251,11 +258,11 @@ Folder names are case insensitive.</p>
 <dt class="sig sig-object py" id="fossology.folders.Folders.update_folder">
 <span class="sig-name descname"><span class="pre">update_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><span class="pre">Folder</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.folders.Folders.update_folder" title="Link to this definition">¶</a></dt>
 <dd><p>Update a folder’s name or description</p>
-<p>The name of the new folder must be unique under the same parent.</p>
 <p>API Endpoint: PATCH /folders/{id}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<a class="reference internal" href="obj.html#fossology.obj.Folder" title="fossology.obj.Folder"><em>Folder</em></a>) – the folder to update</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – the new name of the folder (optional)</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – the new description for the folder (optional)</p></li>
 </ul>
