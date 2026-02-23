@@ -2,6 +2,57 @@
 
 <!-- version list -->
 
+## v3.4.0 (2026-02-23)
+
+### Bug Fixes
+
+- Remove semantic release dependency
+  ([`cbb4978`](https://github.com/fossology/fossology-python/commit/cbb4978faec3801fa79f76b95feb8e7ccc05e144))
+
+- **ci**: Improve semantic-release workflow permissions and concurrency
+  ([`67c7db4`](https://github.com/fossology/fossology-python/commit/67c7db4f63d5ce7999ddc6a45574c4a7e02b1c95))
+
+- **cli**: Improve failure handling in reuse workflow
+  ([`d0b6f29`](https://github.com/fossology/fossology-python/commit/d0b6f29cf5c0ea5f89f179d2bb39ab8d204f813a))
+
+- **users**: Initialise user_agents
+  ([`b4692ac`](https://github.com/fossology/fossology-python/commit/b4692ac72ab2c9f944d0da83fa7c9bc648915c1b))
+
+### Chores
+
+- Add semantic release and update lock file
+  ([`0ddf0ed`](https://github.com/fossology/fossology-python/commit/0ddf0ed2502fd851f70b53e1b4770a05f92073f0))
+
+- Update to latest PSR version and try to improve automation
+  ([`da8ba86`](https://github.com/fossology/fossology-python/commit/da8ba868cffe50aca881af54643bf321d45b87d2))
+
+- Update version number to 3.3.2
+  ([`eb3280d`](https://github.com/fossology/fossology-python/commit/eb3280d3bf5d40bd093df6a19ec9a54b7c523fc7))
+
+- **ci**: Remove redundant workflow comment
+  ([`682fe6d`](https://github.com/fossology/fossology-python/commit/682fe6dc38e353e80f1934aa0ee9e94d70b94484))
+
+- **deps**: Bump urllib3 from 2.5.0 to 2.6.3
+  ([`e90df2c`](https://github.com/fossology/fossology-python/commit/e90df2cecce14458c1f625e26fa488ede05a0b3f))
+
+- **release**: Configure semantic-release to update version in pyproject.toml and
+  docs-source/conf.py
+  ([`3cbcb16`](https://github.com/fossology/fossology-python/commit/3cbcb1615000d80c62ce6f5f0f2eb63c1695b736))
+
+- **types**: Fix type errors add version information
+  ([`b63a74d`](https://github.com/fossology/fossology-python/commit/b63a74d5deaf4091671e5bd3c647b2c17d304aca))
+
+### Features
+
+- **folders**: Implement list_folders_v2 and FolderFactory for API v2 support
+  ([`5f9da70`](https://github.com/fossology/fossology-python/commit/5f9da701c32c2e2aa242aa2f926bc39058d111b1))
+
+### Testing
+
+- **cli**: Add smoke test for foss_cli main command
+  ([`211e554`](https://github.com/fossology/fossology-python/commit/211e554a8434f05c45ac88b359a4d4c85c45582b))
+
+
 ## v3.3.2 (2025-08-04)
 
 ### Bug Fixes
