@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fossology"
-version = "3.3.2"
+version = "3.4.0"
 description = "A library to automate Fossology from Python scripts"
 authors = ["Marion Deveaud <marion.deveaud@siemens.com>"]
 license = "MIT License"
@@ -25,6 +25,8 @@ exclude = ["tests/"]
 addopts = "--doctest-glob='*.rst' --doctest-modules"
 
 [tool.semantic_release]
+build = "true"
+build_command = "pip install poetry && poetry build"
 version_source = "tag"
 version_files = [
   "pyproject.toml:version",
