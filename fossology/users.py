@@ -114,6 +114,53 @@ class Users:
             description = f"Error while creating user {user_spec['name']}"
             raise FossologyApiError(description, response)
 
+    def update_user(self, user_id: int, user_spec: dict):
+        """Update an existing Fossology user
+
+        API Endpoint: PUT /users/{id}
+
+        The full user specification must be provided. Only the fields included
+        in ``user_spec`` will be updated on the server.
+
+        :Example:
+
+        >>> user_spec = {
+        ...     "name": "Updated Name",
+        ...     "description": "Updated description",
+        ...     "email": "updated@example.com",
+        ...     "accessLevel": "read_write",
+        ...     "rootFolderId": 1,
+        ...     "emailNotification": True,
+        ...     "agents": {
+        ...         "bucket": True,
+        ...         "copyright_email_author": True,
+        ...         "ecc": True,
+        ...         "keyword": True,
+        ...         "mime": True,
+        ...         "monk": True,
+        ...         "nomos": True,
+        ...         "ojo": True,
+        ...         "package": True,
+        ...     },
+        ... }
+        >>> foss.update_user(2, user_spec)  # doctest: +SKIP
+
+        :param user_id: the ID of the user to update
+        :param user_spec: the updated user data
+        :type user_id: int
+        :type user_spec: dict
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.put(f"{self.api}/users/{user_id}", json=user_spec)  # type: ignore
+        if response.status_code == 200:
+            logger.info(f"User {user_id} has been updated")
+        elif response.status_code == 404:
+            description = f"User {user_id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"Error while updating user {user_id}"
+            raise FossologyApiError(description, response)
+
     def delete_user(self, user):
         """Delete a Fossology user.
 
