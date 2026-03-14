@@ -164,6 +164,50 @@ def test_detail_user(foss: Fossology):
 
 
 @responses.activate
+def test_update_user(foss_server: str, foss: Fossology, foss_user: dict):
+    user_id = foss_user["id"]
+    updated_spec = {
+        "name": "Updated User",
+        "description": "Updated description",
+        "email": "updated@example.com",
+        "accessLevel": "read_write",
+        "rootFolderId": 1,
+        "emailNotification": True,
+        "agents": {
+            "bucket": True,
+            "copyright_email_author": True,
+            "ecc": True,
+            "keyword": True,
+            "mime": True,
+            "monk": True,
+            "nomos": True,
+            "ojo": True,
+            "package": True,
+        },
+    }
+    responses.add(responses.PUT, f"{foss_server}/api/v1/users/{user_id}", status=200)
+    foss.update_user(user_id, updated_spec)
+
+
+@responses.activate
+def test_update_user_not_found(foss_server: str, foss: Fossology):
+    user_id = secrets.randbelow(1000)
+    responses.add(responses.PUT, f"{foss_server}/api/v1/users/{user_id}", status=404)
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.update_user(user_id, {"name": "Ghost"})
+    assert f"User {user_id} not found" in str(excinfo.value)
+
+
+@responses.activate
+def test_update_user_error(foss_server: str, foss: Fossology):
+    user_id = secrets.randbelow(1000)
+    responses.add(responses.PUT, f"{foss_server}/api/v1/users/{user_id}", status=500)
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.update_user(user_id, {"name": "Broken"})
+    assert f"Error while updating user {user_id}" in str(excinfo.value)
+
+
+@responses.activate
 def test_delete_user(foss_server: str, foss: Fossology):
     user = Mock(name="Test User", id=secrets.randbelow(1000))
     responses.add(responses.DELETE, f"{foss_server}/api/v1/users/{user.id}", status=202)
