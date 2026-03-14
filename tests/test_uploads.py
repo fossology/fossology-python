@@ -43,6 +43,18 @@ def test_upload(upload: Upload):
     )
 
 
+def test_upload_assignee_fields_are_not_tuples(upload: Upload):
+    assert not isinstance(upload.assignee, tuple), (
+        "upload.assignee should not be a tuple"
+    )
+    assert not isinstance(upload.assigneeDate, tuple), (
+        "upload.assigneeDate should not be a tuple"
+    )
+    assert not isinstance(upload.closeDate, tuple), (
+        "upload.closeDate should not be a tuple"
+    )
+
+
 def test_upload_for_group(foss: Fossology, test_file_path: str):
     foss.create_group("upload_access")
     groups = foss.list_groups()

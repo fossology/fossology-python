@@ -426,9 +426,9 @@ class Upload(object):
         self.description = description
         self.uploadname = uploadname
         self.uploaddate = uploaddate
-        self.assignee = (assignee,)
-        self.assigneeDate = (assigneeDate,)
-        self.closeDate = (closingDate,)
+        self.assignee = assignee
+        self.assigneeDate = assigneeDate
+        self.closeDate = closingDate
         self.hash = Hash.from_json(hash)
         self.additional_info = kwargs
 
