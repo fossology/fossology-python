@@ -268,3 +268,6 @@ The testsuite available in this project expects a running Fossology instance und
      poetry run coverage run --source=fossology -m pytest
      poetry run coverage report -m
      poetry run coverage html
+
+This project is usefulfor learning open source
+
