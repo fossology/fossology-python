@@ -235,6 +235,11 @@ def test_change_group_member_permission_server_error(
     )
 
 
+@pytest.mark.xfail(
+    reason="PATCH /groups/{id}/user/{id} is not yet available in FOSSology API v1 server",
+    raises=FossologyApiError,
+    strict=True,
+)
 def test_change_group_member_permission(
     foss: fossology.Fossology,
     created_foss_user: User,
