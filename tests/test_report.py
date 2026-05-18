@@ -48,6 +48,21 @@ def test_generate_report(foss: Fossology, upload: Upload):
 
 
 @responses.activate
+def test_generate_report_unparseable_message(
+    foss_server: str, foss: Fossology, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/report",
+        status=201,
+        json={"code": 201, "message": "Report has been queued."},
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.generate_report(upload)
+    assert "report ID could not be parsed" in str(excinfo.value)
+
+
+@responses.activate
 def test_report_error(foss_server: str, foss: Fossology, upload: Upload):
     responses.add(
         responses.GET,
