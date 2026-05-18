@@ -53,7 +53,15 @@ class Report:
         response = self.session.get(f"{self.api}/report", headers=headers)
 
         if response.status_code == 201:
-            message = response.json()["message"]
+            try:
+                message = response.json()["message"]
+            except (ValueError, KeyError, TypeError) as exc:
+                description = (
+                    f"Report generation for upload {upload.uploadname} succeeded "
+                    "but the response body could not be parsed to extract the report ID"
+                )
+                raise FossologyApiError(description, response) from exc
+
             match = re.search(r"[0-9]+$", message)
             if match is None:
                 description = (
