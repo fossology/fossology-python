@@ -17,6 +17,40 @@ from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import Folder, Upload
 
 
+def test_upload_assignee_fields_are_not_wrapped_in_tuples():
+    upload = Upload(
+        folderid=1,
+        foldername="root",
+        id=42,
+        description="",
+        uploadname="example.tar.gz",
+        uploaddate="2024-01-01",
+        assignee="alice",
+        assigneeDate="2024-01-02",
+        closingDate="2024-01-03",
+        hash={"sha1": "", "md5": "", "sha256": "", "size": 0},
+    )
+    assert upload.assignee == "alice"
+    assert upload.assigneeDate == "2024-01-02"
+    assert upload.closeDate == "2024-01-03"
+
+    unassigned = Upload(
+        folderid=1,
+        foldername="root",
+        id=43,
+        description="",
+        uploadname="example.tar.gz",
+        uploaddate="2024-01-01",
+        hash={"sha1": "", "md5": "", "sha256": "", "size": 0},
+    )
+    assert unassigned.assignee is None
+    assert not unassigned.assignee
+    assert unassigned.assigneeDate is None
+    assert not unassigned.assigneeDate
+    assert unassigned.closeDate is None
+    assert not unassigned.closeDate
+
+
 def test_upload_sha1(upload: Upload):
     assert upload.uploadname == "base-files_11.tar.xz"
     assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
