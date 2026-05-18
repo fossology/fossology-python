@@ -53,8 +53,23 @@ class Report:
         response = self.session.get(f"{self.api}/report", headers=headers)
 
         if response.status_code == 201:
-            report_id = re.search("[0-9]*$", response.json()["message"])
-            return report_id[0]  # type: ignore
+            message = None
+            try:
+                message = response.json()["message"]
+                match = re.search(r"[0-9]+$", message)
+            except (ValueError, KeyError, TypeError) as exc:
+                description = (
+                    f"Report generation for upload {upload.uploadname} succeeded "
+                    f"but response could not be parsed: {exc}"
+                )
+                raise FossologyApiError(description, response) from exc
+            if match is None:
+                description = (
+                    f"Report generation for upload {upload.uploadname} succeeded "
+                    f"but report ID could not be parsed from response message: {message!r}"
+                )
+                raise FossologyApiError(description, response)
+            return int(match[0])
 
         elif response.status_code == 403:
             description = f"Report generation for upload {upload.id} not authorized"
