@@ -43,6 +43,6 @@ jobs:
         run: |
           poetry run coverage run --source=fossology -m pytest
           poetry run coverage report -m
-      - name: upload codecoverage results only if we are on the repository fossology/fossology-python 
-        if: ${{ github.repository == 'fossology/fossology-python' }}
+      - name: upload codecoverage results only if the PR originates from the upstream repository
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         run: poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
