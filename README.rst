@@ -179,6 +179,8 @@ Fossology Python also offers a command line interface to simplify interactions w
 Contribute
 ==========
 
+
+
 Develop
 -------
 
@@ -197,6 +199,21 @@ Develop
 
    To avoid running the whole testsuite during development of a new branch with changing only touching the code related
    to the CLI, name your branch ``feat/cli-{something}`` and only the ``test_foss_cli_*`` will run in the pull request context.
+
+**AI-Assisted Contributions**
+
+   AI coding agents are active in this repository. If you are an AI agent or using AI-assisted tooling,
+   please follow these guidelines:
+
+   -  **Do not pollute the issue tracker** with lengthy explanations for simple fixes or API extensions.
+      The issue tracker is reserved for discussing significant design decisions and feature proposals.
+
+   -  **Keep pull requests concise.** The maintainers do not need a full report of every change — the
+      code speaks for itself. Minimize verbose descriptions and auto-generated summaries.
+
+   -  **All new extensions must include test cases.** Every new feature or API extension must be properly
+      covered by tests that provide confidence in the patch. Pull requests without adequate test coverage
+      will not be accepted.
 
 Build
 -----
