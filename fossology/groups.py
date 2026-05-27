@@ -119,7 +119,7 @@ class Groups:
         response = self.session.post(
             f"{self.api}/groups/{group_id}/user/{user_id}", json=data
         )
-        if response.status_code == 200:
+        if response.status_code == 201:
             logger.info(f"User {user_id} has been added to group {group_id}.")
         elif response.status_code == 400:
             logger.info(f"User {user_id} is already a member of group {group_id}.")
@@ -179,7 +179,7 @@ class Groups:
         :raises FossologyApiError: if the REST call failed
         """
         response = self.session.delete(f"{self.api}/groups/{group_id}/user/{user_id}")
-        if response.status_code == 200:
+        if response.status_code == 202:
             logger.info(f"User {user_id} will be removed from group {group_id}.")
         elif response.status_code == 400:
             description = f"Validation error while removing member {user_id} from group {group_id}."
