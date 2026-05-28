@@ -47,6 +47,57 @@ def test_generate_report(foss: Fossology, upload: Upload):
     Path(report_path / report_name).unlink()
 
 
+def test_import_report(foss: Fossology, upload: Upload, tmp_path: Path):
+    # `ReportFormat.SPDX2` generates SPDX 2.x in RDF, which is the same on-wire
+    # format the import endpoint's default "spdxrdf" accepts. Round-trip the
+    # report file: generate → download → import.
+    report_id = foss.generate_report(upload, report_format=ReportFormat.SPDX2)
+    report_content, report_name = foss.download_report(report_id)
+    report_file = tmp_path / report_name
+    report_file.write_bytes(report_content)
+
+    job_id = foss.import_report(upload, str(report_file))
+    assert isinstance(job_id, int)
+    assert job_id > 0
+
+
+@responses.activate
+def test_import_report_nogroup(
+    foss_server: str, foss: Fossology, upload: Upload, tmp_path: Path
+):
+    responses.add(
+        responses.POST,
+        f"{foss_server}/api/v1/report/import",
+        status=403,
+    )
+    report_file = tmp_path / "dummy.rdf"
+    report_file.write_bytes(b"<rdf></rdf>")
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.import_report(upload, str(report_file), group="test")
+    assert (
+        f"Report import for upload {upload.uploadname} (id={upload.id}) "
+        f"is not authorized"
+    ) in str(excinfo.value)
+
+
+@responses.activate
+def test_import_report_error(
+    foss_server: str, foss: Fossology, upload: Upload, tmp_path: Path
+):
+    responses.add(
+        responses.POST,
+        f"{foss_server}/api/v1/report/import",
+        status=500,
+    )
+    report_file = tmp_path / "dummy.rdf"
+    report_file.write_bytes(b"<rdf></rdf>")
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.import_report(upload, str(report_file))
+    assert (
+        f"Report import for upload {upload.uploadname} (id={upload.id}) failed"
+    ) in str(excinfo.value)
+
+
 @responses.activate
 def test_generate_report_unparseable_message(
     foss_server: str, foss: Fossology, upload: Upload
