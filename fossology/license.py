@@ -158,6 +158,43 @@ class LicenseEndpoint:
             description = f"Error while adding new license {license.shortName}"
             raise FossologyApiError(description, response)
 
+    def import_licenses_csv(
+        self,
+        csv_file: str,
+        delimiter: str = ",",
+        enclosure: str = '"',
+    ) -> str:
+        """Import licenses from a CSV file.
+
+        API Endpoint: POST /license/import-csv
+
+        :param csv_file: local path to the CSV file containing license data
+        :param delimiter: field delimiter used in the CSV file (default: ",")
+        :param enclosure: field enclosure character used in the CSV file (default: '"')
+        :type csv_file: str
+        :type delimiter: str
+        :type enclosure: str
+        :return: the API response message (multi-line summary of inserted /
+            already-existing / skipped rows)
+        :rtype: str
+        :raises FossologyApiError: if the REST call failed
+        """
+        data = {"delimiter": delimiter, "enclosure": enclosure}
+        with open(csv_file, "rb") as fp:
+            response = self.session.post(
+                f"{self.api}/license/import-csv",
+                data=data,
+                files={"file_input": fp},
+            )
+
+        if response.status_code == 200:
+            message = response.json()["message"]
+            logger.info(f"License CSV {csv_file} imported: {message}")
+            return message
+
+        description = f"Unable to import licenses from {csv_file}"
+        raise FossologyApiError(description, response)
+
     def update_license(
         self,
         shortname: str,

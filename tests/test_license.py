@@ -32,6 +32,60 @@ def test_another_license():
     return License(shortname, fullname, text, url, risk, False)
 
 
+def test_import_licenses_csv(foss: fossology.Fossology, tmp_path):
+    csv_path = tmp_path / "licenses.csv"
+    csv_path.write_text(
+        "shortname,fullname,text,parent,report,url,risk,group,notes\n"
+        "CsvImportTestLic,Csv Import Test Lic,License text body,,white,"
+        "http://example.com/csv,5,,\n"
+    )
+    message = foss.import_licenses_csv(str(csv_path))
+    # Server returns multi-line summary; either freshly inserted or already
+    # present from a prior run — both are valid outcomes for an idempotent import.
+    assert "CsvImportTestLic" in message
+    assert "Read csv: 1 licenses" in message
+
+
+@responses.activate
+def test_import_licenses_csv_error(
+    foss_server: str, foss: fossology.Fossology, tmp_path
+):
+    responses.add(
+        responses.POST,
+        f"{foss_server}/api/v1/license/import-csv",
+        status=400,
+    )
+    csv_path = tmp_path / "bad.csv"
+    csv_path.write_text("not really a csv\n")
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.import_licenses_csv(str(csv_path))
+    assert f"Unable to import licenses from {csv_path}" in str(excinfo.value)
+
+
+@responses.activate
+def test_import_licenses_csv_request_payload(
+    foss_server: str, foss: fossology.Fossology, tmp_path
+):
+    responses.add(
+        responses.POST,
+        f"{foss_server}/api/v1/license/import-csv",
+        status=200,
+        json={"code": 200, "message": "head okay\nRead csv: 1 licenses", "type": "INFO"},
+    )
+    csv_path = tmp_path / "lic.csv"
+    csv_path.write_text("shortname,fullname\nFoo,Foo License\n")
+
+    message = foss.import_licenses_csv(str(csv_path), delimiter=";", enclosure="'")
+
+    assert "Read csv: 1 licenses" in message
+    assert len(responses.calls) == 1
+    body = responses.calls[0].request.body.decode("utf-8", errors="ignore")
+    assert 'name="file_input"' in body
+    assert 'name="delimiter"' in body and "\r\n\r\n;\r\n" in body
+    assert 'name="enclosure"' in body and "\r\n\r\n'\r\n" in body
+    assert "shortname,fullname\nFoo,Foo License" in body
+
+
 @responses.activate
 def test_detail_license_error(foss_server: str, foss: fossology.Fossology):
     responses.add(responses.GET, f"{foss_server}/api/v1/license/Blah", status=500)
