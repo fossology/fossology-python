@@ -134,7 +134,7 @@ class Groups:
     ) -> None:
         """Change the permission of a user in a group
 
-        API Endpoint: PATCH /groups/{group_id}/user/{user_id}
+        API Endpoint: PUT /groups/{group_id}/user/{user_id}
 
         :param group_id: the id of the group
         :param user_id: the id of the user
@@ -145,10 +145,10 @@ class Groups:
         :raises FossologyApiError: if the REST call failed
         """
         data = {"perm": perm.value}
-        response = self.session.patch(
+        response = self.session.put(
             f"{self.api}/groups/{group_id}/user/{user_id}", json=data
         )
-        if response.status_code == 200:
+        if response.status_code == 202:
             logger.info(
                 f"Permission of user {user_id} in group {group_id} has been updated to {perm.name}."
             )

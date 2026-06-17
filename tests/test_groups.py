@@ -186,7 +186,7 @@ def test_change_group_member_permission_validation_error(
     foss_server: str, foss: fossology.Fossology
 ):
     responses.add(
-        responses.PATCH, f"{foss_server}/api/v1/groups/42/user/42", status=400
+        responses.PUT, f"{foss_server}/api/v1/groups/42/user/42", status=400
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.change_group_member_permission(42, 42, MemberPerm.ADMIN)
@@ -200,7 +200,7 @@ def test_change_group_member_permission_not_authorized(
     foss_server: str, foss: fossology.Fossology
 ):
     responses.add(
-        responses.PATCH, f"{foss_server}/api/v1/groups/42/user/42", status=403
+        responses.PUT, f"{foss_server}/api/v1/groups/42/user/42", status=403
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.change_group_member_permission(42, 42, MemberPerm.ADMIN)
@@ -214,7 +214,7 @@ def test_change_group_member_permission_not_found(
     foss_server: str, foss: fossology.Fossology
 ):
     responses.add(
-        responses.PATCH, f"{foss_server}/api/v1/groups/42/user/42", status=404
+        responses.PUT, f"{foss_server}/api/v1/groups/42/user/42", status=404
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.change_group_member_permission(42, 42, MemberPerm.ADMIN)
@@ -226,7 +226,7 @@ def test_change_group_member_permission_server_error(
     foss_server: str, foss: fossology.Fossology
 ):
     responses.add(
-        responses.PATCH, f"{foss_server}/api/v1/groups/42/user/42", status=500
+        responses.PUT, f"{foss_server}/api/v1/groups/42/user/42", status=500
     )
     with pytest.raises(FossologyApiError) as excinfo:
         foss.change_group_member_permission(42, 42, MemberPerm.ADMIN)
@@ -235,11 +235,6 @@ def test_change_group_member_permission_server_error(
     )
 
 
-@pytest.mark.xfail(
-    reason="PATCH /groups/{id}/user/{id} is not yet available in FOSSology API v1 server",
-    raises=FossologyApiError,
-    strict=True,
-)
 def test_change_group_member_permission(
     foss: fossology.Fossology,
     created_foss_user: User,
