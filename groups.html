@@ -118,7 +118,7 @@
 <dd><p>Class dedicated to all “groups” related endpoints</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.groups.Groups.add_group_member">
-<span class="sig-name descname"><span class="pre">add_group_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="enums.html#fossology.enums.MemberPerm" title="fossology.enums.MemberPerm"><span class="pre">MemberPerm</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">MemberPerm.USER</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.groups.Groups.add_group_member" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_group_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="enums.html#fossology.enums.MemberPerm" title="fossology.enums.MemberPerm"><span class="pre">MemberPerm</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">MemberPerm.USER</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#fossology.groups.Groups.add_group_member" title="Link to this definition">¶</a></dt>
 <dd><p>Add a user to a group</p>
 <p>API Endpoint: POST /groups/{group_id}/user/{user_id}</p>
 <dl class="field-list simple">
@@ -136,8 +136,27 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="fossology.groups.Groups.change_group_member_permission">
+<span class="sig-name descname"><span class="pre">change_group_member_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="enums.html#fossology.enums.MemberPerm" title="fossology.enums.MemberPerm"><span class="pre">MemberPerm</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#fossology.groups.Groups.change_group_member_permission" title="Link to this definition">¶</a></dt>
+<dd><p>Change the permission of a user in a group</p>
+<p>API Endpoint: PUT /groups/{group_id}/user/{user_id}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group_id</strong> (<em>int</em>) – the id of the group</p></li>
+<li><p><strong>user_id</strong> (<em>int</em>) – the id of the user</p></li>
+<li><p><strong>perm</strong> (<a class="reference internal" href="enums.html#fossology.enums.MemberPerm" title="fossology.enums.MemberPerm"><em>MemberPerm</em></a>) – the new permission level for the user</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#fossology.exceptions.FossologyApiError" title="fossology.exceptions.FossologyApiError"><strong>FossologyApiError</strong></a> – if the REST call failed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="fossology.groups.Groups.create_group">
-<span class="sig-name descname"><span class="pre">create_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.groups.Groups.create_group" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">create_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#fossology.groups.Groups.create_group" title="Link to this definition">¶</a></dt>
 <dd><p>Create a group</p>
 <p>API Endpoint: POST /groups</p>
 <dl class="field-list simple">
@@ -152,8 +171,8 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.groups.Groups.delete_group">
-<span class="sig-name descname"><span class="pre">delete_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.groups.Groups.delete_group" title="Link to this definition">¶</a></dt>
-<dd><p>Create a group</p>
+<span class="sig-name descname"><span class="pre">delete_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#fossology.groups.Groups.delete_group" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a group</p>
 <p>API Endpoint: DELETE /groups/{group_id}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -167,7 +186,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fossology.groups.Groups.delete_group_member">
-<span class="sig-name descname"><span class="pre">delete_group_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.groups.Groups.delete_group_member" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">delete_group_member</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#fossology.groups.Groups.delete_group_member" title="Link to this definition">¶</a></dt>
 <dd><p>Delete a user from a group</p>
 <p>API Endpoint: DELETE /groups/{group_id}/user/{user_id}</p>
 <dl class="field-list simple">
