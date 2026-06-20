@@ -13,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 class Users:
     """Class dedicated to all "users" related endpoints"""
 
-    def detail_user(self, user_id):
+    def detail_user(self, user_id: int) -> "User":
         """Get details of Fossology user.
 
         API Endpoint: GET /users/{id}
@@ -38,7 +38,7 @@ class Users:
             description = f"Error while getting details for user {user_id}"
             raise FossologyApiError(description, response)
 
-    def list_users(self):
+    def list_users(self) -> list:
         """List all users from the Fossology instance
 
         API Endpoint: GET /users
@@ -64,7 +64,7 @@ class Users:
             description = f"Unable to get a list of users from {self.host}"  # type: ignore
             raise FossologyApiError(description, response)
 
-    def create_user(self, user_spec):
+    def create_user(self, user_spec: dict) -> None:
         """Create a new Fossology user
 
         API Endpoint: POST /users
@@ -114,7 +114,7 @@ class Users:
             description = f"Error while creating user {user_spec['name']}"
             raise FossologyApiError(description, response)
 
-    def delete_user(self, user):
+    def delete_user(self, user: "User") -> None:
         """Delete a Fossology user.
 
         API Endpoint: DELETE /users/{id}

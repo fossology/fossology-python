@@ -179,3 +179,88 @@ def test_delete_group_member_if_group_does_not_exists_raises_fossology_api_error
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_group_member(42, created_foss_user.id)
     assert f"Member {created_foss_user.id} or group 42 not found." in str(excinfo.value)
+
+
+@responses.activate
+def test_change_group_member_permission_validation_error(
+    foss_server: str, foss: fossology.Fossology
+):
+    responses.add(
+        responses.PUT, f"{foss_server}/api/v1/groups/42/user/42", status=400
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.change_group_member_permission(42, 42, MemberPerm.ADMIN)
+    assert "Validation error while changing permission of user 42 in group 42." in str(
+        excinfo.value
+    )
+
+
+@responses.activate
+def test_change_group_member_permission_not_authorized(
+    foss_server: str, foss: fossology.Fossology
+):
+    responses.add(
+        responses.PUT, f"{foss_server}/api/v1/groups/42/user/42", status=403
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.change_group_member_permission(42, 42, MemberPerm.ADMIN)
+    assert "Not authorized to change permission of user 42 in group 42." in str(
+        excinfo.value
+    )
+
+
+@responses.activate
+def test_change_group_member_permission_not_found(
+    foss_server: str, foss: fossology.Fossology
+):
+    responses.add(
+        responses.PUT, f"{foss_server}/api/v1/groups/42/user/42", status=404
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.change_group_member_permission(42, 42, MemberPerm.ADMIN)
+    assert "User 42 or group 42 not found." in str(excinfo.value)
+
+
+@responses.activate
+def test_change_group_member_permission_server_error(
+    foss_server: str, foss: fossology.Fossology
+):
+    responses.add(
+        responses.PUT, f"{foss_server}/api/v1/groups/42/user/42", status=500
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.change_group_member_permission(42, 42, MemberPerm.ADMIN)
+    assert "An error occurred while changing permission of user 42 in group 42" in str(
+        excinfo.value
+    )
+
+
+def test_change_group_member_permission(
+    foss: fossology.Fossology,
+    created_foss_user: User,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    mocked_logger = Mock()
+    monkeypatch.setattr("fossology.groups.logger", mocked_logger)
+    name = secrets.token_urlsafe(8)
+    foss.create_group(name)
+    group = get_group(foss, name)
+    foss.add_group_member(group.id, created_foss_user.id, MemberPerm.USER)
+
+    # Change permission from USER to ADMIN
+    foss.change_group_member_permission(group.id, created_foss_user.id, MemberPerm.ADMIN)
+    assert (
+        call(
+            f"Permission of user {created_foss_user.id} in group {group.id} has been updated to ADMIN."
+        )
+        in mocked_logger.info.mock_calls
+    )
+
+    # Verify the new permission is reflected
+    members = foss.list_group_members(group.id)
+    for member in members:
+        if member.user.id == created_foss_user.id:
+            assert member.group_perm == MemberPerm.ADMIN.value
+
+    # Cleanup
+    foss.delete_group(group.id)

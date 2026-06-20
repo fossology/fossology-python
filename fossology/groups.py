@@ -16,6 +16,7 @@ class Groups:
     """Class dedicated to all "groups" related endpoints"""
 
     def list_groups(self, deletable: bool = False) -> list[Group]:
+
         """Get the list of groups (accessible groups for user, all groups for admin)
 
         If parameter deletable is True, the method will return only deletable groups.
@@ -63,7 +64,7 @@ class Groups:
             description = f"Unable to get a list of members for group {group_id}"
             raise FossologyApiError(description, response)
 
-    def create_group(self, name: str):
+    def create_group(self, name: str) -> None:
         """Create a group
 
         API Endpoint: POST /groups
@@ -81,8 +82,8 @@ class Groups:
             description = f"Group {name} already exists, failed to create group or no group name provided"
             raise FossologyApiError(description, response)
 
-    def delete_group(self, group_id: int):
-        """Create a group
+    def delete_group(self, group_id: int) -> None:
+        """Delete a group
 
         API Endpoint: DELETE /groups/{group_id}
 
@@ -100,7 +101,7 @@ class Groups:
 
     def add_group_member(
         self, group_id: int, user_id: int, perm: MemberPerm = MemberPerm.USER
-    ):
+    ) -> None:
         """Add a user to a group
 
         API Endpoint: POST /groups/{group_id}/user/{user_id}
@@ -128,7 +129,45 @@ class Groups:
             )
             raise FossologyApiError(description, response)
 
-    def delete_group_member(self, group_id: int, user_id: int):
+    def change_group_member_permission(
+        self, group_id: int, user_id: int, perm: MemberPerm
+    ) -> None:
+        """Change the permission of a user in a group
+
+        API Endpoint: PUT /groups/{group_id}/user/{user_id}
+
+        :param group_id: the id of the group
+        :param user_id: the id of the user
+        :param perm: the new permission level for the user
+        :type group_id: int
+        :type user_id: int
+        :type perm: MemberPerm
+        :raises FossologyApiError: if the REST call failed
+        """
+        data = {"perm": perm.value}
+        response = self.session.put(
+            f"{self.api}/groups/{group_id}/user/{user_id}", json=data
+        )
+        if response.status_code == 202:
+            logger.info(
+                f"Permission of user {user_id} in group {group_id} has been updated to {perm.name}."
+            )
+        elif response.status_code == 400:
+            description = f"Validation error while changing permission of user {user_id} in group {group_id}."
+            raise FossologyApiError(description, response)
+        elif response.status_code == 403:
+            description = f"Not authorized to change permission of user {user_id} in group {group_id}."
+            raise FossologyApiError(description, response)
+        elif response.status_code == 404:
+            description = f"User {user_id} or group {group_id} not found."
+            raise FossologyApiError(description, response)
+        else:
+            description = (
+                f"An error occurred while changing permission of user {user_id} in group {group_id}"
+            )
+            raise FossologyApiError(description, response)
+
+    def delete_group_member(self, group_id: int, user_id: int) -> None:
         """Delete a user from a group
 
         API Endpoint: DELETE /groups/{group_id}/user/{user_id}
