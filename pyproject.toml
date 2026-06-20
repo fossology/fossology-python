@@ -31,7 +31,7 @@ version_source = "commit"
 version_toml = [
     # "file:variable:[format_type]"
     "pyproject.toml:tool.poetry.version",  # Implied Default: Number format
-    "docs/conf.py:version:nf",  # Number format
+    "docs-source/conf.py:version:nf",  # Number format
 ]
 
 [tool.poetry.dependencies]
