@@ -32,7 +32,7 @@ version_toml = [
     "pyproject.toml:tool.poetry.version",
 ]
 version_variables = [
-    "docs-source/conf.py:version",
+    "docs-source/conf.py:release",
 ]
 
 [tool.poetry.dependencies]
