@@ -2,6 +2,72 @@
 
 <!-- version list -->
 
+## v3.6.0 (2026-06-22)
+
+### Bug Fixes
+
+- Properly specify version for the semantic release action
+  ([`15f74ae`](https://github.com/fossology/fossology-python/commit/15f74ae883c529f5a9c8bef3198b06a3e867a55c))
+
+- **groups**: Use PUT instead of PATCH for change_group_member_permission
+  ([`a16bd19`](https://github.com/fossology/fossology-python/commit/a16bd196bd48af88d1b347d54f7097db79d824d5))
+
+- **obj**: Store Upload assignee, assigneeDate, closeDate as plain values
+  ([`d0d5e9e`](https://github.com/fossology/fossology-python/commit/d0d5e9e3d7327752c8a172ba6da894586c46fa73))
+
+- **report**: Raise FossologyApiError when report ID cannot be parsed
+  ([`b78db0c`](https://github.com/fossology/fossology-python/commit/b78db0c1c263db61ff97279ab40337f404463b23))
+
+### Chores
+
+- Fix path to the docs source directory
+  ([`8b60b85`](https://github.com/fossology/fossology-python/commit/8b60b85a841c5b538ee791eb1bc0053286ce0629))
+
+- Update version configuration for semantic-release
+  ([`68488ae`](https://github.com/fossology/fossology-python/commit/68488aefe714167b71d6d135ef2e70dce22201d0))
+
+- Update versions to latest release 3.5.0
+  ([`b81a8bf`](https://github.com/fossology/fossology-python/commit/b81a8bf18962d4c9c8ce24118f72389983e790aa))
+
+- **deps**: Bump idna from 3.10 to 3.15
+  ([`6678320`](https://github.com/fossology/fossology-python/commit/66783204b8712a0b30bba71190b58d50a5be2bbb))
+
+- **deps**: Bump requests from 2.32.4 to 2.33.0
+  ([`466fce9`](https://github.com/fossology/fossology-python/commit/466fce941a346cef4218b579ddf11898c3df10df))
+
+- **deps**: Bump urllib3 from 2.6.3 to 2.7.0
+  ([`b133bda`](https://github.com/fossology/fossology-python/commit/b133bdab0c3c083c5939bbf3a0bfc53e547c70b5))
+
+- **deps-dev**: Bump pygments from 2.19.2 to 2.20.0
+  ([`b4e4210`](https://github.com/fossology/fossology-python/commit/b4e4210679f670bcd2fef2c55dfbe10828009a0a))
+
+- **deps-dev**: Bump pytest from 7.4.4 to 9.0.3
+  ([`c558890`](https://github.com/fossology/fossology-python/commit/c5588904385b1861b1036b2f303052638e71c942))
+
+- **deps-dev**: Bump tornado from 6.5.1 to 6.5.5
+  ([`ffd54ff`](https://github.com/fossology/fossology-python/commit/ffd54ff2e5aa7e281f3f31f92423368e707e3daa))
+
+### Continuous Integration
+
+- Retrigger tests after server cleanup
+  ([`2420779`](https://github.com/fossology/fossology-python/commit/2420779d382e47a3a63446372e02437ddbfd8cfc))
+
+### Documentation
+
+- Add AI-assisted contribution guidelines and fix codecov for fork PRs
+  ([`ba2676f`](https://github.com/fossology/fossology-python/commit/ba2676ffc9299abf46847d060208e7cbd5b8249f))
+
+### Features
+
+- **groups**: Implement change_group_member_permission and fix type hints
+  ([`4a5a610`](https://github.com/fossology/fossology-python/commit/4a5a61033199a19d02e43e532da5ce7903c860d0))
+
+### Testing
+
+- **groups**: Mark live PATCH test as xfail - endpoint not in v1 server
+  ([`116eadc`](https://github.com/fossology/fossology-python/commit/116eadc8c6b3865419fffb7fc66fc7257483f67d))
+
+
 ## v3.5.0 (2026-02-23)
 
 ### Chores
