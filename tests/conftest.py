@@ -222,7 +222,7 @@ def upload(
     time.sleep(5)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def upload_v2(
     foss_v2: fossology.Fossology,
     test_file_path: str,
@@ -243,23 +243,11 @@ def upload_v2(
 
 @pytest.fixture(scope="session")
 def upload_with_jobs(
-    foss: fossology.Fossology, test_file_path: str, foss_schedule_agents: dict
-) -> Generator:
-    upload = foss.upload_file(
-        foss.rootFolder,
-        file=test_file_path,
-        description="Test upload_with_jobs via fossology-python lib",
-        access_level=AccessLevel.PUBLIC,
-        wait_time=5,
-    )
-    if upload:
-        jobs_lookup(foss, upload)
-        foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
-        jobs_lookup(foss, upload)
-    yield upload
-    foss.delete_upload(upload)
-    time.sleep(5)
-
+    foss: fossology.Fossology, upload: Upload, foss_schedule_agents: dict
+):
+    foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
+    jobs_lookup(foss, upload)
+    return upload
 
 @pytest.fixture(scope="session")
 def created_foss_user(foss: fossology.Fossology, foss_user: dict) -> Generator:

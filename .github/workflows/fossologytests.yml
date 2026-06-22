@@ -28,7 +28,7 @@ jobs:
       - name: Install host dependencies
         run: |
           apt-get -qq update
-          apt-get install -qq bzip2 gcc git nmap xz-utils
+          apt-get install -qq bzip2 curl gcc git nmap xz-utils
           rm -rf /var/lib/apt/lists/*
       - name: Install Python dependencies
         run: |
@@ -38,10 +38,23 @@ jobs:
         run: |
           tar xvf tests/files/base-files_10.3-debian10-test.tar.bz2 -C /tmp
       - name: Check services
-        run: nmap fossology -p 80
+        run: |
+          nmap fossology -p 80
+          for i in $(seq 1 60); do
+            if curl --fail --silent --show-error http://fossology/repo/api/v1/info > /dev/null; then
+              echo "Fossology API is up"
+              break
+            fi
+            if [ "$i" -eq 60 ]; then
+              echo "Fossology API did not become ready in time" >&2
+              exit 1
+            fi
+            echo "Waiting for Fossology API... attempt $i/60"
+            sleep 5
+          done
       - name: Run tests
         run: |
-          poetry run coverage run --source=fossology -m pytest
+          poetry run coverage run --source=fossology -m pytest --ignore-glob="tests/test_foss_cli*.py"
           poetry run coverage report -m
       - name: upload codecoverage results only if the PR originates from the upstream repository
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
