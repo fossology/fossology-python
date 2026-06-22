@@ -23,12 +23,12 @@ def test_upload_licenses_with_containers(foss: Fossology, upload_with_jobs: Uplo
 
 def test_upload_licenses_agent_ojo(foss: Fossology, upload_with_jobs: Upload):
     licenses = foss.upload_licenses(upload_with_jobs, agent="ojo")
-    assert len(licenses) == 9  # type: ignore
+    assert len(licenses) == 10  # type: ignore
 
 
 def test_upload_licenses_agent_monk(foss: Fossology, upload_with_jobs: Upload):
     licenses = foss.upload_licenses(upload_with_jobs, agent="monk")
-    assert len(licenses) == 22  # type: ignore
+    assert len(licenses) == 23  # type: ignore
 
 
 def test_upload_licenses_and_copyrights(foss: Fossology, upload_with_jobs: Upload):

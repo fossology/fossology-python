@@ -10,10 +10,10 @@ from pathlib import PurePath
 from fossology import foss_cli
 
 
-def test_upload_file(runner, click_test_file_path, click_test_file, click_test_dict):
+def test_upload_file(runner, test_file_path, click_test_dict):
     """Test the CLI."""
     d = click_test_dict
-    q_path = PurePath(click_test_file_path, click_test_file)
+    q_path = PurePath(test_file_path)
     result = runner.invoke(
         foss_cli.cli,
         [
@@ -30,7 +30,7 @@ def test_upload_file(runner, click_test_file_path, click_test_file, click_test_d
     assert result.exit_code == 0
     assert d["VERBOSE"] == 2
     assert d["DEBUG"]
-    assert d["UPLOAD"].uploadname == click_test_file
+    assert d["UPLOAD"].uploadname == q_path.name
     assert "Summary of upload" in result.output
     time.sleep(2)
     result = runner.invoke(
@@ -38,7 +38,7 @@ def test_upload_file(runner, click_test_file_path, click_test_file, click_test_d
         [
             "-vv",
             "delete_upload",
-            click_test_file,
+            q_path.name,
         ],
         obj=d,
         catch_exceptions=False,

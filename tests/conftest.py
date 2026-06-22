@@ -186,11 +186,6 @@ def foss_v2(foss_server: str, foss_token: str, foss_agents: Agents):
 
 
 @pytest.fixture(scope="session")
-def test_file_path() -> str:
-    return "tests/files/base-files_11.tar.xz"
-
-
-@pytest.fixture(scope="session")
 def upload_folder(foss: fossology.Fossology) -> Generator:
     name = "UploadFolderTest"
     desc = "Created via the Fossology Python API"
@@ -275,15 +270,9 @@ def created_foss_user(foss: fossology.Fossology, foss_user: dict) -> Generator:
     foss.delete_user(user)
 
 
-# foss_cli specific
 @pytest.fixture(scope="session")
-def click_test_file_path() -> str:
-    return "tests/files"
-
-
-@pytest.fixture(scope="session")
-def click_test_file() -> str:
-    return "zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz"
+def test_file_path() -> str:
+    return "tests/files/base-files_10.3-debian10-test.tar.bz2"
 
 
 @pytest.fixture(scope="session")

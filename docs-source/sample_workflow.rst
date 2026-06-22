@@ -111,10 +111,10 @@ We first get an example file from our github repository test environment and the
 upload it to the server.
 
 
->>> filename = "my_base-files_11.tar.xz"
+>>> filename = "my_base-files_10.3-debian10-test.tar.bz2"
 >>> path_to_upload_file = pathlib.Path.cwd() / filename
 >>> if not path_to_upload_file.exists():
-...    url = "https://github.com/fossology/fossology-python/blob/master/tests/files/base-files_11.tar.xz"
+...    url = "https://github.com/fossology/fossology-python/blob/master/tests/files/base-files_10.3-debian10-test.tar.bz2"
 ...    r = requests.get(url)
 ...    with open(path_to_upload_file, "wb") as fp: 
 ...        len = fp.write(r.content)

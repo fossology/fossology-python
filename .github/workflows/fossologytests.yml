@@ -28,7 +28,7 @@ jobs:
       - name: Install host dependencies
         run: |
           apt-get -qq update
-          apt-get install -qq gcc git nmap xz-utils
+          apt-get install -qq bzip2 gcc git nmap xz-utils
           rm -rf /var/lib/apt/lists/*
       - name: Install Python dependencies
         run: |
@@ -36,7 +36,7 @@ jobs:
           poetry install --with=dev
       - name: Install files in shared volume
         run: |
-          tar xJf tests/files/base-files_11.tar.xz -C /tmp
+          tar xvf tests/files/base-files_10.3-debian10-test.tar.bz2 -C /tmp
       - name: Check services
         run: nmap fossology -p 80
       - name: Run tests

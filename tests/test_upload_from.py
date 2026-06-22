@@ -112,8 +112,8 @@ def test_upload_from_url_v2(foss_v2: Fossology):
 
 def test_upload_from_server(foss: Fossology):
     server = {
-        "path": "/tmp/base-files-11",
-        "name": "base-files-11",
+        "path": "/tmp/base-files-10.3",
+        "name": "base-files-10.3",
     }
     server_upload = foss.upload_file(
         foss.rootFolder,
@@ -132,8 +132,8 @@ def test_upload_from_server(foss: Fossology):
 @pytest.mark.xfail
 def test_upload_from_server_v2(foss_v2: Fossology):
     server = {
-        "path": "/tmp/base-files-11",
-        "name": "base-files-11",
+        "path": "/tmp/base-files_10.3-debian10-test",
+        "name": "base-files_10.3-debian10-test",
     }
     server_upload = foss_v2.upload_file(
         foss_v2.rootFolder,
