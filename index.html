@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Welcome to fossology’s documentation! &#8212; fossology 3.5.0 documentation</title>
+    <title>Welcome to fossology’s documentation! &#8212; fossology 3.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=f6a572b4" />
-    <script src="_static/documentation_options.js?v=c1362a89"></script>
+    <script src="_static/documentation_options.js?v=5349f462"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -224,7 +224,7 @@ Token<span class="w"> </span>scope:<span class="w"> </span>write
 </li>
 <li><p>To upload a file:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>-vv<span class="w"> </span>upload_file<span class="w"> </span>tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz<span class="w"> </span><span class="se">\</span>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>foss_cli<span class="w"> </span>-vv<span class="w"> </span>upload_file<span class="w"> </span>tests/files/base-files_10.3-debian10-test.tar.bz2<span class="w"> </span><span class="se">\</span>
 <span class="w">      </span>--folder_name<span class="w"> </span>FossFolder
 <span class="w">      </span>--access_level<span class="w"> </span>public
 </pre></div>
@@ -276,6 +276,25 @@ extension</a></p></li>
 <blockquote>
 <div><p>To avoid running the whole testsuite during development of a new branch with changing only touching the code related
 to the CLI, name your branch <code class="docutils literal notranslate"><span class="pre">feat/cli-{something}</span></code> and only the <code class="docutils literal notranslate"><span class="pre">test_foss_cli_*</span></code> will run in the pull request context.</p>
+</div></blockquote>
+<p><strong>Testing Requirements for New Code</strong></p>
+<blockquote>
+<div><p>When contributing new features or API extensions, ensure comprehensive test coverage using these guidelines:</p>
+<ul class="simple">
+<li><p><strong>Unit Tests with Responses Framework</strong>: Use the <a class="reference external" href="https://github.com/getsentry/responses">responses</a> library
+to mock HTTP requests and provide unit test coverage for all code paths. This allows fast, isolated testing without
+requiring a running Fossology instance. See existing tests in <code class="docutils literal notranslate"><span class="pre">tests/</span></code> directory for examples of the
+<code class="docutils literal notranslate"><span class="pre">&#64;responses.activate</span></code> decorator pattern.</p></li>
+<li><p><strong>Integration Tests</strong>: Provide at least one generic integration test that runs against an actual Fossology instance.
+These tests validate real API behavior and can be executed:</p>
+<ul>
+<li><p><strong>Locally</strong>: Run against a Fossology Docker container (see the Test section below for setup instructions)</p></li>
+<li><p><strong>In CI/CD</strong>: Tests automatically run via GitHub Actions in the <a class="reference external" href="https://github.com/fossology/fossology-python/.github/workflows/fossologytests.yml">API Tests job</a></p></li>
+</ul>
+</li>
+<li><p><strong>Coverage Requirements</strong>: All new code paths must be covered by tests. Pull requests without adequate test
+coverage will not be accepted. Use <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">coverage</span></code> to verify coverage locally.</p></li>
+</ul>
 </div></blockquote>
 <p><strong>AI-Assisted Contributions</strong></p>
 <blockquote>
@@ -340,7 +359,8 @@ git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </
 <ul>
 <li><p>Use the latest Fossology container from <a class="reference external" href="https://hub.docker.com/r/fossology/fossology">Docker hub</a>:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>fossology/fossology
-tar<span class="w"> </span>xJf<span class="w"> </span>tests/files/base-files_11.tar.xz<span class="w"> </span>-C<span class="w"> </span>/tmp
+tar<span class="w"> </span>xvf<span class="w"> </span>tests/files/base-files_10.3-debian10-test.tar.bz2<span class="w"> </span>-C<span class="w"> </span>/tmp
+chmod<span class="w"> </span>a+r<span class="w"> </span>/tmp/base-files-10.3
 docker<span class="w"> </span>run<span class="w"> </span>--mount<span class="w"> </span><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/tmp&quot;</span>,dst<span class="o">=</span>/tmp,type<span class="o">=</span><span class="nb">bind</span><span class="w"> </span>--name<span class="w"> </span>fossology<span class="w"> </span>-p<span class="w"> </span><span class="m">80</span>:80<span class="w"> </span>fossology/fossology
 </pre></div>
 </div>
