@@ -52,8 +52,8 @@ def test_upload_assignee_fields_are_not_wrapped_in_tuples():
 
 
 def test_upload_sha1(upload: Upload):
-    assert upload.uploadname == "base-files_11.tar.xz"
-    assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+    assert upload.uploadname == "base-files_10.3-debian10-test.tar.bz2"
+    assert upload.hash.sha1 == "7A36310AB05CD8401A1CC16B934D998ED491EB12"
     assert str(upload) == (
         f"Upload '{upload.uploadname}' ({upload.id}, {upload.hash.size}B, {upload.hash.sha1}) "
         f"in folder {upload.foldername} ({upload.folderid})"
@@ -65,8 +65,8 @@ def test_upload_sha1(upload: Upload):
 
 
 def test_upload(upload: Upload):
-    assert upload.uploadname == "base-files_11.tar.xz"
-    assert upload.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
+    assert upload.uploadname == "base-files_10.3-debian10-test.tar.bz2"
+    assert upload.hash.sha1 == "7A36310AB05CD8401A1CC16B934D998ED491EB12"
     assert str(upload) == (
         f"Upload '{upload.uploadname}' ({upload.id}, {upload.hash.size}B, {upload.hash.sha1}) "
         f"in folder {upload.foldername} ({upload.folderid})"
@@ -90,9 +90,9 @@ def test_upload_for_group(foss: Fossology, test_file_path: str):
         wait_time=5,
     )
     if upload:
-        assert upload.uploadname == "base-files_11.tar.xz"
+        assert upload.uploadname == "base-files_10.3-debian10-test.tar.bz2"
     uploads = foss.list_uploads(group="upload_access")
-    assert uploads[0][0].uploadname == "base-files_11.tar.xz"
+    assert uploads[0][0].uploadname == "base-files_10.3-debian10-test.tar.bz2"
     foss.delete_upload(upload)
     foss.delete_group(group_access.id)
 
@@ -111,16 +111,16 @@ def test_upload_for_group_v2(foss_v2: Fossology, test_file_path: str):
         wait_time=5,
     )
     if upload:
-        assert upload.uploadname == "base-files_11.tar.xz"
+        assert upload.uploadname == "base-files_10.3-debian10-test.tar.bz2"
     uploads = foss_v2.list_uploads(group="upload_access")
-    assert uploads[0][0].uploadname == "base-files_11.tar.xz"
+    assert uploads[0][0].uploadname == "base-files_10.3-debian10-test.tar.bz2"
     foss_v2.delete_upload(upload)
     foss_v2.delete_group(group_access.id)
 
 
 @pytest.mark.xfail
 def test_upload_v2(upload_v2: Upload):
-    assert upload_v2.uploadname == "base-files_11.tar.xz"
+    assert upload_v2.uploadname == "base-files_10.3-debian10-test.tar.bz2"
     assert upload_v2.hash.sha1 == "D4D663FC2877084362FB2297337BE05684869B00"
     assert str(upload_v2) == (
         f"Upload '{upload_v2.uploadname}' ({upload_v2.id}, {upload_v2.hash.size}B, {upload_v2.hash.sha1}) "
@@ -392,7 +392,7 @@ def test_download_upload(foss: Fossology, upload: Upload):
     filetype = mimetypes.guess_type(download_path / upload_filename)
     upload_stat = os.stat(download_path / upload_filename)
     assert upload_stat.st_size > 0
-    assert filetype == ("application/x-tar", "xz")
+    assert filetype == ("application/x-tar", "bzip2")
     Path(download_path / upload_filename).unlink()
 
 

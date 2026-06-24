@@ -148,7 +148,7 @@ Fossology Python also offers a command line interface to simplify interactions w
 
    .. code:: bash
 
-      $ foss_cli -vv upload_file tests/files/zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz \
+      $ foss_cli -vv upload_file tests/files/base-files_10.3-debian10-test.tar.bz2 \
             --folder_name FossFolder
             --access_level public
 
@@ -199,6 +199,25 @@ Develop
 
    To avoid running the whole testsuite during development of a new branch with changing only touching the code related
    to the CLI, name your branch ``feat/cli-{something}`` and only the ``test_foss_cli_*`` will run in the pull request context.
+
+**Testing Requirements for New Code**
+
+   When contributing new features or API extensions, ensure comprehensive test coverage using these guidelines:
+
+   -  **Unit Tests with Responses Framework**: Use the `responses <https://github.com/getsentry/responses>`_ library
+      to mock HTTP requests and provide unit test coverage for all code paths. This allows fast, isolated testing without
+      requiring a running Fossology instance. See existing tests in ``tests/`` directory for examples of the
+      ``@responses.activate`` decorator pattern.
+
+   -  **Integration Tests**: Provide at least one generic integration test that runs against an actual Fossology instance.
+      These tests validate real API behavior and can be executed:
+
+      - **Locally**: Run against a Fossology Docker container (see the Test section below for setup instructions)
+      - **In CI/CD**: Tests automatically run via GitHub Actions in the `API Tests job
+        <https://github.com/fossology/fossology-python/.github/workflows/fossologytests.yml>`_
+
+   -  **Coverage Requirements**: All new code paths must be covered by tests. Pull requests without adequate test
+      coverage will not be accepted. Use ``poetry run coverage`` to verify coverage locally.
 
 **AI-Assisted Contributions**
 
@@ -275,7 +294,8 @@ The testsuite available in this project expects a running Fossology instance und
   .. code:: shell
 
     docker pull fossology/fossology
-    tar xJf tests/files/base-files_11.tar.xz -C /tmp
+    tar xvf tests/files/base-files_10.3-debian10-test.tar.bz2 -C /tmp
+    chmod a+r /tmp/base-files-10.3
     docker run --mount src="/tmp",dst=/tmp,type=bind --name fossology -p 80:80 fossology/fossology
 
 - Start the complete test suite or a specific test case (and generate coverage report):

@@ -16,7 +16,7 @@ from fossology.obj import Upload
 
 def test_unpack_jobs(foss: Fossology, upload: Upload):
     jobs, _ = foss.list_jobs(upload=upload)
-    assert len(jobs) == 1
+    assert len(jobs) == 3
 
 
 def test_nogroup_jobs(foss: Fossology, upload: Upload, foss_schedule_agents: Dict):

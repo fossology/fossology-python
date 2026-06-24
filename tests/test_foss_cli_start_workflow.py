@@ -9,10 +9,10 @@ from fossology import foss_cli
 
 
 def test_start_workflow_calling_with_wrong_report_format_exits_with_1(
-    runner, click_test_file_path, click_test_file, click_test_dict
+    runner, test_file_path, click_test_dict
 ):
     d = click_test_dict
-    q_path = PurePath(click_test_file_path, click_test_file)
+    q_path = PurePath(test_file_path)
     result = runner.invoke(
         foss_cli.cli,
         ["-vv", "start_workflow", str(q_path), "--report_format", "imp"],
@@ -24,10 +24,10 @@ def test_start_workflow_calling_with_wrong_report_format_exits_with_1(
 
 
 def test_start_workflow_calling_with_wrong_access_level_exits_with_1(
-    runner, click_test_file_path, click_test_file, click_test_dict
+    runner, test_file_path, click_test_dict
 ):
     d = click_test_dict
-    q_path = PurePath(click_test_file_path, click_test_file)
+    q_path = PurePath(test_file_path)
     result = runner.invoke(
         foss_cli.cli,
         ["-vv", "start_workflow", str(q_path), "--access_level", "imp"],
@@ -39,10 +39,10 @@ def test_start_workflow_calling_with_wrong_access_level_exits_with_1(
 
 
 def test_start_workflow_a_dry_run_without_reuse_newest_upload_always_exits_with_1(
-    runner, click_test_file_path, click_test_file, click_test_dict
+    runner, test_file_path, click_test_dict
 ):
     d = click_test_dict
-    q_path = PurePath(click_test_file_path, click_test_file)
+    q_path = PurePath(test_file_path)
     result = runner.invoke(
         foss_cli.cli,
         [
@@ -63,13 +63,13 @@ def test_start_workflow_a_dry_run_without_reuse_newest_upload_always_exits_with_
 
 
 def test_start_workflow_reuse_newest_job(
-    runner, click_test_file_path, click_test_file, click_test_dict
+    runner, test_file_path, click_test_dict
 ):
     d = click_test_dict
     # first upload is the initial one
     #  - it uploads
     #  - it triggers a job on the upload
-    q_path = PurePath(click_test_file_path, click_test_file)
+    q_path = PurePath(test_file_path)
     result = runner.invoke(
         foss_cli.cli,
         [
@@ -108,8 +108,8 @@ def test_start_workflow_reuse_newest_job(
         obj=d,
         catch_exceptions=False,
     )
-    assert f"Can reuse upload for {click_test_file}" in result.output
-    assert f"Can reuse old job on Upload {click_test_file}" in result.output
+    assert f"Can reuse upload for {q_path.name}" in result.output
+    assert f"Can reuse old job on Upload {q_path.name}" in result.output
     assert "Generated report" in result.output
     assert "Report downloaded" in result.output
     assert "Report written to file: " in result.output
@@ -117,7 +117,7 @@ def test_start_workflow_reuse_newest_job(
 
 
 @pytest.fixture(scope="module", autouse=True)
-def cleanup_module(runner, click_test_file, click_test_dict):
+def cleanup_module(runner, test_file_path, click_test_dict):
     # Setup code (if any)
     yield
     # Teardown code: this runs after all tests in the module
@@ -126,7 +126,7 @@ def cleanup_module(runner, click_test_file, click_test_dict):
         [
             "-vv",
             "delete_upload",
-            click_test_file,
+            PurePath(test_file_path).name,
         ],
         obj=click_test_dict,
         catch_exceptions=False,

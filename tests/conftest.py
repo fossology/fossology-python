@@ -186,11 +186,6 @@ def foss_v2(foss_server: str, foss_token: str, foss_agents: Agents):
 
 
 @pytest.fixture(scope="session")
-def test_file_path() -> str:
-    return "tests/files/base-files_11.tar.xz"
-
-
-@pytest.fixture(scope="session")
 def upload_folder(foss: fossology.Fossology) -> Generator:
     name = "UploadFolderTest"
     desc = "Created via the Fossology Python API"
@@ -227,7 +222,7 @@ def upload(
     time.sleep(5)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def upload_v2(
     foss_v2: fossology.Fossology,
     test_file_path: str,
@@ -248,23 +243,11 @@ def upload_v2(
 
 @pytest.fixture(scope="session")
 def upload_with_jobs(
-    foss: fossology.Fossology, test_file_path: str, foss_schedule_agents: dict
-) -> Generator:
-    upload = foss.upload_file(
-        foss.rootFolder,
-        file=test_file_path,
-        description="Test upload_with_jobs via fossology-python lib",
-        access_level=AccessLevel.PUBLIC,
-        wait_time=5,
-    )
-    if upload:
-        jobs_lookup(foss, upload)
-        foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
-        jobs_lookup(foss, upload)
-    yield upload
-    foss.delete_upload(upload)
-    time.sleep(5)
-
+    foss: fossology.Fossology, upload: Upload, foss_schedule_agents: dict
+):
+    foss.schedule_jobs(foss.rootFolder, upload, foss_schedule_agents)
+    jobs_lookup(foss, upload)
+    return upload
 
 @pytest.fixture(scope="session")
 def created_foss_user(foss: fossology.Fossology, foss_user: dict) -> Generator:
@@ -275,15 +258,9 @@ def created_foss_user(foss: fossology.Fossology, foss_user: dict) -> Generator:
     foss.delete_user(user)
 
 
-# foss_cli specific
 @pytest.fixture(scope="session")
-def click_test_file_path() -> str:
-    return "tests/files"
-
-
-@pytest.fixture(scope="session")
-def click_test_file() -> str:
-    return "zlib_1.2.11.dfsg-0ubuntu2.debian.tar.xz"
+def test_file_path() -> str:
+    return "tests/files/base-files_10.3-debian10-test.tar.bz2"
 
 
 @pytest.fixture(scope="session")
