@@ -2,6 +2,24 @@
 
 <!-- version list -->
 
+## v3.6.1 (2026-06-24)
+
+### Bug Fixes
+
+- Make sure the scheduler has started
+  ([`d0511ee`](https://github.com/fossology/fossology-python/commit/d0511eebbbb35a95eb6cf8266a73ae4504c8a6f1))
+
+### Chores
+
+- Update release version in documentation, fix variable name for semantic release
+  ([`ca46dab`](https://github.com/fossology/fossology-python/commit/ca46dabcd8e8ca609dd385a0c30da70b839cb26d))
+
+### Documentation
+
+- Extend contributions guidelines with expected test strategy
+  ([`8f8ab55`](https://github.com/fossology/fossology-python/commit/8f8ab5515cf2ac397f40bea2b17856373aa2c997))
+
+
 ## v3.6.0 (2026-06-22)
 
 ### Bug Fixes
