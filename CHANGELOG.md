@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v3.7.0 (2026-06-25)
+
+### Features
+
+- **license**: Wrap POST /license/import-csv endpoint
+  ([`230fbe4`](https://github.com/fossology/fossology-python/commit/230fbe46137354c38c71f677700f396e096e79fe))
+
+
 ## v3.6.1 (2026-06-24)
 
 ### Bug Fixes
