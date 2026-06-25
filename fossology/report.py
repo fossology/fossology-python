@@ -85,6 +85,78 @@ class Report:
             description = f"Report generation for upload {upload.uploadname} failed"
             raise FossologyApiError(description, response)
 
+    def import_report(
+        self,
+        upload: Upload,
+        report_file: str,
+        report_format: str = "spdxrdf",
+        add_concluded_as_decisions: bool = False,
+        group: str | None = None,
+    ) -> int:
+        """Import an external report for a given upload.
+
+        Uploads the report file and schedules a ``reportImport`` job that
+        merges the report's license decisions into the upload.
+
+        API Endpoint: POST /report/import
+
+        :Example:
+
+        >>> from fossology import Fossology
+        >>>
+        >>> foss = Fossology(FOSS_URL, FOSS_TOKEN) # doctest: +SKIP
+        >>> job_id = foss.import_report(
+        ...     foss.detail_upload(1),
+        ...     "report.spdx.rdf",
+        ... ) # doctest: +SKIP
+
+        :param upload: the upload the report is imported for
+        :param report_file: local path to the report file to import
+        :param report_format: the report format (default: "spdxrdf" — the only format
+            currently accepted by the Fossology API)
+        :param add_concluded_as_decisions: treat concluded licenses in the report
+            as clearing decisions (default: False)
+        :param group: the group name to act on behalf of (default: None)
+        :type upload: Upload
+        :type report_file: str
+        :type report_format: str
+        :type add_concluded_as_decisions: bool
+        :type group: str | None
+        :return: the id of the scheduled reportImport job
+        :rtype: int
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        params = {
+            "upload": str(upload.id),
+            "reportFormat": report_format,
+            "addConcludedAsDecisions": str(add_concluded_as_decisions).lower(),
+        }
+        headers = {}
+        if group:
+            headers["groupName"] = group
+
+        with open(report_file, "rb") as fp:
+            response = self.session.post(
+                f"{self.api}/report/import",
+                params=params,
+                headers=headers,
+                files={"report": fp},
+            )
+
+        upload_ref = f"{upload.uploadname} (id={upload.id})"
+
+        if response.status_code == 201:
+            return int(response.json()["message"])
+
+        elif response.status_code == 403:
+            description = f"Report import for upload {upload_ref} is not authorized"
+            raise AuthorizationError(description, response)
+
+        else:
+            description = f"Report import for upload {upload_ref} failed"
+            raise FossologyApiError(description, response)
+
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(10))
     def download_report(
         self, report_id: int, group: str | None = None, wait_time: int = 0
