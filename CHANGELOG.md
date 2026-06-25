@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v3.8.0 (2026-06-25)
+
+### Features
+
+- **report**: Wrap POST /report/import endpoint
+  ([`5e098fb`](https://github.com/fossology/fossology-python/commit/5e098fb1e6df4283bba8c5204e5d7af2d5577fd7))
+
+
 ## v3.7.0 (2026-06-25)
 
 ### Features
