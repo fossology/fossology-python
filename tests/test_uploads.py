@@ -326,6 +326,107 @@ def test_upload_summary_with_unknown_group_raises_authorization_error(
     )
 
 
+def test_clearing_progress(foss: Fossology, upload: Upload):
+    progress = foss.clearing_progress(upload)
+    assert progress.totalFilesCleared is not None
+    assert progress.totalFilesOfInterest is not None
+    assert "files cleared" in str(progress)
+
+
+@responses.activate
+def test_clearing_progress_not_found(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/clearing-progress",
+        status=404,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.clearing_progress(upload)
+    assert f"Upload {upload.id} not found" in str(excinfo.value)
+
+
+@responses.activate
+def test_clearing_progress_unauthorized(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/clearing-progress",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.clearing_progress(upload)
+    assert f"Getting clearing progress for upload {upload.id} is not authorized" in str(
+        excinfo.value
+    )
+
+
+@responses.activate
+def test_clearing_progress_500_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/clearing-progress",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.clearing_progress(upload)
+
+
+def test_license_histogram(foss: Fossology, upload_with_jobs: Upload):
+    histogram = foss.license_histogram(upload_with_jobs)
+    assert isinstance(histogram, list)
+
+
+@responses.activate
+def test_license_histogram_payload(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/licenses/histogram",
+        status=200,
+        json=[{"id": 357, "name": "MIT", "scannerCount": 2, "concludedCount": 1}],
+    )
+    histogram = foss.license_histogram(upload, agent_id=3)
+    assert len(histogram) == 1
+    assert histogram[0].name == "MIT"
+    assert histogram[0].scannerCount == 2
+    assert "agentId=3" in responses.calls[0].request.url
+
+
+@responses.activate
+def test_license_histogram_unauthorized(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/licenses/histogram",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.license_histogram(upload)
+    assert f"Getting license histogram for upload {upload.id} is not authorized" in str(
+        excinfo.value
+    )
+
+
+@responses.activate
+def test_license_histogram_500_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/licenses/histogram",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.license_histogram(upload)
+
+
 def test_delete_if_unknown_upload_raises_error(foss: Fossology, fake_hash: dict):
     upload = Upload(
         foss.rootFolder,

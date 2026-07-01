@@ -527,6 +527,45 @@ class Summary(object):
         return cls(**json_dict)
 
 
+class ClearingProgress(object):
+    """FOSSology upload clearing progress."""
+
+    def __init__(self, totalFilesOfInterest=None, totalFilesCleared=None, **kwargs):
+        self.totalFilesOfInterest = totalFilesOfInterest
+        self.totalFilesCleared = totalFilesCleared
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"{self.totalFilesCleared}/{self.totalFilesOfInterest} files cleared"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class LicenseHistogram(object):
+    """FOSSology license histogram entry for an upload."""
+
+    def __init__(
+        self, id=None, name=None, scannerCount=None, concludedCount=None, **kwargs
+    ):
+        self.id = id
+        self.name = name
+        self.scannerCount = scannerCount
+        self.concludedCount = concludedCount
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return (
+            f"License {self.name} ({self.id}): {self.scannerCount} scanned, "
+            f"{self.concludedCount} concluded"
+        )
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 class Job(object):
     """FOSSology job."""
 
