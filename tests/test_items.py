@@ -84,6 +84,39 @@ def test_item_copyrights_500_error(
     )
 
 
+def test_item_user_copyrights(foss: Fossology, upload_with_jobs: Upload):
+    files, _ = foss.search(license="BSD")
+    num_copyrights = foss.item_user_copyrights(
+        upload_with_jobs, files[0].uploadTreeId, CopyrightStatus.ACTIVE
+    )
+    assert num_copyrights == 0
+
+
+def test_item_user_copyrights_with_unknown_item_raises_api_error(
+    foss: Fossology, upload_with_jobs: Upload
+):
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.item_user_copyrights(upload_with_jobs, 1, CopyrightStatus.ACTIVE)
+    assert f"Upload {upload_with_jobs.id} or item 1 not found" in str(excinfo.value)
+
+
+@responses.activate
+def test_item_user_copyrights_500_error(
+    foss: Fossology, foss_server: str, upload_with_jobs: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload_with_jobs.id}/item/1/totalusercopyrights",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.item_user_copyrights(upload_with_jobs, 1, CopyrightStatus.ACTIVE)
+    assert (
+        f"API error while getting total user copyrights for item 1 from upload {upload_with_jobs.uploadname}"
+        in excinfo.value.message
+    )
+
+
 def test_upload_get_clearing_history(foss: Fossology, upload_with_jobs: Upload):
     files, _ = foss.search(license="BSD")
     history = foss.get_clearing_history(upload_with_jobs, files[0].uploadTreeId)

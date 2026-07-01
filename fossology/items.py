@@ -85,6 +85,40 @@ class Items:
             description = f"API error while getting total copyrights for item {item_id} from upload {upload.uploadname}."
             raise FossologyApiError(description, response)
 
+    def item_user_copyrights(
+        self,
+        upload: Upload,
+        item_id: int,
+        status: CopyrightStatus,
+    ) -> int:
+        """Get the total user copyright findings of the mentioned upload tree ID
+
+        API Endpoint: GET /uploads/{id}/item/{itemId}/totalusercopyrights
+
+        :param upload: the upload to get items from
+        :param item_id: the id of the item
+        :param status: the status of the copyrights
+        :type upload: Upload
+        :type item_id: int,
+        :type status: CopyrightStatus
+        :return: the total number of user copyright findings for the uploadtree item
+        :rtype: int
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/item/{item_id}/totalusercopyrights?status={status.value}"  # type: ignore
+        )
+
+        if response.status_code == 200:
+            return response.json()["total_copyrights"]
+
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} or item {item_id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"API error while getting total user copyrights for item {item_id} from upload {upload.uploadname}."
+            raise FossologyApiError(description, response)
+
     def get_clearing_history(
         self,
         upload: Upload,
