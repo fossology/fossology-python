@@ -195,6 +195,28 @@ class LicenseEndpoint:
         description = f"Unable to import licenses from {csv_file}"
         raise FossologyApiError(description, response)
 
+    def export_licenses_csv(self, license_id: int = 0) -> str:
+        """Export licenses as CSV.
+
+        API Endpoint: GET /license/export-csv
+
+        :param license_id: id of the license to export, 0 to export all (default: 0)
+        :type license_id: int
+        :return: the exported licenses as CSV text
+        :rtype: str
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.get(
+            f"{self.api}/license/export-csv", params={"id": license_id}
+        )
+
+        if response.status_code == 200:
+            logger.info(f"Exported licenses as CSV (id={license_id})")
+            return response.text
+
+        description = f"Unable to export licenses as CSV (id={license_id})"
+        raise FossologyApiError(description, response)
+
     def update_license(
         self,
         shortname: str,
