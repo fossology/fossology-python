@@ -86,6 +86,28 @@ def test_import_licenses_csv_request_payload(
     assert "shortname,fullname\nFoo,Foo License" in body
 
 
+def test_export_import_licenses_csv_roundtrip(foss: fossology.Fossology, tmp_path):
+    # Export the full license set, then re-import it. The export format matches
+    # the import format, and re-importing existing licenses is idempotent.
+    exported = foss.export_licenses_csv()
+    assert isinstance(exported, str)
+    assert exported
+    csv_path = tmp_path / "exported.csv"
+    csv_path.write_text(exported)
+    message = foss.import_licenses_csv(str(csv_path))
+    assert "Read csv" in message
+
+
+@responses.activate
+def test_export_licenses_csv_error(foss_server: str, foss: fossology.Fossology):
+    responses.add(
+        responses.GET, f"{foss_server}/api/v1/license/export-csv", status=403
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.export_licenses_csv()
+    assert "Unable to export licenses as CSV (id=0)" in str(excinfo.value)
+
+
 @responses.activate
 def test_detail_license_error(foss_server: str, foss: fossology.Fossology):
     responses.add(responses.GET, f"{foss_server}/api/v1/license/Blah", status=500)
