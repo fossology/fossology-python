@@ -566,6 +566,52 @@ class LicenseHistogram(object):
         return cls(**json_dict)
 
 
+class AgentOfUpload(object):
+    """FOSSology agent that has run on an upload."""
+
+    def __init__(
+        self,
+        uploadId=None,
+        agentName=None,
+        currentAgentId=None,
+        currentAgentRev=None,
+        isAgentRunning=None,
+        successfulAgents=None,
+        **kwargs,
+    ):
+        self.uploadId = uploadId
+        self.agentName = agentName
+        self.currentAgentId = currentAgentId
+        self.currentAgentRev = currentAgentRev
+        self.isAgentRunning = isAgentRunning
+        self.successfulAgents = successfulAgents
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Agent {self.agentName} on upload {self.uploadId}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
+class AgentsRevision(object):
+    """FOSSology successful agent revision for an upload."""
+
+    def __init__(self, id=None, name=None, revision=None, **kwargs):
+        self.id = id
+        self.name = name
+        self.revision = revision
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Agent {self.name} ({self.id}) revision {self.revision}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 class Job(object):
     """FOSSology job."""
 
