@@ -13,8 +13,10 @@ from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attemp
 from fossology.enums import AccessLevel, ClearingStatus
 from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import (
+    ClearingProgress,
     Folder,
     Group,
+    LicenseHistogram,
     Permission,
     Summary,
     Upload,
@@ -359,6 +361,76 @@ class Uploads:
             raise TryAgain
         else:
             description = f"No summary for upload {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
+
+    def clearing_progress(self, upload: Upload) -> ClearingProgress:
+        """Get the clearing progress information for an upload
+
+        API Endpoint: GET /uploads/{id}/clearing-progress
+
+        :param upload: the upload to gather data from
+        :type upload: Upload
+        :return: the clearing progress of the upload
+        :rtype: ClearingProgress
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/clearing-progress"  # type: ignore
+        )
+
+        if response.status_code == 200:
+            return ClearingProgress.from_json(response.json())
+
+        elif response.status_code == 403:
+            description = (
+                f"Getting clearing progress for upload {upload.id} is not authorized"
+            )
+            raise AuthorizationError(description, response)
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"Unable to get clearing progress for upload {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
+
+    def license_histogram(
+        self, upload: Upload, agent_id: int | None = None
+    ) -> list[LicenseHistogram]:
+        """Get the licenses histogram for an upload
+
+        API Endpoint: GET /uploads/{id}/licenses/histogram
+
+        :param upload: the upload to gather data from
+        :param agent_id: limit the histogram to a specific agent (default: None)
+        :type upload: Upload
+        :type agent_id: int | None
+        :return: the license histogram of the upload
+        :rtype: list[LicenseHistogram]
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        params = {}
+        if agent_id is not None:
+            params["agentId"] = agent_id
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/licenses/histogram",  # type: ignore
+            params=params,  # type: ignore
+        )
+
+        if response.status_code == 200:
+            return [LicenseHistogram.from_json(item) for item in response.json()]
+
+        elif response.status_code == 403:
+            description = (
+                f"Getting license histogram for upload {upload.id} is not authorized"
+            )
+            raise AuthorizationError(description, response)
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"Unable to get license histogram for upload {upload.uploadname} (id={upload.id})"
             raise FossologyApiError(description, response)
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
