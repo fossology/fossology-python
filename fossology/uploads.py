@@ -817,3 +817,72 @@ class Uploads:
                 f"API error while getting permissions for upload {upload.uploadname}."
             )
             raise FossologyApiError(description, response)
+
+    def _run_oneshot(self, scanner: str, file: str) -> dict:
+        """Run a one-shot scan on a single file without storing the results.
+
+        :param scanner: the scanner to run ("nomos", "monk" or "ceu")
+        :param file: local path to the file to scan
+        :type scanner: str
+        :type file: str
+        :return: the scanner result (``data`` findings and ``highlights``)
+        :rtype: dict
+        :raises FossologyApiError: if the REST call failed
+        """
+        with open(file, "rb") as fp:
+            response = self.session.post(  # type: ignore
+                f"{self.api}/uploads/oneshot/{scanner}",  # type: ignore
+                files={"fileInput": fp},
+            )
+
+        if response.status_code == 200:
+            logger.info(f"One-shot {scanner} scan completed for {file}")
+            return response.json()
+
+        description = f"One-shot {scanner} scan failed for {file}"
+        raise FossologyApiError(description, response)
+
+    def upload_oneshot_nomos(self, file: str) -> dict:
+        """Run a one-shot nomos (license) scan on a single file.
+
+        The file is scanned without creating a persistent upload.
+
+        API Endpoint: POST /uploads/oneshot/nomos
+
+        :param file: local path to the file to scan
+        :type file: str
+        :return: the scanner result (``data`` findings and ``highlights``)
+        :rtype: dict
+        :raises FossologyApiError: if the REST call failed
+        """
+        return self._run_oneshot("nomos", file)
+
+    def upload_oneshot_monk(self, file: str) -> dict:
+        """Run a one-shot monk (license) scan on a single file.
+
+        The file is scanned without creating a persistent upload.
+
+        API Endpoint: POST /uploads/oneshot/monk
+
+        :param file: local path to the file to scan
+        :type file: str
+        :return: the scanner result (``data`` findings and ``highlights``)
+        :rtype: dict
+        :raises FossologyApiError: if the REST call failed
+        """
+        return self._run_oneshot("monk", file)
+
+    def upload_oneshot_ceu(self, file: str) -> dict:
+        """Run a one-shot copyright/email/URL scan on a single file.
+
+        The file is scanned without creating a persistent upload.
+
+        API Endpoint: POST /uploads/oneshot/ceu
+
+        :param file: local path to the file to scan
+        :type file: str
+        :return: the scanner result (``data`` findings and ``highlights``)
+        :rtype: dict
+        :raises FossologyApiError: if the REST call failed
+        """
+        return self._run_oneshot("ceu", file)

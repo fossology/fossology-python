@@ -420,3 +420,57 @@ def test_download_upload_error(foss_server: str, foss: Fossology, upload: Upload
     with pytest.raises(FossologyApiError) as excinfo:
         foss.download_upload(upload)
     assert f"Unable to download upload {upload.id}" in str(excinfo.value)
+
+
+def test_upload_oneshot_nomos(foss: Fossology, tmp_path):
+    scan_file = tmp_path / "mit.txt"
+    scan_file.write_text("SPDX-License-Identifier: MIT\n")
+    result = foss.upload_oneshot_nomos(str(scan_file))
+    assert isinstance(result, dict)
+
+
+def test_upload_oneshot_monk(foss: Fossology, tmp_path):
+    scan_file = tmp_path / "mit.txt"
+    scan_file.write_text("SPDX-License-Identifier: MIT\n")
+    result = foss.upload_oneshot_monk(str(scan_file))
+    assert isinstance(result, dict)
+
+
+def test_upload_oneshot_ceu(foss: Fossology, tmp_path):
+    scan_file = tmp_path / "code.txt"
+    scan_file.write_text("Copyright (c) 2024 Example Inc. https://example.com\n")
+    result = foss.upload_oneshot_ceu(str(scan_file))
+    assert isinstance(result, dict)
+
+
+@responses.activate
+def test_upload_oneshot_request_payload(
+    foss: Fossology, foss_server: str, tmp_path
+):
+    responses.add(
+        responses.POST,
+        f"{foss_server}/api/v1/uploads/oneshot/nomos",
+        status=200,
+        json={"data": ["MIT"], "highlights": []},
+    )
+    scan_file = tmp_path / "mit.txt"
+    scan_file.write_text("SPDX-License-Identifier: MIT\n")
+    result = foss.upload_oneshot_nomos(str(scan_file))
+    assert result["data"] == ["MIT"]
+    assert len(responses.calls) == 1
+    body = responses.calls[0].request.body.decode("utf-8", errors="ignore")
+    assert 'name="fileInput"' in body
+
+
+@responses.activate
+def test_upload_oneshot_error(foss: Fossology, foss_server: str, tmp_path):
+    responses.add(
+        responses.POST,
+        f"{foss_server}/api/v1/uploads/oneshot/monk",
+        status=500,
+    )
+    scan_file = tmp_path / "mit.txt"
+    scan_file.write_text("some text\n")
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.upload_oneshot_monk(str(scan_file))
+    assert f"One-shot monk scan failed for {scan_file}" in str(excinfo.value)
