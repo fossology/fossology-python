@@ -13,6 +13,8 @@ from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attemp
 from fossology.enums import AccessLevel, ClearingStatus
 from fossology.exceptions import AuthorizationError, FossologyApiError
 from fossology.obj import (
+    AgentOfUpload,
+    AgentsRevision,
     ClearingProgress,
     Folder,
     Group,
@@ -431,6 +433,66 @@ class Uploads:
             raise FossologyApiError(description, response)
         else:
             description = f"Unable to get license histogram for upload {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
+
+    def upload_agents(self, upload: Upload) -> list[AgentOfUpload]:
+        """Get the agents that have run on an upload
+
+        API Endpoint: GET /uploads/{id}/agents
+
+        :param upload: the upload to gather data from
+        :type upload: Upload
+        :return: the list of agents for the upload
+        :rtype: list[AgentOfUpload]
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/agents"  # type: ignore
+        )
+
+        if response.status_code == 200:
+            return [AgentOfUpload.from_json(agent) for agent in response.json()]
+
+        elif response.status_code == 403:
+            description = f"Getting agents for upload {upload.id} is not authorized"
+            raise AuthorizationError(description, response)
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"Unable to get agents for upload {upload.uploadname} (id={upload.id})"
+            raise FossologyApiError(description, response)
+
+    def upload_agents_revision(self, upload: Upload) -> list[AgentsRevision]:
+        """Get the revisions of the successful agents for an upload
+
+        API Endpoint: GET /uploads/{id}/agents/revision
+
+        :param upload: the upload to gather data from
+        :type upload: Upload
+        :return: the list of successful agents with their revision
+        :rtype: list[AgentsRevision]
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        response = self.session.get(  # type: ignore
+            f"{self.api}/uploads/{upload.id}/agents/revision"  # type: ignore
+        )
+
+        if response.status_code == 200:
+            return [AgentsRevision.from_json(agent) for agent in response.json()]
+
+        elif response.status_code == 403:
+            description = (
+                f"Getting agent revisions for upload {upload.id} is not authorized"
+            )
+            raise AuthorizationError(description, response)
+        elif response.status_code == 404:
+            description = f"Upload {upload.id} not found"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"Unable to get agent revisions for upload {upload.uploadname} (id={upload.id})"
             raise FossologyApiError(description, response)
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))

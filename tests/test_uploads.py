@@ -427,6 +427,114 @@ def test_license_histogram_500_error(
         foss.license_histogram(upload)
 
 
+def test_upload_agents(foss: Fossology, upload_with_jobs: Upload):
+    agents = foss.upload_agents(upload_with_jobs)
+    assert isinstance(agents, list)
+
+
+@responses.activate
+def test_upload_agents_payload(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/agents",
+        status=200,
+        json=[
+            {
+                "uploadId": upload.id,
+                "agentName": "nomos",
+                "currentAgentId": 20,
+                "currentAgentRev": "4.1.0",
+                "isAgentRunning": False,
+                "successfulAgents": [
+                    {"agent_id": 20, "agent_rev": "4.1.0", "agent_name": "nomos"}
+                ],
+            }
+        ],
+    )
+    agents = foss.upload_agents(upload)
+    assert len(agents) == 1
+    assert agents[0].agentName == "nomos"
+    assert agents[0].uploadId == upload.id
+    assert str(agents[0]) == f"Agent nomos on upload {upload.id}"
+
+
+@responses.activate
+def test_upload_agents_unauthorized(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/agents",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.upload_agents(upload)
+    assert f"Getting agents for upload {upload.id} is not authorized" in str(
+        excinfo.value
+    )
+
+
+@responses.activate
+def test_upload_agents_500_error(foss: Fossology, foss_server: str, upload: Upload):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/agents",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.upload_agents(upload)
+
+
+def test_upload_agents_revision(foss: Fossology, upload_with_jobs: Upload):
+    revisions = foss.upload_agents_revision(upload_with_jobs)
+    assert isinstance(revisions, list)
+
+
+@responses.activate
+def test_upload_agents_revision_payload(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/agents/revision",
+        status=200,
+        json=[{"id": 68, "name": "monk", "revision": "4.1.0.283-rc1"}],
+    )
+    revisions = foss.upload_agents_revision(upload)
+    assert len(revisions) == 1
+    assert revisions[0].name == "monk"
+    assert revisions[0].revision == "4.1.0.283-rc1"
+    assert str(revisions[0]) == "Agent monk (68) revision 4.1.0.283-rc1"
+
+
+@responses.activate
+def test_upload_agents_revision_unauthorized(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/agents/revision",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.upload_agents_revision(upload)
+    assert f"Getting agent revisions for upload {upload.id} is not authorized" in str(
+        excinfo.value
+    )
+
+
+@responses.activate
+def test_upload_agents_revision_500_error(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/agents/revision",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError):
+        foss.upload_agents_revision(upload)
+
 def test_delete_if_unknown_upload_raises_error(foss: Fossology, fake_hash: dict):
     upload = Upload(
         foss.rootFolder,
