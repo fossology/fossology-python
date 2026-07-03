@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v3.10.0 (2026-07-03)
+
+### Features
+
+- **uploads**: Wrap agents and agents/revision endpoints
+  ([`7bd4a59`](https://github.com/fossology/fossology-python/commit/7bd4a59ba84472afa2b09875f9a85e33d69483f2))
+
+
 ## v3.9.0 (2026-07-03)
 
 ### Features
