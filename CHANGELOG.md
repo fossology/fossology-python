@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v3.9.0 (2026-07-03)
+
+### Features
+
+- **uploads**: Wrap clearing-progress and licenses/histogram endpoints
+  ([`99ee57d`](https://github.com/fossology/fossology-python/commit/99ee57df4deb69e7e1a50b5eeaacce049b0ce4cb))
+
+
 ## v3.8.0 (2026-06-25)
 
 ### Features
