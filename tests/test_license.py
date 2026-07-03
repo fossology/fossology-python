@@ -1,6 +1,8 @@
 # Copyright 2019 Siemens AG
 # SPDX-License-Identifier: MIT
 
+import csv
+import io
 from unittest.mock import MagicMock
 
 import pytest
@@ -106,6 +108,29 @@ def test_export_licenses_csv_error(foss_server: str, foss: fossology.Fossology):
     with pytest.raises(FossologyApiError) as excinfo:
         foss.export_licenses_csv()
     assert "Unable to export licenses as CSV (id=0)" in str(excinfo.value)
+
+
+def test_export_single_license_by_id(foss: fossology.Fossology):
+    # Export a single license using the "id" parameter and verify the CSV
+    # contains exactly that one license (header row + one data row).
+    licenses, _ = foss.list_licenses()
+    target = licenses[0]
+    exported = foss.export_licenses_csv(target.id)
+    rows = list(csv.reader(io.StringIO(exported)))
+    assert len(rows) == 2
+    assert target.shortName in exported
+
+
+def test_export_all_licenses_returns_more_than_one(foss: fossology.Fossology):
+    # Exporting without an id returns every license, i.e. strictly more than
+    # the single-license export above.
+    licenses, _ = foss.list_licenses()
+    single_rows = list(
+        csv.reader(io.StringIO(foss.export_licenses_csv(licenses[0].id)))
+    )
+    all_rows = list(csv.reader(io.StringIO(foss.export_licenses_csv())))
+    assert len(single_rows) - 1 == 1
+    assert len(all_rows) - 1 > 1
 
 
 @responses.activate
