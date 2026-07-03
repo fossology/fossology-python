@@ -508,6 +508,22 @@ def test_upload_agents_revision_payload(
 
 
 @responses.activate
+def test_upload_agents_revision_unauthorized(
+    foss: Fossology, foss_server: str, upload: Upload
+):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/uploads/{upload.id}/agents/revision",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.upload_agents_revision(upload)
+    assert f"Getting agent revisions for upload {upload.id} is not authorized" in str(
+        excinfo.value
+    )
+
+
+@responses.activate
 def test_upload_agents_revision_500_error(
     foss: Fossology, foss_server: str, upload: Upload
 ):
@@ -518,7 +534,6 @@ def test_upload_agents_revision_500_error(
     )
     with pytest.raises(FossologyApiError):
         foss.upload_agents_revision(upload)
-
 
 def test_delete_if_unknown_upload_raises_error(foss: Fossology, fake_hash: dict):
     upload = Upload(
