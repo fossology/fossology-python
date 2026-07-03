@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Fossology objects &#8212; fossology 3.8.0 documentation</title>
+    <title>Fossology objects &#8212; fossology 3.9.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
     <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=f6a572b4" />
-    <script src="_static/documentation_options.js?v=948f11bf"></script>
+    <script src="_static/documentation_options.js?v=e55a5be6"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -65,7 +65,9 @@
 <li class="toctree-l1"><a class="reference internal" href="report.html">Fossology Report</a></li>
 <li class="toctree-l1"><a class="reference internal" href="users.html">Fossology Users</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Fossology objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.obj.AgentOfUpload"><code class="docutils literal notranslate"><span class="pre">AgentOfUpload</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.Agents"><code class="docutils literal notranslate"><span class="pre">Agents</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fossology.obj.AgentsRevision"><code class="docutils literal notranslate"><span class="pre">AgentsRevision</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.ApiInfo"><code class="docutils literal notranslate"><span class="pre">ApiInfo</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.ApiLicense"><code class="docutils literal notranslate"><span class="pre">ApiLicense</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#fossology.obj.ClearingProgress"><code class="docutils literal notranslate"><span class="pre">ClearingProgress</span></code></a></li>
@@ -144,6 +146,12 @@
 <h1>Fossology objects<a class="headerlink" href="#fossology-objects" title="Link to this heading">¶</a></h1>
 <p>The Python objects derived from the REST data.</p>
 <dl class="py class" id="module-fossology.obj">
+<dt class="sig sig-object py" id="fossology.obj.AgentOfUpload">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">AgentOfUpload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uploadId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agentName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currentAgentId</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currentAgentRev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isAgentRunning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">successfulAgents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.AgentOfUpload" title="Link to this definition">¶</a></dt>
+<dd><p>FOSSology agent that has run on an upload.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="fossology.obj.Agents">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">Agents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bucket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copyright_email_author</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mimetype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nomos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ojo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.Agents" title="Link to this definition">¶</a></dt>
 <dd><p>FOSSology agents.</p>
@@ -164,6 +172,12 @@
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fossology.obj.AgentsRevision">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fossology.obj.</span></span><span class="sig-name descname"><span class="pre">AgentsRevision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">revision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fossology.obj.AgentsRevision" title="Link to this definition">¶</a></dt>
+<dd><p>FOSSology successful agent revision for an upload.</p>
 </dd></dl>
 
 <dl class="py class">
