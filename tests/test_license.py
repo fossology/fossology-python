@@ -1,6 +1,8 @@
 # Copyright 2019 Siemens AG
 # SPDX-License-Identifier: MIT
 
+import csv
+import io
 from unittest.mock import MagicMock
 
 import pytest
@@ -84,6 +86,51 @@ def test_import_licenses_csv_request_payload(
     assert 'name="delimiter"' in body and "\r\n\r\n;\r\n" in body
     assert 'name="enclosure"' in body and "\r\n\r\n'\r\n" in body
     assert "shortname,fullname\nFoo,Foo License" in body
+
+
+def test_export_import_licenses_csv_roundtrip(foss: fossology.Fossology, tmp_path):
+    # Export the full license set, then re-import it. The export format matches
+    # the import format, and re-importing existing licenses is idempotent.
+    exported = foss.export_licenses_csv()
+    assert isinstance(exported, str)
+    assert exported
+    csv_path = tmp_path / "exported.csv"
+    csv_path.write_text(exported)
+    message = foss.import_licenses_csv(str(csv_path))
+    assert "Read csv" in message
+
+
+@responses.activate
+def test_export_licenses_csv_error(foss_server: str, foss: fossology.Fossology):
+    responses.add(
+        responses.GET, f"{foss_server}/api/v1/license/export-csv", status=403
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.export_licenses_csv()
+    assert "Unable to export licenses as CSV (id=0)" in str(excinfo.value)
+
+
+def test_export_single_license_by_id(foss: fossology.Fossology):
+    # Export a single license using the "id" parameter and verify the CSV
+    # contains exactly that one license (header row + one data row).
+    licenses, _ = foss.list_licenses()
+    target = licenses[0]
+    exported = foss.export_licenses_csv(target.id)
+    rows = list(csv.reader(io.StringIO(exported)))
+    assert len(rows) == 2
+    assert target.shortName in exported
+
+
+def test_export_all_licenses_returns_more_than_one(foss: fossology.Fossology):
+    # Exporting without an id returns every license, i.e. strictly more than
+    # the single-license export above.
+    licenses, _ = foss.list_licenses()
+    single_rows = list(
+        csv.reader(io.StringIO(foss.export_licenses_csv(licenses[0].id)))
+    )
+    all_rows = list(csv.reader(io.StringIO(foss.export_licenses_csv())))
+    assert len(single_rows) - 1 == 1
+    assert len(all_rows) - 1 > 1
 
 
 @responses.activate
