@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v3.11.0 (2026-07-06)
+
+### Features
+
+- **license**: Wrap GET /license/export-csv endpoint
+  ([`5bccfec`](https://github.com/fossology/fossology-python/commit/5bccfec88421a62c6ec7fa55cff33b107dd20abd))
+
+### Testing
+
+- **license**: Cover single-license export via the id parameter
+  ([`a213d69`](https://github.com/fossology/fossology-python/commit/a213d69776b77a298a138492f17c0a3af9add3ff))
+
+
 ## v3.10.0 (2026-07-03)
 
 ### Features
