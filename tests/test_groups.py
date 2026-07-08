@@ -84,6 +84,35 @@ def test_delete_group_error(foss_server: str, foss: fossology.Fossology):
     assert f"Group {group_id} could not be deleted" in str(excinfo.value)
 
 
+@responses.activate
+def test_create_group_error(foss_server: str, foss: fossology.Fossology):
+    name = secrets.token_urlsafe(8)
+    responses.add(responses.POST, f"{foss_server}/api/v1/groups", status=500)
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.create_group(name)
+    assert (
+        f"Group {name} already exists, failed to create group or no group name provided"
+        in str(excinfo.value)
+    )
+
+
+@responses.activate
+def test_add_group_member_error(foss_server: str, foss: fossology.Fossology):
+    group_id = secrets.randbelow(10)
+    user_id = secrets.randbelow(10)
+    responses.add(
+        responses.POST,
+        f"{foss_server}/api/v1/groups/{group_id}/user/{user_id}",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.add_group_member(group_id, user_id, MemberPerm.USER)
+    assert (
+        f"An error occurred while adding user {user_id} to group {group_id}"
+        in str(excinfo.value)
+    )
+
+
 def test_create_group(foss: fossology.Fossology):
     name = secrets.token_urlsafe(8)
     foss.create_group(name)
