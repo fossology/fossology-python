@@ -549,6 +549,30 @@ def test_delete_if_unknown_upload_raises_error(foss: Fossology, fake_hash: dict)
         foss.delete_upload(upload)
 
 
+@responses.activate
+def test_delete_upload_unauthorized(foss_server: str, foss: Fossology, upload: Upload):
+    responses.add(
+        responses.DELETE,
+        f"{foss_server}/api/v1/uploads/{upload.id}",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.delete_upload(upload)
+    assert f"Not authorized to delete upload {upload.id}" in str(excinfo.value)
+
+
+@responses.activate
+def test_delete_upload_error(foss_server: str, foss: Fossology, upload: Upload):
+    responses.add(
+        responses.DELETE,
+        f"{foss_server}/api/v1/uploads/{upload.id}",
+        status=500,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.delete_upload(upload)
+    assert f"Unable to delete upload {upload.id}" in str(excinfo.value)
+
+
 def test_paginated_list_uploads(foss: Fossology, upload: Upload, test_file_path: str):
     # Add a second upload
     second_upload = foss.upload_file(
