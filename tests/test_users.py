@@ -172,3 +172,26 @@ def test_delete_user(foss_server: str, foss: Fossology):
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_user(user)
     assert f"Error while deleting user {user.name} ({user.id})" in str(excinfo.value)
+
+
+@responses.activate
+def test_create_user_error(foss_server: str, foss: Fossology):
+    user_spec = {"name": "Test User"}
+    responses.add(responses.POST, f"{foss_server}/api/v1/users", status=500)
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.create_user(user_spec)
+    assert f"Error while creating user {user_spec['name']}" in str(excinfo.value)
+
+
+@responses.activate
+def test_create_user_already_exists(
+    foss_server: str, foss: Fossology, monkeypatch: pytest.MonkeyPatch
+):
+    mocked_logger = Mock()
+    monkeypatch.setattr("fossology.users.logger", mocked_logger)
+    user_spec = {"name": "Existing User"}
+    responses.add(responses.POST, f"{foss_server}/api/v1/users", status=409)
+    foss.create_user(user_spec)
+    mocked_logger.info.assert_called_once_with(
+        f"User {user_spec['name']} already exists."
+    )
