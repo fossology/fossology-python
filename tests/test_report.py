@@ -246,3 +246,23 @@ def test_download_report_filename_with_single_quotes(foss_server: str, foss: Fos
     )
     _, report_name = foss.download_report(report_id)
     assert report_name == "Report_FileName.docx"
+
+
+@responses.activate
+def test_download_report_filename_with_extended_parameter(
+    foss_server: str, foss: Fossology
+):
+    report_id = "1"
+    filename = "CLIXML_cifs-utils_2%3A6.14-1ubuntu0.3-ubuntu-combined.tar.bz2.xml"
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/report/{report_id}",
+        status=200,
+        headers={
+            "Content-Disposition": (
+                f"attachment; filename={filename}; filename*=UTF-8''{filename}"
+            )
+        },
+    )
+    _, report_name = foss.download_report(report_id)
+    assert report_name == filename

@@ -205,7 +205,7 @@ class Report:
 
         if response.status_code == 200:
             content = response.headers["Content-Disposition"]
-            report_name_pattern = "(^attachment; filename=)(\"|')?([^\"|']*)(\"|'$)?"
+            report_name_pattern = "(^attachment; filename=)(\"|')?([^\"|';]*)(\"|'$)?"
             report_name = re.match(report_name_pattern, content).group(3)  # type: ignore
             return response.content, report_name
 
