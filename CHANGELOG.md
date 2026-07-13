@@ -2,6 +2,25 @@
 
 <!-- version list -->
 
+## v3.11.1 (2026-07-13)
+
+### Bug Fixes
+
+- **report**: Stop filename parsing from swallowing filename* parameter
+  ([`add9f11`](https://github.com/fossology/fossology-python/commit/add9f110b4794aa17a90f98b7bf9aeec2ceaf145))
+
+### Testing
+
+- **groups**: Add mocked error-path tests for create_group and add_group_member
+  ([`1ff6d8d`](https://github.com/fossology/fossology-python/commit/1ff6d8d35ee7d6d3dc9e168990994313a7763da0))
+
+- **uploads**: Add mocked error-path tests for delete_upload
+  ([`f45612a`](https://github.com/fossology/fossology-python/commit/f45612a730fdcd13defc459860eb6038f994f3b6))
+
+- **users**: Add mocked error-path tests for create_user
+  ([`98665fb`](https://github.com/fossology/fossology-python/commit/98665fbac92c5e6a35b0f8226b8bc1c1be95db66))
+
+
 ## v3.11.0 (2026-07-06)
 
 ### Features
