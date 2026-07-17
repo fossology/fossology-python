@@ -1,13 +1,11 @@
-[tool.poetry]
+[project]
 name = "fossology"
 version = "3.11.1"
 description = "A library to automate Fossology from Python scripts"
-authors = ["Marion Deveaud <marion.deveaud@siemens.com>"]
-license = "MIT License"
+authors = [{name = "Marion Deveaud", email = "marion.deveaud@siemens.com"}]
+license = {text = "MIT License"}
 readme = "README.rst"
-include = ["LICENSE.md"]
-repository = "https://github.com/fossology/fossology-python"
-homepage = "https://github.com/fossology/fossology-python"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Web Environment",
@@ -17,6 +15,34 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3 :: Only",
 ]
+dependencies = [
+    "requests>=2.32.3",
+    "tenacity>=9.1.2",
+    "click>=8.2.1",
+    "poethepoet>=0.21.1",
+    "types-requests>=2.32.0.2",
+    "requests-toolbelt>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "sphinx>=8.1.3",
+    "coverage>=6.5.0",
+    "codecov>=2.1.13",
+    "pytest>=7.4,<10.0",
+    "responses>=0.23.3",
+    "sphinx-autobuild>=2021.3.14",
+    "rstcheck>=6.1.2",
+    "mypy>=1.14.1",
+    "ruff>=0.3.7",
+]
+
+[project.urls]
+repository = "https://github.com/fossology/fossology-python"
+homepage = "https://github.com/fossology/fossology-python"
+
+[project.scripts]
+foss_cli = "fossology.foss_cli:main"
 
 [tool.mypy]
 exclude = ["tests/"]
@@ -26,52 +52,34 @@ addopts = "--doctest-glob='*.rst' --doctest-modules"
 
 [tool.semantic_release]
 build = true
-build_command = "pip install poetry && poetry build"
+build_command = "pip install build && python -m build"
 version_source = "tag"
 version_toml = [
-    "pyproject.toml:tool.poetry.version",
+    "pyproject.toml:project.version",
 ]
 version_variables = [
     "docs-source/conf.py:release",
 ]
-
-[tool.poetry.dependencies]
-python = "^3.10"
-requests = "^2.32.3"
-tenacity = "^9.1.2"
-click = "^8.2.1"
-poethepoet = "^0.21.1"
-types-requests = "^2.32.0.2"
-requests-toolbelt = "^1.0.0"
-
-[tool.poetry.group.dev.dependencies]
-sphinx = "^8.1.3"
-coverage = "^6.5.0"
-codecov = "^2.1.13"
-pytest = ">=7.4,<10.0"
-responses = "^0.23.3"
-sphinx-autobuild = "^2021.3.14"
-rstcheck = "^6.1.2"
-mypy = "^1.14.1"
-ruff = "^0.3.7"
 
 [tool.poe.tasks]
 types = { cmd = "mypy ." }
 lint = { cmd = "ruff check" }
 format = { cmd = "ruff format" }
 
-[tool.poetry.scripts]
-foss_cli = "fossology.foss_cli:main"
-
-
-
-
-
-
-
-
-
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
+
+[tool.uv]
+dev-dependencies = [
+    "sphinx>=8.1.3",
+    "coverage>=6.5.0",
+    "codecov>=2.1.13",
+    "pytest>=7.4,<10.0",
+    "responses>=0.23.3",
+    "sphinx-autobuild>=2021.3.14",
+    "rstcheck>=6.1.2",
+    "mypy>=1.14.1",
+    "ruff>=0.3.7",
+]

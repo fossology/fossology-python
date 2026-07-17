@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.11-slim
+      image: python:3.12-slim
       volumes:
         - /tmp:/tmp
 
     services:
       fossology:
-        image: fossology/fossology:4.4.0
+        image: fossology/fossology:4.7.1
         ports:
           - 8081:80
         volumes:
@@ -32,8 +32,8 @@ jobs:
           rm -rf /var/lib/apt/lists/*
       - name: Install Python dependencies
         run: |
-          pip install poetry
-          poetry install --with=dev
+          pip install uv
+          uv sync --all-extras
       - name: Install files in shared volume
         run: |
           tar xvf tests/files/base-files_10.3-debian10-test.tar.bz2 -C /tmp
@@ -54,8 +54,8 @@ jobs:
           done
       - name: Run tests
         run: |
-          poetry run coverage run --source=fossology -m pytest --ignore-glob="tests/test_foss_cli*.py"
-          poetry run coverage report -m
+          uv run coverage run --source=fossology -m pytest --ignore-glob="tests/test_foss_cli*.py"
+          uv run coverage report -m
       - name: upload codecoverage results only if the PR originates from the upstream repository
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-        run: poetry run codecov -t ${{ secrets.CODECOV_TOKEN }}
+        run: uv run codecov -t ${{ secrets.CODECOV_TOKEN }}

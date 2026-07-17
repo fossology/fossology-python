@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: python:3.11-slim
+      image: python:3.12-slim
       volumes:
         - /tmp:/tmp
 
@@ -32,8 +32,8 @@ jobs:
           rm -rf /var/lib/apt/lists/*
       - name: Install Python dependencies
         run: |
-          pip install poetry
-          poetry install  --with=dev
+          pip install uv
+          uv sync --all-extras
       - name: Install files in shared volume
         run: |
           tar xvf tests/files/base-files_10.3-debian10-test.tar.bz2 -C /tmp
@@ -41,6 +41,6 @@ jobs:
         run: nmap fossology -p 80
       - name: Run tests
         run: |
-          poetry run coverage run --source=fossology -m pytest tests/test_foss_cli*.py
-          poetry run coverage report -m
+          uv run coverage run --source=fossology -m pytest tests/test_foss_cli*.py
+          uv run coverage report -m
         continue-on-error: true

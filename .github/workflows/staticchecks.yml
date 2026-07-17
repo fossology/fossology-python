@@ -11,7 +11,6 @@ jobs:
     strategy:
       matrix:
         container:
-        - 'python:3.11-slim'
         - 'python:3.12-slim'
 
     container: ${{ matrix.container }}
@@ -26,9 +25,9 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install poetry
-          poetry install --with=dev
+          pip install uv
+          uv sync --all-extras
       - name: Lint using ruff
-        run: poetry run ruff check
+        run: uv run ruff check
       - name: Check types with mypy
-        run: poetry run poe types
+        run: uv run poe types
