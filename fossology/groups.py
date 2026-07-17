@@ -1,12 +1,17 @@
-# mypy: disable-error-code="attr-defined"
 # Copyright 2019 Siemens AG
 # SPDX-License-Identifier: MIT
 
 import logging
+from typing import TYPE_CHECKING
 
 from fossology.enums import MemberPerm
 from fossology.exceptions import FossologyApiError
 from fossology.obj import Group, UserGroupMember
+
+if TYPE_CHECKING:
+    import requests
+
+    from fossology.obj import User
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -14,6 +19,10 @@ logger.setLevel(logging.DEBUG)
 
 class Groups:
     """Class dedicated to all "groups" related endpoints"""
+
+    api: str
+    session: "requests.Session"
+    user: "User"
 
     def list_groups(self, deletable: bool = False) -> list[Group]:
 
@@ -119,7 +128,7 @@ class Groups:
         response = self.session.post(
             f"{self.api}/groups/{group_id}/user/{user_id}", json=data
         )
-        if response.status_code == 200:
+        if response.status_code == 201:
             logger.info(f"User {user_id} has been added to group {group_id}.")
         elif response.status_code == 400:
             logger.info(f"User {user_id} is already a member of group {group_id}.")
@@ -179,7 +188,7 @@ class Groups:
         :raises FossologyApiError: if the REST call failed
         """
         response = self.session.delete(f"{self.api}/groups/{group_id}/user/{user_id}")
-        if response.status_code == 200:
+        if response.status_code == 202:
             logger.info(f"User {user_id} will be removed from group {group_id}.")
         elif response.status_code == 400:
             description = f"Validation error while removing member {user_id} from group {group_id}."

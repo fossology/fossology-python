@@ -56,7 +56,7 @@ def test_item_copyrights(foss: Fossology, upload_with_jobs: Upload):
     num_copyrights = foss.item_copyrights(
         upload_with_jobs, files[0].uploadTreeId, CopyrightStatus.ACTIVE
     )
-    assert num_copyrights == 0
+    assert num_copyrights == "0"
 
 
 def test_item_copyrights_with_unknown_item_raises_api_error(

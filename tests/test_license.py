@@ -97,7 +97,7 @@ def test_export_import_licenses_csv_roundtrip(foss: fossology.Fossology, tmp_pat
     csv_path = tmp_path / "exported.csv"
     csv_path.write_text(exported)
     message = foss.import_licenses_csv(str(csv_path))
-    assert "Read csv" in message
+    assert "already exists in DB" in message
 
 
 @responses.activate
@@ -115,6 +115,7 @@ def test_export_single_license_by_id(foss: fossology.Fossology):
     # contains exactly that one license (header row + one data row).
     licenses, _ = foss.list_licenses()
     target = licenses[0]
+    assert target.id is not None
     exported = foss.export_licenses_csv(target.id)
     rows = list(csv.reader(io.StringIO(exported)))
     assert len(rows) == 2
@@ -125,8 +126,10 @@ def test_export_all_licenses_returns_more_than_one(foss: fossology.Fossology):
     # Exporting without an id returns every license, i.e. strictly more than
     # the single-license export above.
     licenses, _ = foss.list_licenses()
+    target = licenses[0]
+    assert target.id is not None
     single_rows = list(
-        csv.reader(io.StringIO(foss.export_licenses_csv(licenses[0].id)))
+        csv.reader(io.StringIO(foss.export_licenses_csv(target.id)))
     )
     all_rows = list(csv.reader(io.StringIO(foss.export_licenses_csv())))
     assert len(single_rows) - 1 == 1

@@ -8,9 +8,11 @@ from json.decoder import JSONDecodeError
 from typing import Tuple
 from urllib.parse import quote
 
+import requests
+
 from fossology.enums import LicenseType
 from fossology.exceptions import FossologyApiError
-from fossology.obj import License, Obligation
+from fossology.obj import License
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -29,6 +31,10 @@ def check_empty_response(response) -> bool:
 
 class LicenseEndpoint:
     """Class dedicated to all "license" related endpoints"""
+
+    api: str
+    session: "requests.Session"
+    
 
     def list_licenses(
         self,
@@ -57,7 +63,7 @@ class LicenseEndpoint:
         :raises FossologyApiError: if the REST call failed
         """
         license_list = list()
-        headers = {"limit": str(page_size)}
+        headers: dict[str, str] = {"limit": str(page_size)}
         if active:
             headers["active"] = json.dumps(True)
         if all_pages:
@@ -92,7 +98,7 @@ class LicenseEndpoint:
 
     def detail_license(
         self, shortname: str, group: int | None = None
-    ) -> Tuple[int, License, list[Obligation]]:
+    ) -> License:
         """Get a license from the DB
 
         API Endpoint: GET /license/{shortname}
@@ -101,13 +107,13 @@ class LicenseEndpoint:
         :param group: the group this license belongs to (default: None)
         :type name: str
         :type group: int
-        :return: the license id, the license data and the associated obligations
-        :rtype: tuple(int, License, list[Obligation])
+        :return: the license data
+        :rtype: License
         :raises FossologyApiError: if the REST call failed
         """
-        headers = dict()
+        headers: dict[str, str] = {}
         if group:
-            headers["groupName"] = group
+            headers["groupName"] = str(group)
         response = self.session.get(
             f"{self.api}/license/{quote(shortname)}", headers=headers
         )
@@ -212,7 +218,9 @@ class LicenseEndpoint:
 
         if response.status_code == 200:
             logger.info(f"Exported licenses as CSV (id={license_id})")
-            return response.text
+            # Use utf-8-sig encoding to automatically strip UTF-8 BOM if present
+            csv_text = response.content.decode('utf-8-sig')
+            return csv_text
 
         description = f"Unable to export licenses as CSV (id={license_id})"
         raise FossologyApiError(description, response)

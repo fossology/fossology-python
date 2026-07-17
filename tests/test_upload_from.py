@@ -12,7 +12,7 @@ from fossology.obj import Upload
 def delete_upload(foss: Fossology, upload: Upload):
     foss.delete_upload(upload)
     try:
-        foss.detail_upload(upload, wait_time=2)
+        foss.detail_upload(upload.id, wait_time=2)
     except FossologyApiError:
         # Upload has been deleted
         pass
@@ -34,18 +34,21 @@ def test_upload_from_vcs(foss: Fossology):
         ignore_scm=False,
         wait_time=5,
     )
-    assert vcs_upload.uploadname == vcs["vcsName"]
-    # FIXME option ignore_scm does not work currently
-    # search_result = foss.search(
-    #     searchType=SearchTypes.DIRECTORY,
-    #     filename=".git",
-    # )
-    # assert not search_result
-    # Cleanup
-    delete_upload(foss, vcs_upload)
+    if vcs_upload is not None:
+        assert vcs_upload.uploadname == vcs["vcsName"]
+        # FIXME option ignore_scm does not work currently
+        # search_result = foss.search(
+        #     searchType=SearchTypes.DIRECTORY,
+        #     filename=".git",
+        # )
+        # assert not search_result
+
+        # Cleanup
+        delete_upload(foss, vcs_upload)
+    else:
+        pytest.fail("Upload from vcs failed.")
 
 
-@pytest.mark.xfail
 def test_upload_from_vcs_v2(foss_v2: Fossology):
     vcs = {
         "vcsType": "git",
@@ -64,10 +67,12 @@ def test_upload_from_vcs_v2(foss_v2: Fossology):
         ignore_scm=False,
         wait_time=5,
     )
-    assert vcs_upload.uploadname == vcs["vcsName"]
-    # Cleanup
-    delete_upload(foss_v2, vcs_upload)
-
+    if vcs_upload is not None:
+        assert vcs_upload.uploadname == vcs["vcsName"]
+        # Cleanup
+        delete_upload(foss_v2, vcs_upload)
+    else:
+        pytest.fail("Upload from vcs failed.")
 
 def test_upload_from_url(foss: Fossology):
     url = {
@@ -84,12 +89,13 @@ def test_upload_from_url(foss: Fossology):
         access_level=AccessLevel.PUBLIC,
         wait_time=5,
     )
-    assert url_upload.uploadname == url["name"]
-    # Cleanup
-    delete_upload(foss, url_upload)
+    if url_upload is not None:
+        assert url_upload.uploadname == url["name"]
+        # Cleanup
+        delete_upload(foss, url_upload)
+    else:
+        pytest.fail("Upload from url failed.")
 
-
-@pytest.mark.xfail
 def test_upload_from_url_v2(foss_v2: Fossology):
     url = {
         "url": "https://github.com/fossology/fossology-python/archive/master.zip",
@@ -105,10 +111,12 @@ def test_upload_from_url_v2(foss_v2: Fossology):
         access_level=AccessLevel.PUBLIC,
         wait_time=5,
     )
-    assert url_upload.uploadname == url["name"]
-    # Cleanup
-    delete_upload(foss_v2, url_upload)
-
+    if url_upload is not None:
+        assert url_upload.uploadname == url["name"]
+        # Cleanup
+        delete_upload(foss_v2, url_upload)
+    else:
+        pytest.fail("Upload from url failed.")
 
 def test_upload_from_server(foss: Fossology):
     server = {
@@ -123,11 +131,12 @@ def test_upload_from_server(foss: Fossology):
         apply_global=True,
         wait_time=5,
     )
-    assert server_upload.uploadname == server["name"]
-
-    # Cleanup
-    delete_upload(foss, server_upload)
-
+    if server_upload is not None:
+        assert server_upload.uploadname == server["name"]
+        # Cleanup
+        delete_upload(foss, server_upload)
+    else:
+        pytest.fail("Upload from server failed.")
 
 @pytest.mark.xfail
 def test_upload_from_server_v2(foss_v2: Fossology):
@@ -143,7 +152,9 @@ def test_upload_from_server_v2(foss_v2: Fossology):
         apply_global=True,
         wait_time=5,
     )
-    assert server_upload.uploadname == server["name"]
-
-    # Cleanup
-    delete_upload(foss_v2, server_upload)
+    if server_upload is not None:
+        assert server_upload.uploadname == server["name"]
+        # Cleanup
+        delete_upload(foss_v2, server_upload)
+    else:
+        pytest.fail("Upload from server failed.")
