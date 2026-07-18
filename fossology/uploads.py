@@ -115,7 +115,12 @@ class Uploads:
 
         if response.status_code == 200:
             logger.debug(f"Got details for upload {upload_id}")
-            return Upload.from_json(response.json())
+            data = response.json()
+            # Handle empty list (upload deleted or not found)
+            if isinstance(data, list) and not data:
+                description = f"Upload {upload_id} not found or has been deleted"
+                raise FossologyApiError(description)
+            return Upload.from_json(data)
 
         elif response.status_code == 403:
             description = f"Getting details for upload {upload_id} is not authorized"

@@ -287,16 +287,7 @@ class UploadPermGroups(object):
 class License(object):
     """FOSSology license."""
 
-    id: int | None
-    shortName: str
-    fullName: str
-    text: str
-    url: str
-    risk: int
-    isCandidate: bool
-    additional_info: dict
-
-    def __init__(self, shortName: str, fullName: str, text: str, url: str, risk: int, isCandidate: bool, id: int | None = None, **kwargs):
+    def __init__(self, shortName, fullName, text, url, risk, isCandidate, id=None, **kwargs):
         self.id = id
         self.shortName = shortName
         self.fullName = fullName
