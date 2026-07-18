@@ -246,6 +246,34 @@ Develop
    These checks are automatically run on every pull request via GitHub Actions (`Static Checks
    <https://github.com/fossology/fossology-python/actions/workflows/staticchecks.yml>`_).
 
+**Commit Message Format**
+
+   All commits should include appropriate footers in the commit message body:
+
+   -  **Signed-off-by**: Required for all commits. Use ``git commit -s`` to add automatically:
+
+      .. code:: shell
+
+         Signed-off-by: Your Name <your.email@example.com>
+
+   -  **Assisted-by** (AI-assisted work): If you used AI coding tools to generate this commit,
+      include the tool and model information:
+
+      .. code:: shell
+
+         Assisted-by: GitHub Copilot (Claude Haiku 4.5)
+
+   Example commit with both footers:
+
+   .. code:: shell
+
+      git commit -m "feat: implement new API endpoint
+
+      Add support for the /v2/inventory endpoint with comprehensive test coverage.
+
+      Signed-off-by: Jane Doe <jane@example.com>
+      Assisted-by: GitHub Copilot (Claude Haiku 4.5)"
+
 **AI-Assisted Contributions**
 
    AI coding agents are active in this repository. If you are an AI agent or using AI-assisted tooling,
@@ -260,6 +288,9 @@ Develop
    -  **All new extensions must include test cases.** Every new feature or API extension must be properly
       covered by tests that provide confidence in the patch. Pull requests without adequate test coverage
       will not be accepted.
+
+   -  **Include Assisted-by footer** in commit messages. This documents which AI tool generated the commit,
+      improving transparency and traceability. Example: ``Assisted-by: GitHub Copilot (Claude Haiku 4.5)``
 
 Check API Coverage
 ------------------

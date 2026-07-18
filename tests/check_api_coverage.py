@@ -29,7 +29,7 @@ OPENAPI_URL = (
     "https://raw.githubusercontent.com/fossology/fossology/master"
     "/src/www/ui/api/documentation/openapi.yaml"
 )
-SOURCE_DIR = Path(__file__).parent / "fossology"
+SOURCE_DIR = Path(__file__).parent.parent / "fossology"
 HTTP_METHODS = {"get", "post", "put", "delete", "patch", "head", "options"}
 
 
