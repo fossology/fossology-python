@@ -1,6 +1,6 @@
 [project]
 name = "fossology"
-version = "3.11.1"
+version = "4.0.0"
 description = "A library to automate Fossology from Python scripts"
 authors = [{name = "Marion Deveaud", email = "marion.deveaud@siemens.com"}]
 license = {text = "MIT License"}

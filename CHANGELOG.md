@@ -2,6 +2,33 @@
 
 <!-- version list -->
 
+## v4.0.0 (2026-07-18)
+
+### Bug Fixes
+
+- Endpoint returns empty list when upload was deleted
+  ([`89940d1`](https://github.com/fossology/fossology-python/commit/89940d1d67785a4aca2fe8fa2bad30d1dddcf66b))
+
+### Chores
+
+- Use uv instead of poetry
+  ([`86b8a85`](https://github.com/fossology/fossology-python/commit/86b8a856b69f0f62e1158638384147644f51a226))
+
+### Documentation
+
+- Add Assisted-by tags to commit messages
+  ([`36aa610`](https://github.com/fossology/fossology-python/commit/36aa61031ee3b9f54916204a5e3ce1ecd9f85458))
+
+### Features
+
+- Adapt tests to latest fossology version 4.7.1
+  ([`b32682f`](https://github.com/fossology/fossology-python/commit/b32682f70a15ce9e54a712cddcfc51a87f1ff41f))
+
+### Breaking Changes
+
+- This version is not compatible with 4.4.0 anymore
+
+
 ## v3.11.1 (2026-07-13)
 
 ### Bug Fixes
