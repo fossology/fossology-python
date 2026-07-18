@@ -5,7 +5,7 @@
 import logging
 
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import Folder
+from fossology.obj import Folder, FolderContent
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -233,3 +233,52 @@ class Folders:
         :raises FossologyApiError: if the REST call failed
         """
         return self._put_folder("move", folder, parent)
+
+    def list_folder_contents(self, folder: Folder) -> list[FolderContent]:
+        """List the contents of a folder
+
+        API Endpoint: GET /folders/{id}/contents
+
+        :param folder: the folder to list the contents of
+        :type folder: Folder
+        :return: the list of contents (uploads and subfolders) of the folder
+        :rtype: list[FolderContent]
+        :raises FossologyApiError: if the REST call failed
+        :raises AuthorizationError: if the REST call is not authorized
+        """
+        response = self.session.get(f"{self.api}/folders/{folder.id}/contents")
+
+        if response.status_code == 200:
+            return [FolderContent.from_json(item) for item in response.json()]
+        elif response.status_code == 403:
+            description = f"Folder {folder.id} is not accessible"
+            raise AuthorizationError(description, response)
+        elif response.status_code == 404:
+            description = f"Folder {folder.id} does not exist"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"Unable to get contents of folder {folder.name} (id={folder.id})"
+            raise FossologyApiError(description, response)
+
+    def unlink_folder_content(self, content_id: int):
+        """Unlink a content from its folder
+
+        API Endpoint: PUT /folders/contents/{contentId}/unlink
+
+        :param content_id: the id of the folder content to unlink (see
+            :func:`~fossology.folders.Folders.list_folder_contents`)
+        :type content_id: int
+        :raises FossologyApiError: if the REST call failed
+        """
+        response = self.session.put(
+            f"{self.api}/folders/contents/{content_id}/unlink"
+        )
+
+        if response.status_code == 200:
+            logger.info(f"Folder content {content_id} has been unlinked")
+        elif response.status_code == 404:
+            description = f"Folder content {content_id} does not exist"
+            raise FossologyApiError(description, response)
+        else:
+            description = f"Unable to unlink folder content {content_id}"
+            raise FossologyApiError(description, response)
