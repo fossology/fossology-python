@@ -85,9 +85,9 @@ def fossology_token(
     else:
         now = date.today()
         if version == "v2":
-            data["tokenExpire"] = str(now + timedelta(days=30))
+            data["tokenExpire"] = str(now + timedelta(days=10))
         else:
-            data["token_expire"] = str(now + timedelta(days=30))
+            data["token_expire"] = str(now + timedelta(days=10))
     try:
         response = requests.post(url + "/api/" + version + "/tokens", data=data)
         if response.status_code == 201:

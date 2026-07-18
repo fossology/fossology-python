@@ -17,7 +17,7 @@ from fossology.obj import Upload
 
 def test_report_nogroup(foss: Fossology, upload: Upload):
     with pytest.raises(AuthorizationError) as excinfo:
-        foss.generate_report(upload, report_format=ReportFormat.SPDX2, group="test")
+        foss.generate_report(upload, report_format=ReportFormat.SPDX3JSON, group="test")
     assert f"Report generation for upload {upload.id} not authorized" in str(
         excinfo.value
     )
@@ -31,7 +31,7 @@ def test_download_report_nogroup(foss: Fossology, upload: Upload):
 
 
 def test_generate_report(foss: Fossology, upload: Upload):
-    report_id = foss.generate_report(upload, report_format=ReportFormat.SPDX2)
+    report_id = foss.generate_report(upload, report_format=ReportFormat.SPDX3JSON)
     assert report_id
 
     # Plain text
@@ -43,15 +43,15 @@ def test_generate_report(foss: Fossology, upload: Upload):
     filetype = mimetypes.guess_type(report_path / report_name)
     report_stat = os.stat(report_path / report_name)
     assert report_stat.st_size > 0
-    assert "application/rdf+xml" or "application/xml" in filetype[0]
+    assert filetype[0] in ("application/rdf+xml", "application/xml", "application/json")
     Path(report_path / report_name).unlink()
 
 
 def test_import_report(foss: Fossology, upload: Upload, tmp_path: Path):
-    # `ReportFormat.SPDX2` generates SPDX 2.x in RDF, which is the same on-wire
-    # format the import endpoint's default "spdxrdf" accepts. Round-trip the
+    # `ReportFormat.SPDX3JSON` generates SPDX 3.x in JSON, which is the same on-wire
+    # format the import endpoint's default "spdx3json" accepts. Round-trip the
     # report file: generate → download → import.
-    report_id = foss.generate_report(upload, report_format=ReportFormat.SPDX2)
+    report_id = foss.generate_report(upload, report_format=ReportFormat.SPDX3JSON)
     report_content, report_name = foss.download_report(report_id)
     report_file = tmp_path / report_name
     report_file.write_bytes(report_content)
@@ -211,7 +211,7 @@ def test_download_report_error(foss_server: str, foss: Fossology):
 
 @responses.activate
 def test_download_report_filename_without_quotes(foss_server: str, foss: Fossology):
-    report_id = "1"
+    report_id = 1
     responses.add(
         responses.GET,
         f"{foss_server}/api/v1/report/{report_id}",
@@ -224,7 +224,7 @@ def test_download_report_filename_without_quotes(foss_server: str, foss: Fossolo
 
 @responses.activate
 def test_download_report_filename_with_quotes(foss_server: str, foss: Fossology):
-    report_id = "1"
+    report_id = 1
     responses.add(
         responses.GET,
         f"{foss_server}/api/v1/report/{report_id}",
@@ -237,7 +237,7 @@ def test_download_report_filename_with_quotes(foss_server: str, foss: Fossology)
 
 @responses.activate
 def test_download_report_filename_with_single_quotes(foss_server: str, foss: Fossology):
-    report_id = "1"
+    report_id = 1
     responses.add(
         responses.GET,
         f"{foss_server}/api/v1/report/{report_id}",

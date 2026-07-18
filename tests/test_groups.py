@@ -10,14 +10,15 @@ import responses
 import fossology
 from fossology.enums import MemberPerm
 from fossology.exceptions import FossologyApiError
-from fossology.obj import User
+from fossology.obj import Group, User
 
 
 # Helper functions
-def get_group(foss: fossology.Fossology, name: str) -> int:
+def get_group(foss: fossology.Fossology, name: str) -> Group | None:
     for group in foss.list_groups():
         if group.name == name:
             return group
+    return None
 
 
 def verify_user_group_membership(
@@ -145,11 +146,12 @@ def test_list_group_members(foss: fossology.Fossology, created_foss_user: User):
     name = secrets.token_urlsafe(8)
     foss.create_group(name)
     group = get_group(foss, name)
+    assert group is not None, f"Group {name} was not created successfully."
+
     foss.add_group_member(group.id, created_foss_user.id, MemberPerm.ADVISOR)
     assert verify_user_group_membership(foss, group.id, created_foss_user.id)
     # Cleanup
     foss.delete_group(group.id)
-
 
 def test_add_group_member_if_user_does_not_exists_raises_fossology_api_error(
     foss: fossology.Fossology,
@@ -157,6 +159,8 @@ def test_add_group_member_if_user_does_not_exists_raises_fossology_api_error(
     name = secrets.token_urlsafe(8)
     foss.create_group(name)
     group = get_group(foss, name)
+    assert group is not None, f"Group {name} was not created successfully."
+
     with pytest.raises(FossologyApiError) as excinfo:
         foss.add_group_member(group.id, 42, MemberPerm.ADVISOR)
     assert f"An error occurred while adding user 42 to group {group.id}" in str(
@@ -164,7 +168,6 @@ def test_add_group_member_if_user_does_not_exists_raises_fossology_api_error(
     )
     # Cleanup
     foss.delete_group(group.id)
-
 
 def test_add_group_member_if_member_already_exists_returns_400(
     foss: fossology.Fossology, created_foss_user: User, monkeypatch: pytest.MonkeyPatch
@@ -174,6 +177,8 @@ def test_add_group_member_if_member_already_exists_returns_400(
     name = secrets.token_urlsafe(8)
     foss.create_group(name)
     group = get_group(foss, name)
+    assert group is not None, f"Group {name} was not created successfully."
+
     foss.add_group_member(group.id, created_foss_user.id, MemberPerm.ADVISOR)
     assert verify_user_group_membership(foss, group.id, created_foss_user.id)
     assert (
@@ -193,14 +198,14 @@ def test_delete_group_member(foss: fossology.Fossology, created_foss_user: User)
     name = secrets.token_urlsafe(8)
     foss.create_group(name)
     group = get_group(foss, name)
+    assert group is not None, f"Group {name} was not created successfully."
+
     foss.add_group_member(group.id, created_foss_user.id, MemberPerm.ADVISOR)
     assert verify_user_group_membership(foss, group.id, created_foss_user.id)
     foss.delete_group_member(group.id, created_foss_user.id)
     assert not verify_user_group_membership(foss, group.id, created_foss_user.id)
-
     # Cleanup
     foss.delete_group(group.id)
-
 
 def test_delete_group_member_if_group_does_not_exists_raises_fossology_api_error(
     foss: fossology.Fossology, created_foss_user: User
@@ -274,6 +279,8 @@ def test_change_group_member_permission(
     name = secrets.token_urlsafe(8)
     foss.create_group(name)
     group = get_group(foss, name)
+    assert group is not None, f"Group {name} was not created successfully."
+
     foss.add_group_member(group.id, created_foss_user.id, MemberPerm.USER)
 
     # Change permission from USER to ADMIN

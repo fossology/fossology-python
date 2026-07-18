@@ -5,7 +5,10 @@
 import logging
 import re
 import time
-from typing import Tuple
+from typing import TYPE_CHECKING, Tuple
+
+if TYPE_CHECKING:
+    import requests
 
 from tenacity import TryAgain, retry, retry_if_exception_type, stop_after_attempt
 
@@ -19,6 +22,9 @@ logger.setLevel(logging.DEBUG)
 
 class Report:
     """Class dedicated to all "report" related endpoints"""
+
+    api: str
+    session: "requests.Session"
 
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(3))
     def generate_report(
@@ -160,7 +166,7 @@ class Report:
     @retry(retry=retry_if_exception_type(TryAgain), stop=stop_after_attempt(10))
     def download_report(
         self, report_id: int, group: str | None = None, wait_time: int = 0
-    ) -> Tuple[str, str]:
+    ) -> Tuple[bytes, str]:
         """Download a report
 
         API Endpoint: GET /report/{id}
@@ -215,7 +221,7 @@ class Report:
 
         elif response.status_code == 503:
             if not wait_time:
-                wait_time = response.headers["Retry-After"]
+                wait_time = int(response.headers["Retry-After"])
             logger.debug(
                 f"Retry GET report {report_id} after {wait_time} seconds: {response.json()['message']}"
             )

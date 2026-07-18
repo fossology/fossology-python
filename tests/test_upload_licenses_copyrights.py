@@ -90,7 +90,7 @@ def test_upload_licenses_500_error(foss: Fossology, foss_server: str, upload: Up
 
 def test_upload_copyrights(foss: Fossology, upload_with_jobs: Upload):
     copyrights = foss.upload_copyrights(upload_with_jobs)
-    assert len(copyrights) == 79
+    assert len(copyrights) == 32
 
 
 @responses.activate

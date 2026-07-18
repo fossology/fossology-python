@@ -57,7 +57,7 @@ class Items:
         upload: Upload,
         item_id: int,
         status: CopyrightStatus,
-    ) -> int:
+    ) -> str:
         """Get the total copyrights of the mentioned upload tree ID
 
         API Endpoint: GET /uploads/{id}/item/{itemId}/totalcopyrights

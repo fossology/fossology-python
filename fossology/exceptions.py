@@ -41,11 +41,14 @@ class FossologyApiError(Error):
     """Error during a Fossology request"""
 
     def __init__(self, description, response=None):
-        try:
-            message = response.json().get("message")
-        except JSONDecodeError:
-            message = response.text
-        self.message = f"{description}: {message} ({response.status_code})"
+        if response:
+            try:
+                message = response.json().get("message")
+            except JSONDecodeError:
+                message = response.text
+            self.message = f"{description}: {message} ({response.status_code})"
+        else:
+            self.message = f"{description}"
         super().__init__(self.message)
 
 
