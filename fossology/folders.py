@@ -80,7 +80,7 @@ class Folders:
         The name of the new folder must be unique under the same parent.
         Folder names are case insensitive.
 
-        API Endpoint: POST /folders/{id}
+        API Endpoint: POST /folders
 
         :param parent: the parent folder
         :param name: the name of the folder
