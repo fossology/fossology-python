@@ -868,7 +868,7 @@ class Uploads:
     ):
         """Change the permission of an upload
 
-        API Endpoint: PUT /uploads/{id}/permission
+        API Endpoint: PUT /uploads/{id}/permissions
 
         :param upload: the upload to update
         :param group: the group you want to add or edit permission for this upload
