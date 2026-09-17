@@ -3,13 +3,14 @@
 
 import secrets
 import time
+from unittest.mock import MagicMock
 
 import pytest
 import responses
 
 from fossology import Fossology
 from fossology.exceptions import AuthorizationError, FossologyApiError
-from fossology.obj import Folder
+from fossology.obj import Folder, FolderContent
 
 
 @responses.activate
@@ -201,3 +202,66 @@ def test_delete_folder_error(foss_server: str, foss: Fossology):
     with pytest.raises(FossologyApiError) as excinfo:
         foss.delete_folder(folder)
     assert f"Unable to delete folder {folder.id}" in str(excinfo.value)
+
+
+def test_list_folder_contents(foss: Fossology):
+    name = "FolderContentsTest"
+    subfolder = foss.create_folder(foss.rootFolder, name, "list contents test")
+    contents = foss.list_folder_contents(foss.rootFolder)
+    assert isinstance(contents, list)
+    assert contents
+    assert all(isinstance(content, FolderContent) for content in contents)
+    match = [c for c in contents if c.content and name in c.content]
+    assert match, f"{name} not found in folder contents"
+    assert match[0].id is not None
+    assert "Folder content" in str(match[0])
+    foss.delete_folder(subfolder)
+
+
+@responses.activate
+def test_list_folder_contents_unauthorized(foss_server: str, foss: Fossology):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/folders/{foss.rootFolder.id}/contents",
+        status=403,
+    )
+    with pytest.raises(AuthorizationError) as excinfo:
+        foss.list_folder_contents(foss.rootFolder)
+    assert f"Folder {foss.rootFolder.id} is not accessible" in str(excinfo.value)
+
+
+@responses.activate
+def test_list_folder_contents_not_found(foss_server: str, foss: Fossology):
+    responses.add(
+        responses.GET,
+        f"{foss_server}/api/v1/folders/{foss.rootFolder.id}/contents",
+        status=404,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.list_folder_contents(foss.rootFolder)
+    assert f"Folder {foss.rootFolder.id} does not exist" in str(excinfo.value)
+
+
+@responses.activate
+def test_unlink_folder_content(foss_server: str, foss: Fossology, monkeypatch):
+    mocked_logger = MagicMock()
+    monkeypatch.setattr("fossology.folders.logger", mocked_logger)
+    responses.add(
+        responses.PUT,
+        f"{foss_server}/api/v1/folders/contents/42/unlink",
+        status=200,
+    )
+    foss.unlink_folder_content(42)
+    mocked_logger.info.assert_called_once()
+
+
+@responses.activate
+def test_unlink_folder_content_error(foss_server: str, foss: Fossology):
+    responses.add(
+        responses.PUT,
+        f"{foss_server}/api/v1/folders/contents/999/unlink",
+        status=404,
+    )
+    with pytest.raises(FossologyApiError) as excinfo:
+        foss.unlink_folder_content(999)
+    assert "Folder content 999 does not exist" in str(excinfo.value)

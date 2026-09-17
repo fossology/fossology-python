@@ -207,6 +207,23 @@ class Folder(object):
         )
 
 
+class FolderContent(object):
+    """FOSSology folder content (an upload or a subfolder linked in a folder)."""
+
+    def __init__(self, id=None, content=None, removable=None, **kwargs):
+        self.id = id
+        self.content = content
+        self.removable = removable
+        self.additional_info = kwargs
+
+    def __str__(self):
+        return f"Folder content {self.content} ({self.id}), removable={self.removable}"
+
+    @classmethod
+    def from_json(cls, json_dict):
+        return cls(**json_dict)
+
+
 class Findings(object):
     """FOSSology license findings."""
 
