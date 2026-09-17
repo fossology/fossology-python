@@ -176,11 +176,11 @@ def get_newest_upload_of_file(ctx: click.Context, filename: str, folder_name: st
                 newest_date = a_upload.uploaddate
                 found = a_upload
     if found:
-        the_upload = foss.detail_upload(a_upload.id)
+        the_upload = foss.detail_upload(found.id)
         logger.info(
-            f"Can reuse upload for {a_upload.uploadname}. The uploads id is {a_upload.id}."
+            f"Can reuse upload for {found.uploadname}. The uploads id is {found.id}."
         )
-        assert a_upload.id == the_upload.id
+        assert found.id == the_upload.id
         return the_upload
     else:
         return None
