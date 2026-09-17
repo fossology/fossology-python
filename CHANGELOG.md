@@ -2,6 +2,26 @@
 
 <!-- version list -->
 
+## v4.0.1 (2026-09-17)
+
+### Bug Fixes
+
+- **cli**: Reuse the newest matching upload
+  ([#211](https://github.com/fossology/fossology-python/pull/211),
+  [`ccfac4c`](https://github.com/fossology/fossology-python/commit/ccfac4c1421a4a98ba6664323d4852c3f4601910))
+
+### Documentation
+
+- Corrected api endpoints in docstring
+  ([#209](https://github.com/fossology/fossology-python/pull/209),
+  [`d745d5e`](https://github.com/fossology/fossology-python/commit/d745d5e10ccbab49f7877f66092e7230a13b7bb1))
+
+- Corrected api endpoints in docstring that is fixed typos in folders.py/create_folder() and
+  uploads.py/change_upload_permissions
+  ([#209](https://github.com/fossology/fossology-python/pull/209),
+  [`d745d5e`](https://github.com/fossology/fossology-python/commit/d745d5e10ccbab49f7877f66092e7230a13b7bb1))
+
+
 ## v4.0.0 (2026-07-18)
 
 ### Bug Fixes
