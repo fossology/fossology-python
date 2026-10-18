@@ -98,8 +98,9 @@ class Folders:
         headers = {
             "parentFolder": f"{parent.id}",
             "folderName": f"{name}",
-            "folderDescription": f"{description}",
         }
+        if description:
+            headers["folderDescription"] = description
         if group:
             headers["groupName"] = group
 
