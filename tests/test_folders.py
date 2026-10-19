@@ -5,7 +5,6 @@ import secrets
 import time
 
 import pytest
-import requests
 import responses
 
 from fossology import Fossology
@@ -23,39 +22,15 @@ def test_list_folders_error(foss_server: str, foss: Fossology):
     assert f"Unable to get a list of folders for {foss.user.name}" in str(excinfo.value)
 
 
-def _offline_foss(url: str) -> Fossology:
-    foss = Fossology.__new__(Fossology)
-    foss.api = f"{url}/api/v1"
-    foss.version = "v1"
-    foss.folders = []
-    foss.session = requests.Session()
-    return foss
+def test_create_folder_without_description(foss: Fossology):
+    name = "FossPythonTestNoDesc"
+    test_folder = foss.create_folder(foss.rootFolder, name)
+    assert test_folder.name == name
+    # an unset description must not be stored as the literal string "None"
+    assert test_folder.description == ""
 
-
-@responses.activate
-def test_create_folder_without_description():
-    url = "https://fossology.example.com/repo"
-    foss = _offline_foss(url)
-    responses.add(
-        responses.POST,
-        f"{url}/api/v1/folders",
-        json={"code": 201, "message": 42, "type": "INFO"},
-        status=201,
-    )
-    responses.add(
-        responses.GET,
-        f"{url}/api/v1/folders/42",
-        json={"id": 42, "name": "NoDesc", "description": "", "parent": 1},
-        status=200,
-    )
-    parent = Folder(1, "Software Repository", "Top folder", None)
-
-    foss.create_folder(parent, "NoDesc")
-
-    headers = responses.calls[0].request.headers
-    assert headers["folderName"] == "NoDesc"
-    # an unset description must not be sent as the literal string "None"
-    assert "folderDescription" not in headers
+    # Cleanup
+    foss.delete_folder(test_folder)
 
 
 def test_create_folder_nogroup(foss: Fossology):
