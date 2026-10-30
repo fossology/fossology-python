@@ -2,6 +2,25 @@
 
 <!-- version list -->
 
+## v4.0.2 (2026-10-30)
+
+### Bug Fixes
+
+- **folders**: Don't send "None" as the folder description
+  ([#212](https://github.com/fossology/fossology-python/pull/212),
+  [`3c38e3d`](https://github.com/fossology/fossology-python/commit/3c38e3d919c50321696f86cf8c0808d1e81ae327))
+
+### Testing
+
+- **folders**: Check folder without description on a real instance
+  ([#212](https://github.com/fossology/fossology-python/pull/212),
+  [`3c38e3d`](https://github.com/fossology/fossology-python/commit/3c38e3d919c50321696f86cf8c0808d1e81ae327))
+
+- **uploads**: Use upload ids that cannot exist in permission tests
+  ([#212](https://github.com/fossology/fossology-python/pull/212),
+  [`3c38e3d`](https://github.com/fossology/fossology-python/commit/3c38e3d919c50321696f86cf8c0808d1e81ae327))
+
+
 ## v4.0.1 (2026-09-17)
 
 ### Bug Fixes
