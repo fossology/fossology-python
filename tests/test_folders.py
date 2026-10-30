@@ -22,6 +22,17 @@ def test_list_folders_error(foss_server: str, foss: Fossology):
     assert f"Unable to get a list of folders for {foss.user.name}" in str(excinfo.value)
 
 
+def test_create_folder_without_description(foss: Fossology):
+    name = "FossPythonTestNoDesc"
+    test_folder = foss.create_folder(foss.rootFolder, name)
+    assert test_folder.name == name
+    # an unset description must not be stored as the literal string "None"
+    assert test_folder.description == ""
+
+    # Cleanup
+    foss.delete_folder(test_folder)
+
+
 def test_create_folder_nogroup(foss: Fossology):
     name = "FossPythonTest"
     desc = "Created via the Fossology Python API"
